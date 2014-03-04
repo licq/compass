@@ -22,12 +22,7 @@ var UserSchema = new Schema({
     },
     hashed_password: String,
     provider: String,
-    salt: String,
-    facebook: {},
-    twitter: {},
-    github: {},
-    google: {},
-    linkedin: {}
+    salt: String
 });
 
 /**
