@@ -7,14 +7,10 @@ var User = mongoose.model('User'),
     config = require('./config');
 
 module.exports = function (passport) {
-
-    // Serialize the user id to push into the session
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
 
-    // Deserialize the user object based on a pre-serialized token
-    // which is the user id
     passport.deserializeUser(function (id, done) {
         User.findOne({
             _id: id
@@ -23,7 +19,6 @@ module.exports = function (passport) {
         });
     });
 
-    // Use local strategy
     passport.use(new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password'
