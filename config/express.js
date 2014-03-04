@@ -12,10 +12,6 @@ module.exports = function (app, passport, db) {
     app.locals.pretty = true;
     app.locals.cache = 'memory';
 
-    if (process.env.NODE_ENV === 'development') {
-        app.use(express.logger('dev'));
-    }
-
     app.engine('html', consolidate[config.templateEngine]);
     app.set('view engine', 'html');
     app.set('views', config.root + '/app/views');
@@ -23,6 +19,11 @@ module.exports = function (app, passport, db) {
 
     app.configure(function () {
         app.use(express.favicon());
+
+        if (process.env.NODE_ENV === 'development') {
+            app.use(express.logger('dev'));
+        }
+
         app.use(express.compress({
             filter: function (req, res) {
                 return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
