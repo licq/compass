@@ -2,7 +2,7 @@
 
 (function() {
     // Articles Controller Spec
-    describe('MEAN controllers', function() {
+    describe('Compass controllers', function() {
         describe('ArticlesController', function() {
             // The $resource service augments the response object with methods for updating and deleting the resource.
             // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -18,7 +18,7 @@
             });
 
             // Load the controllers module
-            beforeEach(module('mean'));
+            beforeEach(module('compass'));
 
             // Initialize the controller and a mock scope
             var ArticlesController,
@@ -51,8 +51,8 @@
 
                     // test expected GET request
                     $httpBackend.expectGET('articles').respond([{
-                        title: 'An Article about MEAN',
-                        content: 'MEAN rocks!'
+                        title: 'An Article about Compass',
+                        content: 'Compass rocks!'
                     }]);
 
                     // run controller
@@ -61,8 +61,8 @@
 
                     // test scope value
                     expect(scope.articles).toEqualData([{
-                        title: 'An Article about MEAN',
-                        content: 'MEAN rocks!'
+                        title: 'An Article about Compass',
+                        content: 'Compass rocks!'
                     }]);
 
                 });
@@ -75,8 +75,8 @@
                     // fixture response object
                     var testArticleData = function() {
                         return {
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            title: 'An Article about Compass',
+                            content: 'Compass rocks!'
                         };
                     };
 
@@ -99,8 +99,8 @@
                     // fixture expected POST data
                     var postArticleData = function() {
                         return {
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            title: 'An Article about Compass',
+                            content: 'Compass rocks!'
                         };
                     };
 
@@ -108,14 +108,14 @@
                     var responseArticleData = function() {
                         return {
                             _id: '525cf20451979dea2c000001',
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            title: 'An Article about Compass',
+                            content: 'Compass rocks!'
                         };
                     };
 
                     // fixture mock form input values
-                    scope.title = 'An Article about MEAN';
-                    scope.content = 'MEAN rocks!';
+                    scope.title = 'An Article about Compass';
+                    scope.content = 'Compass rocks!';
 
                     // test post request is sent
                     $httpBackend.expectPOST('articles', postArticleData()).respond(responseArticleData());
@@ -138,8 +138,8 @@
                 var putArticleData = function() {
                     return {
                         _id: '525a8422f6d0f87f0e407a33',
-                        title: 'An Article about MEAN',
-                        to: 'MEAN is great!'
+                        title: 'An Article about Compass',
+                        to: 'Compass is great!'
                     };
                 };
 

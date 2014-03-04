@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean', ['ngCookies', 'ngResource', 'ui.bootstrap', 'ui.router', 'mean.system', 'mean.articles']);
+angular.module('compass', ['ngCookies', 'ngResource', 'ui.bootstrap', 'ui.router', 'compass.system', 'compass.articles']);
 
-angular.module('mean.system', []);
-angular.module('mean.articles', []);
+angular.module('compass.system', []);
+angular.module('compass.articles', []);

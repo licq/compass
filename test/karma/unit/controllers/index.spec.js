@@ -1,10 +1,10 @@
 'use strict';
 
 (function() {
-    describe('MEAN controllers', function() {
+    describe('Compass controllers', function() {
         describe('IndexController', function() {
             // Load the controllers module
-            beforeEach(module('mean'));
+            beforeEach(module('compass'));
 
             var scope, IndexController;
 
