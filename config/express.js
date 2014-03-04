@@ -5,7 +5,8 @@ var express = require('express'),
     mongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config');
+    config = require('./config'),
+    swig = require('swig');
 
 module.exports = function (app, passport, db) {
     app.set('showStackError', true);
@@ -16,8 +17,9 @@ module.exports = function (app, passport, db) {
     app.set('view engine', 'html');
     app.set('views', config.root + '/app/views');
     app.enable('jsonp callback');
-    if(process.env.NODE_ENV === 'development'){
+    if (process.env.NODE_ENV === 'development') {
         app.set('view cache', false);
+        swig.setDefaults({cache: false});
     }
 
     app.configure(function () {
