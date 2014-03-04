@@ -16,6 +16,9 @@ module.exports = function (app, passport, db) {
     app.set('view engine', 'html');
     app.set('views', config.root + '/app/views');
     app.enable('jsonp callback');
+    if(process.env.NODE_ENV === 'development'){
+        app.set('view cache', false);
+    }
 
     app.configure(function () {
         app.use(express.favicon());

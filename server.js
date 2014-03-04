@@ -22,7 +22,7 @@ var walkModels = function (path) {
                 require(newPath);
             }
         } else if (stat.isDirectory()) {
-            walk(newPath);
+            walkModels(newPath);
         }
     });
 };
@@ -46,7 +46,7 @@ var walkRoutes = function (path) {
             // used and shared by routes as further middlewares and is not a
             // route by itself
         } else if (stat.isDirectory() && file !== 'middlewares') {
-            walk(newPath);
+            walkRoutes(newPath);
         }
     });
 };
