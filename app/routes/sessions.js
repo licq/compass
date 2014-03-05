@@ -4,7 +4,7 @@
 module.exports = function (app, passport) {
 
     app.get('/signin', function (req, res) {
-        res.render('users/signin', {
+        res.render('sessions/signin', {
             title: 'Signin',
             message: req.flash('error')
         });
