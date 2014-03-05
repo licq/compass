@@ -32,12 +32,12 @@ module.exports = function (passport) {
                 }
                 if (!user) {
                     return done(null, false, {
-                        message: 'Unknown user'
+                        message: '用户名或密码不匹配'
                     });
                 }
                 if (!user.authenticate(password)) {
                     return done(null, false, {
-                        message: 'Invalid password'
+                        message: '用户名或密码不匹配'
                     });
                 }
                 return done(null, user);

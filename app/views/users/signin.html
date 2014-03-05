@@ -29,6 +29,14 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="portlet-body">
+                    {% if message && message.length  %}
+                    <div class="alert alert-error">
+                        <!--<button class="close" data-dismiss="alert">&times;</button>-->
+                        <div class="strong">
+                            {{ message }}
+                        </div>
+                    </div>
+                    {% endif %}
                     <form accept-charset="UTF-8" role="form" action="/users/session" method="post">
                         <fieldset>
                             <div class="form-group">
@@ -62,6 +70,10 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="/lib/jquery/dist/jquery.min.js"></script>
 <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+{% if (process.env.NODE_ENV == 'development') %}
+<!-- Livereload script rendered -->
+<script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
+{% endif %}
 
 </body>
 </html>

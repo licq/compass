@@ -3,7 +3,7 @@
 // User routes use users controller
 var users = require('../controllers/users');
 
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
 
     app.get('/signin', users.signin);
     app.get('/signup', users.signup);
@@ -15,9 +15,11 @@ module.exports = function(app, passport) {
 
     // Setting up the userId param
     app.param('userId', users.user);
-        // Setting the local strategy route
-    app.post('/users/session', passport.authenticate('local', {
-        failureRedirect: '/signin',
-        failureFlash: true
-    }), users.session);
+    // Setting the local strategy route
+    app.post('/users/session',
+        passport.authenticate('local', {
+            failureRedirect: '/signin',
+            successRedirect: '/home',
+            failureFlash: true
+        }));
 };
