@@ -1,10 +1,16 @@
 'use strict';
 
 module.exports = function(app) {
-    
-    // Home route
-    var index = require('../controllers/index');
-    app.get('/', index.render);
-    app.get('/home',index.home);
+
+    app.get('/', function(req,res){
+        res.render('index', {
+            user: req.user ? JSON.stringify(req.user) : 'null'
+        });
+    });
+    app.get('/home',function(req,res){
+        res.render('home',{
+            user: req.user? JSON.stringify(req.user) : 'null'
+        });
+    });
 
 };
