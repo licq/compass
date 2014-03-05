@@ -15,8 +15,8 @@ module.exports = function(grunt) {
             html: {
                 files: ['public/views/**', 'app/views/**'],
                 options: {
-                    livereload: true,
-                },
+                    livereload: true
+                }
             },
             css: {
                 files: ['public/css/**'],

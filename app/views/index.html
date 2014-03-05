@@ -1,7 +1,170 @@
-{% extends 'layouts/default.html' %}
-{% block content %}
-    <section data-ui-view />
-    <script type="text/javascript">
-        window.user = {{user|safe}};
-    </script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Compass">
+    <meta name="keywords" content="Compass">
+
+    <title> Compass </title>
+
+    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/plugins.css" rel="stylesheet">
+    <link href="/css/docs.min.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/lib/html5shiv/dist/html5shiv.js"></script>
+    <script src="/lib/respond/dest/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/apple/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/img/icons/favicon.ico">
+</head>
+<body class="bs-docs-home">
+<a class="sr-only" href="#content">Skip to main content</a>
+
+<!-- Docs master nav -->
+<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="../" class="navbar-brand">Compass</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/signup">注册</a></li>
+                <li><a href="/signin">登陆</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+<!-- Page content of course! -->
+<main class="bs-docs-masthead" id="content" role="main">
+    <div class="container">
+        <span class="bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline">C</span>
+        <!-- <h1>Bootstrap</h1> -->
+        <p class="lead">最好的云招聘服务</p>
+
+        <p class="lead">
+            <a href="/signup" class="btn btn-outline-inverse btn-lg">马上注册</a>
+        </p>
+    </div>
+</main>
+
+<div class="bs-docs-featurette">
+    <div class="container">
+        <h2 class="bs-docs-featurette-title">Designed for everyone, everywhere.</h2>
+
+        <p class="lead">best best best</p>
+
+        <hr class="half-rule">
+
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="/img/intro1.png" alt="Sass and Less support" class="img-responsive">
+
+                <h3>Preprocessors</h3>
+
+                <p>In addition to vanilla CSS, Bootstrap includes support for the two most popular CSS preprocessors, <a
+                        href="../css/#less">Less</a> and <a href="../css/#sass">Sass</a>.</p>
+            </div>
+            <div class="col-sm-4">
+                <img src="/img/intro2.png" alt="Responsive across devices" class="img-responsive">
+
+                <h3>One framework, every device.</h3>
+
+                <p>Bootstrap easily and efficiently scales your project with one code base, from phones to tablets to
+                    desktops.</p>
+            </div>
+            <div class="col-sm-4">
+                <img src="/img/intro3.png" alt="Components" class="img-responsive">
+
+                <h3>Comprehensive docs</h3>
+
+                <p>With Bootstrap, you get extensive and beautiful documentation with hundreds of live examples, code
+                    snippets, and more.</p>
+            </div>
+        </div>
+        <hr class="half-rule">
+    </div>
+</div>
+
+<div class="bs-docs-featurette">
+    <div class="container">
+        <h2 class="bs-docs-featurette-title">Built with Bootstrap.</h2>
+
+        <p class="lead">Millions of amazing sites across the web are being built with Bootstrap. Get started on your own
+            with our growing <a href="../getting-started/#examples">collection of examples</a> or by exploring some of
+            our favorites.</p>
+
+        <hr class="half-rule">
+
+        <div class="row bs-docs-featured-sites">
+            <div class="col-sm-3">
+                <img src="/img/screenshot1.jpg" alt="Little" class="img-responsive">
+            </div>
+
+            <div class="col-sm-3">
+                <img src="/img/screenshot1.jpg" alt="Engine Yard" class="img-responsive">
+            </div>
+
+            <div class="col-sm-3">
+                <img src="/img/screenshot1.jpg" alt="Webflow" class="img-responsive">
+            </div>
+
+            <div class="col-sm-3">
+                <img src="/img/screenshot1.jpg" alt="Sentry" class="img-responsive">
+            </div>
+        </div>
+
+        <hr class="half-rule">
+
+        <p class="lead">We showcase dozens of inspiring projects built with Bootstrap on the Bootstrap Expo.</p>
+        <a href="http://expo.getbootstrap.com" class="btn btn-outline btn-lg">Explore the Expo</a>
+    </div>
+</div>
+
+
+<!-- Footer
+================================================== -->
+<footer class="bs-docs-footer" role="contentinfo">
+    <div class="container">
+        <p>此软件由上海xx软件有限公司设计</p>
+
+        <p>Maintained by the <a href="https://github.com/twbs?tab=members">core team</a> with the help of <a
+                href="https://github.com/twbs/bootstrap/graphs/contributors">our contributors</a>.</p>
+
+        <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>,
+            documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="bs-docs-footer-links muted">
+            <li><a href="">Expo</a></li>
+            <li>&middot;</li>
+            <li><a href="">Blog</a></li>
+            <li>&middot;</li>
+            <li><a href="">Issues</a></li>
+            <li>&middot;</li>
+            <li><a href="">Releases</a></li>
+        </ul>
+    </div>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap-min.js"></script>
+
+</body>
+</html>
+
