@@ -23,6 +23,7 @@
     "flot": "~0.8.2",
     "sparkline": "~2.1.2",
     "moment": "~2.5.1",
-    "jquery.easy-pie-chart": "~2.1.4"
+    "jquery.easy-pie-chart": "~2.1.4",
+    "jquery": "~2.1.0"
   }
 }

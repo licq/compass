@@ -1,24 +1,17 @@
 'use strict';
 
 
-module.exports = function (app, passport) {
+var User = require('../models/user');
 
-    app.get('/signin', function(req, res) {
-        res.render('users/signin', {
-            title: 'Signin',
-            message: req.flash('error')
-        });
-    });
+module.exports = function (app) {
+
     app.get('/signup', function(req, res) {
         res.render('users/signup', {
             title: 'Sign up',
             user: new User()
         });
     });
-    app.get('/signout', function(req, res) {
-        req.logout();
-        res.redirect('/');
-    });
+
     app.get('/users/me', function(req, res) {
         res.jsonp(req.user || null);
     });
@@ -65,11 +58,5 @@ module.exports = function (app, passport) {
                 next();
             });
     });
-    // Setting the local strategy route
-    app.post('/users/session',
-        passport.authenticate('local', {
-            failureRedirect: '/signin',
-            successRedirect: '/home',
-            failureFlash: true
-        }));
+
 };
