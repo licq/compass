@@ -1,9 +1,8 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-    LocalStrategy = require('passport-local').Strategy;
-
-var User = mongoose.model('User'),
+var User = require('../app/models/user'),
+    LocalStrategy = require('passport-local').Strategy,
+    RememberMeStrategy = require('passport-remember-me').Strategy,
     config = require('./config');
 
 module.exports = function (passport) {
@@ -41,6 +40,23 @@ module.exports = function (passport) {
                     });
                 }
                 return done(null, user);
+            });
+        }
+    ));
+
+    passport.use(new RememberMeStrategy(
+        function(token, done) {
+            Token.consume(token, function (err, user) {
+                if (err) { return done(err); }
+                if (!user) { return done(null, false); }
+                return done(null, user);
+            });
+        },
+        function(user, done) {
+            var token = utils.generateToken(64);
+            Token.save(user.id, function(err) {
+                if (err) { return done(err); }
+                return done(null, token);
             });
         }
     ));

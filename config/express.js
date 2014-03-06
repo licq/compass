@@ -50,6 +50,7 @@ module.exports = function (app, passport, db) {
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(flash());
+        app.use(passport.authenticate('remember-me'));
         app.use(app.router);
         app.use(express.static(config.root + '/public'));
 
