@@ -2,7 +2,6 @@
 
 var Token = require('../models/token');
 
-
 module.exports = function (app, passport) {
 
     app.get('/signin', function (req, res) {

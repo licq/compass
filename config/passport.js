@@ -3,7 +3,8 @@
 var User = require('../app/models/user'),
     LocalStrategy = require('passport-local').Strategy,
     RememberMeStrategy = require('passport-remember-me').Strategy,
-    config = require('./config');
+    config = require('./config'),
+    Token = require('../app/models/token');
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {
@@ -53,10 +54,9 @@ module.exports = function (passport) {
             });
         },
         function(user, done) {
-            var token = utils.generateToken(64);
-            Token.save(user.id, function(err) {
+            Token.save(user.id, function(err,tokenId) {
                 if (err) { return done(err); }
-                return done(null, token);
+                return done(null, tokenId);
             });
         }
     ));
