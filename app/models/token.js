@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var tokenSchema = new mongoose.Schema({
-    userId: {type: String, unique: true}
+    userId: {type: String}
 });
 
 tokenSchema.statics.consume = function (id, cb) {
@@ -12,7 +12,8 @@ tokenSchema.statics.save = function (userId, cb) {
         userId: userId
     });
     token.save(function (err, saved) {
-        cb(err, saved.id);
+        if (err) return cb(err);
+        cb(null, saved.id);
     });
 };
 

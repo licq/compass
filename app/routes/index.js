@@ -16,7 +16,7 @@ module.exports = function (app) {
                 user: req.user ? JSON.stringify(req.user) : 'null'
             })
         } else {
-            res.redirect('/signin');
+            res.redirect('/login');
         }
     });
 

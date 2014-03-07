@@ -4,14 +4,14 @@ var Token = require('../models/token');
 
 module.exports = function (app, passport) {
 
-    app.get('/signin', function (req, res) {
-        res.render('sessions/signin', {
-            title: 'Signin',
+    app.get('/login', function (req, res) {
+        res.render('sessions/login', {
+            title: 'Login',
             message: req.flash('error')
         });
     });
 
-    app.get('/signout', function (req, res) {
+    app.get('/logout', function (req, res) {
         res.clearCookie('remember_me');
         req.logout();
         res.redirect('/');
@@ -19,7 +19,7 @@ module.exports = function (app, passport) {
 
     app.post('/sessions',
         passport.authenticate('local', {
-            failureRedirect: '/signin',
+            failureRedirect: '/login',
             failureFlash: true
         }),
         function (req, res, next) {
@@ -28,7 +28,7 @@ module.exports = function (app, passport) {
             }
 
             Token.save(req.user.id, function (err, tokenId) {
-                if (err) return done(err);
+                if (err) return next(err);
                 res.cookie('remember_me', tokenId, { path: '/', httpOnly: true, maxAge: 604800000 }); // 7 days
                 return next();
             });
