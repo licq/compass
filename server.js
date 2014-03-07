@@ -8,7 +8,7 @@ var express = require('express'),
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var config = require('./app/config'),
-    mongoose = require('mongoose');
+    mongoose = require('./app/mongoose');
 
 var db = mongoose.connect(config.db);
 

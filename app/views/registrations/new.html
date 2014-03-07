@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include '../includes/head.html' %}
+
+<body>
+<header class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">Compass</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-banner text-center">
+                <h1><i class="fa fa-gears"></i>Compass</h1>
+            </div>
+            <div class="portlet portlet-green">
+                <div class="portlet-heading login-heading">
+                    <div class="portlet-title">
+                        <h4><strong>注册Compass!</strong>
+                        </h4>
+                    </div>
+                    <div class="portlet-widgets">
+                        <a href="/login" class="btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i>已注册</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="portlet-body">
+                    {% if errors%}
+                    <div class="alert alert-error">
+                        <!--<button class="close" data-dismiss="alert">&times;</button>-->
+                        <div class="strong">
+                            <ul>
+                                {% for key in Object.keys(errors) %}
+                                <li>{{errors[key].message}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <form accept-charset="UTF-8" role="form" action="/registrations" method="post">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="公司名称" name="companyName" type="text"
+                                       value="{{registration.companyName}}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="管理员姓名" name="admin[name]" type="text"
+                                       value="{{registration.admin.name}}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="管理员邮箱" name="admin[email]" type="text"
+                                       value="{{registration.admin.email}}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="密码" name="admin[password]" type="password"
+                                       value="">
+                            </div>
+                            <br>
+                            <input type="submit" class="btn btn-lg btn-green btn-block" value="注册"></button>
+                        </fieldset>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+{% if (process.env.NODE_ENV == 'development') %}
+<!-- Livereload script rendered -->
+<script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
+{% endif %}
+
+</body>
+</html>

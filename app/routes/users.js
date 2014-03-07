@@ -5,13 +5,6 @@ var User = require('../models/user');
 
 module.exports = function (app) {
 
-    app.get('/signup', function(req, res) {
-        res.render('users/signup', {
-            title: 'Sign up',
-            user: new User()
-        });
-    });
-
     app.get('/users/me', function(req, res) {
         res.jsonp(req.user || null);
     });
