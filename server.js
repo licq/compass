@@ -7,7 +7,7 @@ var express = require('express'),
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-var config = require('./config/config'),
+var config = require('./app/config'),
     mongoose = require('mongoose');
 
 var db = mongoose.connect(config.db);
@@ -28,10 +28,10 @@ var walkModels = function (path) {
 };
 walkModels(models_path);
 
-require('./config/passport')(passport);
+require('./app/passport')(passport);
 
 var app = express();
-require('./config/express')(app, passport, db);
+require('./app/express')(app, passport, db);
 
 var routes_path = __dirname + '/app/routes';
 var walkRoutes = function (path) {

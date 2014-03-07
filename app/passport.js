@@ -1,10 +1,10 @@
 'use strict';
 
-var User = require('../app/models/user'),
+var User = require('./models/user'),
     LocalStrategy = require('passport-local').Strategy,
     RememberMeStrategy = require('passport-remember-me').Strategy,
     config = require('./config'),
-    Token = require('../app/models/token');
+    Token = require('./models/token');
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {

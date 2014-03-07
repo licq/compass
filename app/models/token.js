@@ -1,5 +1,4 @@
-var mongoose = require('mongoose'),
-    ObjectId = mongoose.ObjectId;
+var mongoose = require('mongoose');
 
 var tokenSchema = new mongoose.Schema({
     userId: {type: String, unique: true}
