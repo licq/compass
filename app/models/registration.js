@@ -2,6 +2,8 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
+    Company = require('./company'),
+    User = require('./user'),
     validator = require('validator'),
     _ = require('lodash');
 
@@ -26,6 +28,22 @@ var registrationSchema = new Schema({
             validate: [_.partialRight(validator.isLength, 6), '密码长度应大于6位']
         }}
 });
+
+registrationSchema.methods.activate = function (done) {
+    var self = this;
+    new Company({name: self.companyName}).save(function (err, company) {
+        if (err) return done(err);
+        new User({
+            name: self.admin.name,
+            email: self.admin.email,
+            password: self.admin.password,
+            companyId: company.id
+        }).save(function (err, user) {
+                if (err) return done(err);
+                done(null, user);
+            });
+    });
+};
 
 
 module.exports = mongoose.model('Registration', registrationSchema);
