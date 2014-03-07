@@ -13,8 +13,8 @@ module.exports = function (app) {
     app.get('/home', function (req, res) {
         if (req.user) {
             res.render('home', {
-                user: req.user ? JSON.stringify(req.user) : 'null'
-            })
+                user: req.user
+            });
         } else {
             res.redirect('/login');
         }

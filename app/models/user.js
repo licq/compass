@@ -20,7 +20,8 @@ var UserSchema = new Schema({
     companyId: {
         type: String,
         required: true
-    }
+    },
+    companyName: String
 });
 
 UserSchema.virtual('password').set(function (password) {

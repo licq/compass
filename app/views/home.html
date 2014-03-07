@@ -15,8 +15,9 @@
         <i class="fa fa-bars"></i> Menu
     </button>
     <div class="navbar-brand">
-        <a href="index.html">
-            <img src="img/flex-admin-logo.png" data-1x="img/flex-admin-logo@1x.png" data-2x="img/flex-admin-logo@2x.png"
+        <a href="/home">
+            <img src="img/compass-admin-logo.png" data-1x="img/compass-admin-logo@1x.png"
+                 data-2x="img/compass-admin-logo@2x.png"
                  class="hisrc img-responsive" alt="">
         </a>
     </div>
@@ -59,7 +60,7 @@
                     <a href="#">
                         <div class="row">
                             <div class="col-xs-2">
-                                <img class="img-circle" src="img/user-profile-1.jpg" alt="">
+                                <img class="img-circle" src="/img/user-profile-1.jpg" alt="">
                             </div>
                             <div class="col-xs-10">
                                 <p>
@@ -77,7 +78,7 @@
                     <a href="#">
                         <div class="row">
                             <div class="col-xs-2">
-                                <img class="img-circle" src="img/user-profile-2.jpg" alt="">
+                                <img class="img-circle" src="/img/user-profile-2.jpg" alt="">
                             </div>
                             <div class="col-xs-10">
                                 <p>
@@ -95,7 +96,7 @@
                     <a href="#">
                         <div class="row">
                             <div class="col-xs-2">
-                                <img class="img-circle" src="img/user-profile-3.jpg" alt="">
+                                <img class="img-circle" src="/img/user-profile-3.jpg" alt="">
                             </div>
                             <div class="col-xs-10">
                                 <p>
@@ -113,7 +114,7 @@
                     <a href="#">
                         <div class="row">
                             <div class="col-xs-2">
-                                <img class="img-circle" src="img/user-profile-4.jpg" alt="">
+                                <img class="img-circle" src="/img/user-profile-4.jpg" alt="">
                             </div>
                             <div class="col-xs-10">
                                 <p>
@@ -520,18 +521,13 @@
 <ul id="side" class="nav navbar-nav side-nav">
 <!-- begin SIDE NAV USER PANEL -->
 <li class="side-user hidden-xs">
-    <img class="img-circle" src="img/profile-pic.jpg" alt="">
+    <div class="welcome">
+        <p class="fa fa-key"> 欢迎您 </p>
 
-    <p class="welcome">
-        <i class="fa fa-key"></i> Logged in as
-    </p>
+        <p class="fa fa-key"> {{user.name}} </p>
 
-    <p class="name tooltip-sidebar-logout">
-        John
-        <span class="last-name">Smith</span> <a style="color: inherit" class="logout_open" href="#logout"
-                                                data-toggle="tooltip" data-placement="top" title="Logout"><i
-            class="fa fa-sign-out"></i></a>
-    </p>
+        <p class="fa fa-key"> {{user.companyName}} </p>
+    </div>
 
     <div class="clearfix"></div>
 </li>

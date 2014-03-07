@@ -37,7 +37,8 @@ registrationSchema.methods.activate = function (done) {
             name: self.admin.name,
             email: self.admin.email,
             password: self.admin.password,
-            companyId: company.id
+            companyId: company.id,
+            companyName: company.name
         }).save(function (err, user) {
                 if (err) return done(err);
                 done(null, user);
