@@ -2,7 +2,10 @@ var Registration = require('../models/registration');
 
 module.exports = function (app) {
     app.get('/signup', function (req, res) {
-        res.render('registrations/new');
+        res.render('registrations/new', {
+            errors: req.flash.errors,
+            registration: req.flash.registration
+        });
     });
 
     app.post('/registrations', function (req, res) {
@@ -10,14 +13,18 @@ module.exports = function (app) {
 
         registration.save(function (err) {
             if (err) {
-                console.log(err.errors);
-                return res.render('registrations/new', {
-                    errors: err.errors,
-                    registration: registration
-                });
+                req.flash.registration = registration;
+                req.flash.errors = err.errors;
+                return res.redirect('/signup');
             }
-            res.send('激活邮件已经发送到' + registration.admin.email
-                + ',请根据邮箱内容继续');
+            req.flash.email = registration.admin.email;
+            res.redirect('/registrations/success');
+        });
+    });
+
+    app.get('/registrations/success', function (req, res) {
+        res.render('registrations/success', {
+            email: req.flash.email
         });
     });
 };

@@ -1,12 +1,11 @@
 'use strict';
 
 var express = require('express'),
-    consolidate = require('consolidate'),
+    swig = require('./swig'),
     mongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config'),
-    swig = require('swig');
+    config = require('./config');
 
 module.exports = function (app, passport, db) {
     app.set('showStackError', true);
@@ -15,7 +14,7 @@ module.exports = function (app, passport, db) {
         app.locals.cache = 'memory';
     }
 
-    app.engine('html', consolidate[config.templateEngine]);
+    app.engine('html',swig.renderFile);
     app.set('view engine', 'html');
     app.set('views', config.root + '/app/views');
     app.enable('jsonp callback');

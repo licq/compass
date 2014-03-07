@@ -29,35 +29,35 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="portlet-body">
-                    {% if errors%}
-                    <div class="alert alert-error">
-                        <!--<button class="close" data-dismiss="alert">&times;</button>-->
-                        <div class="strong">
-                            <ul>
-                                {% for key in Object.keys(errors) %}
-                                <li>{{errors[key].message}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    {% endif %}
                     <form accept-charset="UTF-8" role="form" action="/registrations" method="post">
                         <fieldset>
                             <div class="form-group">
                                 <input class="form-control" placeholder="公司名称" name="companyName" type="text"
                                        value="{{registration.companyName}}">
+                                {% if errors.companyName %}
+                                <p class="text-danger">{{errors.companyName.message}}</p>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="管理员姓名" name="admin[name]" type="text"
                                        value="{{registration.admin.name}}">
+                                {% if errors['admin.name'] %}
+                                <p class="text-danger">{{errors['admin.name'].message}}</p>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="管理员邮箱" name="admin[email]" type="text"
                                        value="{{registration.admin.email}}">
+                                {% if errors['admin.email'] %}
+                                <p class="text-danger">{{errors['admin.email'].message}}</p>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="密码" name="admin[password]" type="password"
                                        value="">
+                                {% if errors['admin.password'] %}
+                                <p class="text-danger">{{errors['admin.password'].message}}</p>
+                                {% endif %}
                             </div>
                             <br>
                             <input type="submit" class="btn btn-lg btn-green btn-block" value="注册"></button>
