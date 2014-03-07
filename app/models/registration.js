@@ -10,21 +10,21 @@ var mongoose = require('mongoose'),
 var registrationSchema = new Schema({
     companyName: {
         type: String,
-        required: true
+        required: [true, '请输入公司名称']
     },
     admin: {
         name: {
             type: String,
-            required: true
+            required: [true, '请输入管理员姓名']
         },
         email: {
             type: String,
-            required: true,
+            required: [true, '请输入管理员Email'],
             validate: [validator.isEmail, 'Email格式错误']
         },
         password: {
             type: String,
-            required: true,
+            required: [true, '请输入管理员密码'],
             validate: [_.partialRight(validator.isLength, 6), '密码长度应大于6位']
         }}
 });
