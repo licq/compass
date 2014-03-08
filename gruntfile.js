@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     // Project Configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
             js: {
-                files: ['gruntfile.js', 'server.js', 'app/**/*.js', 'public/app/**', 'test/**/*.js'],
+                files: ['gruntfile.js', 'server.js', 'app/**/*.js', 'public/js/**', 'public/app/**', 'test/**/*.js'],
                 tasks: ['jshint'],
                 options: {
                     livereload: true,
