@@ -23,6 +23,7 @@ app.controller('EmailListController', function ($scope) {
                     '{{row.getProperty(col.field) | state}}</span></div>'},
             {field: 'actions',
                 displayName: '操作',
+                sortable: false,
                 cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><button class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></button>' +
                     '<button class="btn btn-xs btn-danger" ng-click="remove(row)"><i class="fa fa-times"></i></button></div>'}
         ]
