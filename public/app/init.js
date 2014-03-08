@@ -1,7 +1,5 @@
 'use strict';
 
-angular.element(document).ready(function() {
-    alert('begin');
+angular.element(document).ready(function () {
     angular.bootstrap(document, ['compass']);
-
 });
