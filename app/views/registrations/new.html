@@ -1,69 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include '../includes/head.html' %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <!-- Title and other stuffs -->
+    <title>Compass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <!-- Stylesheets -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Support for IE -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shim.js"></script>
+    <![endif]-->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon/favicon.png">
+</head>
 
 <body>
-<header class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <a href="/" class="navbar-brand">Compass</a>
-        </div>
-    </div>
-</header>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="login-banner text-center">
-                <h1><i class="fa fa-gears"></i>Compass</h1>
-            </div>
-            <div class="portlet portlet-green">
-                <div class="portlet-heading login-heading">
-                    <div class="portlet-title">
-                        <h4><strong>注册Compass!</strong>
-                        </h4>
+<div class="admin-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Widget starts -->
+                <div class="widget wred">
+                    <div class="widget-head">
+                        <i class="icon-lock"></i> 注册
                     </div>
-                    <div class="portlet-widgets">
-                        <a href="/login" class="btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i>已注册</a>
+                    <div class="widget-content">
+                        <div class="padd">
+
+                            <form class="form-horizontal" action="/registrations/" method="post">
+                                <!-- Registration form starts -->
+                                <!-- Name -->
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">公司名称</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="companyName"
+                                               value="{{registration.companyName}}">
+                                        {% if errors.companyName %}
+                                        <p class="text-danger">{{errors.companyName.message}}</p>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">管理员姓名</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="admin[name]"
+                                               value="{{registration.admin.name}}">
+                                        {% if errors['admin.name'] %}
+                                        <p class="text-danger">{{errors['admin.name'].message}}</p>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                                <!-- Email -->
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">管理员邮箱</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="admin[email]"
+                                               value="{{registration.admin.email}}">
+                                        {% if errors['admin.email'] %}
+                                        <p class="text-danger">{{errors['admin.email'].message}}</p>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Password -->
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">密码</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="password" class="form-control" name="admin[password]">
+                                        {% if errors['admin.password'] %}
+                                        <p class="text-danger">{{errors['admin.password'].message}}</p>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                                <!-- Accept box and button s-->
+                                <div class="form-group">
+                                    <div class="col-lg-9 col-lg-offset-3">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox"> 同意 Terms &amp; Conditions
+                                            </label>
+                                        </div>
+                                        <br/>
+                                        <button type="submit" class="btn btn-danger">注册</button>
+                                        <button type="reset" class="btn btn-success">重置</button>
+                                    </div>
+                                </div>
+                                <br/>
+                            </form>
+
+                        </div>
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="portlet-body">
-                    <form accept-charset="UTF-8" role="form" action="/registrations" method="post">
-                        <fieldset>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="公司名称" name="companyName" type="text"
-                                       value="{{registration.companyName}}">
-                                {% if errors.companyName %}
-                                <p class="text-danger">{{errors.companyName.message}}</p>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="管理员姓名" name="admin[name]" type="text"
-                                       value="{{registration.admin.name}}">
-                                {% if errors['admin.name'] %}
-                                <p class="text-danger">{{errors['admin.name'].message}}</p>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="管理员邮箱" name="admin[email]" type="text"
-                                       value="{{registration.admin.email}}">
-                                {% if errors['admin.email'] %}
-                                <p class="text-danger">{{errors['admin.email'].message}}</p>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="密码" name="admin[password]" type="password"
-                                       value="">
-                                {% if errors['admin.password'] %}
-                                <p class="text-danger">{{errors['admin.password'].message}}</p>
-                                {% endif %}
-                            </div>
-                            <br>
-                            <input type="submit" class="btn btn-lg btn-green btn-block" value="注册"></button>
-                        </fieldset>
-                        <br>
-                    </form>
+                    <div class="widget-foot">
+                        已经注册? <a href="/login">登陆</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,15 +120,8 @@
 </div>
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="/lib/jquery/dist/jquery.min.js"></script>
-<script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-{% if (process.env.NODE_ENV == 'development') %}
-<!-- Livereload script rendered -->
-<script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
-{% endif %}
-
+<!-- JS -->
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.js"></script>
 </body>
 </html>

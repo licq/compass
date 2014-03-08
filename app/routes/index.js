@@ -12,7 +12,7 @@ module.exports = function (app) {
 
     app.get('/home', function (req, res) {
         if (req.user) {
-            res.render('home', {
+            res.render('home',{
                 user: req.user
             });
         } else {

@@ -1,842 +1,1098 @@
 <!DOCTYPE html>
 <html lang="en">
-
 {% include './includes/head.html' %}
+
 <body>
+<header>
+    <div class="navbar navbar-fixed-top bs-docs-nav" role="banner">
 
-<div id="wrapper">
+        <div class="container">
+            <!-- Menu button for smallar screens -->
+            <div class="navbar-header">
+                <button class="navbar-toggle btn-navbar" type="button" data-toggle="collapse"
+                        data-target=".bs-navbar-collapse"><span>Menu</span></button>
+                <a href="#" class="pull-left menubutton hidden-xs"><i class="fa fa-bars"></i></a>
+                <!-- Site name for smallar screens -->
+                <a href="index.html" class="navbar-brand">Mood<span class="bold">Strap</span></a>
+            </div>
 
-<!-- begin TOP NAVIGATION -->
-<nav class="navbar-top" role="navigation">
+            <!-- Navigation starts -->
+            <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
 
-<!-- begin BRAND HEADING -->
-<div class="navbar-header">
-    <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".sidebar-collapse">
-        <i class="fa fa-bars"></i> Menu
-    </button>
-    <div class="navbar-brand">
-        <a href="/home">
-            <img src="img/compass-admin-logo.png" data-1x="img/compass-admin-logo@1x.png"
-                 data-2x="img/compass-admin-logo@2x.png"
-                 class="hisrc img-responsive" alt="">
-        </a>
+                <!-- Links -->
+                <ul class="nav navbar-nav pull-right">
+                    <li class="dropdown pull-right user-data">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img src="img/user1.png"> John <span class="bold">Doe</span> <b class="caret"></b>
+                        </a>
+
+                        <!-- Dropdown menu -->
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                            <li><a href="#"><i class="fa fa-cogs"></i> Settings</a></li>
+                            <li><a href="/logout"><i class="fa fa-key"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    <!-- Upload to server link. Class "dropdown-big" creates big dropdown -->
+                    <li class="dropdown dropdown-big leftonmobile">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                                class="fa fa-cloud-upload"></i></a>
+                        <!-- Dropdown -->
+                        <ul class="dropdown-menu">
+                            <li>
+                                <!-- Progress bar -->
+                                <p>Photo Upload in Progress</p>
+                                <!-- Bootstrap progress bar -->
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40"
+                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                        <span class="sr-only">40% Complete</span>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <!-- Progress bar -->
+                                <p>Video Upload in Progress</p>
+                                <!-- Bootstrap progress bar -->
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80"
+                                         aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                        <span class="sr-only">80% Complete</span>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <!-- Dropdown menu footer -->
+                                <div class="drop-foot">
+                                    <a href="#">View All</a>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Sync to server link -->
+                    <li class="dropdown dropdown-big leftonmobile">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-refresh"></i></a>
+                        <!-- Dropdown -->
+                        <ul class="dropdown-menu">
+                            <li>
+                                <!-- Using "fa fa-spin" class to rotate icon. -->
+                                <p><span class="label label-info"><i class="fa fa-cloud"></i></span> Syncing Photos to
+                                    Server</p>
+                                <hr/>
+                                <p><span class="label label-warning"><i class="fa fa-cloud"></i></span> Syncing
+                                    Bookmarks Lists to Cloud</p>
+
+                                <hr/>
+
+                                <!-- Dropdown menu footer -->
+                                <div class="drop-foot">
+                                    <a href="#">View All</a>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown dropdown-big leftonmobile">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="fa fa-comments"></i><span class="label label-info">6</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header padless">
+                                <!-- Heading - h5 -->
+                                <h5><i class="fa fa-comments"></i> Chats</h5>
+                                <!-- Use hr tag to add border -->
+                            </li>
+                            <li>
+                                <hr/>
+                                <!-- List item heading h6 -->
+                                <h6><a href="#">Hi :)</a> <span class="label label-warning pull-right">10:42</span></h6>
+
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <h6><a href="#">How are you?</a> <span
+                                        class="label label-warning pull-right">20:42</span></h6>
+
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <h6><a href="#">What are you doing?</a> <span class="label label-warning pull-right">14:42</span>
+                                </h6>
+
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">View All</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Message button with number of latest messages count-->
+                    <li class="dropdown dropdown-big messages-dd leftonmobile">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i> <span class="label label-primary">3</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header padless">
+                                <!-- Heading - h5 -->
+                                <h5><i class="fa fa-envelope-alt"></i> Messages</h5>
+                                <!-- Use hr tag to add border -->
+
+                            </li>
+                            <li>
+                                <hr/>
+                                <!-- List item heading h6 -->
+                                <h6><a href="#">Hello how are you?</a></h6>
+                                <!-- List item para -->
+                                <p>Quisque eu consectetur erat eget semper...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <h6><a href="#">Today is wonderful?</a></h6>
+
+                                <p>Quisque eu consectetur erat eget semper...</p>
+                                <hr/>
+                            </li>
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">View All</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Members button with number of latest members count -->
+                    <li class="dropdown dropdown-big">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> <span class="label label-success">7</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header padless">
+                                <!-- Heading - h5 -->
+                                <h5><i class="fa fa-user"></i> Users</h5>
+                                <!-- Use hr tag to add border -->
+                            </li>
+                            <li>
+                                <hr/>
+                                <!-- List item heading h6-->
+                                <h6><a href="#">John Doe</a> <span class="label label-warning pull-right">Free</span>
+                                </h6>
+
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <h6><a href="#">Iron Man</a> <span
+                                        class="label label-important pull-right">Premium</span></h6>
+
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <h6><a href="#">Salamander</a> <span class="label label-warning pull-right">Free</span>
+                                </h6>
+
+                                <div class="clearfix"></div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">View All</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
     </div>
+</header>
+<!-- Main content starts -->
+
+<div class="content">
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-dropdown"><a href="#">Navigation</a></div>
+    <!-- Search form -->
+    <form class="navbar-form" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+            <button class="btn search-button" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+    </form>
+    <!--- Sidebar navigation -->
+    <!-- If the main navigation has sub navigation, then add the class "has_sub" to "li" of main navigation. -->
+    <ul id="nav">
+        <!-- Main menu with font awesome icon -->
+        <li><a href="index.html" class="open"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li class="has_sub"><a href="#"><i class="fa fa-list-alt"></i> <span>Widgets</span> <span class="pull-right"><i
+                class="fa fa-chevron-left"></i></span></a>
+            <ul>
+                <li><a href="widgets1.html">Widgets #1</a></li>
+                <li><a href="widgets2.html">Widgets #2</a></li>
+                <li><a href="widgets3.html">Widgets #3</a></li>
+            </ul>
+        </li>
+        <li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> <span>Charts</span></a></li>
+        <li><a href="tables.html"><i class="fa fa-table"></i> <span>Tables</span></a></li>
+        <li><a href="forms.html"><i class="fa fa-tasks"></i> <span>Forms</span></a></li>
+        <li><a href="ui.html"><i class="fa fa-magic"></i> <span>User Interface</span></a></li>
+        <li><a href="typography.html"><i class="fa fa-edit"></i> <span>Typography</span></a></li>
+        <li><a href="calendar.html"><i class="fa fa-calendar"></i> <span>Calendar</span></a></li>
+        <li class="has_sub"><a href="#"><i class="fa fa-sitemap"></i> <span>Extra Pages #1</span> <span
+                class="pull-right"><i class="fa fa-chevron-left"></i></span></a>
+            <ul>
+                <li><a href="post.html">Post</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="invoice.html">Invoice</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+            </ul>
+        </li>
+        <li class="has_sub"><a href="#"><i class="fa fa-file-text"></i> <span>Extra Pages #2</span> <span
+                class="pull-right"><i class="fa fa-chevron-left"></i></span></a>
+            <ul>
+                <li><a href="media.html">Media</a></li>
+                <li><a href="statement.html">Statement</a></li>
+                <li><a href="error.html">Error</a></li>
+                <li><a href="error-log.html">Error Log</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="grid.html">Grid</a></li>
+            </ul>
+        </li>
+        <li class="has_sub"><a href="#"><i class="fa fa-heart"></i> <span>3 Level Menu</span> <span
+                class="pull-right"><i class="fa fa-chevron-left"></i></span></a>
+            <ul>
+                <li><a href="#"><i class="fa fa-bookmark"></i> Subitem 1</a></li>
+                <li class="has_sub"><a href="#"><i class="fa fa-glass"></i> Subitem 2 <span class="pull-right"><i
+                        class="fa fa-chevron-left"></i></span></a>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-bell"></i> Subitem 1</a></li>
+                        <li><a href="#"><i class="fa fa-camera"></i> Subitem 2</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="has_sub"><a href="#"><i class="fa fa-folder"></i> <span>4 Level Menu</span> <span class="pull-right"><i
+                class="fa fa-chevron-left"></i></span></a>
+            <ul>
+                <li><a href="#"><i class="fa fa-thumb-tack"></i> Subitem 1</a></li>
+                <li class="has_sub"><a href="#"><i class="fa fa-thumbs-up"></i> Subitem 2 <span class="pull-right"><i
+                        class="fa fa-chevron-left"></i></span></a>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-trophy"></i> Subitem 1</a></li>
+                        <li class="has_sub"><a href="#"><i class="fa fa-share"></i> Subitem 2 <span
+                                class="pull-right"><i class="fa fa-chevron-left"></i></span></a>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-microphone"></i> Subitem 1</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i> Subitem 2</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </div>
-<!-- end BRAND HEADING -->
+<!-- Sidebar ends -->
 
-<div class="nav-top">
+<!-- Main bar -->
+<div class="mainbar">
 
-<!-- begin LEFT SIDE WIDGETS -->
-<ul class="nav navbar-left">
-    <li class="tooltip-sidebar-toggle">
-        <a href="#" id="sidebar-toggle" data-toggle="tooltip" data-placement="right" title="Sidebar Toggle">
-            <i class="fa fa-bars"></i>
-        </a>
-    </li>
-    <!-- You may add more widgets here using <li> -->
-</ul>
-<!-- end LEFT SIDE WIDGETS -->
+<!-- Page heading -->
+<div class="page-head">
+    <h2 class="pull-left">Dashboard</h2>
 
-<!-- begin MESSAGES/ALERTS/TASKS/USER ACTIONS DROPDOWNS -->
-<ul class="nav navbar-right">
-
-<!-- begin MESSAGES DROPDOWN -->
-<li class="dropdown">
-    <a href="#" class="messages-link dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-envelope"></i>
-        <span class="number">4</span> <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-scroll dropdown-messages">
-
-        <!-- Messages Dropdown Heading -->
-        <li class="dropdown-header">
-            <i class="fa fa-envelope"></i> 4 New Messages
-        </li>
-
-        <!-- Messages Dropdown Body - This is contained within a SlimScroll fixed height box. You can change the height using the SlimScroll jQuery features. -->
-        <li id="messageScroll">
-            <ul class="list-unstyled">
-                <li>
-                    <a href="#">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <img class="img-circle" src="/img/user-profile-1.jpg" alt="">
-                            </div>
-                            <div class="col-xs-10">
-                                <p>
-                                    <strong>Jane Smith</strong>: Hi again! I wanted to let you know that the order...
-                                </p>
-
-                                <p class="small">
-                                    <i class="fa fa-clock-o"></i> 12 minutes ago
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <img class="img-circle" src="/img/user-profile-2.jpg" alt="">
-                            </div>
-                            <div class="col-xs-10">
-                                <p>
-                                    <strong>Roddy Austin</strong>: Thanks for the info, if you need anything from...
-                                </p>
-
-                                <p class="small">
-                                    <i class="fa fa-clock-o"></i> 3:39 PM
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <img class="img-circle" src="/img/user-profile-3.jpg" alt="">
-                            </div>
-                            <div class="col-xs-10">
-                                <p>
-                                    <strong>Stacy Gibson</strong>: Hey, what was the purchase order number for the...
-                                </p>
-
-                                <p class="small">
-                                    <i class="fa fa-clock-o"></i> Yesterday at 10:23 AM
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <img class="img-circle" src="/img/user-profile-4.jpg" alt="">
-                            </div>
-                            <div class="col-xs-10">
-                                <p>
-                                    <strong>Jeffrey Cortez</strong>: Check out this video I found the other day, it's...
-                                </p>
-
-                                <p class="small">
-                                    <i class="fa fa-clock-o"></i> Tuesday at 12:23 PM
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Messages Dropdown Footer -->
-        <li class="dropdown-footer">
-            <a href="mailbox.html">Read All Messages</a>
-        </li>
-
-    </ul>
-    <!-- /.dropdown-menu -->
-</li>
-<!-- /.dropdown -->
-<!-- end MESSAGES DROPDOWN -->
-
-<!-- begin ALERTS DROPDOWN -->
-<li class="dropdown">
-    <a href="#" class="alerts-link dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-bell"></i>
-        <span class="number">9</span><i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-scroll dropdown-alerts">
-
-        <!-- Alerts Dropdown Heading -->
-        <li class="dropdown-header">
-            <i class="fa fa-bell"></i> 9 New Alerts
-        </li>
-
-        <!-- Alerts Dropdown Body - This is contained within a SlimScroll fixed height box. You can change the height using the SlimScroll jQuery features. -->
-        <li id="alertScroll">
-            <ul class="list-unstyled">
-                <li>
-                    <a href="#">
-                        <div class="alert-icon green pull-left">
-                            <i class="fa fa-money"></i>
-                        </div>
-                        Order #2931 Received
-                                            <span class="small pull-right">
-                                                <strong>
-                                                    <em>3 minutes ago</em>
-                                                </strong>
-                                            </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon blue pull-left">
-                            <i class="fa fa-comment"></i>
-                        </div>
-                        New Comments
-                        <span class="badge blue pull-right">15</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon orange pull-left">
-                            <i class="fa fa-wrench"></i>
-                        </div>
-                        Crawl Errors Detected
-                        <span class="badge orange pull-right">3</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon yellow pull-left">
-                            <i class="fa fa-question-circle"></i>
-                        </div>
-                        Server #2 Not Responding
-                                            <span class="small pull-right">
-                                                <strong>
-                                                    <em>5:25 PM</em>
-                                                </strong>
-                                            </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon red pull-left">
-                            <i class="fa fa-bolt"></i>
-                        </div>
-                        Server #4 Crashed
-                                            <span class="small pull-right">
-                                                <strong>
-                                                    <em>3:34 PM</em>
-                                                </strong>
-                                            </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon green pull-left">
-                            <i class="fa fa-plus-circle"></i>
-                        </div>
-                        New Users
-                        <span class="badge green pull-right">5</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon orange pull-left">
-                            <i class="fa fa-download"></i>
-                        </div>
-                        Downloads
-                        <span class="badge orange pull-right">16</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon purple pull-left">
-                            <i class="fa fa-cloud-upload"></i>
-                        </div>
-                        Server #8 Rebooted
-                                            <span class="small pull-right">
-                                                <strong>
-                                                    <em>12 hours ago</em>
-                                                </strong>
-                                            </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <div class="alert-icon red pull-left">
-                            <i class="fa fa-bolt"></i>
-                        </div>
-                        Server #8 Crashed
-                                            <span class="small pull-right">
-                                                <strong>
-                                                    <em>12 hours ago</em>
-                                                </strong>
-                                            </span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Alerts Dropdown Footer -->
-        <li class="dropdown-footer">
-            <a href="#">View All Alerts</a>
-        </li>
-
-    </ul>
-    <!-- /.dropdown-menu -->
-</li>
-<!-- /.dropdown -->
-<!-- end ALERTS DROPDOWN -->
-
-<!-- begin TASKS DROPDOWN -->
-<li class="dropdown">
-    <a href="#" class="tasks-link dropdown-toggle" data-toggle=dropdown>
-        <i class="fa fa-tasks"></i>
-        <span class=number>10</span><i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-scroll dropdown-tasks">
-
-        <!-- Tasks Dropdown Header -->
-        <li class="dropdown-header">
-            <i class="fa fa-tasks"></i> 10 Pending Tasks
-        </li>
-
-        <!-- Tasks Dropdown Body - This is contained within a SlimScroll fixed height box. You can change the height using the SlimScroll jQuery features. -->
-        <li id="taskScroll">
-            <ul class="list-unstyled">
-                <li>
-                    <a href="#">
-                        <p>
-                            Software Update 2.1
-                                                <span class="pull-right">
-                                                    <strong>60%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                 aria-valuemax="100" style="width: 60%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            Server #2 Hardware Upgrade
-                                                <span class="pull-right">
-                                                    <strong>90%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            Call Ticket #2032
-                                                <span class="pull-right">
-                                                    <strong>72%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="72"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            Emergency Maintenance
-                                                <span class="pull-right">
-                                                    <strong>36%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="36"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 36%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            Purchase Order #439
-                                                <span class="pull-right">
-                                                    <strong>52%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped">
-                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="52"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 52%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            March Content Update
-                                                <span class="pull-right">
-                                                    <strong>14%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="14"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 14%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            Client #42 Data Scrubbing
-                                                <span class="pull-right">
-                                                    <strong>68%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="68" aria-valuemin="0"
-                                 aria-valuemax="100" style="width: 68%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            PHP Upgrade Server #6
-                                                <span class="pull-right">
-                                                    <strong>85%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="85"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            Malware Scan
-                                                <span class="pull-right">
-                                                    <strong>66%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="66"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 66%;"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <p>
-                            New Employee Intake
-                                                <span class="pull-right">
-                                                    <strong>98%</strong>
-                                                </span>
-                        </p>
-
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="14"
-                                 aria-valuemin="0" aria-valuemax="100" style="width: 98%;"></div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Tasks Dropdown Footer -->
-        <li class="dropdown-footer">
-            <a href="#">View All Tasks</a>
-        </li>
-
-    </ul>
-    <!-- /.dropdown-menu -->
-</li>
-<!-- /.dropdown -->
-<!-- end TASKS DROPDOWN -->
-
-<!-- begin USER ACTIONS DROPDOWN -->
-<li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-user"></i> <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-user">
-        <li>
-            <a href="profile.html">
-                <i class="fa fa-user"></i> My Profile
-            </a>
-        </li>
-        <li>
-            <a href="mailbox.html">
-                <i class="fa fa-envelope"></i> My Messages
-                <span class="badge green pull-right">4</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fa fa-bell"></i> My Alerts
-                <span class="badge orange pull-right">9</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fa fa-tasks"></i> My Tasks
-                <span class="badge blue pull-right">10</span>
-            </a>
-        </li>
-        <li>
-            <a href="calendar.html">
-                <i class="fa fa-calendar"></i> My Calendar
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#">
-                <i class="fa fa-gear"></i> Settings
-            </a>
-        </li>
-        <li>
-            <a class="logout_open" href="#logout">
-                <i class="fa fa-sign-out"></i> Logout
-                <strong>John Smith</strong>
-            </a>
-        </li>
-    </ul>
-    <!-- /.dropdown-menu -->
-</li>
-<!-- /.dropdown -->
-<!-- end USER ACTIONS DROPDOWN -->
-
-</ul>
-<!-- /.nav -->
-<!-- end MESSAGES/ALERTS/TASKS/USER ACTIONS DROPDOWNS -->
-
-</div>
-<!-- /.nav-top -->
-</nav>
-<!-- /.navbar-top -->
-<!-- end TOP NAVIGATION -->
-
-<!-- begin SIDE NAVIGATION -->
-<nav class="navbar-side" role="navigation">
-<div class="navbar-collapse sidebar-collapse collapse">
-<ul id="side" class="nav navbar-nav side-nav">
-<!-- begin SIDE NAV USER PANEL -->
-<li class="side-user hidden-xs">
-    <div class="welcome">
-        <p class="fa fa-key"> 欢迎您 </p>
-
-        <p class="fa fa-key"> {{user.name}} </p>
-
-        <p class="fa fa-key"> {{user.companyName}} </p>
+    <div class="pull-right">
+        <div id="reportrange" class="pull-right">
+            <i class="fa fa-calendar"></i>
+            <span></span> <b class="caret"></b>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- Breadcrumb -->
+    <div class="bread-crumb">
+        <a href="index.html"><i class="fa fa-home"></i> Home</a>
+        <!-- Divider -->
+        <span class="divider">/</span>
+        <a href="#" class="bread-current">Dashboard</a>
     </div>
 
     <div class="clearfix"></div>
-</li>
-<!-- end SIDE NAV USER PANEL -->
-<!-- begin SIDE NAV SEARCH -->
-<li class="nav-search">
-    <form role="form">
-        <input type="search" class="form-control" placeholder="Search...">
-        <button class="btn">
-            <i class="fa fa-search"></i>
-        </button>
-    </form>
-</li>
-<!-- end SIDE NAV SEARCH -->
-<!-- begin DASHBOARD LINK -->
-<li>
-    <a class="active" href="index.html">
-        <i class="fa fa-dashboard"></i> Dashboard
-    </a>
-</li>
-<!-- end DASHBOARD LINK -->
-<!-- begin CHARTS DROPDOWN -->
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#charts">
-        <i class="fa fa-bar-chart-o"></i> Charts <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="charts">
-        <li>
-            <a href="flot.html">
-                <i class="fa fa-angle-double-right"></i> Flot Charts
-            </a>
-        </li>
-        <li>
-            <a href="morris.html">
-                <i class="fa fa-angle-double-right"></i> Morris.js
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- end CHARTS DROPDOWN -->
-<!-- begin FORMS DROPDOWN -->
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#forms">
-        <i class="fa fa-edit"></i> Forms <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="forms">
-        <li>
-            <a href="basic-form-elements.html">
-                <i class="fa fa-angle-double-right"></i> Basic Elements
-            </a>
-        </li>
-        <li>
-            <a href="advanced-form-elements.html">
-                <i class="fa fa-angle-double-right"></i> Advanced Elements
-            </a>
-        </li>
-        <li>
-            <a href="validation.html">
-                <i class="fa fa-angle-double-right"></i> Validation
-            </a>
-        </li>
-        <li>
-            <a href="wysiwyg-editor.html">
-                <i class="fa fa-angle-double-right"></i> WYSIWYG Editor
-            </a>
-        </li>
-        <li>
-            <a href="dropzone-uploader.html">
-                <i class="fa fa-angle-double-right"></i> Dropzone Uploader
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- end FORMS DROPDOWN -->
-<!-- begin CALENDAR LINK -->
-<li>
-    <a href="calendar.html">
-        <i class="fa fa-calendar"></i> Calendar
-    </a>
-</li>
-<!-- end CALENDAR LINK -->
-<!-- begin TABLES DROPDOWN -->
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#tables">
-        <i class="fa fa-table"></i> Tables <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="tables">
-        <li>
-            <a href="basic-tables.html">
-                <i class="fa fa-angle-double-right"></i> Basic Tables
-            </a>
-        </li>
-        <li>
-            <a href="advanced-tables.html">
-                <i class="fa fa-angle-double-right"></i> Advanced Tables
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- end TABLES DROPDOWN -->
-<!-- begin UI ELEMENTS DROPDOWN -->
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle"
-       data-target="#ui-elements">
-        <i class="fa fa-wrench"></i> UI Elements <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="ui-elements">
-        <li>
-            <a href="portlets.html">
-                <i class="fa fa-angle-double-right"></i> Portlets &amp; Widgets
-            </a>
-        </li>
-        <li>
-            <a href="buttons.html">
-                <i class="fa fa-angle-double-right"></i> Buttons
-            </a>
-        </li>
-        <li>
-            <a href="tabs-accordions.html">
-                <i class="fa fa-angle-double-right"></i> Tabs &amp; Accordions
-            </a>
-        </li>
-        <li>
-            <a href="notifications.html">
-                <i class="fa fa-angle-double-right"></i> Popups &amp; Notifications
-            </a>
-        </li>
-        <li>
-            <a href="sliders.html">
-                <i class="fa fa-angle-double-right"></i> Sliders
-            </a>
-        </li>
-        <li>
-            <a href="typography.html">
-                <i class="fa fa-angle-double-right"></i> Typography
-            </a>
-        </li>
-        <li>
-            <a href="icons.html">
-                <i class="fa fa-angle-double-right"></i> Icons
-            </a>
-        </li>
-        <li>
-            <a href="grid.html">
-                <i class="fa fa-angle-double-right"></i> Grid
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- end UI ELEMENTS DROPDOWN -->
-<!-- begin MESSAGE CENTER DROPDOWN -->
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle"
-       data-target="#message-center">
-        <i class="fa fa-inbox"></i> Message Center <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="message-center">
-        <li>
-            <a href="mailbox.html">
-                <i class="fa fa-angle-double-right"></i> Mailbox
-            </a>
-        </li>
-        <li>
-            <a href="compose-message.html">
-                <i class="fa fa-angle-double-right"></i> Compose Message
-            </a>
-        </li>
-        <li>
-            <a href="chat.html">
-                <i class="fa fa-angle-double-right"></i> Chat
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- end MESSAGE CENTER DROPDOWN -->
-<!-- begin PAGES DROPDOWN -->
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#pages">
-        <i class="fa fa-files-o"></i> Pages <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="pages">
-        <li>
-            <a href="profile.html">
-                <i class="fa fa-angle-double-right"></i> User Profile
-            </a>
-        </li>
-        <li>
-            <a href="invoice.html">
-                <i class="fa fa-angle-double-right"></i> Invoice
-            </a>
-        </li>
-        <li>
-            <a href="pricing.html">
-                <i class="fa fa-angle-double-right"></i> Pricing Tables
-            </a>
-        </li>
-        <li>
-            <a href="faq.html">
-                <i class="fa fa-angle-double-right"></i> FAQ Page
-            </a>
-        </li>
-        <li>
-            <a href="search-results.html">
-                <i class="fa fa-angle-double-right"></i> Search Results
-            </a>
-        </li>
-        <li>
-            <a href="login.html">
-                <i class="fa fa-angle-double-right"></i> Login Basic
-            </a>
-        </li>
-        <li>
-            <a href="login-social.html">
-                <i class="fa fa-angle-double-right"></i> Login Social
-            </a>
-        </li>
-        <li>
-            <a href="404.html">
-                <i class="fa fa-angle-double-right"></i> 404 Error
-            </a>
-        </li>
-        <li>
-            <a href="500.html">
-                <i class="fa fa-angle-double-right"></i> 500 Error
-            </a>
-        </li>
-        <li>
-            <a href="blank.html">
-                <i class="fa fa-angle-double-right"></i> Blank Page
-            </a>
-        </li>
-    </ul>
-</li>
-
-<li class="panel">
-    <a href="javascript:;" data-parent="#side" data-toggle="collapse" class="accordion-toggle" data-target="#settings">
-        <i class="fa fa-files-o"></i> 设置 <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="collapse nav" id="settings">
-        <li>
-            <a href="#/emails">
-                <i class="fa fa-angle-double-right"></i> 简历邮箱
-            </a>
-        </li>
-        <li>
-            <a href="invoice.html">
-                <i class="fa fa-angle-double-right"></i> Invoice
-            </a>
-        </li>
-        <li>
-            <a href="pricing.html">
-                <i class="fa fa-angle-double-right"></i> Pricing Tables
-            </a>
-        </li>
-        <li>
-            <a href="faq.html">
-                <i class="fa fa-angle-double-right"></i> FAQ Page
-            </a>
-        </li>
-        <li>
-            <a href="search-results.html">
-                <i class="fa fa-angle-double-right"></i> Search Results
-            </a>
-        </li>
-        <li>
-            <a href="login.html">
-                <i class="fa fa-angle-double-right"></i> Login Basic
-            </a>
-        </li>
-        <li>
-            <a href="login-social.html">
-                <i class="fa fa-angle-double-right"></i> Login Social
-            </a>
-        </li>
-        <li>
-            <a href="404.html">
-                <i class="fa fa-angle-double-right"></i> 404 Error
-            </a>
-        </li>
-        <li>
-            <a href="500.html">
-                <i class="fa fa-angle-double-right"></i> 500 Error
-            </a>
-        </li>
-        <li>
-            <a href="blank.html">
-                <i class="fa fa-angle-double-right"></i> Blank Page
-            </a>
-        </li>
-    </ul>
-</li>
-</ul>
-</div>
-</nav>
-
-<div id="page-wrapper">
-    <div class="page-content" ng-view></div>
-</div>
 
 </div>
+<!-- Page heading ends -->
 
-<script src="/lib/jquery/dist/jquery.js"></script>
-<script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/lib/slimScroll/jquery.slimscroll.min.js"></script>
-<script src="/lib/jquery-popup-overlay/jquery.popupoverlay.js"></script>
-<script src="/js/flex.js"></script>
+
+<!-- Matter -->
+
+<div class="matter">
+<div class="container">
+
+<!-- Today status. jQuery Sparkline plugin used. -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- List starts -->
+                <ul class="today-datas">
+                    <!-- List #1 -->
+                    <li>
+                        <!-- Graph -->
+                        <div><span id="todayspark1" class="spark"></span></div>
+                        <!-- Text -->
+                        <div class="datas-text">12,000 visitors/day</div>
+                    </li>
+                    <li>
+                        <div><span id="todayspark2" class="spark"></span></div>
+                        <div class="datas-text">30,000 Pageviews</div>
+                    </li>
+                    <li>
+                        <div><span id="todayspark3" class="spark"></span></div>
+                        <div class="datas-text">15.66% Bounce Rate</div>
+                    </li>
+                    <li>
+                        <div><span id="todayspark4" class="spark"></span></div>
+                        <div class="datas-text">$12,000 Revenue/Day</div>
+                    </li>
+                    <li>
+                        <div><span id="todayspark5" class="spark"></span></div>
+                        <div class="datas-text">15,000000 visitors till date</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 pill-container">
+                <div class="header-data">
+
+                    <!-- Traffic data -->
+                    <div class="hdata">
+                        <div class="mcol-left">
+                            <div id="pie-chart4"></div>
+                        </div>
+                        <div class="mcol-right">
+                            <!-- Number of visitors -->
+                            <p><a href="#">7000</a> <em>visits</em></p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <!-- Members data -->
+                    <div class="hdata">
+                        <div class="mcol-left">
+                            <div id="pie-chart5"></div>
+                        </div>
+                        <div class="mcol-right">
+                            <!-- Number of visitors -->
+                            <p><a href="#">3000</a> <em>users</em></p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <!-- revenue data -->
+                    <div class="hdata">
+                        <div class="mcol-left">
+                            <div id="pie-chart6"></div>
+                        </div>
+                        <div class="mcol-right">
+                            <!-- Number of visitors -->
+                            <p><a href="#">5000</a><em>orders</em></p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Today status ends -->
+
+<!-- Dashboard Graph starts -->
+<div class="row">
+    <div class="col-md-8 portlets">
+
+        <!-- Widget -->
+        <div class="widget white headless footless">
+            <!-- Widget head -->
+            <div class="widget-head">
+                <div class="pull-left">Dashboard Chart</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                    <a href="#" class="wsettings"><i class="fa fa-wrench"></i></a>
+                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <!-- Widget content -->
+            <div class="widget-content">
+                <div class="padd">
+                    <div class="btn-group">
+                        <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-th-large"></i>
+                            <span class="fa fa-caret-down fa fa-on-right"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-right">
+                        <div data-toggle="buttons" class="btn-group">
+                            <label class="btn btn-sm btn-default">
+                                <input type="radio" id="option1" name="options"> Daily
+                            </label>
+                            <label class="btn btn-sm btn-default">
+                                <input type="radio" id="option2" name="options"> Weekly
+                            </label>
+                            <label class="btn btn-sm btn-default active">
+                                <input type="radio" id="option3" name="options"> Monthly
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="graph1"></div>
+                </div>
+            </div>
+            <!-- Widget ends -->
+
+        </div>
+    </div>
+    <div class="col-md-4 portlets">
+
+        <!-- Widget -->
+        <div class="widget">
+            <!-- Widget content -->
+            <div class="widget-content">
+                <div id="graph2"></div>
+            </div>
+            <!-- Widget ends -->
+
+        </div>
+        <!-- Widget -->
+        <div class="widget">
+            <!-- Widget content -->
+            <div class="widget-content">
+                <div class="padd">
+                    <div data-toggle="buttons" class="btn-group">
+                        <label class="btn btn-default">
+                            Print
+                        </label>
+                        <label class="btn btn-default">
+                            Export
+                        </label>
+                        <label class="btn btn-default">
+                            E-mail
+                        </label>
+                    </div>
+
+                    <div class="btn-group pull-right">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-cog"></i> Settings
+                            <span class="fa fa-caret-down fa fa-on-right"></span>
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Widget ends -->
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 portlets">
+
+        <!-- Widget -->
+        <div class="widget">
+            <!-- Widget head -->
+            <div class="widget-head">
+                <div class="pull-left"><i class="fa fa-bar-chart"></i> Graph Chart</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                    <a href="#" class="wsettings"><i class="fa fa-wrench"></i></a>
+                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <!-- Widget content -->
+            <div class="widget-content">
+                <div class="padd">
+
+                    <div id="bar-chart2"></div>
+
+                </div>
+            </div>
+            <!-- Widget ends -->
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 portlets">
+
+        <div class="widget">
+
+            <div class="widget-head">
+                <div class="pull-left">Today Status</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                    <a href="#" class="wsettings"><i class="fa fa-wrench"></i></a>
+                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content">
+                <div class="padd">
+
+                    <!-- Visitors, pageview, bounce rate, etc., Sparklines plugin used -->
+                    <ul class="current-status">
+                        <li>
+                            <span id="status1"></span> <span class="bold">Visits : 411,231</span>
+                        </li>
+                        <li>
+                            <span id="status2"></span> <span class="bold">Unique Visitors : 1,345</span>
+                        </li>
+                        <li>
+                            <span id="status3"></span> <span class="bold">Pageviews : 21,312</span>
+                        </li>
+                        <li>
+                            <span id="status4"></span> <span class="bold">Pages / Visit : 6,523</span>
+                        </li>
+                        <li>
+                            <span id="status5"></span> <span class="bold">Avg. Visit Duration : 12:17</span>
+                        </li>
+                        <li>
+                            <span id="status6"></span> <span class="bold">Bounce Rate : 32%</span>
+                        </li>
+                        <li>
+                            <span id="status7"></span> <span class="bold">% New Visits : 76%</span>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Dashboard graph ends -->
+
+<!-- Chats, File upload and Recent Comments -->
+<div class="row">
+
+<div class="col-md-4 portlets">
+    <!-- Widget -->
+    <div class="widget">
+        <!-- Widget title -->
+        <div class="widget-head">
+            <div class="pull-left">Chats</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="widget-content">
+            <!-- Widget content -->
+            <div class="padd sscroll">
+
+                <ul class="chats">
+
+                    <!-- Chat by us. Use the class "by-me". -->
+                    <li class="by-me">
+                        <!-- Use the class "pull-left" in avatar -->
+                        <div class="avatar pull-left">
+                            <img src="img/user.jpg" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                            <!-- In meta area, first include "name" and then "time" -->
+                            <div class="chat-meta">Jane Doe <span class="pull-right">3 hours ago</span></div>
+                            Vivamus diam elit diam, consectetur dapibus adipiscing elit.
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+                    <!-- Chat by other. Use the class "by-other". -->
+                    <li class="by-other">
+                        <!-- Use the class "pull-right" in avatar -->
+                        <div class="avatar pull-right">
+                            <img src="img/user22.png" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                            <!-- In the chat meta, first include "time" then "name" -->
+                            <div class="chat-meta">3 hours ago <span class="pull-right">John Doe</span></div>
+                            Vivamus diam elit diam, consectetur fconsectetur dapibus adipiscing elit.
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+                    <li class="by-me">
+                        <div class="avatar pull-left">
+                            <img src="img/user.jpg" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                            <div class="chat-meta">Jane Doe <span class="pull-right">4 hours ago</span></div>
+                            Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur dapibus
+                            adipiscing elit.
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+                    <li class="by-other">
+                        <!-- Use the class "pull-right" in avatar -->
+                        <div class="avatar pull-right">
+                            <img src="img/user22.png" alt=""/>
+                        </div>
+
+                        <div class="chat-content">
+                            <!-- In the chat meta, first include "time" then "name" -->
+                            <div class="chat-meta">3 hours ago <span class="pull-right">John Doe</span></div>
+                            Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur dapibus
+                            adipiscing elit.
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </div>
+            <!-- Widget footer -->
+            <div class="widget-foot">
+
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Type your message here...">
+                    </div>
+                    <button type="submit" class="btn btn-info">Send</button>
+                </form>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<!-- File Upload widget -->
+<div class="col-md-4 portlets">
+    <div class="widget">
+        <!-- Widget title -->
+        <div class="widget-head">
+            <div class="pull-left">File Upload</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="widget-content">
+            <!-- Widget content -->
+            <ul class="file-upload">
+
+                <li>
+                    <strong><i class="fa fa-upload-alt"></i> File_Name_Here.Mp3</strong>
+
+                    <div class="file-meta">3.3 of 5MB - 5 mins - 1MB/Sec</div>
+
+                    <div class="progress progress-animated progress-striped">
+                        <div class="progress-bar progress-bar-success" data-percentage="100">
+                            <span class="sr-only">100 % completed</span>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <strong><i class="fa fa-check"></i> Third_File_Here.Mp3</strong>
+
+                    <div class="file-meta">5MB - 5 mins - Stopped</div>
+                </li>
+
+                <li>
+                    <strong><i class="fa fa-check"></i> Third_File_Here.Mp3</strong>
+
+                    <div class="file-meta">5MB - 5 mins - Stopped</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="widget">
+        <!-- Widget title -->
+        <div class="widget-head">
+            <div class="pull-left">Browsers</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content referrer">
+            <!-- Widget content -->
+
+            <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <th>
+                        <center>#</center>
+                    </th>
+                    <th>Browsers</th>
+                    <th>Visits</th>
+                </tr>
+                <tr>
+                    <td><img src="img/icons/chrome.png" alt=""/>
+                    <td>Google Chrome</td>
+                    <td>3,005</td>
+                </tr>
+                <tr>
+                    <td><img src="img/icons/firefox.png" alt=""/>
+                    <td>Mozilla Firefox</td>
+                    <td>2,505</td>
+                </tr>
+                <tr>
+                    <td><img src="img/icons/ie.png" alt=""/>
+                    <td>Internet Explorer</td>
+                    <td>1,405</td>
+                </tr>
+                <tr>
+                    <td><img src="img/icons/opera.png" alt=""/>
+                    <td>Opera</td>
+                    <td>4,005</td>
+                </tr>
+                <tr>
+                    <td><img src="img/icons/safari.png" alt=""/>
+                    <td>Safari</td>
+                    <td>505</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="col-md-4 portlets">
+    <!-- Widget -->
+    <div class="widget">
+        <!-- Widget title -->
+        <div class="widget-head">
+            <div class="pull-left">Recent Comments</div>
+            <div class="widget-icons pull-right">
+                <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content">
+            <!-- Widget content -->
+            <div class="padd">
+
+                <ul class="recent">
+
+
+                    <li>
+
+                        <div class="recent-content">
+                            <div class="recent-meta">Posted on 25/1/2120 by Ashok</div>
+                            <div>Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur
+                                dapibus adipiscing elit.
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-xs btn-default"><i class="fa fa-check"></i></button>
+                                <button class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs btn-default"><i class="fa fa-times"></i></button>
+                            </div>
+
+                            <button class="btn btn-xs btn-danger pull-right">Spam</button>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+
+                    <li>
+
+                        <div class="recent-content">
+                            <div class="recent-meta">Posted on 25/1/2120 by Ashok</div>
+                            <div>Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur
+                                dapibus adipiscing elit.
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-xs btn-default"><i class="fa fa-check"></i></button>
+                                <button class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs btn-default"><i class="fa fa-times"></i></button>
+                            </div>
+
+                            <button class="btn btn-xs btn-danger pull-right">Spam</button>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+
+                    <li>
+
+                        <div class="recent-content">
+                            <div class="recent-meta">Posted on 25/1/2120 by Ashok</div>
+                            <div>Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur
+                                dapibus adipiscing elit.
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-xs btn-default"><i class="fa fa-check"></i></button>
+                                <button class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs btn-default"><i class="fa fa-times"></i></button>
+                            </div>
+
+                            <button class="btn btn-xs btn-danger pull-right">Spam</button>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </li>
+
+
+                </ul>
+
+            </div>
+            <!-- Widget footer -->
+            <div class="widget-foot">
+
+
+                <ul class="pagination pull-right">
+                    <li><a href="#">Prev</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">Next</a></li>
+                </ul>
+
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6 portlets">
+        <div class="widget">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left">Calendar</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="widget-content">
+                <!-- Widget content -->
+                <div class="padd">
+                    <!-- Below line produces calendar. I am using FullCalendar plugin. -->
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6 portlets">
+        <div class="widget">
+            <div class="widget-head">
+                <div class="pull-left">Quick Post</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="widget-content">
+                <div class="padd">
+
+                    <div class="form quick-post">
+                        <!-- Edit profile form (not working)-->
+                        <form class="form-horizontal">
+                            <!-- Title -->
+                            <div class="form-group">
+                                <label class="control-label col-lg-2" for="title">Title</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="title">
+                                </div>
+                            </div>
+                            <!-- Content -->
+                            <div class="form-group">
+                                <label class="control-label col-lg-2" for="content">Content</label>
+
+                                <div class="col-lg-10">
+                                    <textarea class="form-control" id="content"></textarea>
+                                </div>
+                            </div>
+                            <!-- Cateogry -->
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Category</label>
+
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option value="">- Choose Cateogry -</option>
+                                        <option value="1">General</option>
+                                        <option value="2">News</option>
+                                        <option value="3">Media</option>
+                                        <option value="4">Funny</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Tags -->
+                            <div class="form-group">
+                                <label class="control-label col-lg-2" for="tags">Tags</label>
+
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="tags">
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="form-group">
+                                <!-- Buttons -->
+                                <div class="col-lg-offset-2 col-lg-9">
+                                    <button type="submit" class="btn btn-primary">Publish</button>
+                                    <button type="submit" class="btn btn-danger">Save Draft</button>
+                                    <button type="reset" class="btn btn-default">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+                <div class="widget-foot">
+                    <!-- Footer goes here -->
+                </div>
+            </div>
+        </div>
+        <div class="widget wblack">
+            <div class="widget-head">
+                <div class="pull-left">Black Chart</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
+                    <a href="#" class="wclose"><i class="fa fa-times"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="widget-content">
+                <div class="padd">
+
+                    <div id="bar-chart"></div>
+
+                </div>
+                <div class="widget-foot">
+                    <!-- Footer goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<!-- Matter ends -->
+
+</div>
+
+<!-- Mainbar ends -->
+<div class="clearfix"></div>
+
+</div>
+<!-- Content ends -->
+
+<!-- Footer starts -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Copyright info -->
+                <p class="copy">Copyright &copy; 2013 | <a href="#">Your Site</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Footer ends -->
+
+<!-- Scroll to top -->
+<span class="totop"><a href="#"><i class="fa fa-chevron-up"></i></a></span>
 
 {% include './includes/foot.html' %}
-
+<!-- Index Javascripts -->
 </body>
-
 </html>

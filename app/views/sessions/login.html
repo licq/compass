@@ -1,63 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include '../includes/head.html' %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <!-- Title and other stuffs -->
+    <title>Login - MoodStrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <!-- Stylesheets -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Support for IE -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shim.js"></script>
+    <![endif]-->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon/favicon.png">
+</head>
 
 <body>
-<header class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <a href="/" class="navbar-brand">Compass</a>
-        </div>
-    </div>
-</header>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="login-banner text-center">
-                <h1><i class="fa fa-gears"></i>Compass</h1>
-            </div>
-            <div class="portlet portlet-green">
-                <div class="portlet-heading login-heading">
-                    <div class="portlet-title">
-                        <h4><strong>登陆Compass!</strong>
-                        </h4>
+<!-- Form area -->
+<div class="admin-form">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Widget starts -->
+                <div class="widget">
+                    <!-- Widget head -->
+                    <div class="widget-head">
+                        <i class="icon-lock"></i> 登陆
                     </div>
-                    <div class="portlet-widgets">
-                        <a href="/signup" class="btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i>新用户</a>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="portlet-body">
-                    {% if message && message.length  %}
-                    <div class="alert alert-error">
-                        <!--<button class="close" data-dismiss="alert">&times;</button>-->
-                        <div class="strong">
-                            {{ message }}
+
+                    <div class="widget-content">
+                        <div class="padd">
+                            <!-- Login form -->
+                            <form class="form-horizontal" action='/sessions' method="post">
+                                <!-- Email -->
+                                {% if message && message.length%}
+                                <div class="well text-danger">{{message}}</div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Email</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" name="email" placeholder="Email">
+                                    </div>
+                                </div>
+                                <!-- Password -->
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">密码</label>
+
+                                    <div class="col-lg-9">
+                                        <input type="password" class="form-control" name="password"
+                                               placeholder="密码">
+                                    </div>
+                                </div>
+                                <!-- Remember me checkbox and sign in button -->
+                                <div class="form-group">
+                                    <div class="col-lg-9 col-lg-offset-3">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="remember_me"> 记住我
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9 col-lg-offset-3">
+                                    <button type="submit" class="btn btn-danger">登陆</button>
+                                    <button type="reset" class="btn btn-default">重置</button>
+                                </div>
+                                <br/>
+                            </form>
+
                         </div>
                     </div>
-                    {% endif %}
-                    <form accept-charset="UTF-8" role="form" action="/sessions" method="post">
-                        <fieldset>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="E-mail" name="email" type="text">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="密码" name="password" type="password" value="">
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input name="remember_me" type="checkbox"/>记住我
-                                </label>
-                            </div>
-                            <br>
-                            <input type="submit" class="btn btn-lg btn-green btn-block" value="登陆"></button>
-                        </fieldset>
-                        <br>
-                        <p class="small">
-                            <a href="#">忘记密码?</a>
-                        </p>
-                    </form>
+
+                    <div class="widget-foot">
+                        还没有注册? <a href="/signup">注册</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,15 +93,8 @@
 </div>
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="/lib/jquery/dist/jquery.min.js"></script>
-<script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-{% if (process.env.NODE_ENV == 'development') %}
-<!-- Livereload script rendered -->
-<script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
-{% endif %}
-
+<!-- JS -->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
 </body>
 </html>

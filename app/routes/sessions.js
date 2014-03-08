@@ -14,13 +14,14 @@ module.exports = function (app, passport) {
     app.get('/logout', function (req, res) {
         res.clearCookie('remember_me');
         req.logout();
-        res.redirect('/');
+        res.redirect('/login');
     });
 
     app.post('/sessions',
         passport.authenticate('local', {
             failureRedirect: '/login',
-            failureFlash: true
+            failureFlash: true,
+            badRequestMessage: '用户名或密码不正确'
         }),
         function (req, res, next) {
             if (!req.body.remember_me) {
