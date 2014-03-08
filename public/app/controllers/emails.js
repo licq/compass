@@ -1,9 +1,11 @@
-app.controller('EmailListController', function ($scope) {
+'use strict';
+
+angular.module('compass').controller('EmailListController', function ($scope) {
     $scope.myData = [
-        {"email": "job@jinjiang.com", "totalResumes": 43, "lastTime": "2013-4-30", "active": true},
-        {"email": "job@jinjiang.com", "totalResumes": 42, "lastTime": "2013-3-30", "active": false},
-        {"email": "job@jinjiang.com", "totalResumes": 40, "lastTime": "2013-2-30", "active": true},
-        {"email": "job@jinjiang.com", "totalResumes": 22, "lastTime": "2013-1-30", "active": true}
+        {email: 'job@jinjiang.com', totalResumes: 43, lastTime: '2013-4-30', active: true},
+        {email: 'job@jinjiang.com', totalResumes: 42, lastTime: '2013-3-30', active: false},
+        {email: 'job@jinjiang.com', totalResumes: 40, lastTime: '2013-2-30', active: true},
+        {email: 'job@jinjiang.com', totalResumes: 22, lastTime: '2013-1-30', active: true}
     ];
     $scope.gridOptions = {
         multiSelect: false,

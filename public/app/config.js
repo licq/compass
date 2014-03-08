@@ -1,10 +1,9 @@
 'use strict';
 
-app.config(
-    function ($routeProvider, $urlRouterProvider) {
-        console.log('config');
+angular.module('compass').config(
+    function ($routeProvider) {
         $routeProvider
-            .when('/',{
+            .when('/', {
                 templateUrl: '/views/dashboard.html'
             })
             .when('/emails', {

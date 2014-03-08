@@ -16,23 +16,26 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'public/js/jquery.js',
             'public/lib/angular/angular.js',
             'public/lib/angular-mocks/angular-mocks.js',
             'public/lib/angular-cookies/angular-cookies.js',
             'public/lib/angular-resource/angular-resource.js',
+            'public/lib/angular-route/angular-route.js',
             'public/lib/angular-ui-router/release/angular-ui-router.js',
             'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
             'public/lib/angular-bootstrap/ui-bootstrap.js',
-            'public/js/app.js',
-            'public/js/config.js',
-            'public/js/directives.js',
-            'public/js/filters.js',
-            'public/js/services/global.js',
-            'public/js/services/articles.js',
-            'public/js/controllers/articles.js',
-            'public/js/controllers/index.js',
-            'public/js/controllers/header.js',
-            'public/js/init.js',
+            'public/lib/ng-grid/ng-grid-2.0.7.min.js',
+            'public/app/app.js',
+            'public/app/config.js',
+            'public/app/directives.js',
+            'public/app/filters.js',
+            'public/app/services/global.js',
+            'public/app/services/articles.js',
+            'public/app/controllers/articles.js',
+            'public/app/controllers/index.js',
+            'public/app/controllers/header.js',
+            'public/app/init.js',
             'test/karma/unit/**/*.js'
         ],
 
@@ -53,8 +56,8 @@ module.exports = function(config) {
             // source files, that you wanna generate coverage for
             // do not include tests or libraries
             // (these files will be instrumented by Istanbul)
-            'public/js/controllers/*.js': ['coverage'],
-            'public/js/services/*.js': ['coverage']
+            'public/app/controllers/*.js': ['coverage'],
+            'public/app/services/*.js': ['coverage']
         },
 
         coverageReporter: {

@@ -1,7 +1,6 @@
 'use strict';
 
-var should = require('should'),
-    mongoose = require('mongoose'),
+var mongoose = require('mongoose'),
     Registration = mongoose.model('Registration'),
     _ = require('lodash');
 
@@ -13,7 +12,7 @@ describe('Registration', function () {
             registration = new Registration();
             registration.save(function (err) {
                 console.log(_.map(err.errors, function (e) {
-                    return e.message
+                    return e.message;
                 }));
                 Object.keys(err.errors).should.have.length(4);
 

@@ -1,9 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    validator = require('validator'),
-    _ = require('lodash');
+    Schema = mongoose.Schema;
 
 var companySchema = new Schema({
     name: {
@@ -12,7 +10,6 @@ var companySchema = new Schema({
         unique: true
     }
 });
-
 
 
 module.exports = mongoose.model('Company', companySchema);

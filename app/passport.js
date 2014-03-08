@@ -3,7 +3,6 @@
 var User = require('./models/user'),
     LocalStrategy = require('passport-local').Strategy,
     RememberMeStrategy = require('passport-remember-me').Strategy,
-    config = require('./config'),
     Token = require('./models/token');
 
 module.exports = function (passport) {
