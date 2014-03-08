@@ -1,4 +1,4 @@
-// Flex Admin Custom JavaScript Document
+ // Flex Admin Custom JavaScript Document
 
 //Sidebar Toggle
 $("#sidebar-toggle").click(function(e) {
