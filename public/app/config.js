@@ -22,6 +22,10 @@ angular.module('compass').config(
                 templateUrl: '/views/emails/list.html',
                 controller: 'EmailListController'
             })
+            .when('/emails/new',{
+                templateUrl: '/views/emails/new.html',
+                controller: 'EmailNewController'
+            })
             .otherwise({
                 redirectTo: '/'
             });

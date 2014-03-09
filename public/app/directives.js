@@ -30,5 +30,5 @@ angular.module('compass')
             },
             template: '<span class="label" ng-class = "{\'label-success\': value, \'label-danger\': !value}">' +
                 '{{value | state}}</span>'
-        }
+        };
     });
