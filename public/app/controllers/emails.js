@@ -15,9 +15,9 @@ angular.module('compass').controller('EmailListController', function ($scope) {
             {field: 'lastTime', displayName: '上次收取时间'},
             {field: 'active',
                 displayName: '状态',
-                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span class="label" ' +
-                    'ng-class="{\'label-success\': row.getProperty(col.field), \'label-danger\': !row.getProperty(col.field)}">' +
-                    '{{row.getProperty(col.field) | state}}</span></div>'},
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"> ' +
+                    '<status-span value="row.getProperty(col.field)"></status-span>' +
+                    '</div>'},
             {field: 'actions',
                 displayName: '操作',
                 sortable: false,

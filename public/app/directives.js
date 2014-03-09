@@ -20,4 +20,15 @@ angular.module('compass')
             },
             template: '<button class="btn btn-xs btn-warning" ng-click="action()"><i class="fa fa-pencil"></i></button>'
         };
+    })
+    .directive('statusSpan', function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                value: '='
+            },
+            template: '<span class="label" ng-class = "{\'label-success\': value, \'label-danger\': !value}">' +
+                '{{value | state}}</span>'
+        }
     });
