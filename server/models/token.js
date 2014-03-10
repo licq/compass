@@ -19,5 +19,5 @@ tokenSchema.statics.save = function (userId, cb) {
     });
 };
 
-module.exports = mongoose.model('Token', tokenSchema);
+mongoose.model('Token', tokenSchema);
 

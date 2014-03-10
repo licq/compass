@@ -1,6 +1,7 @@
 'use strict';
 
-var Company = require('../models/company');
+var mongoose = require('mongoose'),
+    Company = mongoose.model('Company');
 
 module.exports = function (app) {
     app.get('/emails', function (req, res, next) {

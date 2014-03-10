@@ -2,8 +2,8 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    Company = require('./company'),
-    User = require('./user'),
+    Company = mongoose.model('Company'),
+    User = mongoose.model('User'),
     validator = require('validator'),
     _ = require('lodash');
 

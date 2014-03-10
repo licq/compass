@@ -1,8 +1,10 @@
 'use strict';
 
-var Token = require('../models/token');
+var mongoose = require('mongoose'),
+    Token = mongoose.model('Token'),
+    passport = require('passport');
 
-module.exports = function (app, passport) {
+module.exports = function (app) {
 
     app.get('/login', function (req, res) {
         res.render('sessions/login', {

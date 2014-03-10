@@ -1,6 +1,7 @@
 'use strict';
 
-var Registration = require('../models/registration'),
+var mongoose = require('mongoose'),
+    Registration = mongoose.model('Registration'),
     _ = require('lodash');
 
 module.exports = function (app) {

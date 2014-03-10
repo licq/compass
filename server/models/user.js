@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     crypto = require('crypto');
 
+
 var UserSchema = new Schema({
     name: {
         type: String,
@@ -76,4 +77,4 @@ UserSchema.methods = {
     }
 };
 
-module.exports = mongoose.model('User', UserSchema);
+mongoose.model('User', UserSchema);

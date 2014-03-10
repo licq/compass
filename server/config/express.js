@@ -1,32 +1,20 @@
 'use strict';
 
 var express = require('express'),
-    swig = require('./swig'),
+    swig = require('./../swig'),
+    mongoose = require('mongoose'),
+    passport = require('passport'),
     mongoStore = require('connect-mongo')(express),
-    flash = require('connect-flash'),
-    helpers = require('view-helpers'),
-    config = require('./config');
+    flash = require('connect-flash');
 
-module.exports = function (app, passport, db) {
-    app.set('showStackError', true);
-    app.locals.pretty = true;
-    if (process.env.NODE_ENV === 'production') {
-        app.locals.cache = 'memory';
-    }
-
-    app.engine('html',swig.renderFile);
-    app.set('view engine', 'html');
-    app.set('views', config.root + '/app/views');
-    app.enable('jsonp callback');
-
+module.exports = function (app, config) {
     app.configure(function () {
+        app.engine('html', swig.renderFile);
+        app.set('view engine', 'html');
+        app.set('views', config.rootPath + '/server/views');
+
         app.use(express.favicon());
-
-        if (process.env.NODE_ENV === 'development') {
-            app.use(express.logger('dev'));
-            app.set('view cache', false);
-        }
-
+        app.use(express.logger(config.log));
         app.use(express.compress({
             filter: function (req, res) {
                 return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
@@ -40,18 +28,17 @@ module.exports = function (app, passport, db) {
         app.use(express.session({
             secret: config.sessionSecret,
             store: new mongoStore({
-                db: db.connection.db,
+                db: mongoose.connection.db,
                 collection: config.sessionCollection
             })
         }));
-        app.use(helpers(config.app.name));
 
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(flash());
         app.use(passport.authenticate('remember-me'));
         app.use(app.router);
-        app.use(express.static(config.root + '/public'));
+        app.use(express.static(config.rootPath + '/public'));
 
         app.use(function (err, req, res, next) {
             if (~err.message.indexOf('not found')) {

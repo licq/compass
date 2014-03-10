@@ -1,21 +1,22 @@
 'use strict';
 
 
-var User = require('../models/user');
+var mongoose = require('mongoose'),
+    User = mongoose.model('User');
 
 module.exports = function (app) {
 
-    app.get('/users/me', function(req, res) {
+    app.get('/users/me', function (req, res) {
         res.jsonp(req.user || null);
     });
 
     // Setting up the users api
-    app.post('/users', function(req, res, next) {
+    app.post('/users', function (req, res, next) {
         var user = new User(req.body);
         var message = null;
 
         user.provider = 'local';
-        user.save(function(err) {
+        user.save(function (err) {
             if (err) {
                 switch (err.code) {
                     case 11000:
@@ -31,7 +32,7 @@ module.exports = function (app) {
                     user: user
                 });
             }
-            req.logIn(user, function(err) {
+            req.logIn(user, function (err) {
                 if (err) return next(err);
                 return res.redirect('/');
             });
@@ -39,12 +40,12 @@ module.exports = function (app) {
     });
 
     // Setting up the userId param
-    app.param('userId', function(req, res, next, id) {
+    app.param('userId', function (req, res, next, id) {
         User
             .findOne({
                 _id: id
             })
-            .exec(function(err, user) {
+            .exec(function (err, user) {
                 if (err) return next(err);
                 if (!user) return next(new Error('Failed to load User ' + id));
                 req.profile = user;
