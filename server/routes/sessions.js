@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 module.exports = function (app) {
 
     app.get('/login', function (req, res) {
-        res.render('sessions/login2.jade', {
+        res.render('sessions/login', {
             title: 'Login',
             message: req.flash('error')
         });

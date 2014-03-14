@@ -7,8 +7,8 @@ var mongoose = require('mongoose'),
 module.exports = function (app) {
     app.get('/signup', function (req, res) {
         res.render('registrations/new', {
-            errors: req.flash.errors,
-            registration: req.flash.registration
+            errors: req.flash.errors || {},
+            registration: req.flash.registration || {}
         });
     });
 

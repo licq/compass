@@ -4,7 +4,7 @@ module.exports = function (app) {
 
     app.get('/', function (req, res) {
         if (!req.user) {
-            res.render('index2.jade');
+            res.render('index');
         } else {
             res.redirect('/home');
         }
@@ -12,7 +12,7 @@ module.exports = function (app) {
 
     app.get('/home', function (req, res) {
         if (req.user) {
-            res.render('home2.jade',{
+            res.render('home',{
                 user: req.user
             });
         } else {
