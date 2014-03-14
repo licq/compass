@@ -1,0 +1,89 @@
+mixin ie(condition)
+  | <!--[!{condition}]>
+  block
+  | <![endif]-->
+
+doctype
+html
+  head
+    meta(http-equiv='Content-Type',content='text/html; charset=UTF-8')
+    title Compass
+    meta(name='viewport',content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet',href='/css/bootstrap.css')
+    link(rel='stylesheet',href='/css/font-awesome.css')
+    link(rel='stylesheet',href='/css/style.css')
+    link(rel='stylesheet',href='/css/docs.min.css')
+    link(ref='shortcut icon',href='/img/favicon/favicon.png')
+
+    +ie('if lt IE 9')
+      script(type='text/javascript', src='js/html5shim.js')
+  body.bs-docs-home
+    header#top.navbar.navbar-static-top.bs-docs-nav(role="banner")
+      .container
+        .navbar-header
+          button.navbar-toggle(data-toggle='collapse',data-target='.bs-navbar-collapse')
+            span.sr-only Toggle Navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/') Compass
+        nav.collapse.navbar-collapse.bs-navbar-collapse(role='navigation')
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='/signup') 注册
+            li
+              a(href='/login') 登陆
+
+    main#content.bs-docs-masthead(role="main")
+      .container
+        span.bs-docs-booticon.bs-docs-booticon-lg.bs-docs-booticon-outline C
+        p.lead 最好的云招聘服务
+        p.lead
+          a.btn.btn-outline-inverse.btn-lg(href='/signup') 马上注册
+    .bs-docs-featurette
+      .container
+        h2.bs-docs-featurette-title Designed for everyone, everywhere.
+        p.lead best best best
+        hr.half-rule
+        .row
+          .col-md-4
+            img.img-responsive(src='/img/intro1.png')
+            h3 Preprocessors
+            p In addition to vanilla CSS, Bootstrap includes support for the two most popular CSS preprocessors
+          .col-md-4
+            img.img-responsive(src='/img/intro2.png')
+            h3 One framework, every device.
+            p Bootstrap easily and efficiently scales your project with one code base, from phones to tablets to desktops.
+          .col-md-4
+            img.img-responsive(src='/img/intro3.png')
+            h3 Comprehensive docs
+            p With Bootstrap, you get extensive and beautiful documentation with hundreds of live examples, code snippets, and more.
+        
+    .bs-docs-featurette
+      .container
+        h2.bs-docs-featurette-title Built with Bootstrap.
+        p.lead Millions of amazing sites across the web are being built with Bootstrap. Get started on your own with our growing collection of examples or by exploring some of our favorites.
+        hr.half-rule
+        .row
+          .col-md-3
+            img.img-responsive(src='/img/screenshot1.jpg')
+          .col-md-3
+            img.img-responsive(src='/img/screenshot1.jpg')
+          .col-md-3
+            img.img-responsive(src='/img/screenshot1.jpg')
+          .col-md-3
+            img.img-responsive(src='/img/screenshot1.jpg')
+        hr.half-rule
+
+        p.lead We showcase dozens of inspiring projects built with Bootstrap on the Bootstrap Expo.
+        a.btn.btn-outline.btn-lg Explorer the Expo
+
+    footer.bs-docs-footer(role='content-info')
+      .container
+        p 此软件由上海xx软件有限公司设计
+        p Maintained by the core team with the help of our contributors.
+
+    script(type='text/javascript',src='/js/jquery.js')
+    script(type='text/javascript',src='/js/bootstrap.js')
+
+

@@ -4,7 +4,7 @@ module.exports = function (app) {
 
     app.get('/', function (req, res) {
         if (!req.user) {
-            res.render('index');
+            res.render('index2.jade');
         } else {
             res.redirect('/home');
         }
