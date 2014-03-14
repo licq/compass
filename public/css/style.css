@@ -1064,7 +1064,7 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
 
 .mainbar {
     position: relative;
-    margin-left: 230px;
+    /*margin-left: 230px;*/
     margin-right: 0px;
     width: auto;
     overflow: hidden;
@@ -2274,4 +2274,10 @@ footer .copy {
 
 .ngCellText .btn{
     margin: 1px 3px 1px 0px;
+}
+
+.sidebar.ng-hide{
+    width: 0;
+    float: none;
+    display: none;
 }

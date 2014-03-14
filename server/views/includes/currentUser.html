@@ -1,0 +1,5 @@
+{% if !!bootstrappedUser %}
+<script>
+    window.bootstrappedUserObject = {{ JSON.stringify(bootstrappedUser) }};
+</script>
+{% endif %}

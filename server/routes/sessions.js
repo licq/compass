@@ -6,25 +6,25 @@ var mongoose = require('mongoose'),
 
 module.exports = function (app) {
 
-    app.get('/login', function (req, res) {
-        res.render('sessions/login', {
-            title: 'Login',
-            message: req.flash('error')
-        });
-    });
-
     app.get('/logout', function (req, res) {
         res.clearCookie('remember_me');
         req.logout();
         res.redirect('/login');
     });
 
-    app.post('/sessions',
-        passport.authenticate('local', {
-            failureRedirect: '/login',
-            failureFlash: true,
-            badRequestMessage: '用户名或密码不正确'
-        }),
+    function passportAuthenticate(req, res, next) {
+        var auth = passport.authenticate('local', function (err, user) {
+            if (err) return next(err);
+            if (!user) return res.send({
+                success: false,
+                reason: '用户名或密码不正确'
+            });
+            next();
+        });
+        auth(req, res, next);
+    }
+
+    app.post('/sessions', passportAuthenticate,
         function (req, res, next) {
             if (!req.body.remember_me) {
                 return next();
@@ -37,6 +37,10 @@ module.exports = function (app) {
             });
         },
         function (req, res) {
-            res.redirect('/home');
-        });
+            return res.send({
+                success: true,
+                user: req.user
+            });
+        }
+    )
 };

@@ -15,7 +15,14 @@ angular.module('compass').run(
 angular.module('compass').config(
     function ($routeProvider) {
         $routeProvider
-            .when('/', {
+            .when('/',{
+                templateUrl: '/views/index.html'
+            })
+            .when('/login',{
+                templateUrl: '/app/auth/login.html',
+                controller: 'mvLoginCtrl'
+            })
+            .when('/dashboard', {
                 templateUrl: '/views/dashboard.html'
             })
             .when('/emails', {
