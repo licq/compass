@@ -1423,7 +1423,7 @@ repeat
 }
 
 .widget .padd, .modal-body {
-    padding: 13px 15px;
+    padding: 23px 15px;
 }
 
 .widget .widget-head, .modal-header {
@@ -1443,6 +1443,10 @@ repeat
     font-size: 14px;
     font-weight: bold;
     padding: 8px 15px;
+}
+
+.widget .padd button{
+    margin-left: 8px;
 }
 
 .widget.wblack .widget-head {
