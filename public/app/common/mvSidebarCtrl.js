@@ -1,3 +1,4 @@
-angular.module('compass').controller('mvSidebarCtrl', function ($scope, mvIdentity) {
-    $scope.identity = mvIdentity;
-});
+angular.module('compass')
+    .controller('mvSidebarCtrl', function ($scope, mvIdentity) {
+        $scope.identity = mvIdentity;
+    });

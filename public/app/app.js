@@ -12,18 +12,30 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
         };
     })
     .config(function ($routeProvider, $locationProvider, $httpProvider) {
+        var routeRoleChecks = {
+            user: { auth: function (mvAuth) {
+                return mvAuth.authenticated();
+            }},
+
+            anonymous: {auth: function (mvAuth) {
+                return mvAuth.notAuthenticated();
+            }} };
+
         $routeProvider
             .when('/', {
-                templateUrl: '/app/index/index.html'
+                templateUrl: '/app/index/index.html',
+                resolve: routeRoleChecks.anonymous
             })
             .when('/login', {
                 templateUrl: '/app/auth/login.html',
                 controller: 'mvLoginCtrl'
             })
             .when('/dashboard', {
-                templateUrl: '/app/dashboard/dashboard.html'
+                templateUrl: '/app/dashboard/dashboard.html',
+                resolve: routeRoleChecks.user
             })
-            .when('/emails', {
+            .
+            when('/emails', {
                 templateUrl: '/app/emails/list.html',
                 controller: 'mvEmailListCtrl'
             })
@@ -54,6 +66,16 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
     .run(function ($rootScope, $location, mvIdentity) {
         $rootScope.$on('$routeChangeStart', function (event, next) {
             if (next.authenticate && !mvIdentity.isAuthenticated()) {
+                $location.path('/login');
+            }
+        });
+
+        $rootScope.$on('$routeChangeError', function (evt, current, previous, rejection) {
+            if (rejection === 'authenticated already') {
+                $location.path('/dashboard');
+            }
+
+            if (rejection === 'not authenticated') {
                 $location.path('/login');
             }
         });
