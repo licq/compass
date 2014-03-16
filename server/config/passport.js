@@ -39,20 +39,15 @@ module.exports = function () {
     passport.use(new RememberMeStrategy(
         function (token, done) {
             Token.consume(token, function (err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (!user) {
-                    return done(null, false);
-                }
+                if (err) return done(err);
+                if (!user) return done(null, false);
+
                 return done(null, user);
             });
         },
         function (user, done) {
             Token.save(user.id, function (err, tokenId) {
-                if (err) {
-                    return done(err);
-                }
+                if (err) return done(err);
                 return done(null, tokenId);
             });
         }

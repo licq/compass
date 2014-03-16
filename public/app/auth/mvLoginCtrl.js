@@ -1,13 +1,12 @@
-angular.module('compass').controller('mvLoginCtrl', function ($scope, $http, mvIdentity,$location) {
+angular.module('compass').controller('mvLoginCtrl', function ($scope, mvSession, mvIdentity, $location) {
     $scope.login = function () {
-        $http.post('/sessions', {email: $scope.email, password: $scope.password}).then(function (response) {
-            console.log(response);
-            if (response.data.success) {
-                mvIdentity.currentUser = response.data.user;
-                $location.path('#/dashbaord');
-            } else {
-                $scope.errorMessage = response.data.reason;
+        mvSession.save({email: $scope.email, password: $scope.password}, function (user) {
+                mvIdentity.currentUser = user;
+                $location.path('/dashboard');
+            },
+            function (error) {
+                $scope.errorMessage = error.data.message;
             }
-        });
+        );
     };
 });

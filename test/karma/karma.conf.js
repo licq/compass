@@ -3,7 +3,7 @@
 // Karma configuration
 // Generated on Sat Oct 05 2013 22:00:14 GMT+0700 (ICT)
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
 
         // base path, that will be used to resolve files and exclude
@@ -27,7 +27,6 @@ module.exports = function(config) {
             'public/lib/angular-bootstrap/ui-bootstrap.js',
             'public/lib/ng-grid/ng-grid-2.0.7.min.js',
             'public/app/app.js',
-            'public/app/config.js',
             'public/app/directives.js',
             'public/app/filters.js',
             'public/app/services/global.js',
@@ -35,7 +34,6 @@ module.exports = function(config) {
             'public/app/controllers/articles.js',
             'public/app/controllers/index.js',
             'public/app/controllers/header.js',
-            'public/app/init.js',
             'test/karma/unit/**/*.js'
         ],
 

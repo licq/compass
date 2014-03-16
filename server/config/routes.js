@@ -1,24 +1,27 @@
 'use strict';
-var fs = require('fs');
+var fs = require('fs'),
+    sessions = require('../controllers/sessions'),
+    emails = require('../controllers/emails'),
+    registrations = require('../controllers/registrations');
 
 module.exports = function (app) {
-    var routes_path = __dirname + '/../routes';
-    var walkRoutes = function (path) {
-        fs.readdirSync(path).forEach(function (file) {
-            var newPath = path + '/' + file;
-            var stat = fs.statSync(newPath);
-            if (stat.isFile()) {
-                if (/(.*)\.(js$|coffee$)/.test(file)) {
-                    require(newPath)(app);
-                }
-                // We skip the app/routes/middlewares directory as it is meant to be
-                // used and shared by routes as further middlewares and is not a
-                // route by itself
-            } else if (stat.isDirectory() && file !== 'middlewares') {
-                walkRoutes(newPath);
-            }
-        });
-    };
-    walkRoutes(routes_path);
 
+    app.post('/api/sessions', sessions.authenticate, sessions.rememberMe);
+    app.delete('/api/sessions', sessions.clearRememberMe, sessions.logout);
+
+    app.post('/registrations', registrations.create);
+    app.get('/registrations/activate/:code', registrations.activate);
+
+    app.get('/api/emails', emails.list);
+    app.post('/api/emails', emails.create);
+
+    app.all('/api/*', function (req, res) {
+        res.send(404);
+    });
+
+    app.get('*', function (req, res) {
+        res.render('index', {
+            bootstrappedUser: req.user
+        });
+    });
 };

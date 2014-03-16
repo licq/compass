@@ -5,7 +5,7 @@
     {% include './includes/styles.html' %}
 </head>
 
-<body>
+<body ng-app="compass">
 <header>
     <div class="navbar navbar-fixed-top bs-docs-nav" role="banner">
         <div class="container">
@@ -16,14 +16,14 @@
                 <!-- Site name for smallar screens -->
                 <a href="index.html" class="navbar-brand">Compass</a>
             </div>
-            <div ng-include="'/app/navbar-top.html'"/>
+            <div ng-include="'/app/common/navbar-top.html'"/>
         </div>
     </div>
 </header>
 
 <div class="content">
     {% include './includes/currentUser.html' %}
-    <div ng-include="'/app/sidebar.html'"></div>
+    <div ng-include="'/app/common/sidebar.html'"></div>
     <div class="mainbar">
         <div ng-view=""/>
     </div>
