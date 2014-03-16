@@ -11,29 +11,24 @@ module.exports = function (config) {
 
 
         // frameworks to use
-        frameworks: ['jasmine'],
+        frameworks: ['mocha'],
 
 
         // list of files / patterns to load in the browser
         files: [
             'public/js/jquery.js',
-            'public/lib/angular/angular.js',
-            'public/lib/angular-mocks/angular-mocks.js',
-            'public/lib/angular-cookies/angular-cookies.js',
-            'public/lib/angular-resource/angular-resource.js',
-            'public/lib/angular-route/angular-route.js',
-            'public/lib/angular-ui-router/release/angular-ui-router.js',
-            'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
-            'public/lib/angular-bootstrap/ui-bootstrap.js',
-            'public/lib/ng-grid/ng-grid-2.0.7.min.js',
+            'public/vendor/angular/angular.js',
+            'public/vendor/angular-mocks/angular-mocks.js',
+            'public/vendor/angular-cookies/angular-cookies.js',
+            'public/vendor/angular-resource/angular-resource.js',
+            'public/vendor/angular-route/angular-route.js',
+            'public/vendor/angular-ui-router/release/angular-ui-router.js',
+            'public/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+            'public/vendor/angular-bootstrap/ui-bootstrap.js',
+            'public/vendor/ng-grid/ng-grid-2.0.7.min.js',
             'public/app/app.js',
             'public/app/directives.js',
             'public/app/filters.js',
-            'public/app/services/global.js',
-            'public/app/services/articles.js',
-            'public/app/controllers/articles.js',
-            'public/app/controllers/index.js',
-            'public/app/controllers/header.js',
             'test/karma/unit/**/*.js'
         ],
 

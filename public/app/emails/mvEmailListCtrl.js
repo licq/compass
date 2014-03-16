@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('compass')
     .controller('mvEmailListController', function ($scope, Email) {
         $scope.emails = Email.query();

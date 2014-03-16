@@ -1,4 +1,5 @@
 'use strict';
+
 var fs = require('fs'),
     sessions = require('../controllers/sessions'),
     emails = require('../controllers/emails'),

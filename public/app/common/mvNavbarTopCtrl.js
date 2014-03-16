@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('compass')
     .controller('mvNavbarTopCtrl', function ($scope, mvIdentity, mvAuth, $location) {
         $scope.identity = mvIdentity;

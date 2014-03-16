@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('compass')
     .controller('mvLoginCtrl', function ($scope, mvAuth, mvIdentity, $location) {
         $scope.login = function () {

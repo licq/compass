@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('compass')
     .factory('mvAuth', function (mvSession, mvIdentity, $q) {
         return {
@@ -42,5 +44,5 @@ angular.module('compass')
                     return $q.reject('not authenticated');
                 }
             }
-        }
+        };
     });

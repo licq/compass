@@ -19,7 +19,8 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
 
             anonymous: {auth: function (mvAuth) {
                 return mvAuth.notAuthenticated();
-            }} };
+            }}
+        };
 
         $routeProvider
             .when('/', {
