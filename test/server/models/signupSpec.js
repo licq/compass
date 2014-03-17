@@ -13,8 +13,13 @@ describe('Signup', function () {
     before(function (done) {
         Company.create({name: 'already exist'}, function (err, company) {
             User.create({name: 'user', email: 'already@exist.com', password: 'password', company: company._id});
+            signup = new Signup({companyName: 'newName',
+                'admin.name': 'newName',
+                'admin.email': 'new@email.com',
+                'admin.password': 'password'});
             done();
         });
+
     });
     describe('#validate', function () {
         it('should show errors if with empty arguments', function (done) {
@@ -56,19 +61,29 @@ describe('Signup', function () {
         });
     });
 
-    describe('#create', function (done) {
+    describe('#create', function () {
         it('should create new signup', function (done) {
-            var signup = new Signup({companyName: 'newName',
-                'admin.name': 'newName',
-                'admin.email': 'new@email.com',
-                'admin.password': 'password'});
             signup.save(done);
+        });
+    });
+
+    describe('#activate', function () {
+        it('should create new company and admin use when activate', function (done) {
+            signup.save(function () {
+                signup.activate(function (err, company, user) {
+                    should.not.exist(err);
+                    should.exist(company);
+                    should.exist(user);
+                    done();
+                });
+            });
         });
     });
 
     after(function (done) {
         User.remove().exec();
         Company.remove().exec();
+        Signup.remove().exec();
         done();
     });
 });

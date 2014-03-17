@@ -65,7 +65,7 @@ signupSchema.methods.activate = function (done) {
             company: company.id
         }, function (err, user) {
             if (err) return done(err);
-            done(null, user);
+            done(null, company, user);
         });
     });
 };
