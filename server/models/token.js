@@ -1,23 +1,18 @@
 'use strict';
 
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    uuid = require('node-uuid');
 
-var tokenSchema = new mongoose.Schema({
-    userId: {type: String}
+var tokenSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'},
+    _id: {
+        type: String,
+        default: uuid.v1(),
+        unique: true
+    }
 });
-
-tokenSchema.statics.consume = function (id, cb) {
-    this.findByIdAndRemove(id, cb);
-};
-tokenSchema.statics.save = function (userId, cb) {
-    var token = new this({
-        userId: userId
-    });
-    token.save(function (err, saved) {
-        if (err) return cb(err);
-        cb(null, saved.id);
-    });
-};
 
 mongoose.model('Token', tokenSchema);
 

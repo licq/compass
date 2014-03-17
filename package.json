@@ -27,7 +27,8 @@
     "passport-local": "^0.1.6",
     "passport-remember-me": "0.0.1",
     "validator": "^3.4.0",
-    "mongoose-timestamps": "0.0.1"
+    "mongoose-timestamps": "0.0.1",
+    "node-uuid": "^1.4.1"
   },
   "devDependencies": {
     "supertest": "~0.9.0",

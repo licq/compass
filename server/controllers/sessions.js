@@ -21,7 +21,7 @@ exports.rememberMe = function (req, res, next) {
         return res.json(req.user);
     }
 
-    Token.save(req.user.id, function (err, tokenId) {
+    Token.create({user: req.user._id}, function (err, tokenId) {
         if (!err) {
             res.cookie('remember_me', tokenId, { path: '/', httpOnly: true, maxAge: 604800000 });
         }

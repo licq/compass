@@ -14,6 +14,7 @@ exports.list = function (req, res, next) {
 exports.create = function (req, res) {
     var email = new Email(req.body);
     email.company = req.user.company;
+    email.createdBy = req.user._id;
     email.save(function (err) {
         if (err) {
             if (err.code === 11000 || err.code === 11001) {

@@ -5,10 +5,16 @@ var mongoose = require('mongoose'),
     Company = mongoose.model('Company'),
     User = mongoose.model('User'),
     validator = require('validator'),
+    uuid = require('node-uuid'),
     timestamps = require('mongoose-timestamps'),
     _ = require('lodash');
 
 var signupSchema = new Schema({
+    _id: {
+        type: String,
+        default: uuid.v1(),
+        unique: true
+    },
     companyName: {
         type: String,
         trim: true,

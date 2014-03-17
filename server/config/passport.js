@@ -38,7 +38,7 @@ module.exports = function () {
 
     passport.use(new RememberMeStrategy(
         function (token, done) {
-            Token.consume(token, function (err, user) {
+            Token.findByIdAndRemove(token, function (err, user) {
                 if (err) return done(err);
                 if (!user) return done(null, false);
 
@@ -46,9 +46,9 @@ module.exports = function () {
             });
         },
         function (user, done) {
-            Token.save(user.id, function (err, tokenId) {
+            Token.create({user: user.id}, function (err, token) {
                 if (err) return done(err);
-                return done(null, tokenId);
+                return done(null, token._id);
             });
         }
     ));
