@@ -15,6 +15,7 @@ module.exports = function (app) {
 
     app.get('/api/emails', emails.list);
     app.post('/api/emails', emails.create);
+    app.delete('/api/emails/:id', emails.delete);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

@@ -2,5 +2,5 @@
 
 angular.module('compass')
     .factory('mvEmail', function ($resource) {
-        return $resource('/api/emails');
+        return $resource('/api/emails/:_id', {_id: '@_id'});
     });

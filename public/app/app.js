@@ -54,7 +54,7 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
             })
             .when('/emails/new', {
                 templateUrl: '/app/emails/new.html',
-                controller: 'mvEmailNewController'
+                controller: 'mvEmailNewCtrl'
             })
             .otherwise({
                 redirectTo: '/'

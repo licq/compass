@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
+    timestamps = require('mongoose-timestamps'),
     crypto = require('crypto');
 
 
@@ -27,6 +28,8 @@ var userSchema = new Schema({
     provider: String,
     salt: String
 });
+
+userSchema.plugin(timestamps);
 
 userSchema.virtual('password').set(function (password) {
     this._password = password;

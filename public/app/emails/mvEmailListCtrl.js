@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvEmailListController', function ($scope, Email) {
-        $scope.emails = Email.query();
+    .controller('mvEmailListCtrl', function ($scope, mvEmail) {
+        $scope.emails = mvEmail.query();
         $scope.gridOptions = angular.extend({
             data: 'emails',
             columnDefs: [
@@ -26,8 +26,11 @@ angular.module('compass')
 
         $scope.remove = function (row) {
             var index = $scope.emails.indexOf(row.entity);
-            if (confirm('真的要删除' + $scope.emails[index].email + '吗？')) {
-                $scope.emails.splice(index, 1);
+            var email = $scope.emails[index];
+            if (confirm('真的要删除' + email.address + '吗？')) {
+                email.$delete(function () {
+                    $scope.emails.splice(index, 1);
+                });
             }
         };
     });

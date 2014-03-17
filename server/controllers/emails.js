@@ -1,31 +1,34 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Company = mongoose.model('Company');
+    Email = mongoose.model('Email');
 
 exports.list = function (req, res, next) {
-    Company.findById(req.user.companyId, function (err, company) {
+    Email.find({company: req.user.company}, function (err, emails) {
         if (err) return next(err);
-        return res.json(company.emails);
+        return res.json(emails);
     });
 };
 
-exports.create = function (req, res, next) {
-    var email = {
-        address: req.body.address,
-        account: req.body.account,
-        password: req.body.password,
-        server: req.body.server,
-        port: req.body.port,
-        secure: req.body.secure,
-        ssl: req.body.ssl
-    };
-    Company.findById(req.user.companyId, function (err, company) {
-        console.log(email);
-        company.emails.push(email);
-        company.save(function (err, saved) {
-            if (err) return next(err);
-            res.jsonp(saved);
-        });
+exports.create = function (req, res) {
+    var email = new Email(req.body);
+    email.company = req.user.company;
+    email.save(function (err) {
+        if (err) {
+            if (err.code === 11000 || err.code === 11001) {
+                return res.json(400, {message: '邮箱地址已经存在'});
+            } else {
+                return res.json(400, {message: err.message});
+            }
+        }
+        res.end();
     });
 };
+
+exports.delete = function (req, res) {
+    var id = req.params.id;
+    Email.remove({_id: id}, function (err) {
+        if (err) return res.json(400, err);
+        res.end();
+    });
+}

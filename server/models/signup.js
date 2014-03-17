@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
     Company = mongoose.model('Company'),
     User = mongoose.model('User'),
     validator = require('validator'),
+    timestamps = require('mongoose-timestamps'),
     _ = require('lodash');
 
 var signupSchema = new Schema({
@@ -32,6 +33,8 @@ var signupSchema = new Schema({
         }
     }
 });
+
+signupSchema.plugin(timestamps);
 
 signupSchema.path('companyName').validate(function (companyName, respond) {
     Company.findOne({name: companyName}, function (err, company) {
