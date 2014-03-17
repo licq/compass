@@ -1,7 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Email = mongoose.model('Email');
+    Email = mongoose.model('Email'),
+    _ = require('lodash');
 
 exports.list = function (req, res, next) {
     Email.find({company: req.user.company}, function (err, emails) {
@@ -26,9 +27,29 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-    var id = req.params.id;
-    Email.remove({_id: id}, function (err) {
-        if (err) return res.json(400, err);
+    req.email.remove(function (err) {
+        if (err) return next(err);
         res.end();
     });
-}
+};
+
+exports.get = function (req, res) {
+    res.json(req.email);
+};
+
+exports.update = function (req, res) {
+    _.merge(req.email, req.body);
+    req.email.save(function (err) {
+        if (err) return next(err);
+        res.end();
+    });
+};
+
+exports.load = function (req, res, next, id) {
+    Email.findOne({_id: id, company: req.user.company}, function (err, email) {
+        if (err) return next(err);
+        if (!email) return res.send(404, {message: 'not found'});
+        req.email = email;
+        next();
+    });
+};

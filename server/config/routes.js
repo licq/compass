@@ -13,9 +13,12 @@ module.exports = function (app) {
     app.post('/api/signups', signups.create);
     app.put('/api/signups/:code', signups.activate);
 
-    app.get('/api/emails', emails.list);
-    app.post('/api/emails', emails.create);
-    app.delete('/api/emails/:id', emails.delete);
+    app.get('/api/emails', sessions.requiresLogin, emails.list);
+    app.post('/api/emails', sessions.requiresLogin, emails.create);
+    app.delete('/api/emails/:emailId', emails.delete);
+    app.get('/api/emails/:emailId', emails.get);
+    app.put('/api/emails/:emailId', emails.update);
+    app.param('emailId', sessions.requiresLogin, emails.load);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

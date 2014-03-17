@@ -1,5 +1,6 @@
+<!-- Page heading -->
 <div class="page-head">
-    <h2 class="pull-left">添加邮箱</h2>
+    <h2 class="pull-left">修改邮箱</h2>
 
     <div class="clearfix"></div>
     <div class="bread-crumb">
@@ -7,7 +8,7 @@
         <span class="divider">/</span>
         <a href="/emails" class="bread-current">简历邮箱</a>
         <span class="divider">/</span>
-        <a href="/emails/new" class="bread-current">添加邮箱</a>
+        <a href="/emails/edit" class="bread-current">修改邮箱</a>
     </div>
 
     <div class="clearfix"></div>
@@ -21,7 +22,7 @@
 
                 <div class="widget">
                     <div class="widget-head">
-                        <div class="pull-left">添加邮箱</div>
+                        <div class="pull-left">修改邮箱</div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="widget-content">
@@ -33,16 +34,8 @@
                                 <fieldset>
                                     <div class="form-group">
                                         <label>邮箱地址</label>
-                                        <input type="email" class="form-control"
-                                               placeholder="邮箱地址" name="address" ng-model="email.address" required=""/>
 
-                                        <p class="text-danger"
-                                           ng-show="emailForm.address.$error.required && !emailForm.address.$pristine">
-                                            请输入邮箱地址</p>
-
-                                        <p class="text-danger"
-                                           ng-show="emailForm.address.$error.email && !emailForm.address.$pristine">
-                                            邮箱格式不正确</p>
+                                        <p class="well">{{email.address}}</p>
                                     </div>
                                     <div class="form-group">
                                         <label>邮箱帐号</label>
@@ -99,10 +92,10 @@
                                     </div>
 
                                     <br/>
-                                    <button class="btn btn-primary" ng-click="create()"
+                                    <button class="btn btn-primary" ng-click="update()"
                                             ng-disabled="emailForm.$invalid">保存
                                     </button>
-                                    <button class="btn btn-info" ng-click="">验证</button>
+                                    <button class="btn btn-info" ng-click="cancel()">取消</button>
 
                                 </fieldset>
                             </form>

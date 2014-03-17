@@ -38,3 +38,8 @@ exports.logout = function (req, res) {
     req.logout();
     res.send(200);
 };
+
+exports.requiresLogin = function (req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.send(401);
+};

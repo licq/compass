@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvEmailListCtrl', function ($scope, mvEmail) {
+    .controller('mvEmailListCtrl', function ($scope, mvEmail, $location) {
         $scope.emails = mvEmail.query();
         $scope.gridOptions = angular.extend({
             data: 'emails',
@@ -18,14 +18,14 @@ angular.module('compass')
                     displayName: '操作',
                     sortable: false,
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
-                        '<edit-button></edit-button>' +
-                        '<delete-button action="remove(row)"></delete-button>' +
+                        '<edit-button action="edit()"></edit-button>' +
+                        '<delete-button action="remove()"></delete-button>' +
                         '</div>'}
             ]
         }, $scope.gridDefaults);
 
-        $scope.remove = function (row) {
-            var index = $scope.emails.indexOf(row.entity);
+        $scope.remove = function () {
+            var index = this.row.rowIndex;
             var email = $scope.emails[index];
             if (confirm('真的要删除' + email.address + '吗？')) {
                 email.$delete(function () {
@@ -33,4 +33,9 @@ angular.module('compass')
                 });
             }
         };
+
+        $scope.edit = function () {
+            var index = this.row.rowIndex;
+            $location.path('/emails/edit/' + $scope.emails[index]._id);
+        }
     });
