@@ -37,5 +37,5 @@ angular.module('compass')
         $scope.edit = function () {
             var index = this.row.rowIndex;
             $location.path('/emails/edit/' + $scope.emails[index]._id);
-        }
+        };
     });

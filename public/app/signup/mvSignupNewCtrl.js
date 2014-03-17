@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('compass')
     .controller('mvSignupNewCtrl', function ($scope, mvSignup, $location) {
         $scope.create = function () {
@@ -8,5 +10,5 @@ angular.module('compass')
                 }, function (err) {
                     $scope.err = err.data;
                 });
-        }
+        };
     });

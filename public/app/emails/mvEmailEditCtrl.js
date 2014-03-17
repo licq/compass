@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('compass')
     .controller('mvEmailEditCtrl', function ($scope, mvEmail, $routeParams, $location) {
         $scope.email = mvEmail.get({_id: $routeParams.id});
@@ -13,5 +15,5 @@ angular.module('compass')
 
         $scope.cancel = function () {
             $location.path('/emails');
-        }
+        };
     });

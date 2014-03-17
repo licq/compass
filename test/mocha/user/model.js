@@ -5,59 +5,67 @@
  */
 var should = require('should'),
     mongoose = require('mongoose'),
-    User = mongoose.model('User');
+    User = mongoose.model('User'),
+    Company = mongoose.model('Company');
 
 //Globals
-var user, user2;
+var user, user2, company;
 
 //The tests
-describe('<Unit Test>', function() {
-    describe('Model User:', function() {
-        before(function(done) {
-            user = new User({
-                name: 'Full name',
-                email: 'test@test.com',
-                username: 'user',
-                password: 'password',
-                provider: 'local',
-                companyId: '1'
-            });
-            user2 = new User(user);
+describe('<Unit Test>', function () {
+    describe('Model User:', function () {
+        before(function (done) {
+            Company.create({
+                name: 'Company'
+            }, function (err, company) {
+                user = new User({
+                    name: 'Full name',
+                    email: 'test@test.com',
+                    username: 'user',
+                    password: 'password',
+                    provider: 'local',
+                    company: company._id
+                });
+                console.log(user);
+                user2 = new User(user);
 
-            done();
+                done();
+            });
+
         });
 
-        describe('Method Save', function() {
-            it('should begin with no users', function(done) {
-                User.find({}, function(err, users) {
+        describe('Method Save', function () {
+            it('should begin with no users', function (done) {
+                User.find({}, function (err, users) {
                     users.should.have.length(0);
                     done();
                 });
             });
 
-            it('should be able to save whithout problems', function(done) {
+            it('should be able to save whithout problems', function (done) {
                 user.save(done);
             });
 
-            it('should fail to save an existing user again', function(done) {
+            it('should fail to save an existing user again', function (done) {
                 user.save();
-                return user2.save(function(err) {
+                return user2.save(function (err) {
                     should.exist(err);
                     done();
                 });
             });
 
-            it('should show an error when try to save without name', function(done) {
+            it('should show an error when try to save without name', function (done) {
                 user.name = '';
-                return user.save(function(err) {
+                return user.save(function (err) {
                     should.exist(err);
                     done();
                 });
             });
         });
 
-        after(function(done) {
+        after(function (done) {
             User.remove().exec();
+            Company.remove().exec();
             done();
         });
     });

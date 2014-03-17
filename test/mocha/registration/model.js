@@ -1,16 +1,16 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Registration = mongoose.model('Registration'),
+    Signup = mongoose.model('Signup'),
     _ = require('lodash');
 
-var registration;
+var signup;
 
-describe('Registration', function () {
+describe('Signup', function () {
     describe('Create', function () {
         it('should have four errors if without arguments', function (done) {
-            registration = new Registration();
-            registration.save(function (err) {
+            signup = new Signup();
+            signup.save(function (err) {
                 console.log(_.map(err.errors, function (e) {
                     return e.message;
                 }));
