@@ -29,7 +29,7 @@ module.exports = function (config) {
             'public/app/app.js',
             'public/app/directives.js',
             'public/app/filters.js',
-            'test/karma/unit/**/*.js'
+            '/unit/**/*.js'
         ],
 
 

@@ -3,7 +3,8 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     timestamps = require('mongoose-timestamps'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    validator = require('validator');
 
 
 var userSchema = new Schema({
@@ -16,6 +17,7 @@ var userSchema = new Schema({
         required: [true, 'Email不能为空'],
         unique: true,
         lowercase: true,
+        validate: [validator.isEmail, 'Email格式不正确']
     },
 
     company: {

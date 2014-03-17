@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                 reporter: 'spec',
                 require: 'server.js'
             },
-            src: ['test/mocha/**/*.js']
+            src: ['test/server/**/*.js']
         },
         env: {
             test: {
@@ -69,7 +69,7 @@ module.exports = function (grunt) {
         },
         karma: {
             unit: {
-                configFile: 'test/karma/karma.conf.js'
+                configFile: 'test/client/karma.conf.js'
             }
         }
     });

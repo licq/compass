@@ -1,0 +1,1 @@
+--recursive test/server --reporter spec -r server.js
