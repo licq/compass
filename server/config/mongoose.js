@@ -15,7 +15,7 @@ module.exports = function (config) {
     require('../models/user');
     require('../models/article');
     require('../models/company');
-    require('../models/registration');
+    require('../models/signup');
     require('../models/token');
 
 };

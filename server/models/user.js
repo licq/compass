@@ -5,27 +5,30 @@ var mongoose = require('mongoose'),
     crypto = require('crypto');
 
 
-var UserSchema = new Schema({
+var userSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: [true, '姓名不能为空']
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, 'Email不能为空'],
+        unique: true,
+        lowercase: true,
     },
-    hashed_password: String,
-    provider: String,
-    salt: String,
-    companyId: {
-        type: String,
+
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
         required: true
     },
-    companyName: String
+
+    hashed_password: String,
+    provider: String,
+    salt: String
 });
 
-UserSchema.virtual('password').set(function (password) {
+userSchema.virtual('password').set(function (password) {
     this._password = password;
     this.salt = this.makeSalt();
     this.hashed_password = this.encryptPassword(password);
@@ -33,26 +36,34 @@ UserSchema.virtual('password').set(function (password) {
         return this._password;
     });
 
+userSchema.virtual('info').get(function () {
+    return {
+        name: this.name,
+        email: this.email,
+        id: this._id
+    }
+});
+
 var validatePresenceOf = function (value) {
     return value && value.length;
 };
 
-UserSchema.path('name').validate(function (name) {
+userSchema.path('name').validate(function (name) {
     return (typeof name === 'string' && name.length > 0);
-}, 'Name cannot be blank');
+}, '姓名不能为空');
 
-UserSchema.path('email').validate(function (email) {
+userSchema.path('email').validate(function (email) {
     if (!this.provider) return true;
     return (typeof email === 'string' && email.length > 0);
-}, 'Email cannot be blank');
+}, 'Email不能为空');
 
-UserSchema.path('hashed_password').validate(function (hashed_password) {
+userSchema.path('hashed_password').validate(function (hashed_password) {
     if (!this.provider) return true;
     return (typeof hashed_password === 'string' && hashed_password.length > 0);
-}, 'Password cannot be blank');
+}, '密码不能为空');
 
 
-UserSchema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
     if (!this.isNew) return next();
 
     if (!validatePresenceOf(this.password) && !this.provider)
@@ -61,7 +72,7 @@ UserSchema.pre('save', function (next) {
         next();
 });
 
-UserSchema.methods = {
+userSchema.methods = {
     authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
@@ -77,4 +88,4 @@ UserSchema.methods = {
     }
 };
 
-mongoose.model('User', UserSchema);
+mongoose.model('User', userSchema);

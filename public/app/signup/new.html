@@ -1,0 +1,115 @@
+<div class="admin-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget wred">
+                    <div class="widget-head">
+                        <i class="icon-lock"></i> 注册
+                    </div>
+                    <div class="widget-content">
+                        <div class="padd">
+
+                            <form name="signupForm" class="form-horizontal" novalidate="">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">公司名称</label>
+
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="companyName"
+                                               ng-model="companyName" required>
+
+                                        <p class="text-danger"
+                                           ng-show="signupForm.companyName.$invalid && !signupForm.companyName.$pristine">
+                                            请输入公司名称</p>
+
+                                        <p class="text-danger"
+                                           ng-show="err.errors.companyName">
+                                            {{err.errors.companyName.message}}</p>
+
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">管理员姓名</label>
+
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="adminName" ng-model="admin.name"
+                                               required>
+
+                                        <p class="text-danger"
+                                           ng-show="signupForm.adminName.$invalid && !signupForm.adminName.$pristine">
+                                            请输入管理员姓名</p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">管理员Email</label>
+
+                                    <div class="col-md-9">
+                                        <input type="email" class="form-control" name="adminEmail"
+                                               ng-model="admin.email"
+                                               required="">
+
+                                        <p class="text-danger"
+                                           ng-show="signupForm.adminEmail.$error.required && !signupForm.adminEmail.$pristine">
+                                            请输入管理员Email</p>
+
+                                        <p class="text-danger"
+                                           ng-show="signupForm.adminEmail.$error.email && !signupForm.adminEmail.$pristine">
+                                            邮箱格式不正确</p>
+
+                                        <p class="text-danger"
+                                           ng-show="err.errors['admin.email']">
+                                            {{err.errors['admin.email'].message}}</p>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">密码</label>
+
+                                    <div class="col-md-9">
+                                        <input type="password" class="form-control" name="adminPassword"
+                                               ng-model="admin.password"
+                                               required="" ng-minlength="6">
+
+                                        <p class="text-danger"
+                                           ng-show="signupForm.adminPassword.$error.required && !signupForm.adminPassword.$pristine">
+                                            请输入密码</p>
+
+                                        <p class="text-danger"
+                                           ng-show="signupForm.adminPassword.$error.minlength && !signupForm.adminPassword.$pristine">
+                                            密码最短为6位</p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" ng-model="agree"> 同意 Terms &amp; Conditions
+                                            </label>
+                                        </div>
+                                        <br/>
+                                        <button type="submit" class="btn btn-danger" ng-click="create()"
+                                                ng-disabled="signupForm.$invalid || !agree">注册
+                                        </button>
+                                        <button type="reset" class="btn btn-success">重置</button>
+                                    </div>
+                                </div>
+                                <br/>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        已经注册? <a href="/login">登陆</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

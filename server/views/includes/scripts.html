@@ -68,14 +68,21 @@
 <script type="text/javascript" src="/app/auth/mvIdentity.js"></script>
 <script type="text/javascript" src="/app/auth/mvSession.js"></script>
 <script type="text/javascript" src="/app/auth/mvAuth.js"></script>
+
 <script type="text/javascript" src="/app/common/mvNavbarTopCtrl.js"></script>
 <script type="text/javascript" src="/app/common/mvSidebarCtrl.js"></script>
 <script type="text/javascript" src="/app/auth/mvLoginCtrl.js"></script>
+
+<script type="text/javascript" src="/app/signup/mvSignupNewCtrl.js"></script>
+<script type="text/javascript" src="/app/signup/mvSignup.js"></script>
+<script type="text/javascript" src="/app/signup/mvSignupSuccessCtrl.js"></script>
+<script type="text/javascript" src="/app/signup/mvSignupActivateCtrl.js"></script>
+
 <script type="text/javascript" src="/app/emails/mvEmail.js"></script>
 <script type="text/javascript" src="/app/emails/mvEmailNewCtrl.js"></script>
 <script type="text/javascript" src="/app/emails/mvEmailListCtrl.js"></script>
 
 
 {% if (process.env.NODE_ENV == 'development') %}
-<script type="text/javascript" src="{{'http://' + req.host + ':35729/livereload.js'}}"></script>
+<script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 {% endif %}

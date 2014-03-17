@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=latin,latin-ext);
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=latin,latin-ext);*/
 
 body {
     font-size: 13px;
@@ -1246,18 +1246,6 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
     min-height: 50px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     background: #fff;
-
-/
-/
-background: #fafafa
-
-url
-(
-'../img/cream.png'
-)
-repeat
-
-;
 }
 
 .widget p {
@@ -1445,7 +1433,7 @@ repeat
     padding: 8px 15px;
 }
 
-.widget .padd button{
+.widget .padd button {
     margin-left: 8px;
 }
 
@@ -2272,11 +2260,11 @@ footer .copy {
     float: left;
 }
 
-.ngCellText .btn{
+.ngCellText .btn {
     margin: 1px 3px 1px 0px;
 }
 
-.sidebar.ng-hide{
+.sidebar.ng-hide {
     width: 0;
     float: none;
     display: none;

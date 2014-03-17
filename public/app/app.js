@@ -31,6 +31,18 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
                 templateUrl: '/app/auth/login.html',
                 controller: 'mvLoginCtrl'
             })
+            .when('/signup', {
+                templateUrl: '/app/signup/new.html',
+                controller: 'mvSignupNewCtrl'
+            })
+            .when('/signup/success/:code/:email', {
+                templateUrl: '/app/signup/success.html',
+                controller: 'mvSignupSuccessCtrl'
+            })
+            .when('/signup/activate/:code', {
+                templateUrl: '/app/signup/activate.html',
+                controller: 'mvSignupActivateCtrl'
+            })
             .when('/dashboard', {
                 templateUrl: '/app/dashboard/dashboard.html',
                 resolve: routeRoleChecks.user

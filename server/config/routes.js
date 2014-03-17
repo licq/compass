@@ -3,15 +3,15 @@
 var fs = require('fs'),
     sessions = require('../controllers/sessions'),
     emails = require('../controllers/emails'),
-    registrations = require('../controllers/registrations');
+    signups = require('../controllers/signups');
 
 module.exports = function (app) {
 
     app.post('/api/sessions', sessions.authenticate, sessions.rememberMe);
     app.delete('/api/sessions', sessions.clearRememberMe, sessions.logout);
 
-    app.post('/registrations', registrations.create);
-    app.get('/registrations/activate/:code', registrations.activate);
+    app.post('/api/signups', signups.create);
+    app.put('/api/signups/:code', signups.activate);
 
     app.get('/api/emails', emails.list);
     app.post('/api/emails', emails.create);

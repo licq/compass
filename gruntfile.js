@@ -6,7 +6,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         watch: {
             js: {
-                files: ['gruntfile.js', 'server.js', 'app/**/*.js', 'public/js/**', 'public/app/**', 'test/**/*.js'],
+                files: ['gruntfile.js', 'server.js', 'server/**/*.html', 'server/**/*.js', 'app/**/*.js', 'public/js/**', 'public/app/**', 'test/**/*.js'],
                 tasks: ['jshint'],
                 options: {
                     livereload: true,
