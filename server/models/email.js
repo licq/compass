@@ -8,7 +8,7 @@ var emailSchema = mongoose.Schema({
     address: {
         type: String,
         required: [true, '请输入邮箱地址'],
-        validate: [validator.isEmail, 'Email格式错误'],
+        validate: [validator.isEmail, 'Email格式不正确'],
         unique: true
     },
     account: {
