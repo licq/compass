@@ -1,1 +1,1 @@
---recursive test/server --reporter spec -r server.js
+--recursive test/server --reporter spec -r server.js -r test/server/factory.js

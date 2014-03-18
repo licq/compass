@@ -24,6 +24,10 @@ module.exports = function (app) {
         res.send(404);
     });
 
+    app.all('/api/*', function (err, req, res, next) {
+        res.status(500).json({message: 'Internal Server Error'});
+    });
+
     app.get('*', function (req, res) {
         res.render('index', {
             bootstrappedUser: req.user && req.user.info

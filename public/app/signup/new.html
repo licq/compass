@@ -32,7 +32,7 @@
                                     <label class="control-label col-md-3">管理员姓名</label>
 
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="adminName" ng-model="admin.name"
+                                        <input type="text" class="form-control" name="adminName" ng-model="adminName"
                                                required>
 
                                         <p class="text-danger"
@@ -48,7 +48,7 @@
 
                                     <div class="col-md-9">
                                         <input type="email" class="form-control" name="adminEmail"
-                                               ng-model="admin.email"
+                                               ng-model="adminEmail"
                                                required="">
 
                                         <p class="text-danger"
@@ -60,8 +60,8 @@
                                             邮箱格式不正确</p>
 
                                         <p class="text-danger"
-                                           ng-show="err.errors['admin.email']">
-                                            {{err.errors['admin.email'].message}}</p>
+                                           ng-show="err.errors.adminEmail">
+                                            {{err.errors.adminEmail.message}}</p>
 
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
 
                                     <div class="col-md-9">
                                         <input type="password" class="form-control" name="adminPassword"
-                                               ng-model="admin.password"
+                                               ng-model="adminPassword"
                                                required="" ng-minlength="6">
 
                                         <p class="text-danger"

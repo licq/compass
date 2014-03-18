@@ -10,7 +10,7 @@ exports.create = function (req, res) {
 
     signup.save(function (err) {
         if (err) return res.json(400, err);
-        res.json({_id: signup._id, email: signup.admin.email});
+        res.json({_id: signup._id, email: signup.adminEmail});
     });
 };
 

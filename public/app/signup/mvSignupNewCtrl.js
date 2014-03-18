@@ -4,9 +4,9 @@ angular.module('compass')
     .controller('mvSignupNewCtrl', function ($scope, mvSignup, $location) {
         $scope.create = function () {
             mvSignup.save({companyName: $scope.companyName,
-                    admin: {email: $scope.admin.email, name: $scope.admin.name, password: $scope.admin.password}},
+                    adminEmail: $scope.adminEmail, adminName: $scope.adminName, adminPassword: $scope.adminPassword},
                 function (signup) {
-                    $location.path('/signup/success/' + signup._id + '/' + $scope.admin.email);
+                    $location.path('/signup/success/' + signup._id + '/' + $scope.adminEmail);
                 }, function (err) {
                     $scope.err = err.data;
                 });
