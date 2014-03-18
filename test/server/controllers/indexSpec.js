@@ -1,7 +1,8 @@
 'use strict';
 
 var app = require('../../../server'),
-    request = require('supertest');
+    request = require('supertest'),
+    expect = require('chai').expect;
 
 
 describe('/', function () {
@@ -14,7 +15,7 @@ describe('/', function () {
                 .expect('Content-Type', /html/)
                 .end(function (err, res) {
                     if (err) return done(err);
-                    res.body.should.match(/<html>/);
+                    expect(res.text).to.have.string('<html');
                     done();
                 });
         });

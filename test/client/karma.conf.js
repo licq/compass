@@ -11,7 +11,7 @@ module.exports = function (config) {
 
 
         // frameworks to use
-        frameworks: ['mocha'],
+        frameworks: ['mocha','chai','sinon-chai'],
 
 
         // list of files / patterns to load in the browser
@@ -29,7 +29,9 @@ module.exports = function (config) {
             'public/app/app.js',
             'public/app/directives.js',
             'public/app/filters.js',
-            '/unit/**/*.js'
+            'public/app/**/*.js',
+            'node_modules/should/lib/should.js',
+            'test/client/**/*.js'
         ],
 
 
@@ -49,8 +51,9 @@ module.exports = function (config) {
             // source files, that you wanna generate coverage for
             // do not include tests or libraries
             // (these files will be instrumented by Istanbul)
-            'public/app/controllers/*.js': ['coverage'],
-            'public/app/services/*.js': ['coverage']
+            'public/app/**/*.js': ['coverage'],
+//            'public/app/services/*.js': ['coverage'],
+//            'public/app/services/*.js': ['coverage'],
         },
 
         coverageReporter: {

@@ -3,8 +3,7 @@ var Factory = require('factory-lady'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
     Signup = mongoose.model('Signup'),
-    Email = mongoose.model('Email'),
-    _ = require('lodash');
+    Email = mongoose.model('Email');
 
 var companyCounter = 1;
 

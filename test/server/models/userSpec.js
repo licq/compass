@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
-    should = require('should'),
+    expect = require('chai').expect,
     Factory = require('../factory');
 
 describe('User', function () {
@@ -16,7 +16,7 @@ describe('User', function () {
     describe('#validate', function () {
         it('should begin with no users', function (done) {
             User.find({}, function (err, users) {
-                users.should.have.length(0);
+                expect(users).to.be.empty;
                 done();
             });
         });
@@ -31,7 +31,7 @@ describe('User', function () {
             Factory('user', function (user) {
                 Factory.build('user', {email: user.email}, function (user2) {
                     user2.save(function (err) {
-                        should.exist(err);
+                        expect(err).to.exist;
                         done();
                     });
                 });
@@ -41,10 +41,10 @@ describe('User', function () {
 
         it('should show an error when try to save empty user', function (done) {
             return new User().save(function (err) {
-                should.exist(err);
-                err.errors.should.have.property('email');
-                err.errors.should.have.property('name');
-                err.errors.should.have.property('company');
+                expect(err).to.exist;
+                expect(err.errors).to.have.property('email');
+                expect(err.errors).to.have.property('name');
+                expect(err.errors).to.have.property('company');
                 done();
             });
         });
@@ -52,9 +52,8 @@ describe('User', function () {
         it('should show an error when try to save without valid email', function (done) {
             Factory.build('user', {email: 'invalid email address'}, function (user) {
                 user.save(function (err) {
-                    should.exist(err);
-                    err.errors.should.have.property('email');
-                    err.errors.email.message.should.equal('Email格式不正确');
+                    expect(err).to.exist;
+                    expect(err.errors.email).to.have.property('message', 'Email格式不正确');
                     done();
                 });
             });
@@ -64,8 +63,8 @@ describe('User', function () {
     describe('#attributes', function () {
         it('should have createdat and updatedat timestamp', function (done) {
             Factory('user', function (user) {
-                should.exist(user.created_at);
-                should.exist(user.updated_at);
+                expect(user.created_at).to.exist;
+                expect(user.updated_at).to.exist;
                 done();
             });
         });
@@ -74,12 +73,12 @@ describe('User', function () {
     describe('#authenticate', function () {
         it('should return true if given the correct password', function () {
             Factory.build('user', function (user) {
-                user.authenticate('password').should.be.true;
+                expect(user.authenticate('password')).to.be.true;
             });
         });
         it('should return false if given the wrong password', function () {
             Factory.build('user', function (user) {
-                user.authenticate('invalid password').should.be.false;
+                expect(user.authenticate('invalid password')).to.be.false;
             });
         });
     });
