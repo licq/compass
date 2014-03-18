@@ -11,6 +11,8 @@ var app = require('../../../server'),
 
 describe('singups', function () {
     beforeEach(function (done) {
+        User.remove().exec();
+        Company.remove().exec();
         Signup.remove().exec();
         done();
     });

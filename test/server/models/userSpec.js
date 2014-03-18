@@ -3,39 +3,11 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
-    should = require('should');
-
-var user, user2;
+    should = require('should'),
+    Factory = require('../factory');
 
 describe('User', function () {
-    before(function (done) {
-        User.remove().exec();
-        Company.remove().exec();
-
-        Company.create({
-            name: 'Company'
-        }, function (err, company) {
-            user = new User({
-                name: 'Full name',
-                email: 'test1@test.com',
-                password: 'password',
-                provider: 'local',
-                company: company._id
-            });
-
-            user2 = new User({
-                name: 'user2',
-                email: 'test2@test.com',
-                password: 'password',
-                provider: 'local',
-                company: company._id
-            });
-
-            done();
-        });
-    });
-
-    afterEach(function (done) {
+    after(function (done) {
         User.remove().exec();
         Company.remove().exec();
         done();
@@ -50,18 +22,22 @@ describe('User', function () {
         });
 
         it('should be able to save without problems', function (done) {
-            user.save(done);
+            Factory.build('user', function (user) {
+                user.save(done);
+            });
         });
 
         it('should fail to save an existing user again', function (done) {
-            User.create(user2, function (err) {
-                should.not.exist(err);
-                user2.save(function (err) {
-                    should.exist(err);
-                    done();
+            Factory('user', function (user) {
+                Factory.build('user', {email: user.email}, function (user2) {
+                    user2.save(function (err) {
+                        should.exist(err);
+                        done();
+                    });
                 });
             });
         });
+
 
         it('should show an error when try to save empty user', function (done) {
             return new User().save(function (err) {
@@ -74,32 +50,39 @@ describe('User', function () {
         });
 
         it('should show an error when try to save without valid email', function (done) {
-            user.email = 'invalid email address';
-            user.save(function (err) {
-                should.exist(err);
-                err.errors.should.have.property('email');
-                err.errors.email.message.should.equal('Email格式不正确');
-                done();
+            Factory.build('user', {email: 'invalid email address'}, function (user) {
+                user.save(function (err) {
+                    should.exist(err);
+                    err.errors.should.have.property('email');
+                    err.errors.email.message.should.equal('Email格式不正确');
+                    done();
+                });
             });
         });
     });
 
     describe('#attributes', function () {
         it('should have createdat and updatedat timestamp', function (done) {
-            user2.save();
-            should.exist(user2.created_at);
-            should.exist(user2.updated_at);
-            done();
+            Factory('user', function (user) {
+                should.exist(user.created_at);
+                should.exist(user.updated_at);
+                done();
+            });
         });
     });
 
     describe('#authenticate', function () {
         it('should return true if given the correct password', function () {
-            user2.authenticate('password').should.be.true;
+            Factory.build('user', function (user) {
+                user.authenticate('password').should.be.true;
+            });
         });
         it('should return false if given the wrong password', function () {
-            user2.authenticate('wrong password').should.be.false;
+            Factory.build('user', function (user) {
+                user.authenticate('invalid password').should.be.false;
+            });
         });
     });
 
-});
+})
+;

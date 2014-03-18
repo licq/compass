@@ -3,38 +3,12 @@
 var mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
     Company = mongoose.model('Company'),
-    should = require('should');
-
-var email,email2;
+    should = require('should'),
+    Factory = require('../factory');
 
 describe('Email', function () {
-    before(function (done) {
-        Email.remove().exec();
-        Company.remove().exec();
 
-        Company.create({
-            name: 'Company'
-        }, function (err, company) {
-            email = new Email({
-                address: 'address@email.com',
-                account: 'address',
-                password: 'password',
-                server: 'email.com',
-                company: company._id
-            });
-            email2 = new Email({
-                address: 'address2@email.com',
-                account: 'address2',
-                password: 'password',
-                server: 'email.com',
-                company: company._id
-            });
-
-            done();
-        });
-    });
-
-    afterEach(function (done) {
+    after(function (done) {
         Email.remove().exec();
         Company.remove().exec();
         done();
@@ -49,26 +23,29 @@ describe('Email', function () {
         });
 
         it('should be able to save without problems and got correct default value', function (done) {
-            email.save(function(err,saved){
-              saved.port.should.equal(110);
-              saved.ssl.should.be.false;
-              saved.secure.should.be.false;
-              done();
-            });
-        });
-
-        it('should fail to save an existing email address again', function (done) {
-            Email.create(email2, function (err) {
-                should.not.exist(err);
-                email2.save(function (err) {
-                    should.exist(err);
+            Factory.build('email', function (email) {
+                email.save(function (err, saved) {
+                    saved.port.should.equal(110);
+                    saved.ssl.should.be.false;
+                    saved.secure.should.be.false;
                     done();
                 });
             });
         });
 
+        it('should fail to save an existing email address again', function (done) {
+            Factory('email', function (email) {
+                Factory.build('email', {address: email.address}, function (aemail) {
+                    aemail.save(function (err) {
+                        should.exist(err);
+                        done();
+                    });
+                });
+            });
+        });
+
         it('should show an error when try to save empty user', function (done) {
-            return new Email().save(function (err) {
+            new Email().save(function (err) {
                 should.exist(err);
                 err.errors.should.have.property('address');
                 err.errors.should.have.property('account');
@@ -80,22 +57,26 @@ describe('Email', function () {
         });
 
         it('should show an error when try to save without valid email', function (done) {
-            email.address = 'invalid email address';
-            email.save(function (err) {
-                should.exist(err);
-                err.errors.should.have.property('address');
-                err.errors.address.message.should.equal('Email格式不正确');
-                done();
+            Factory.build('email', {address: 'invalid email'}, function (email) {
+                email.save(function (err) {
+                    should.exist(err);
+                    err.errors.should.have.property('address');
+                    err.errors.address.message.should.equal('Email格式不正确');
+                    done();
+                });
             });
         });
     });
 
     describe('#attributes', function () {
         it('should have createdat and updatedat timestamp', function (done) {
-            email2.save();
-            should.exist(email2.created_at);
-            should.exist(email2.updated_at);
-            done();
+            Factory.build('email', function (email) {
+                email.save(function () {
+                    should.exist(email.created_at);
+                    should.exist(email.updated_at);
+                    done();
+                });
+            });
         });
     });
 

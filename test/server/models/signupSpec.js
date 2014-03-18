@@ -7,16 +7,7 @@ var mongoose = require('mongoose'),
     should = require('should'),
     Factory = require('../factory');
 
-var signup;
-
 describe('Signup', function () {
-
-    beforeEach(function (done) {
-        Signup.remove().exec();
-        Company.remove().exec();
-        User.remove().exec();
-        done();
-    });
 
     describe('#validate', function () {
         it('should show errors if with empty arguments', function (done) {
@@ -88,6 +79,13 @@ describe('Signup', function () {
                 });
             });
         });
+    });
+
+    beforeEach(function (done) {
+        User.remove().exec();
+        Company.remove().exec();
+        Signup.remove().exec();
+        done();
     });
 
     after(function (done) {
