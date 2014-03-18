@@ -33,7 +33,8 @@ module.exports = function (app, config) {
             secret: 'This is another secret',
             store: new mongoStore({
                 db: mongoose.connection.db,
-                collection: 'sessions'
+                collection: 'sessions',
+                auto_reconnect: true
             })
         }));
 

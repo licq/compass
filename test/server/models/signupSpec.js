@@ -11,9 +11,11 @@ var signup;
 describe('Signup', function () {
 
     before(function (done) {
+        Signup.remove().exec();
         Company.create({name: 'already exist'}, function (err, company) {
             User.create({name: 'user', email: 'already@exist.com', password: 'password', company: company._id});
-            signup = new Signup({companyName: 'newName',
+            signup = new Signup({
+                companyName: 'newName',
                 'admin.name': 'newName',
                 'admin.email': 'new@email.com',
                 'admin.password': 'password'});
@@ -45,7 +47,6 @@ describe('Signup', function () {
         it('should show error if the company already existed', function (done) {
             new Signup({companyName: 'already exist'}).save(function (err) {
                 should.exist(err);
-                console.log(err);
                 err.errors.companyName.message.should.equal('该公司已注册');
                 done();
             });
@@ -54,7 +55,6 @@ describe('Signup', function () {
         it('should show error if the user already existed', function (done) {
             new Signup({'admin.email': 'already@exist.com'}).save(function (err) {
                 should.exist(err);
-                console.log(err);
                 err.errors['admin.email'].message.should.equal('该邮箱已注册');
                 done();
             });
@@ -69,13 +69,11 @@ describe('Signup', function () {
 
     describe('#activate', function () {
         it('should create new company and admin use when activate', function (done) {
-            signup.save(function () {
-                signup.activate(function (err, company, user) {
-                    should.not.exist(err);
-                    should.exist(company);
-                    should.exist(user);
-                    done();
-                });
+            signup.activate(function (err, company, user) {
+                should.not.exist(err);
+                should.exist(company);
+                should.exist(user);
+                done();
             });
         });
     });
