@@ -22,12 +22,15 @@ module.exports = {
         db: 'mongodb://localhost/compass-dev',
         hostname: 'localhost',
         emailFrom: emailFrom,
-        emailOptions: emailOptions
+        emailOptions: emailOptions,
     },
     test: {
         rootPath: rootPath,
         port: process.env.PORT || 3001,
-        db: 'mongodb://localhost/compass-test'
+        db: 'mongodb://localhost/compass-test',
+        hostname: 'localhost',
+        emailFrom: emailFrom,
+        emailOptions: emailOptions,
     },
     production: {
         rootPath: rootPath,

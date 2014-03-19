@@ -1,7 +1,6 @@
 var nodemailer = require("nodemailer");
 
 function Mailer() {
-
 }
 
 Mailer.prototype.init = function (config) {
@@ -21,7 +20,6 @@ Mailer.prototype.sendEmail = function (to, subject, content, cb) {
         subject: subject,
         html: content
     };
-    console.log('sendEmail ', mailProperties);
 
     this.smtpTransport.sendMail(mailProperties, function (error, response) {
         if (error) {
@@ -32,5 +30,15 @@ Mailer.prototype.sendEmail = function (to, subject, content, cb) {
         if (cb) return cb();
     });
 };
+
+Mailer.prototype.sendSignupEmail = function (email, code) {
+    this.sendEmail(email, '已注册，请激活', this.generateEmailContent(code));
+};
+
+Mailer.prototype.generateEmailContent = function (code) {
+    return '<html><head></head><body><a href="http://' + this.config.hostname + ':' + this.config.port + '/signup/activate/'
+        + code + "\">激活</a></body></html>";
+};
+
 module.exports = new Mailer();
 
