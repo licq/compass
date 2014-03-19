@@ -46,7 +46,7 @@ describe('singups', function () {
                 request(app)
                     .put('/api/signups/' + signup._id)
                     .expect(200)
-                    .end(done)
+                    .end(done);
             });
         });
     });

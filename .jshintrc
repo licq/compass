@@ -16,9 +16,12 @@
     "unused": true, // Warn unused variables.
     "strict": false, // Require `use strict` pragma in every file.
     "trailing": true, // Prohibit trailing whitespaces.
+    "expr": true,
+    "shadow": true,
     "smarttabs": false, // Suppresses warnings about mixed tabs and spaces
     "globals": { // Globals variables.
-        "angular": true
+        "angular": true,
+        "expect": true
     },
     "predef": [ // Extra globals.
         "define",
@@ -31,8 +34,7 @@
         "after",
         "afterEach",
         "it",
-        "inject",
-        "expect"
+        "inject"
     ],
     "indent": 4, // Specify indentation spacing
     "devel": true, // Allow development statements e.g. `console.log();`.
