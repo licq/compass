@@ -11,12 +11,13 @@ module.exports = function (config) {
 
 
         // frameworks to use
-        frameworks: ['mocha','chai','sinon-chai'],
+        frameworks: ['mocha', 'chai', 'sinon-chai'],
 
 
         // list of files / patterns to load in the browser
         files: [
             'public/js/jquery.js',
+            'node_modules/lodash/lodash.js',
             'public/vendor/angular/angular.js',
             'public/vendor/angular-mocks/angular-mocks.js',
             'public/vendor/angular-cookies/angular-cookies.js',
@@ -30,7 +31,6 @@ module.exports = function (config) {
             'public/app/directives.js',
             'public/app/filters.js',
             'public/app/**/*.js',
-            'node_modules/should/lib/should.js',
             'test/client/**/*.js'
         ],
 

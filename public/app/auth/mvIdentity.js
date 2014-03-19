@@ -10,9 +10,6 @@ angular.module('compass').factory('mvIdentity', function ($window) {
         currentUser: currentUser,
         isAuthenticated: function () {
             return !!this.currentUser;
-        },
-        notAuthenticated: function () {
-
         }
     };
 });

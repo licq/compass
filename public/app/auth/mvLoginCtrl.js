@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvLoginCtrl', function ($scope, mvAuth, mvIdentity, $location) {
+    .controller('mvLoginCtrl', function ($scope, mvAuth, $location) {
         $scope.login = function () {
             mvAuth.login({email: $scope.email, password: $scope.password, remember_me: $scope.remember_me})
                 .then(function () {
                     $location.path('/dashboard');
                 })
                 .catch(function (err) {
-                    $scope.errorMessage = err.message;
+                    $scope.errorMessage = err.data.message;
                 });
         };
     });

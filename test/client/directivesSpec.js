@@ -8,7 +8,7 @@ describe('directives', function () {
 
         beforeEach(inject(function ($compile, $rootScope) {
             scope = $rootScope.$new();
-            element = angular.element('<delete-button action="clicked=true"></delete-button>')
+            element = angular.element('<delete-button action="clicked=true"></delete-button>');
             element = $compile(element)(scope);
             scope.$digest();
         }));
@@ -36,7 +36,7 @@ describe('directives', function () {
 
         beforeEach(inject(function ($compile, $rootScope) {
             scope = $rootScope.$new();
-            element = angular.element('<edit-button action="clicked=true"></edit-button>')
+            element = angular.element('<edit-button action="clicked=true"></edit-button>');
             element = $compile(element)(scope);
             scope.$digest();
         }));
@@ -64,7 +64,7 @@ describe('directives', function () {
 
         beforeEach(inject(function ($compile, $rootScope) {
             scope = $rootScope.$new();
-            element = angular.element('<status-span value="true"></status-span>')
+            element = angular.element('<status-span value="true"></status-span>');
             element = $compile(element)(scope);
             scope.$digest();
         }));
