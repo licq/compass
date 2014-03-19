@@ -4,11 +4,25 @@ var path = require('path');
 
 var rootPath = path.normalize(__dirname + '/../../');
 
+var emailOptions = {
+    host: "smtp.126.com",
+    port: 25,
+    auth: {
+        user: "compass_test@126.com",
+        pass: "compass123"
+    }
+};
+
+var emailFrom = emailOptions.auth.user;
+
 module.exports = {
     development: {
         rootPath: rootPath,
         port: process.env.PORT || 3000,
-        db: 'mongodb://localhost/compass-dev'
+        db: 'mongodb://localhost/compass-dev',
+        hostname: 'localhost',
+        emailFrom: emailFrom,
+        emailOptions: emailOptions
     },
     test: {
         rootPath: rootPath,

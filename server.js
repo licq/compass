@@ -16,6 +16,8 @@ require('./server/config/passport')();
 
 require('./server/config/routes')(app);
 
+require('./server/config/mailer').init(config);
+
 app.listen(config.port);
 console.log('Compass Listening on port ' + config.port + '...');
 

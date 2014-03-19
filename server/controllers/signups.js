@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
     Signup = mongoose.model('Signup'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    mailer = require('../config/mailer');
 
 
 exports.create = function (req, res) {
@@ -10,6 +11,7 @@ exports.create = function (req, res) {
 
     signup.save(function (err) {
         if (err) return res.json(400, err);
+        sendSignupEmail(signup.adminEmail, signup._id);
         res.json({_id: signup._id, email: signup.adminEmail});
     });
 };
@@ -24,4 +26,14 @@ exports.activate = function (req, res, next) {
         });
     });
 };
+
+function sendSignupEmail(email, code) {
+    mailer.sendEmail(email, '已注册，请激活', generateEmailContent(code));
+}
+
+function generateEmailContent(code) {
+    return '<html><head></head><body><a href="http://localhost:3000/signup/activate/'
+        + code + '">激活</a>'
+        + '</body></html>';
+}
 
