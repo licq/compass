@@ -27,7 +27,7 @@ Mailer.prototype.sendEmail = function (to, subject, content, cb) {
         } else {
             console.log("Email sent to " + to + 'successfully with ' + response.message);
         }
-        if (cb) return cb();
+        if (cb) return cb(error);
     });
 };
 

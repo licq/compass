@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    taskRunner = require('../config/taskRunner');
 
 exports.list = function (req, res, next) {
     Email.find({company: req.user.company}, function (err, emails) {
@@ -23,6 +24,7 @@ exports.create = function (req, res) {
                 return res.json(400, {message: err.message});
             }
         }
+        taskRunner.addEmailFetcher(email);
         res.end();
     });
 };
