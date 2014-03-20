@@ -4,6 +4,7 @@ var express = require('express'),
     swig = require('swig'),
     mongoose = require('mongoose'),
     passport = require('passport'),
+    kue = require('kue'),
     mongoStore = require('connect-mongo')(express);
 
 module.exports = function (app, config) {
@@ -38,6 +39,7 @@ module.exports = function (app, config) {
             })
         }));
 
+        app.use('/tasks', kue.app);
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(passport.authenticate('remember-me'));

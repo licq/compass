@@ -18,6 +18,8 @@ require('./server/config/routes')(app);
 
 require('./server/config/mailer').init(config);
 
+require('./server/config/taskRunner').init();
+
 app.listen(config.port);
 console.log('Compass Listening on port ' + config.port + '...');
 
