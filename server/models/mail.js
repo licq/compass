@@ -1,22 +1,40 @@
 var mongoose = require('mongoose'),
     timestamps = require('mongoose-timestamps');
 
+var nameAndAddressSchema = mongoose.Schema({
+    address: String,
+    name: String
+});
+
 var mailSchema = mongoose.Schema({
     from: {
-        type: [{address: String, name: String}],
+        type: [nameAndAddressSchema ],
         required: true
     },
-    to: [{address: String, name:String}],
-    cc: [{address: String, name:String}],
-    bcc: [{address: String, name:String}],
+    to: [nameAndAddressSchema ],
+    cc: [ nameAndAddressSchema ],
+    bcc: [ nameAndAddressSchema ],
     subject: String,
     html: String,
     text: String,
     date: Date,
-    attachments: [Buffer],
+    attachments: [
+        {
+            contentType: String,
+            fileName: String,
+            contentDisposition: String,
+            contentId: String,
+            transferEncoding: String,
+            length: Number,
+            generatedFileName: String,
+            checksum: String,
+            content: Buffer
+        }
+    ],
     email: {
         type: String,
-        required: true
+        required: true,
+        index: true
     }
 });
 

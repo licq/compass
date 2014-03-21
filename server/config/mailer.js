@@ -31,8 +31,8 @@ Mailer.prototype.sendEmail = function (to, subject, content, cb) {
     });
 };
 
-Mailer.prototype.sendSignupEmail = function (email, code) {
-    this.sendEmail(email, '已注册，请激活', this.generateEmailContent(code));
+Mailer.prototype.sendSignupEmail = function (email, code, cb) {
+    this.sendEmail(email, '已注册，请激活', this.generateEmailContent(code), cb);
 };
 
 Mailer.prototype.generateEmailContent = function (code) {
