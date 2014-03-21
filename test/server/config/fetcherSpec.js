@@ -20,7 +20,7 @@ describe('fetcher', function () {
             });
         });
 
-        it.only('should login successfully', function (done) {
+        it.skip('should login successfully', function (done) {
             this.timeout(0);
             var fetcher = new Fetcher({
                 address: '',

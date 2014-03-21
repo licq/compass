@@ -45,10 +45,6 @@ Fetcher.prototype.list = function (callback) {
     this.client.on('list', function (status, msgcount, msgnumber, data, rawdata) {
         if (status) {
             console.log('list success');
-            console.log(msgcount);
-            console.log(msgnumber);
-            console.log(data);
-
             callback(null, msgcount);
         } else {
             console.log('list failed ', rawdata);
@@ -62,7 +58,6 @@ Fetcher.prototype.retrieve = function (number, callback) {
     this.client.on('retr', function (status, msgnumber, data, rawdata) {
         if (status) {
             console.log('retr success ' + number);
-            console.log(data);
             callback(null, {
                 msgNumber: msgnumber,
                 mailData: data
@@ -93,13 +88,14 @@ Fetcher.prototype.save = function (mailObject, callback) {
 };
 
 
-Fetcher.prototype.quit = function (callback) {
+Fetcher.prototype.quit = function (callback, err) {
     this.client.quit();
-    this.client.on('quit', function (status, rawdata) {
-        if (status) {
-            console.log('quit ' + status);
-        }
-        callback();
+    this.client.on('quit', function () {
+        if (err) {
+            console.log('quit ' + err);
+            callback(err);
+        } else
+            callback();
     });
 };
 
@@ -127,9 +123,8 @@ Fetcher.prototype.verify = function (callback) {
     var self = this;
     async.waterfall([
         self.connect.bind(self),
-        self.login.bind(self),
-        self.quit.bind(self),
-    ], callback);
+        self.login.bind(self)
+    ], self.quit.bind(self, callback));
 };
 
 Fetcher.prototype.processOneMail = function (msgNumber, callback) {
@@ -152,9 +147,8 @@ Fetcher.prototype.all = function (callback) {
         function (msgCount, cb) {
             var arr = _.range(1, msgCount + 1);
             async.eachSeries(arr, self.processOneMail.bind(self), cb);
-        },
-        this.quit.bind(this)
-    ], callback);
+        }
+    ], this.quit.bind(this, callback));
 };
 
 module.exports = Fetcher;

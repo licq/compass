@@ -3,7 +3,8 @@ var Factory = require('factory-lady'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
     Signup = mongoose.model('Signup'),
-    Email = mongoose.model('Email');
+    Email = mongoose.model('Email'),
+    Mail = mongoose.model('Mail');
 
 var companyCounter = 1;
 
@@ -52,6 +53,14 @@ Factory.define('signup', Signup, {
     adminPassword: 'password'
 });
 
+Factory.define('mail', Mail, {
+    from: 'aa@aa.com',
+    to: 'bb@bb.com',
+    subject: 'hello,this is from compass',
+    html: '<h1>hello</h1>',
+    date: '2012-03-15',
+    email: 'bb@bb.com'
+});
 module.exports = Factory;
 
 
