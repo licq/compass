@@ -1,7 +1,9 @@
 var POPClient = require('poplib'),
     async = require('async'),
     _ = require('lodash'),
-    MailParser = require('mailparser').MailParser;
+    MailParser = require('mailparser').MailParser,
+    mongoose = require('mongoose'),
+    Mail = mongoose.model('Mail');
 
 function Fetcher(options) {
     this.options = options;
@@ -83,8 +85,15 @@ Fetcher.prototype.dele = function (msgNumber, callback) {
 };
 
 Fetcher.prototype.save = function (mailObject, callback) {
-    console.log('save mail to mongo');
-    callback(null, mailObject.msgNumber);
+    mailObject.mail.email = this.options.address;
+    console.log(mailObject.mail);
+    console.log(mailObject.mail.from);
+    console.log(mailObject.mail.to);
+
+    Mail.create(mailObject.mail, function (err) {
+        if (err) callback(err);
+        else  callback(null, mailObject.msgNumber);
+    });
 };
 
 

@@ -3,17 +3,17 @@ var mongoose = require('mongoose'),
 
 var mailSchema = mongoose.Schema({
     from: {
-        type: String,
+        type: [{address: String, name: String}],
         required: true
     },
-    to: [String],
-    cc: [String],
-    bcc: [String],
+    to: [{address: String, name:String}],
+    cc: [{address: String, name:String}],
+    bcc: [{address: String, name:String}],
     subject: String,
     html: String,
     text: String,
     date: Date,
-    attachements: [Buffer],
+    attachments: [Buffer],
     email: {
         type: String,
         required: true

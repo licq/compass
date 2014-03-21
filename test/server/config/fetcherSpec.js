@@ -3,8 +3,8 @@ var Fetcher = require('../../../server/config/fetcher'),
 
 describe('fetcher', function () {
     describe('#verify', function () {
-        it.skip('should show server error if with invalid server address', function (done) {
-            this.timeout(0);
+        it('should show server error if with invalid server address', function (done) {
+            this.timeout(200);
             var fetcher = new Fetcher({
                 address: '',
                 account: 'compass_test',
@@ -20,8 +20,8 @@ describe('fetcher', function () {
             });
         });
 
-        it.skip('should login successfully', function (done) {
-            this.timeout(0);
+        it('should login successfully', function (done) {
+            this.timeout(200);
             var fetcher = new Fetcher({
                 address: '',
                 account: 'compass_test@126.com',
@@ -31,8 +31,27 @@ describe('fetcher', function () {
                 server: 'pop.126.com'
             });
 
+            fetcher.verify(function (err) {
+                expect(err).to.not.exist;
+                done();
+            });
+        });
+    });
+
+    describe.only('#all', function () {
+
+        it('should retrive email successfully', function (done) {
+            this.timeout(2000);
+            var fetcher = new Fetcher({
+                address: 'compass_test@126.com',
+                account: 'compass_test@126.com',
+                password: 'compass123',
+                ssl: false,
+                port: 110,
+                server: 'pop.126.com'
+            });
+
             fetcher.all(function (err) {
-                console.log('success');
                 expect(err).to.not.exist;
                 done();
             });
