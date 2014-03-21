@@ -2,61 +2,70 @@ var kue = require('kue'),
     mailer = require('./mailer'),
     mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    fetcher = require('./fetcher');
 
-function TaskRunner() {
-    this.jobs = kue.createQueue();
-}
+var jobs = kue.createQueue();
 
-TaskRunner.prototype.init = function () {
-    var self = this;
-    this.jobs.process('send signup email', 20, function (job, done) {
+function init() {
+    jobs.process('send signup email', 20, function (job, done) {
         mailer.sendSignupEmail(job.data.to, job.data.code, done);
     });
 
-    this.jobs.process('fetch email', 20, function (job, done) {
+    jobs.process('fetch email', function (job, done) {
         console.log('fetch email of ' + job.data.address);
-        self.jobs.create('fetch email', job.data).delay(1000 * 60 * 5).save(done);
+        fetcher.fetch(job.data, function (err) {
+            console.log(err);
+            jobs.create('fetch email', job.data).delay(1000 * 60 ).save();
+            done();
+        });
     });
 
     process.once('SIGTERM', function (sig) {
-        self.jobs.shutdown(function (err) {
+        console.log('process exit');
+        jobs.shutdown(function (err) {
             console.log('Kue is shut down.', err || '');
             process.exit(0);
         }, 5000);
     });
 
-    this.jobs.promote();
+    jobs.promote();
 
-//    this.loadAllFetchTasks();
-};
+    console.log('taskRunner start');
 
-TaskRunner.prototype.loadAllFetchTasks = function () {
-    var self = this;
+//    loadAllFetchTasks();
+}
+
+function loadAllFetchTasks() {
     Email.find({}, function (err, emails) {
         _.forEach(emails, function (email) {
-            self.addEmailFetcher(email);
-        }, self);
+            addEmailFetcher(email);
+        });
     });
-};
+}
 
-TaskRunner.prototype.restart = function () {
-
-};
-
-
-TaskRunner.prototype.sendSignupEmail = function (to, code) {
-    this.jobs.create('send signup email', {
+function sendSignupEmail(to, code) {
+    jobs.create('send signup email', {
         title: 'send signup email to ' + to,
         to: to,
         code: code
     }).attempts(3).save();
+}
+
+function addEmailFetcher(email) {
+    var job = jobs.create('fetch email', email).priority('high').attempts(3);
+    job.on('complete',function () {
+        console.log("Fetch " + email.address + ' complete');
+    }).on('failed',function () {
+            console.log("Job failed");
+        }).on('progress', function (progress) {
+            process.stdout.write('\r  job #' + job.id + ' ' + progress + '% complete');
+        });
+    job.save();
+}
+
+module.exports = {
+    init: init,
+    addEmailFetcher: addEmailFetcher,
+    sendSignupEmail: sendSignupEmail
 };
-
-TaskRunner.prototype.addEmailFetcher = function (email) {
-    this.jobs.create('fetch email', email).priority('high').attempts(3).save();
-};
-
-
-module.exports = new TaskRunner();
-

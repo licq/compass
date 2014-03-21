@@ -4,7 +4,7 @@ var fetcher = require('../../../server/config/fetcher'),
     async = require('async'),
     _ = require('lodash');
 
-describe('fetcher', function () {
+describe.only('fetcher', function () {
     var mailbox;
 
     beforeEach(function () {
@@ -18,7 +18,7 @@ describe('fetcher', function () {
         }
     });
 
-    describe.skip('#verify', function () {
+    describe('#verify', function () {
         it('should show server error if with invalid server address', function (done) {
             this.timeout(2000);
             mailbox.server = 'invalid.com.cbbb';
@@ -48,7 +48,7 @@ describe('fetcher', function () {
         });
     });
 
-    describe.skip('#fetch', function () {
+    describe.only('#fetch', function () {
         it('should retrive email successfully', function (done) {
             this.timeout(0);
 
@@ -58,8 +58,9 @@ describe('fetcher', function () {
                 });
             }, function () {
                 setTimeout(function () {
-                    fetcher.fetch(mailbox, function (err) {
+                    fetcher.fetch(mailbox, function (err, num) {
                         expect(err).to.not.exist;
+                        expect(num).to.equal(3);
                         done();
                     });
                 }, 2000);

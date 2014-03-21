@@ -17,6 +17,8 @@ module.exports = function (app, config) {
         app.set('view engine', 'html');
         app.set('views', config.rootPath + '/server/views');
 
+        app.use('/tasks', kue.app);
+
         app.use(express.favicon());
         app.use(express.logger('dev'));
         app.use(express.compress({
@@ -39,7 +41,7 @@ module.exports = function (app, config) {
             })
         }));
 
-        app.use('/tasks', kue.app);
+
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(passport.authenticate('remember-me'));

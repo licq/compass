@@ -64,6 +64,8 @@ exports.fetch = function (mailbox, callback) {
     var correct = false;
     var totalMails, current;
 
+    console.log('start fetch ' + mailbox.address);
+
     var client = new POPClient(mailbox.port, mailbox.server, {
         tlserrs: true,
         enabletls: mailbox.ssl,
@@ -154,7 +156,7 @@ exports.fetch = function (mailbox, callback) {
         if (status === true) console.log("QUIT success");
         else console.log("QUIT failed");
         if (correct) {
-            callback(null);
+            callback(null, current);
         } else {
             callback('login failed');
         }
