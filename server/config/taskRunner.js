@@ -16,13 +16,19 @@ TaskRunner.prototype.init = function () {
 
     this.jobs.process('fetch email', 20, function (job, done) {
         console.log('fetch email of ' + job.data.address);
-        self.jobs.create('fetch email', job.data).delay(1000 * 60 * 5).save();
-        done();
+        self.jobs.create('fetch email', job.data).delay(1000 * 60 * 5).save(done);
+    });
+
+    process.once('SIGTERM', function (sig) {
+        self.jobs.shutdown(function (err) {
+            console.log('Kue is shut down.', err || '');
+            process.exit(0);
+        }, 5000);
     });
 
     this.jobs.promote();
 
-    this.loadAllFetchTasks();
+//    this.loadAllFetchTasks();
 };
 
 TaskRunner.prototype.loadAllFetchTasks = function () {
@@ -50,6 +56,7 @@ TaskRunner.prototype.sendSignupEmail = function (to, code) {
 TaskRunner.prototype.addEmailFetcher = function (email) {
     this.jobs.create('fetch email', email).priority('high').attempts(3).save();
 };
+
 
 module.exports = new TaskRunner();
 
