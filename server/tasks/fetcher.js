@@ -156,7 +156,7 @@ exports.fetch = function (mailbox, callback) {
         if (status === true) console.log("QUIT success");
         else console.log("QUIT failed");
         if (correct) {
-            callback(null, current);
+            callback(null, current - 1);
         } else {
             callback('login failed');
         }

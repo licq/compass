@@ -54,12 +54,12 @@ Factory.define('signup', Signup, {
 });
 
 Factory.define('mail', Mail, {
-    from: 'aa@aa.com',
-    to: 'bb@bb.com',
+    from: [{address: 'aa@aa.com', name: 'aa'}],
+    to: [{address:'bb@bb.com', name: 'bb'}],
     subject: 'hello,this is from compass',
     html: '<h1>hello</h1>',
     date: '2012-03-15',
-    email: 'bb@bb.com'
+    mailbox: 'bb@bb.com'
 });
 module.exports = Factory;
 

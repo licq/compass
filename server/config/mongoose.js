@@ -19,5 +19,4 @@ module.exports = function (config) {
     require('../models/mail');
     require('../models/signup');
     require('../models/token');
-
 };

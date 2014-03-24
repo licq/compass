@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Signup = mongoose.model('Signup'),
     _ = require('lodash'),
-    tasks = require('../config/taskRunner');
+    jobs = require('../tasks/jobs');
 
 
 exports.create = function (req, res) {
@@ -11,7 +11,7 @@ exports.create = function (req, res) {
 
     signup.save(function (err) {
         if (err) return res.json(400, err);
-        tasks.sendSignupEmail(signup.adminEmail, signup._id);
+        jobs.sendSignupEmail(signup.adminEmail, signup._id);
         res.json({_id: signup._id, email: signup.adminEmail});
     });
 };

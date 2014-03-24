@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
     _ = require('lodash'),
-    taskRunner = require('../config/taskRunner');
+    jobs = require('../tasks/jobs');
 
 exports.list = function (req, res, next) {
     Email.find({company: req.user.company}, function (err, emails) {
@@ -24,7 +24,7 @@ exports.create = function (req, res) {
                 return res.json(400, {message: err.message});
             }
         }
-        taskRunner.addEmailFetcher(email);
+        jobs.addEmailFetcher(email);
         res.end();
     });
 };

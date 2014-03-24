@@ -31,7 +31,7 @@ var mailSchema = mongoose.Schema({
             content: Buffer
         }
     ],
-    email: {
+    mailbox: {
         type: String,
         required: true,
         index: true

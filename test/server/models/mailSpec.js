@@ -2,15 +2,13 @@
 
 var mongoose = require('mongoose'),
     Mail = mongoose.model('Mail'),
-    Company = mongoose.model('Company'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
 describe('Mail', function () {
 
-    after(function (done) {
-        Mail.remove().exec();
-        done();
+    beforeEach(function (done) {
+        Mail.remove().exec(done);
     });
 
     describe('#validate', function () {
@@ -25,9 +23,10 @@ describe('Mail', function () {
             Factory.build('mail', function (mail) {
                 mail.save(function (err, saved) {
                     expect(err).to.not.exist;
-                    expect(saved).to.have.property('from');
+                    expect(saved.from).to.exist;
                     expect(saved.to).to.exist;
                     expect(saved.subject).to.exist;
+                    expect(saved.mailbox).to.exist;
                     expect(saved.html).to.exist;
                     expect(saved.date).to.exist;
                     expect(saved.created_at).to.exist;
@@ -42,7 +41,7 @@ describe('Mail', function () {
             new Mail().save(function (err) {
                 expect(err).to.exist;
                 expect(err.errors).to.have.property('from');
-                expect(err.errors).to.have.property('email');
+                expect(err.errors).to.have.property('mailbox');
                 done();
             });
         });

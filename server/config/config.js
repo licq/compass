@@ -23,6 +23,7 @@ module.exports = {
         hostname: 'localhost',
         emailFrom: emailFrom,
         emailOptions: emailOptions,
+        templatePath: rootPath + 'server/templates/'
     },
     test: {
         rootPath: rootPath,
@@ -31,6 +32,7 @@ module.exports = {
         hostname: 'localhost',
         emailFrom: emailFrom,
         emailOptions: emailOptions,
+        templatePath: rootPath + 'server/templates/'
     },
     production: {
         rootPath: rootPath,
