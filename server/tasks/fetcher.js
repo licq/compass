@@ -125,8 +125,10 @@ exports.fetch = function (mailbox, callback) {
 
             parse(data, function (mail) {
                 saveToDB(mail, mailbox.address, function (err) {
-                    if (err)  client.rset();
-                    else client.dele(msgnumber);
+                    if (err) {
+                        console.log(err);
+                        client.rset();
+                    } else client.dele(msgnumber);
                 });
             });
         } else {
@@ -165,7 +167,7 @@ exports.fetch = function (mailbox, callback) {
 
 
 function saveToDB(mail, address, callback) {
-    mail.email = address;
+    mail.mailbox = address;
     Mail.create(mail, function (err) {
         callback(err);
     });

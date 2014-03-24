@@ -8,6 +8,10 @@ var kue = require('kue'),
 var jobs = kue.createQueue();
 
 exports.start = function () {
+    jobs.on('error',function(error){
+        console.log(error);
+    });
+
     jobs.process('send signup email', 20, handleSendSignupEmail);
 
     jobs.process('fetch email', 20, handleFetchEmail);
@@ -30,7 +34,6 @@ function handleFetchEmail(job, done) {
     console.log('fetch email of ' + job.data.address);
     fetcher.fetch(job.data, function (err) {
         console.log(err);
-        jobs.create('fetch email', job.data).delay(1000 * 60 * 10).save();
         done(err);
     });
 }

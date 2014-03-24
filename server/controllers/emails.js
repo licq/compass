@@ -24,7 +24,7 @@ exports.create = function (req, res) {
                 return res.json(400, {message: err.message});
             }
         }
-        jobs.addEmailFetcher(email);
+        jobs.addFetchEmailJob(email);
         res.end();
     });
 };
@@ -32,6 +32,7 @@ exports.create = function (req, res) {
 exports.delete = function (req, res) {
     req.email.remove(function (err) {
         if (err) return next(err);
+        jobs.removeFetchEmailJob(req.email);
         res.end();
     });
 };
@@ -44,6 +45,9 @@ exports.update = function (req, res) {
     _.merge(req.email, req.body);
     req.email.save(function (err) {
         if (err) return next(err);
+        jobs.removeFetchEmailJob(req.email, function () {
+            jobs.addFetchEmailJob(req.email);
+        });
         res.end();
     });
 };
