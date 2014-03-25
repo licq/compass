@@ -62,7 +62,7 @@ exports.verify = function (mailbox, callback) {
 
 exports.fetch = function (mailbox, callback) {
     var correct = false;
-    var totalMails, current;
+    var totalMails, current = 0;
 
     console.log('start fetch ' + mailbox.address);
 
@@ -158,7 +158,7 @@ exports.fetch = function (mailbox, callback) {
         if (status === true) console.log("QUIT success");
         else console.log("QUIT failed");
         if (correct) {
-            callback(null, current - 1);
+            callback(null, current);
         } else {
             callback('login failed');
         }

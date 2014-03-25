@@ -26,7 +26,7 @@ function addFetchEmailJob(email, done) {
         ssl: email.ssl
     };
 
-    var fetchEmailAfter = function (minutes) {
+    var fetchEmailAfter = function (minutes,callback) {
         var job = jobs.create('fetch email', data, email._id);
         if (minutes) {
             job.delay(1000 * 60 * minutes);
@@ -35,7 +35,7 @@ function addFetchEmailJob(email, done) {
         job.on('complete', function () {
             console.log('Fetch ' + email.address + ' complete');
             job.remove(function () {
-                fetchEmailAfter(5);
+                fetchEmailAfter(2);
             });
         });
         job.on('failed', function () {
@@ -47,11 +47,11 @@ function addFetchEmailJob(email, done) {
 
         job.save(function (err) {
             if (err) console.log(err);
-            done && done(err);
+            callback && callback(err);
         });
     };
 
-    fetchEmailAfter(0);
+    fetchEmailAfter(0,done);
 }
 
 function removeFetchEmailJob(email, cb) {

@@ -41,8 +41,34 @@ var emailSchema = mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+
+    totalRetrieveCount: {
+        type: Number,
+        default: 0
+    },
+    lastRetrieveCount: {
+        type: Number,
+        default: 0
+    },
+    lastError: String,
+    lastRetrieveTime: Date
 });
+
+emailSchema.statics.setActivity = function (activity, callback) {
+    this.findOne({address: activity.address }).exec(function (err, email) {
+        if (err) return callback(err);
+        if (!email) return callback(new Error('could not find email ' + activity.address));
+        email.lastRetrieveCount = activity.count;
+        email.lastRetriveTime = activity.time;
+        email.lastError = activity.error;
+        email.totalRetrieveCount += activity.count;
+        email.save(function (err, saved) {
+            if (err) return callback(err);
+            callback(null, saved);
+        });
+    });
+};
 
 emailSchema.plugin(timestamps);
 

@@ -6,9 +6,9 @@ var mongoose = require('mongoose'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
-describe('Email', function () {
+describe.only('Email', function () {
 
-    after(function (done) {
+    before(function (done) {
         Email.remove().exec();
         Company.remove().exec();
         done();
@@ -72,10 +72,34 @@ describe('Email', function () {
                 email.save(function () {
                     expect(email.created_at).to.exist;
                     expect(email.updated_at).to.exist;
+                    expect(email.totalRetrieveCount).to.equal(0);
                     done();
                 });
             });
         });
     });
 
-});
+    describe('#setActivity', function () {
+        it('should set activity to the same email account', function (done) {
+            Factory('email', function (email) {
+                Email.setActivity({
+                    address: email.address,
+                    count: 10,
+                    time: Date.now()
+                }, function (err) {
+                    expect(err).to.not.exist;
+                    Email.setActivity({
+                        address: email.address,
+                        count: 10,
+                        time: Date.now()
+                    }, function (err, saved) {
+                        expect(err).to.not.exist;
+                        expect(saved.lastRetrieveCount).to.equal(10);
+                        expect(saved.totalRetrieveCount).to.equal(20);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+})
