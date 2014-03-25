@@ -9,7 +9,7 @@ angular.module('compass')
                 {field: 'address', displayName: 'Email'},
                 {field: 'totalRetrieveCount', displayName: '共收取邮件数'},
                 {field: 'lastRetrieveCount', displayName: '上次收取邮件数'},
-                {field: 'lastRetrieveTime', displayName: '上次收取时间',cellFilter: "date:'yyyy/MM/dd HH:mm:ss'"},
+                {field: 'lastRetrieveTime', displayName: '上次收取时间',cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"'},
                 {field: 'lastError',
                     displayName: '状态',
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"> ' +

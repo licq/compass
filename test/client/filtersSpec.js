@@ -3,8 +3,9 @@ describe('filters',function(){
 
     describe('state',function(){
         it('should return correctly', inject(function(stateFilter){
-            expect(stateFilter(true)).to.equal('正常');
-            expect(stateFilter(false)).to.equal('异常');
+            expect(stateFilter()).to.equal('正常');
+            expect(stateFilter('connect failed')).to.equal('服务器无法连接');
+            expect(stateFilter('login failed')).to.equal('用户名或密码不正确');
         }));
     });
 });
