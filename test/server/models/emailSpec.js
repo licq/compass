@@ -27,7 +27,6 @@ describe('Email', function () {
                 email.save(function (err, saved) {
                     expect(saved.port).to.equal(110);
                     expect(saved.ssl).to.be.false;
-                    expect(saved.secure).to.be.false;
                     done();
                 });
             });

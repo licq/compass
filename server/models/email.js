@@ -28,10 +28,6 @@ var emailSchema = mongoose.Schema({
         default: 110,
         required: [true, '请输入端口号']
     },
-    secure: {
-        type: Boolean,
-        default: false
-    },
     ssl: {
         type: Boolean,
         default: false
