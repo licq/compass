@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
     Mail.find({company: req.user.company})
+        .sort('-date')
         .exec(function (err, mails) {
             if (err) return next(err);
             return res.json(mails);
