@@ -60,9 +60,11 @@ emailSchema.statics.setActivity = function (activity, callback) {
         if (err) return callback(err);
         if (!email) return callback(new Error('could not find email ' + activity.address));
         email.lastRetrieveCount = activity.count;
-        email.lastRetriveTime = activity.time;
+        email.lastRetrieveTime = activity.time;
         email.lastError = activity.error;
-        email.totalRetrieveCount += activity.count;
+        if (!activity.error) {
+            email.totalRetrieveCount += activity.count;
+        }
         email.save(function (err, saved) {
             if (err) return callback(err);
             callback(null, saved);

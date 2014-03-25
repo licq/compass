@@ -7,7 +7,6 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
     Email.find({company: req.user.company})
-        .select('_id server address password ssl port account')
         .exec(function (err, emails) {
             if (err) return next(err);
             return res.json(emails);
@@ -45,8 +44,6 @@ exports.get = function (req, res) {
 
 exports.update = function (req, res, next) {
     _.merge(req.email, req.body);
-    console.log(req.email);
-    console.log(req.body);
     req.email.save(function (err) {
         if (err) return next(err);
         jobs.removeFetchEmailJob(req.email, function () {
@@ -58,7 +55,7 @@ exports.update = function (req, res, next) {
 
 exports.load = function (req, res, next, id) {
     Email.findOne({_id: id, company: req.user.company})
-        .select('_id server address password ssl port account').exec(function (err, email) {
+        .exec(function (err, email) {
             if (err) return next(err);
             if (!email) return res.send(404, {message: 'not found'});
             req.email = email;

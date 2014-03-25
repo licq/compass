@@ -28,7 +28,7 @@ angular.module('compass')
             scope: {
                 value: '='
             },
-            template: '<span class="label" ng-class = "{\'label-success\': value, \'label-danger\': !value}">' +
+            template: '<span class="label" ng-class = "{\'label-success\': !value, \'label-danger\': value}">' +
                 '{{value | state}}</span>'
         };
     });
