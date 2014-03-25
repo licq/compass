@@ -2,13 +2,18 @@
 
 var mongoose = require('mongoose'),
     Mail = mongoose.model('Mail'),
+    Company = mongoose.model('Company'),
+    Email = mongoose.model('Email'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
 describe('Mail', function () {
 
     beforeEach(function (done) {
-        Mail.remove().exec(done);
+        Mail.remove().exec();
+        Company.remove().exec();
+        Email.remove().exec();
+        done();
     });
 
     describe('#validate', function () {
@@ -32,6 +37,19 @@ describe('Mail', function () {
                     expect(saved.created_at).to.exist;
                     expect(saved.updated_at).to.exist;
                     done();
+                });
+            });
+        });
+
+        it('should associate one company', function (done) {
+            Factory('company', function (company) {
+                Factory('email', {company: company._id}, function (email) {
+                    Factory('mail', {mailbox: email.address}, function (mail) {
+                        expect(mail.company.equals(company._id)).to.be.true;
+                        expect(mail.fromName).to.equal(mail.from[0].name);
+                        expect(mail.fromAddress).to.equal(mail.from[0].address);
+                        done();
+                    });
                 });
             });
         });

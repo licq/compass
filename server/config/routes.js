@@ -3,7 +3,8 @@
 var fs = require('fs'),
     sessions = require('../controllers/sessions'),
     emails = require('../controllers/emails'),
-    signups = require('../controllers/signups');
+    signups = require('../controllers/signups'),
+    mails = require('../controllers/mails');
 
 module.exports = function (app) {
 
@@ -19,6 +20,8 @@ module.exports = function (app) {
     app.get('/api/emails/:emailId', emails.get);
     app.put('/api/emails/:emailId', emails.update);
     app.param('emailId', sessions.requiresLogin, emails.load);
+
+    app.get('/api/mails', sessions.requiresLogin, mails.list);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

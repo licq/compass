@@ -60,6 +60,11 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
                 templateUrl: '/app/emails/edit.html',
                 controller: 'mvEmailEditCtrl'
             })
+            .when('/mails', {
+                templateUrl: '/app/mails/list.html',
+                controller: 'mvMailListCtrl',
+                resolve: routeRoleChecks.user
+            })
             .otherwise({
                 redirectTo: '/'
             });

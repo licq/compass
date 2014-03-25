@@ -1206,7 +1206,7 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
 
 .mainbar .bread-crumb {
     padding-top: 3px;
-    border-top: 1px solid #ddd;
+    /*border-top: 1px solid #ddd;*/
     font-size: 12px;
     margin-top: 10px;
     color: #aaa;

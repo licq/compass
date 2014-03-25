@@ -59,7 +59,7 @@ exports.verify = function (mailbox, callback) {
 
 exports.fetch = function (mailbox, callback) {
     var correct = false;
-    var totalMails, current = 0;
+    var totalMails, current = 1;
 
     var client = new POPClient(mailbox.port, mailbox.server, {
         tlserrs: true,
@@ -101,8 +101,7 @@ exports.fetch = function (mailbox, callback) {
             client.quit();
         } else if (msgcount > 0) {
             totalMails = msgcount;
-            current = 1;
-            client.retr(1);
+            client.retr(current);
         } else {
             client.quit();
         }
@@ -146,7 +145,7 @@ exports.fetch = function (mailbox, callback) {
 //        if (status === true) console.log("QUIT success");
 //        else console.log("QUIT failed");
         if (correct) {
-            callback(null, current);
+            callback(null, current - 1);
         } else {
             callback('login failed', 0);
         }

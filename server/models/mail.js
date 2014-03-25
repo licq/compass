@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-    timestamps = require('mongoose-timestamps');
+    timestamps = require('mongoose-timestamps'),
+    Email = mongoose.model('Email');
 
 var nameAndAddressSchema = mongoose.Schema({
     address: String,
@@ -11,6 +12,8 @@ var mailSchema = mongoose.Schema({
         type: [nameAndAddressSchema ],
         required: true
     },
+    fromName: String,
+    fromAddress: String,
     to: [nameAndAddressSchema ],
     cc: [ nameAndAddressSchema ],
     bcc: [ nameAndAddressSchema ],
@@ -35,7 +38,29 @@ var mailSchema = mongoose.Schema({
         type: String,
         required: true,
         index: true
+    },
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
+        index: true
     }
+});
+
+mailSchema.pre('save', function (next) {
+    var self = this;
+    Email.findOne({address: this.mailbox}, function (err, email) {
+        if (err || !email) return next();
+        self.company = email.company;
+        next();
+    });
+});
+
+mailSchema.pre('save', function (next) {
+    if (this.from && this.from[0]) {
+        this.fromName = this.from[0].name;
+        this.fromAddress = this.from[0].address;
+    }
+    next();
 });
 
 mailSchema.plugin(timestamps);

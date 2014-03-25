@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
-describe.only('Email', function () {
+describe('Email', function () {
 
     before(function (done) {
         Email.remove().exec();
