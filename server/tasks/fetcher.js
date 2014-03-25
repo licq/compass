@@ -12,18 +12,16 @@ exports.verify = function (mailbox, callback) {
     var client = new POPClient(mailbox.port, mailbox.server, {
         tlserrs: true,
         enabletls: mailbox.ssl,
-        debug: true
+        debug: false
     });
 
     client.on("error", function (err) {
         if (err.errno === 111) console.log("Unable to connect to server, failed");
         else console.log("Server error occurred, failed");
-        console.log(err);
         callback('connect failed');
     });
 
     client.on("connect", function () {
-        console.log("CONNECT success");
         client.login(mailbox.account, mailbox.password);
     });
 
@@ -37,7 +35,6 @@ exports.verify = function (mailbox, callback) {
 
     client.on("login", function (status, data) {
         if (status) {
-            console.log("LOGIN/PASS success");
             correct = true;
         } else {
             console.log("LOGIN/PASS failed");
@@ -64,23 +61,19 @@ exports.fetch = function (mailbox, callback) {
     var correct = false;
     var totalMails, current = 0;
 
-    console.log('start fetch ' + mailbox.address);
-
     var client = new POPClient(mailbox.port, mailbox.server, {
         tlserrs: true,
         enabletls: mailbox.ssl,
-        debug: true
+        debug: false
     });
 
     client.on("error", function (err) {
         if (err.errno === 111) console.log("Unable to connect to server, failed");
         else console.log("Server error occurred, failed");
-        console.log(err);
         callback('connect failed');
     });
 
     client.on("connect", function () {
-        console.log("CONNECT success");
         client.login(mailbox.account, mailbox.password);
     });
 
@@ -94,7 +87,6 @@ exports.fetch = function (mailbox, callback) {
 
     client.on("login", function (status, data) {
         if (status) {
-            console.log("LOGIN/PASS success");
             correct = true;
             client.list();
         } else {
@@ -110,17 +102,14 @@ exports.fetch = function (mailbox, callback) {
         } else if (msgcount > 0) {
             totalMails = msgcount;
             current = 1;
-            console.log("LIST success with " + msgcount + " message(s)");
             client.retr(1);
         } else {
-            console.log("LIST success with 0 message(s)");
             client.quit();
         }
     });
 
     client.on("retr", function (status, msgnumber, data, rawdata) {
         if (status === true) {
-            console.log("RETR success " + msgnumber);
             current += 1;
 
             parse(data, function (mail) {
@@ -139,7 +128,6 @@ exports.fetch = function (mailbox, callback) {
 
     client.on("dele", function (status, msgnumber, data, rawdata) {
         if (status === true) {
-            console.log("DELE success for msgnumber " + msgnumber);
             if (current > totalMails)
                 client.quit();
             else
@@ -155,12 +143,12 @@ exports.fetch = function (mailbox, callback) {
     });
 
     client.on("quit", function (status, rawdata) {
-        if (status === true) console.log("QUIT success");
-        else console.log("QUIT failed");
+//        if (status === true) console.log("QUIT success");
+//        else console.log("QUIT failed");
         if (correct) {
             callback(null, current);
         } else {
-            callback('login failed');
+            callback('login failed', 0);
         }
     });
 };

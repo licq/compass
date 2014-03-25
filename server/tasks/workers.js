@@ -31,16 +31,13 @@ function handleSendSignupEmail(job, done) {
 }
 
 function handleFetchEmail(job, done) {
-    console.log('fetch email of ' + job.data.address);
     fetcher.fetch(job.data, function (err, count) {
-        console.log(count);
         Email.setActivity({
             time: Date.now(),
             count: count,
             error: err,
             address: job.data.address
         }, function (error) {
-            console.log('complete addActivity with error ' + error);
             done(err);
         });
     });
