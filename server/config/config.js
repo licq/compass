@@ -1,43 +1,38 @@
 'use strict';
 
-var path = require('path');
+var path = require('path'),
+    _ = require('lodash');
 
 var rootPath = path.normalize(__dirname + '/../../');
 
-var emailOptions = {
-    host: "smtp.126.com",
-    port: 25,
-    auth: {
-        user: "compass_test@126.com",
-        pass: "compass123"
-    }
+var defaultConfig = {
+    emailOptions: {
+        host: "smtp.126.com",
+        port: 25,
+        auth: {
+            user: "compass_test@126.com",
+            pass: "compass123"
+        }
+    },
+    emailFrom: "compass_test@126.com",
+    rootPath: rootPath,
+    hostname: 'localhost',
+    templatePath: rootPath + 'server/templates/'
 };
 
-var emailFrom = emailOptions.auth.user;
 
 module.exports = {
-    development: {
-        rootPath: rootPath,
+    development: _.defaults({
         port: process.env.PORT || 3000,
         db: 'mongodb://localhost/compass-dev',
-        hostname: 'localhost',
-        emailFrom: emailFrom,
-        emailOptions: emailOptions,
-        templatePath: rootPath + 'server/templates/'
-    },
-    test: {
-        rootPath: rootPath,
+    }, defaultConfig),
+    test: _.defaults({
         port: process.env.PORT || 3001,
         db: 'mongodb://localhost/compass-test',
-        hostname: 'localhost',
-        emailFrom: emailFrom,
-        emailOptions: emailOptions,
-        templatePath: rootPath + 'server/templates/'
-    },
-    production: {
-        rootPath: rootPath,
+    }, defaultConfig),
+    production: _.defaults({
         port: process.env.PORT || 80,
         db: 'mongodb://localhost/compass'
-    }
+    }, defaultConfig)
 };
 

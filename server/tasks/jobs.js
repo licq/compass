@@ -23,11 +23,12 @@ function addFetchEmailJob(email, done) {
         password: email.password,
         port: email.port,
         title: 'fetch email from ' + email.address,
-        ssl: email.ssl
+        ssl: email.ssl,
+        _id: email._id
     };
 
-    var fetchEmailAfter = function (minutes,callback) {
-        var job = jobs.create('fetch email', data, email._id);
+    var fetchEmailAfter = function (minutes, callback) {
+        var job = jobs.create('fetch email', data, data._id);
         if (minutes) {
             job.delay(1000 * 60 * minutes);
         }
@@ -51,7 +52,7 @@ function addFetchEmailJob(email, done) {
         });
     };
 
-    fetchEmailAfter(0,done);
+    fetchEmailAfter(0, done);
 }
 
 function removeFetchEmailJob(email, cb) {
@@ -62,9 +63,20 @@ function findFetchEmailJob(email, cb) {
     Job.get(email._id, cb);
 }
 
+function start() {
+    Email.find(function (err, emails) {
+        _.forEach(emails, function (email) {
+            removeFetchEmailJob(email, function () {
+                addFetchEmailJob(email);
+            });
+        });
+    });
+}
+
 module.exports = {
     addFetchEmailJob: addFetchEmailJob,
     sendSignupEmail: sendSignupEmail,
     findFetchEmailJob: findFetchEmailJob,
-    removeFetchEmailJob: removeFetchEmailJob
+    removeFetchEmailJob: removeFetchEmailJob,
+    start: start
 };
