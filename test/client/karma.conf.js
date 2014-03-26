@@ -23,6 +23,7 @@ module.exports = function (config) {
             'public/vendor/angular-cookies/angular-cookies.js',
             'public/vendor/angular-resource/angular-resource.js',
             'public/vendor/angular-route/angular-route.js',
+            'public/vendor/angular-sanitize/angular-sanitize.js',
             'public/vendor/angular-ui-router/release/angular-ui-router.js',
             'public/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
             'public/vendor/angular-bootstrap/ui-bootstrap.js',

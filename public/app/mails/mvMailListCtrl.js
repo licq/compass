@@ -7,7 +7,8 @@ angular.module('compass')
                 pageSizes: [10, 20, 50],
                 pageSize: 10,
                 currentPage: 1
-            }, filterOptions: {
+            },
+            filterOptions: {
                 filterText: '',
                 useExternalFilter: true
             }
