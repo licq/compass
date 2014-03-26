@@ -30,7 +30,7 @@ angular.module('compass')
                 {field: 'fromName', displayName: '发件人', width: 100},
                 {field: 'fromAddress', displayName: '发件箱', width: 180},
                 {field: 'subject', displayName: '主题', width: 450},
-                {field: 'date', displayName: '时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"',width: 150},
+                {field: 'date', displayName: '时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"', width: 150},
                 {field: 'actions',
                     displayName: '操作',
                     sortable: false,
@@ -42,8 +42,8 @@ angular.module('compass')
 
         $scope.getMails = function (pageSize, page, searchText) {
             mvMail.query({pageSize: pageSize, page: page, searchText: searchText}, function (mails, responseHeaders) {
-                $scope.mails = mails;
                 $scope.totalMailsCount = parseInt(responseHeaders('totalCount'), 10);
+                $scope.mails = mails;
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
