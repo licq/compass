@@ -5,15 +5,14 @@
     {% include './includes/styles.html' %}
 </head>
 
-<body ng-app="compass">
+<body ng-app="compass" class="bigscreen" ng-controller="mvMainCtrl">
 <header>
     <div class="navbar navbar-fixed-top bs-docs-nav" role="banner">
         <div class="container">
             <div class="navbar-header">
                 <button class="navbar-toggle btn-navbar" type="button" data-toggle="collapse"
                         data-target=".bs-navbar-collapse"><span>Menu</span></button>
-                <a href="#" class="pull-left menubutton hidden-xs"><i class="fa fa-bars"></i></a>
-                <!-- Site name for smallar screens -->
+                <a href="#" class="pull-left menubutton" ng-click="enlarge()"><i class="fa fa-bars"></i></a>
                 <a href="index.html" class="navbar-brand">Compass</a>
             </div>
             <div ng-include="'/app/common/navbar-top.html'"/>
@@ -21,7 +20,7 @@
     </div>
 </header>
 
-<div class="content">
+<div class="content" ng-class="{'enlarged': enlarged}">
     {% include './includes/currentUser.html' %}
     <div ng-include="'/app/common/sidebar.html'"></div>
     <div class="mainbar">
