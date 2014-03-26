@@ -1093,46 +1093,42 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
     color: #333;
 }
 
-.content.enlarged .sidebar {
+.sidebar.enlarged {
     width: 50px;
 }
 
-.content.enlarged .mainbar {
-    margin-left: 50px;
-}
-
-.content.enlarged .sidebar .navbar-form:hover {
+.sidebar.enlarged .navbar-form:hover {
     width: 230px;
     position: relative;
     z-index: 100;
 }
 
-.content.enlarged .sidebar #nav > li {
+.sidebar.enlarged #nav > li {
     white-space: nowrap;
 }
 
-.content.enlarged .sidebar #nav > li > ul {
+.sidebar.enlarged #nav > li > ul {
     display: none;
 }
 
-.content.enlarged .sidebar #nav > li:hover > ul {
+.sidebar.enlarged #nav > li:hover > ul {
     position: absolute;
     left: 50px;
     width: 180px;
     display: block;
 }
 
-.content.enlarged .sidebar #nav ul li:hover > a {
+.sidebar.enlarged #nav ul li:hover > a {
     background: #59646E !important;
     color: #fff;
 }
 
-.content.enlarged .sidebar #nav ul li:hover > a i {
+.sidebar.enlarged #nav ul li:hover > a i {
     background: #59646E !important;
     color: #fff;
 }
 
-.content.enlarged .sidebar #nav ul li:hover > ul {
+.sidebar.enlarged #nav ul li:hover > ul {
     position: absolute;
     left: 180px;
     margin-top: -32px;
@@ -1140,7 +1136,7 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
     display: block;
 }
 
-.content.enlarged .sidebar #nav > li:hover > ul a {
+.sidebar.enlarged #nav > li:hover > ul a {
     background: #2E3338;
     padding-left: 10px;
     border: none;
@@ -1148,41 +1144,41 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
     position: relative;
 }
 
-.content.enlarged .sidebar #nav ul li > a span.pull-right {
+.sidebar.enlarged #nav ul li > a span.pull-right {
     position: absolute;
     right: 5px;
     top: 5px;
 }
 
-.content.enlarged .sidebar #nav > li > a span {
+.sidebar.enlarged #nav > li > a span {
     display: none;
     padding-left: 10px;
 }
 
-.content.enlarged .sidebar #nav > li:hover > a span.pull-right {
+.sidebar.enlarged #nav > li:hover > a span.pull-right {
     position: absolute;
     right: 10px;
     top: 7px;
 }
 
-.content.enlarged .sidebar #nav > li:hover > a {
+.sidebar.enlarged #nav > li:hover > a {
     width: 230px;
     position: relative;
 }
 
-.content.enlarged .sidebar #nav > li {
+.sidebar.enlarged #nav > li {
     position: relative;
 }
 
-.content.enlarged .sidebar #nav > li:hover > a span {
+.sidebar.enlarged #nav > li:hover > a span {
     display: inline;
 }
 
-.content.enlarged .sidebar .navbar-form {
+.sidebar.enlarged .navbar-form {
     padding: 10px 7px;
 }
 
-.content.enlarged .sidebar .navbar-form .search-button {
+.sidebar.enlarged .navbar-form .search-button {
     right: 7px;
 }
 

@@ -72,9 +72,9 @@ describe('directives', function () {
         it('should create button with class btn', function () {
             expect(element).to.have.class('btn');
             expect(element).to.have.class('btn-xs');
-            expect(element).to.have.class('btn-green');
+            expect(element).to.have.class('btn-info');
 
-            expect(element).to.have('i.fa.fa-book');
+            expect(element).to.have('i.fa.fa-archive');
         });
 
         it('should invoke the action', function () {

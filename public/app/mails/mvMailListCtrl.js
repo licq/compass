@@ -26,11 +26,11 @@ angular.module('compass')
             filterOptions: $scope.states.filterOptions,
 
             columnDefs: [
-                {field: 'mailbox', displayName: '收件箱'},
-                {field: 'fromName', displayName: '发件人'},
-                {field: 'fromAddress', displayName: '发件箱'},
-                {field: 'subject', displayName: '主题'},
-                {field: 'date', displayName: '时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"'},
+                {field: 'mailbox', displayName: '收件箱', width: 180},
+                {field: 'fromName', displayName: '发件人', width: 100},
+                {field: 'fromAddress', displayName: '发件箱', width: 180},
+                {field: 'subject', displayName: '主题', width: 450},
+                {field: 'date', displayName: '时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"',width: 150},
                 {field: 'actions',
                     displayName: '操作',
                     sortable: false,

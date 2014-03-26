@@ -1,4 +1,11 @@
-<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" ng-controller="mvNavbarTopCtrl">
+<div class="container" ng-controller="mvNavbarTopCtrl">
+<div class="navbar-header">
+    <button class="navbar-toggle btn-navbar" type="button" data-toggle="collapse"
+            data-target=".bs-navbar-collapse"><span>Menu</span></button>
+    <a href="#" class="pull-left menubutton" ng-click="enlarge()"><i class="fa fa-bars"></i></a>
+    <a href="index.html" class="navbar-brand">Compass</a>
+</div>
+<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
 
 <ul class="nav navbar-nav navbar-right" ng-hide="identity.isAuthenticated()">
     <li><a href="/signup">注册</a></li>
@@ -201,3 +208,4 @@
     </li>
 </ul>
 </nav>
+</div>

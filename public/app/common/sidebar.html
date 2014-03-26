@@ -1,5 +1,5 @@
 <div ng-controller="mvSidebarCtrl">
-    <div class="sidebar" ng-show="identity.isAuthenticated()">
+    <div class="sidebar" ng-show="identity.isAuthenticated()" ng-class="{'enlarged': enlarged}">
         <form class="navbar-form" role="search">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="搜索">
@@ -57,10 +57,8 @@
                     $(this).removeClass("subdrop");
                     $(this).next("ul").slideUp(350);
                     $(".pull-right i", $(this).parent()).removeClass("fa-chevron-down").addClass("fa-chevron-left");
-
                 }
             }
         });
-        $("#nav > li.has_sub > a.open").addClass("subdrop").next("ul").show();
-     </script>
+    </script>
 </div>

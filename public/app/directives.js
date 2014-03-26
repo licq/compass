@@ -39,6 +39,6 @@ angular.module('compass')
             scope: {
                 action: '&'
             },
-            template: '<button class="btn btn-xs btn-green" ng-click="action()"><i class="fa fa-book"</button> '
+            template: '<button class="btn btn-xs btn-info" ng-click="action()"><i class="fa fa-archive"</button> '
         };
     });
