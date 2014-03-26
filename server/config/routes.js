@@ -22,6 +22,8 @@ module.exports = function (app) {
     app.param('emailId', sessions.requiresLogin, emails.load);
 
     app.get('/api/mails', sessions.requiresLogin, mails.list);
+    app.get('/api/mails/:mailId', sessions.requiresLogin, mails.get);
+    app.param('mailId', mails.load);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

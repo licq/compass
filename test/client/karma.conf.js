@@ -31,6 +31,7 @@ module.exports = function (config) {
             'public/app/directives.js',
             'public/app/filters.js',
             'public/app/**/*.js',
+            'node_modules/karma-chai-plugins/node_modules/chai-jquery/chai-jquery.js',
             'test/client/**/*.js'
         ],
 

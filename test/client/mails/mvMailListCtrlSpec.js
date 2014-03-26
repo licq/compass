@@ -7,6 +7,12 @@ describe('mvMailListCtrl', function () {
 
     beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
         $httpBackend = _$httpBackend_;
+        $httpBackend.expectGET('/api/mails?page=1&pageSize=10').respond(function () {
+            return[200, [
+                {address: 'compass@best.com'}
+            ], {'totalCount': 20}];
+        });
+
         $scope = $rootScope.$new();
         mvMailListCtrl = $controller('mvMailListCtrl', {
             $scope: $scope
@@ -14,9 +20,9 @@ describe('mvMailListCtrl', function () {
     }));
 
     it('should get the email list', function () {
-        $httpBackend.expectGET('/api/mails').respond([]);
         $httpBackend.flush();
 
-        expect($scope.mails).to.be.empty;
+        expect($scope.mails).to.have.length(1);
+        expect($scope.totalMailsCount).to.equal(20);
     });
 });

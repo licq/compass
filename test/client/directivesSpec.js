@@ -58,6 +58,33 @@ describe('directives', function () {
         });
     });
 
+    describe('viewButton', function () {
+        var element;
+        var scope;
+
+        beforeEach(inject(function ($compile, $rootScope) {
+            scope = $rootScope.$new();
+            element = angular.element('<view-button action="clicked=true"></view-button>');
+            element = $compile(element)(scope);
+            scope.$digest();
+        }));
+
+        it('should create button with class btn', function () {
+            expect(element).to.have.class('btn');
+            expect(element).to.have.class('btn-xs');
+            expect(element).to.have.class('btn-green');
+
+            expect(element).to.have('i.fa.fa-book');
+        });
+
+        it('should invoke the action', function () {
+            expect(scope.clicked).to.not.exist;
+
+            element.triggerHandler('click');
+            expect(scope.clicked).to.be.true;
+        });
+    });
+
     describe('statusSpan', function () {
         var element;
         var scope;

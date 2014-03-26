@@ -31,4 +31,14 @@ angular.module('compass')
             template: '<span class="label" ng-class = "{\'label-success\': !value, \'label-danger\': value}">' +
                 '{{value | state}}</span>'
         };
+    })
+    .directive('viewButton', function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                action: '&'
+            },
+            template: '<button class="btn btn-xs btn-green" ng-click="action()"><i class="fa fa-book"</button> '
+        };
     });
