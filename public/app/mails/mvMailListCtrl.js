@@ -1,24 +1,28 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvMailListCtrl', function ($scope, mvMail,$location) {
-        $scope.filterOptions = {
-            filterText: '',
-            useExternalFilter: true
-        };
+    .controller('mvMailListCtrl', function ($scope, mvMail, $location, states) {
+        states.defaults('mvMailListCtrl', {
+            pagingOptions: {
+                pageSizes: [10, 20, 50],
+                pageSize: 10,
+                currentPage: 1
+            }, filterOptions: {
+                filterText: '',
+                useExternalFilter: true
+            }
+        });
+
+        $scope.states = states.get('mvMailListCtrl');
+
         $scope.totalMailsCount = 0;
-        $scope.pagingOptions = {
-            pageSizes: [10, 20, 50],
-            pageSize: 10,
-            currentPage: 1
-        };
 
         $scope.gridOptions = angular.extend({
             data: 'mails',
             enablePaging: true,
             totalServerItems: 'totalMailsCount',
-            pagingOptions: $scope.pagingOptions,
-            filterOptions: $scope.filterOptions,
+            pagingOptions: $scope.states.pagingOptions,
+            filterOptions: $scope.states.filterOptions,
 
             columnDefs: [
                 {field: 'mailbox', displayName: '收件箱'},
@@ -43,28 +47,21 @@ angular.module('compass')
                     $scope.$apply();
                 }
             });
-
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
         };
 
 
-        $scope.getMails($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+        $scope.getMails($scope.states.pagingOptions.pageSize, $scope.states.pagingOptions.currentPage);
 
-        $scope.$watch('pagingOptions', function (newVal, oldVal) {
+        $scope.$watch('states', function (newVal, oldVal) {
             if (newVal !== oldVal) {
-                if (newVal.pageSize !== oldVal.pageSize) $scope.pagingOptions.currentPage = 1;
-                $scope.getMails($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-            }
-        }, true);
-        $scope.$watch('filterOptions', function (newVal, oldVal) {
-            if (newVal !== oldVal) {
-                $scope.getMails($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+                if (newVal.pagingOptions.pageSize !== oldVal.pagingOptions.pageSize) $scope.states.pagingOptions.currentPage = 1;
+                $scope.getMails($scope.states.pagingOptions.pageSize, $scope.states.pagingOptions.currentPage,
+                    $scope.states.filterOptions.filterText);
             }
         }, true);
 
         $scope.view = function (mail) {
             $location.path('/mails/' + mail._id);
         };
-    });
+    })
+;

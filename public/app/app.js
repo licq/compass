@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
-        'ui.router', 'ngGrid'])
+angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ngGrid'])
     .run(function ($rootScope) {
         $rootScope.gridDefaults = {
             multiSelect: false,
@@ -89,6 +88,20 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ui.bootstrap',
                 }
             };
         }]);
+    })
+    .factory('states', function () {
+        var states = {};
+        return {
+            defaults: function (key, value) {
+                if (!states.hasOwnProperty(key)) {
+                    states[key] = value;
+                }
+                return states[key];
+            },
+            get: function(key){
+                return states[key];
+            }
+        };
     })
     .run(function ($rootScope, $location, mvIdentity) {
         $rootScope.$on('$routeChangeStart', function (event, next) {
