@@ -7,11 +7,17 @@ angular.module('compass')
         });
 
         $scope.create = function () {
+            $scope.saving = true;
             $scope.email.$save(function () {
                 $location.path('/emails');
             }, function (err) {
+                $scope.saving = false;
                 $scope.err = err.data;
             });
+        };
+
+        $scope.cancel = function () {
+            $location.path('/emails');
         };
     });
 

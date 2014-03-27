@@ -2,7 +2,9 @@
 
 var mongoose = require('mongoose'),
     timestamps = require('mongoose-timestamps'),
-    validator = require('validator');
+    validator = require('validator'),
+    fetcher = require('../tasks/fetcher'),
+    ValidationError = require('mongoose/lib/error/validation');
 
 var emailSchema = mongoose.Schema({
     address: {
@@ -55,7 +57,17 @@ var emailSchema = mongoose.Schema({
     lastRetrieveTime: Date
 });
 
+emailSchema.pre('save', function (next, done) {
+    fetcher.verify(this, function (err) {
+        if (err) {
+            next(new Error(err));
+        } else
+            next();
+    });
+});
+
 emailSchema.statics.setActivity = function (activity, callback) {
+    console.log(activity);
     this.findOne({address: activity.address }).exec(function (err, email) {
         if (err) return callback(err);
         if (!email) return callback(new Error('could not find email ' + activity.address));

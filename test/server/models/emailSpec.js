@@ -27,7 +27,7 @@ describe('Email', function () {
                 email.save(function (err, saved) {
                     expect(saved.port).to.equal(110);
                     expect(saved.ssl).to.be.false;
-                    done();
+                    done(err);
                 });
             });
         });
@@ -39,6 +39,16 @@ describe('Email', function () {
                         expect(err).to.exist;
                         done();
                     });
+                });
+            });
+        });
+
+        it('should fail to save an invalid account', function (done) {
+            Factory.build('email', {account: 'invalid account'}, function (email) {
+                email.save(function (err) {
+                    expect(err).to.exist;
+                    expect(err.message).to.equal('connect failed');
+                    done();
                 });
             });
         });
@@ -102,4 +112,5 @@ describe('Email', function () {
             });
         });
     });
-});
+})
+;

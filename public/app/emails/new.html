@@ -28,7 +28,7 @@
                         <div class="padd">
                             <form name="emailForm" novalidate="">
                                 <div class="well text-danger" ng-show="err">
-                                    {{err.message}}
+                                    {{err.message | state}}
                                 </div>
                                 <fieldset>
                                     <div class="form-group">
@@ -89,13 +89,18 @@
                                                 使用ssl链接
                                             </label>
                                         </div>
+                                        <div class="col-md-6" ng-show="saving">
+                                            <label>
+                                                验证所需时间稍长，请稍等。
+                                            </label>
+                                        </div>
                                     </div>
 
                                     <br/>
                                     <button class="btn btn-primary" ng-click="create()"
-                                            ng-disabled="emailForm.$invalid">保存
+                                            ng-disabled="emailForm.$invalid">验证并保存
                                     </button>
-                                    <button class="btn btn-info" ng-click="">验证</button>
+                                    <button class="btn btn-info" ng-click="cancel()">取消</button>
 
                                 </fieldset>
                             </form>

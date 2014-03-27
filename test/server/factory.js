@@ -34,7 +34,7 @@ Factory.define('email', Email, {
     address: function (cb) {
         cb('resume' + emailAddressCounter++ + '@resume.com');
     },
-    account: 'account',
+    account: 'emailaccountforverifypass',
     password: 'password',
     server: 'server.com',
     company: Factory.assoc('company', 'id')

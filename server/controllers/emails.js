@@ -42,10 +42,10 @@ exports.get = function (req, res) {
     res.json(req.email);
 };
 
-exports.update = function (req, res, next) {
+exports.update = function (req, res) {
     _.merge(req.email, req.body);
     req.email.save(function (err) {
-        if (err) return next(err);
+        if (err) return res.json(400, err);
         jobs.removeFetchEmailJob(req.email, function () {
             jobs.addFetchEmailJob(req.email);
         });

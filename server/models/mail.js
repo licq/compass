@@ -1,6 +1,5 @@
 var mongoose = require('mongoose'),
-    timestamps = require('mongoose-timestamps'),
-    Email = mongoose.model('Email');
+    timestamps = require('mongoose-timestamps');
 
 var nameAndAddressSchema = mongoose.Schema({
     address: String,
@@ -48,6 +47,7 @@ var mailSchema = mongoose.Schema({
 
 mailSchema.pre('save', function (next) {
     var self = this;
+    var Email = mongoose.model('Email');
     Email.findOne({address: this.mailbox}, function (err, email) {
         if (err || !email) return next();
         self.company = email.company;
