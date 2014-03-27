@@ -13,7 +13,7 @@ angular.module('compass')
                 {field: 'lastError',
                     displayName: '状态',
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"> ' +
-                        '<status-span value="row.getProperty(col.field)"></status-span>' +
+                        '<status-span value="row.getProperty(col.field)">{{row.getProperty(col.field) | state}}</status-span>' +
                         '</div>'},
                 {field: 'actions',
                     displayName: '操作',

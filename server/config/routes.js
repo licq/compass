@@ -27,6 +27,7 @@ module.exports = function (app) {
     app.param('mailId', mails.load);
 
     app.post('/api/users', sessions.requiresLogin, users.create);
+    app.get('/api/users', sessions.requiresLogin, users.list);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

@@ -25,11 +25,11 @@ angular.module('compass')
         return {
             restrict: 'E',
             replace: true,
+            transclude: true,
             scope: {
                 value: '='
             },
-            template: '<span class="label" ng-class = "{\'label-success\': !value, \'label-danger\': value}">' +
-                '{{value | state}}</span>'
+            template: '<span class="label" ng-class = "{\'label-success\': !value, \'label-danger\': value}" ng-transclude="">' + +'</span>'
         };
     })
     .directive('viewButton', function () {

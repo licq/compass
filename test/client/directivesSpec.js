@@ -91,7 +91,7 @@ describe('directives', function () {
 
         beforeEach(inject(function ($compile, $rootScope) {
             scope = $rootScope.$new();
-            element = angular.element('<status-span value=""></status-span>');
+            element = angular.element('<status-span value="false">正常</status-span>');
             element = $compile(element)(scope);
             scope.$digest();
         }));
