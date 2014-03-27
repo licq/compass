@@ -92,7 +92,7 @@ describe('User', function () {
                 user.deleted = true;
                 expect(user.authenticate('password')).to.be.false;
                 done();
-            })
+            });
         });
     });
 });

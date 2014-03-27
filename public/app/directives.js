@@ -29,7 +29,7 @@ angular.module('compass')
             scope: {
                 value: '='
             },
-            template: '<span class="label" ng-class = "{\'label-success\': !value, \'label-danger\': value}" ng-transclude="">' + +'</span>'
+            template: '<span class="label" ng-class = "{\'label-success\': !value, \'label-danger\': value}" ng-transclude=""></span>'
         };
     })
     .directive('viewButton', function () {

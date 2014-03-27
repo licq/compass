@@ -26,7 +26,7 @@ describe('singups', function () {
 
     describe('POST /api/signups', function () {
         it('should return 200 with json result', function (done) {
-            Factory.build('signup', {adminEmail: 'lee.chaoqun@icloud.com'}, function (signup) {
+            Factory.build('signup', {adminEmail: 'lee.chaoqun@icloud1.com'}, function (signup) {
                 request(app)
                     .post('/api/signups')
                     .send(signup)
