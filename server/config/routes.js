@@ -4,7 +4,8 @@ var fs = require('fs'),
     sessions = require('../controllers/sessions'),
     emails = require('../controllers/emails'),
     signups = require('../controllers/signups'),
-    mails = require('../controllers/mails');
+    mails = require('../controllers/mails'),
+    users = require('../controllers/users');
 
 module.exports = function (app) {
 
@@ -24,6 +25,8 @@ module.exports = function (app) {
     app.get('/api/mails', sessions.requiresLogin, mails.list);
     app.get('/api/mails/:mailId', sessions.requiresLogin, mails.get);
     app.param('mailId', mails.load);
+
+    app.post('/api/users', sessions.requiresLogin, users.create);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

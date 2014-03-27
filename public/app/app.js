@@ -69,6 +69,16 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvMailViewCtrl',
                 resolve: routeRoleChecks.user
             })
+            .when('/users', {
+                templateUrl: '/app/users/list.html',
+                controller: 'mvUserListCtrl',
+                resolve: routeRoleChecks.user
+            })
+            .when('/users/new', {
+                templateUrl: '/app/users/new.html',
+                controller: 'mvUserNewCtrl',
+                resolve: routeRoleChecks.user
+            })
             .otherwise({
                 redirectTo: '/'
             });
@@ -98,7 +108,7 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 }
                 return states[key];
             },
-            get: function(key){
+            get: function (key) {
                 return states[key];
             }
         };

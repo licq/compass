@@ -26,6 +26,8 @@ var userSchema = new Schema({
         required: true
     },
 
+    title: String,
+
     hashed_password: String,
     provider: String,
     salt: String
@@ -70,6 +72,8 @@ userSchema.path('hashed_password').validate(function (hashed_password) {
 
 userSchema.pre('save', function (next) {
     if (!this.isNew) return next();
+
+    console.log('password', this.password);
 
     if (!validatePresenceOf(this.password) && !this.provider)
         next(new Error('Invalid password'));

@@ -25,6 +25,7 @@ Factory.define('user', User, {
         cb('email' + userEmailCounter++ + '@test.com');
     },
     password: 'password',
+    title: 'title',
     company: Factory.assoc('company', 'id')
 });
 
