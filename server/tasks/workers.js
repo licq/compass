@@ -31,8 +31,8 @@ function handleSendSignupEmail(job, done) {
 }
 
 function handleFetchEmail(job, done) {
+    console.log('handleFetchEmail ', job.data);
     fetcher.fetch(job.data, function (err, count) {
-        console.log('fetch ', job.data, 'err ', err, 'count ', count);
         Email.setActivity({
             time: Date.now(),
             count: count,

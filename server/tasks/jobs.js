@@ -36,13 +36,13 @@ function addFetchEmailJob(email, done) {
         job.on('complete', function () {
             console.log('Fetch ' + email.address + ' complete');
             job.remove(function () {
-                fetchEmailAfter(2);
+                    fetchEmailAfter(5);
+                });
             });
-        });
         job.on('failed', function () {
             console.log('Fetch ' + email.address + ' failed');
             job.remove(function () {
-                fetchEmailAfter(5);
+                fetchEmailAfter(10);
             });
         });
 

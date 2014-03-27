@@ -29,7 +29,7 @@
                         <div class="padd">
                             <form name="emailForm" novalidate="">
                                 <div class="well text-danger" ng-show="err">
-                                    {{err.message}}
+                                    {{err.message | state}}
                                 </div>
                                 <fieldset>
                                     <div class="form-group">
@@ -84,7 +84,7 @@
                                         </div>
                                         <div class="col-md-6" ng-show="saving">
                                             <label>
-                                                验证所需时间稍长，请稍等。
+                                                验证所需时间稍长，请稍等...
                                             </label>
                                         </div>
                                     </div>
