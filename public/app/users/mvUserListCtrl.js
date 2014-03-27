@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvUserListCtrl', function ($scope, mvUser) {
+    .controller('mvUserListCtrl', function ($scope, mvUser, $location) {
         $scope.users = mvUser.query();
 
         $scope.gridOptions = angular.extend({
@@ -8,7 +8,7 @@ angular.module('compass')
                 {field: 'name', displayName: '姓名'},
                 {field: 'email', displayName: '邮箱'},
                 {field: 'title', displayName: '职位'},
-                {field: 'created_at', displayName: '创建时间',cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"'},
+                {field: 'created_at', displayName: '创建时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"'},
                 {field: 'deleted',
                     displayName: '状态',
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"> ' +
@@ -24,4 +24,18 @@ angular.module('compass')
             ]
         }, $scope.gridDefaults);
 
+        $scope.remove = function () {
+            var index = this.row.rowIndex;
+            var user = $scope.users[index];
+            if (confirm('真的要删除' + user.name + '吗？')) {
+                user.$delete(function () {
+                    user.deleted = true;
+                });
+            }
+        };
+
+        $scope.edit = function () {
+            var index = this.row.rowIndex;
+            $location.path('/users/edit/' + $scope.users[index]._id);
+        };
     });

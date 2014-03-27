@@ -1,5 +1,5 @@
 <div class="page-head">
-    <h2 class="pull-left">添加用户</h2>
+    <h2 class="pull-left">修改用户</h2>
 
     <div class="clearfix"></div>
     <div class="bread-crumb">
@@ -7,7 +7,7 @@
         <span class="divider">/</span>
         <a href="/users" class="bread-current">用户</a>
         <span class="divider">/</span>
-        <a href="/users/new" class="bread-current">添加用户</a>
+        <a href="/users/edit" class="bread-current">修改用户</a>
     </div>
 
     <div class="clearfix"></div>
@@ -21,7 +21,7 @@
 
                 <div class="widget">
                     <div class="widget-head">
-                        <div class="pull-left">添加用户</div>
+                        <div class="pull-left">修改用户</div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="widget-content">
@@ -42,14 +42,15 @@
                                             请输入姓名帐号</p>
 
                                     </div>
+
                                     <div class="form-group">
                                         <label>职位</label>
                                         <input type="text"
                                                class="form-control placeholder"
                                                ng-model="user.title" placeholder="职位"
                                                name="title"/>
-
                                     </div>
+
                                     <div class="form-group">
                                         <label>邮箱地址</label>
                                         <input type="email" class="form-control"
@@ -67,11 +68,7 @@
                                     <div class="form-group">
                                         <label>密码</label>
                                         <input type="password" class="form-control placeholder" name="password"
-                                               ng-model="user.password" placeholder="密码" required="" ng-minlength="6"/>
-
-                                        <p class="text-danger"
-                                           ng-show="userForm.password.$error.required && !userForm.password.$pristine">
-                                            请输入密码</p>
+                                               ng-model="user.password" placeholder="如不修改密码，请留空" ng-minlength="6"/>
 
                                         <p class="text-danger"
                                            ng-show="userForm.password.$error.minlength && !userForm.password.$pristine">
@@ -79,7 +76,7 @@
                                     </div>
 
                                     <br/>
-                                    <button class="btn btn-primary" ng-click="create()"
+                                    <button class="btn btn-primary" ng-click="update()"
                                             ng-disabled="userForm.$invalid">保存
                                     </button>
                                     <button class="btn btn-default" ng-click="cancel()">取消</button>

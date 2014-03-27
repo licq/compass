@@ -23,11 +23,15 @@ module.exports = function (app) {
     app.param('emailId', sessions.requiresLogin, emails.load);
 
     app.get('/api/mails', sessions.requiresLogin, mails.list);
-    app.get('/api/mails/:mailId', sessions.requiresLogin, mails.get);
-    app.param('mailId', mails.load);
+    app.get('/api/mails/:mailId', mails.get);
+    app.param('mailId', sessions.requiresLogin, mails.load);
 
     app.post('/api/users', sessions.requiresLogin, users.create);
     app.get('/api/users', sessions.requiresLogin, users.list);
+    app.get('/api/users/:userId', users.get);
+    app.put('/api/users/:userId', users.update);
+    app.delete('/api/users/:userId', users.delete);
+    app.param('userId', sessions.requiresLogin, users.load);
 
     app.all('/api/*', function (req, res) {
         res.send(404);

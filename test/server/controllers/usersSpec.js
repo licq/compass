@@ -11,20 +11,21 @@ var app = require('../../../server'),
 
 describe('users', function () {
     var cookies;
+    var existUser;
 
     beforeEach(function (done) {
         User.remove().exec();
         Company.remove().exec();
         Factory('user', function (user) {
-            Factory.build('mail', function (mail) {
-                request(app).post('/api/sessions')
-                    .send({email: user.email, password: user.password})
-                    .expect(200)
-                    .end(function (err, res) {
-                        cookies = res.headers['set-cookie'].pop().split(';')[0];
-                        done();
-                    });
-            });
+            existUser = user;
+            request(app).post('/api/sessions')
+                .send({email: user.email, password: user.password})
+                .expect(200)
+                .end(function (err, res) {
+                    cookies = res.headers['set-cookie'].pop().split(';')[0];
+                    done();
+                });
+
         });
     });
 
@@ -59,6 +60,32 @@ describe('users', function () {
                 .end(function (err, res) {
                     expect(res.body).to.have.length(1);
                     done(err);
+                });
+        });
+    });
+
+    describe('GET /api/users/:id', function () {
+        it('should return 200 with json result', function (done) {
+            var req = request(app).get('/api/users/' + existUser._id);
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    expect(err).to.not.exist;
+                    expect(res.body.name).to.equal(existUser.name);
+                    done();
+                });
+        });
+    });
+
+    describe('DELETE /api/users/:id', function () {
+        it('should return 200', function (done) {
+            var req = request(app).del('/api/users/' + existUser._id);
+            req.cookies = cookies;
+            req.expect(200)
+                .end(function (err) {
+                    expect(err).to.not.exist;
+                    done();
                 });
         });
     });

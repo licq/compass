@@ -30,34 +30,32 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-    req.user.remove(function (err) {
+    req.loadedUser.deleted = true;
+    req.loadedUser.save(function (err) {
         if (err) return next(err);
-        jobs.removeFetchUserJob(req.user);
         res.end();
     });
 };
 
 exports.get = function (req, res) {
-    res.json(req.user);
+    res.json(req.loadedUser);
 };
 
 exports.update = function (req, res, next) {
-    _.merge(req.user, req.body);
-    req.user.save(function (err) {
+    _.merge(req.loadedUser, req.body);
+    req.loadedUser.save(function (err) {
         if (err) return next(err);
-        jobs.removeFetchUserJob(req.user, function () {
-            jobs.addFetchUserJob(req.user);
-        });
         res.end();
     });
 };
 
 exports.load = function (req, res, next, id) {
     User.findOne({_id: id, company: req.user.company})
-        .exec(function (err, user) {
+        .select('name email title')
+        .exec(function (err, loadedUser) {
             if (err) return next(err);
-            if (!user) return res.send(404, {message: 'not found'});
-            req.user = user;
+            if (!loadedUser) return res.send(404, {message: 'not found'});
+            req.loadedUser = loadedUser;
             next();
         });
 };

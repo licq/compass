@@ -23,7 +23,10 @@ describe('User', function () {
 
         it('should be able to save without problems', function (done) {
             Factory.build('user', function (user) {
-                user.save(done);
+                user.save(function (err) {
+                    expect(user.deleted).to.be.false;
+                    done(err);
+                });
             });
         });
 
@@ -71,17 +74,25 @@ describe('User', function () {
     });
 
     describe('#authenticate', function () {
-        it('should return true if given the correct password', function () {
+        it('should return true if given the correct password', function (done) {
             Factory.build('user', function (user) {
                 expect(user.authenticate('password')).to.be.true;
+                done();
             });
         });
-        it('should return false if given the wrong password', function () {
+        it('should return false if given the wrong password', function (done) {
             Factory.build('user', function (user) {
                 expect(user.authenticate('invalid password')).to.be.false;
+                done();
             });
         });
-    });
 
-})
-;
+        it('should not allow deleted user to authenticate', function (done) {
+            Factory.build('user', function (user) {
+                user.deleted = true;
+                expect(user.authenticate('password')).to.be.false;
+                done();
+            })
+        });
+    });
+});

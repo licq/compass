@@ -79,6 +79,11 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvUserNewCtrl',
                 resolve: routeRoleChecks.user
             })
+            .when('/users/edit/:id', {
+                templateUrl: '/app/users/edit.html',
+                controller: 'mvUserEditCtrl',
+                resolve: routeRoleChecks.user
+            })
             .otherwise({
                 redirectTo: '/'
             });

@@ -27,6 +27,10 @@ var userSchema = new Schema({
     },
 
     title: String,
+    deleted: {
+        type: Boolean,
+        default: false
+    },
 
     hashed_password: String,
     provider: String,
@@ -73,8 +77,6 @@ userSchema.path('hashed_password').validate(function (hashed_password) {
 userSchema.pre('save', function (next) {
     if (!this.isNew) return next();
 
-    console.log('password', this.password);
-
     if (!validatePresenceOf(this.password) && !this.provider)
         next(new Error('Invalid password'));
     else
@@ -83,7 +85,7 @@ userSchema.pre('save', function (next) {
 
 userSchema.methods = {
     authenticate: function (plainText) {
-        return this.encryptPassword(plainText) === this.hashed_password;
+        return !this.deleted && this.encryptPassword(plainText) === this.hashed_password;
     },
 
     makeSalt: function () {
