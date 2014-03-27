@@ -5,7 +5,9 @@ var express = require('express'),
     mongoose = require('mongoose'),
     passport = require('passport'),
     kue = require('kue'),
-    mongoStore = require('connect-mongo')(express);
+    mongoStore = require('connect-mongo')(express),
+    winston = require('winston'),
+    expressWinston = require('express-winston');
 
 module.exports = function (app, config) {
     app.configure('development', function () {
@@ -20,7 +22,16 @@ module.exports = function (app, config) {
         app.use('/tasks', kue.app);
 
         app.use(express.favicon());
-        app.use(express.logger('dev'));
+        app.use(expressWinston.logger({
+            transports: [
+                new winston.transports.Console({
+                    json: true,
+                    colorize: true
+                })
+            ],
+            meta: true,
+            msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+        }));
         app.use(express.compress({
             filter: function (req, res) {
                 return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
@@ -41,13 +52,21 @@ module.exports = function (app, config) {
             })
         }));
 
-
         app.use(passport.initialize());
         app.use(passport.session());
         app.use(passport.authenticate('remember-me'));
         app.use(app.router);
 
     });
+
+    app.use(expressWinston.errorLogger({
+        transports: [
+            new winston.transports.Console({
+                json: true,
+                colorize: true
+            })
+        ]
+    }));
 
     app.configure('development', function () {
         app.use(express.errorHandler());
