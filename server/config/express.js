@@ -20,18 +20,7 @@ module.exports = function (app, config) {
         app.set('views', config.rootPath + '/server/views');
 
         app.use('/tasks', kue.app);
-
         app.use(express.favicon());
-        app.use(expressWinston.logger({
-            transports: [
-                new winston.transports.Console({
-                    json: true,
-                    colorize: true
-                })
-            ],
-            meta: true,
-            msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-        }));
         app.use(express.compress({
             filter: function (req, res) {
                 return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
@@ -39,6 +28,16 @@ module.exports = function (app, config) {
             level: 9
         }));
         app.use(express.static(config.rootPath + '/public'));
+        app.use(expressWinston.logger({
+            transports: [
+                new winston.transports.Console({
+                    json: false,
+                    colorize: true
+                })
+            ],
+            meta: true,
+            msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+        }));
         app.use(express.cookieParser());
         app.use(express.urlencoded());
         app.use(express.json());
