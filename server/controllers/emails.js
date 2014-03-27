@@ -17,16 +17,19 @@ exports.create = function (req, res) {
     var email = new Email(req.body);
     email.company = req.user.company;
     email.createdBy = req.user._id;
-    email.save(function (err) {
-        if (err) {
-            if (err.code === 11000 || err.code === 11001) {
-                return res.json(400, {message: '邮箱地址已经存在'});
-            } else {
-                return res.json(400, {message: err.message});
+    email.verify(function (err) {
+        if (err) return res.json(400, err);
+        email.save(function (err) {
+            if (err) {
+                if (err.code === 11000 || err.code === 11001) {
+                    return res.json(400, {message: '邮箱地址已经存在'});
+                } else {
+                    return res.json(400, {message: err.message});
+                }
             }
-        }
-        jobs.addFetchEmailJob(email);
-        res.end();
+            jobs.addFetchEmailJob(email);
+            res.end();
+        });
     });
 };
 
@@ -44,12 +47,15 @@ exports.get = function (req, res) {
 
 exports.update = function (req, res) {
     _.merge(req.email, req.body);
-    req.email.save(function (err) {
-        if (err) return res.json(400, err);
-        jobs.removeFetchEmailJob(req.email, function () {
-            jobs.addFetchEmailJob(req.email);
+    req.email.verify(function(err){
+        if(err) return res.json(400,err);
+        req.email.save(function (err) {
+            if (err) return res.json(400, err);
+            jobs.removeFetchEmailJob(req.email, function () {
+                jobs.addFetchEmailJob(req.email);
+            });
+            res.end();
         });
-        res.end();
     });
 };
 

@@ -32,12 +32,14 @@ function handleSendSignupEmail(job, done) {
 
 function handleFetchEmail(job, done) {
     fetcher.fetch(job.data, function (err, count) {
+        console.log('fetch ', job.data, 'err ', err, 'count ', count);
         Email.setActivity({
             time: Date.now(),
             count: count,
             error: err,
             address: job.data.address
         }, function (error) {
+            console.log(error);
             done(err);
         });
     });

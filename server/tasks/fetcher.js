@@ -52,8 +52,8 @@ exports.verify = function (mailbox, callback) {
 
     client.on("quit", function (status, rawdata) {
 
-        if (status === true) console.log("QUIT success");
-        else console.log("QUIT failed");
+        if (status === true) console.log("verify QUIT success");
+        else console.log("verify QUIT failed");
 
         if (correct) callback(null)
         else callback('login failed');

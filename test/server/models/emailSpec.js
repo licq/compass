@@ -45,7 +45,7 @@ describe('Email', function () {
 
         it('should fail to save an invalid account', function (done) {
             Factory.build('email', {account: 'invalid account'}, function (email) {
-                email.save(function (err) {
+                email.verify(function (err) {
                     expect(err).to.exist;
                     expect(err.message).to.equal('connect failed');
                     done();

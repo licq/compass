@@ -57,14 +57,12 @@ var emailSchema = mongoose.Schema({
     lastRetrieveTime: Date
 });
 
-emailSchema.pre('save', function (next, done) {
+emailSchema.methods.verify = function (callback) {
     fetcher.verify(this, function (err) {
-        if (err) {
-            next(new Error(err));
-        } else
-            next();
+        if (err) return callback({message: err});
+        callback();
     });
-});
+};
 
 emailSchema.statics.setActivity = function (activity, callback) {
     console.log(activity);
