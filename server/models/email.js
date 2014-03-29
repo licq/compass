@@ -3,8 +3,7 @@
 var mongoose = require('mongoose'),
     timestamps = require('mongoose-timestamps'),
     validator = require('validator'),
-    fetcher = require('../tasks/fetcher'),
-    ValidationError = require('mongoose/lib/error/validation');
+    emailChecker = require('../tasks/emailChecker');
 
 var emailSchema = mongoose.Schema({
     address: {
@@ -58,14 +57,13 @@ var emailSchema = mongoose.Schema({
 });
 
 emailSchema.methods.verify = function (callback) {
-    fetcher.verify(this, function (err) {
+    emailChecker.check(this, function (err) {
         if (err) return callback({message: err});
         callback();
     });
 };
 
 emailSchema.statics.setActivity = function (activity, callback) {
-    console.log(activity);
     this.findOne({address: activity.address }).exec(function (err, email) {
         if (err) return callback(err);
         if (!email) return callback(new Error('could not find email ' + activity.address));

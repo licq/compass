@@ -5,7 +5,8 @@ var fs = require('fs'),
     emails = require('../controllers/emails'),
     signups = require('../controllers/signups'),
     mails = require('../controllers/mails'),
-    users = require('../controllers/users');
+    users = require('../controllers/users'),
+    logger = require('./winston').logger();
 
 module.exports = function (app) {
 
@@ -34,11 +35,12 @@ module.exports = function (app) {
     app.param('userId', sessions.requiresLogin, users.load);
 
     app.all('/api/*', function (req, res) {
+        logger.error('request unknown url ' + req.url);
         res.send(404);
     });
 
     app.all('/api/*', function (err, req, res, next) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({message: 'Internal Server Error'});
     });
 

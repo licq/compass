@@ -3,13 +3,14 @@ var kue = require('kue'),
     mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
     _ = require('lodash'),
-    fetcher = require('./fetcher');
+    emailFetcher = require('./emailFetcher'),
+    logger = require('../config/winston').logger();
 
 var jobs = kue.createQueue();
 
 exports.start = function () {
     jobs.on('error', function (error) {
-        console.log(error);
+        logger.log(error);
     });
 
     jobs.process('send signup email', 20, handleSendSignupEmail);
@@ -21,7 +22,7 @@ exports.start = function () {
 
 exports.stop = function () {
     jobs.shutdown(function (err) {
-        console.log('Kue is shut down.', err || '');
+        logger.log('Kue is shut down.', err || '');
         process.exit(0);
     }, 5000);
 };
@@ -31,15 +32,15 @@ function handleSendSignupEmail(job, done) {
 }
 
 function handleFetchEmail(job, done) {
-    console.log('handleFetchEmail ', job.data);
-    fetcher.fetch(job.data, function (err, count) {
+    logger.log('handleFetchEmail ', job.data);
+    emailFetcher.fetch(job.data, function (err, count) {
         Email.setActivity({
             time: Date.now(),
             count: count,
             error: err,
             address: job.data.address
         }, function (error) {
-            console.log(error);
+            logger.log(error);
             done(err);
         });
     });

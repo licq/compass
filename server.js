@@ -9,10 +9,9 @@ var app = express();
 
 var config = require('./server/config/config')[env];
 
-require('./server/config/mongoose')(config);
+require('./server/config/winston').init(config);
 
-var logger = require('./server/config/winston');
-logger.init(config);
+require('./server/config/mongoose')(config);
 
 require('./server/config/express')(app, config);
 

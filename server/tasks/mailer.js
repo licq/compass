@@ -1,10 +1,11 @@
 var nodemailer = require("nodemailer"),
-    emailTemplates = require('swig-email-templates');
+    emailTemplates = require('swig-email-templates'),
+    logger = require('../config/winston').logger();
 
 
 var emailFrom, emailOptions, templateOptions, baseurl, smtpTransport;
 
-function init(config) {
+exports.init = function init(config) {
     emailFrom = config.emailFrom;
     emailOptions = config.emailOptions;
     templateOptions = {
@@ -12,7 +13,12 @@ function init(config) {
     };
 
     baseurl = 'http://' + config.hostname + ':' + config.port + '/';
-}
+};
+
+exports.sendSignupEmail = function sendSignupEmail(to, code, cb) {
+    sendEmail(to, '已注册，请激活', 'signup.html', {link: baseurl + 'signup/activate/' + code}, cb);
+};
+
 
 function transport() {
     return smtpTransport || (smtpTransport = nodemailer.createTransport("SMTP", emailOptions));
@@ -29,9 +35,9 @@ function sendEmail(to, subject, template, context, cb) {
             };
             transport().sendMail(mail, function (error, response) {
                 if (error) {
-                    console.error('Email sent to ' + to + 'failed' + error);
+                    logger.error('Email sent to ' + to + 'failed' + error);
                 } else {
-                    console.log("Email sent to " + to + 'successfully with ' + response.message);
+                    logger.log("Email sent to " + to + 'successfully with ' + response.message);
                 }
                 if (cb) return cb(error);
             });
@@ -39,12 +45,5 @@ function sendEmail(to, subject, template, context, cb) {
     });
 }
 
-function sendSignupEmail(to, code, cb) {
-    sendEmail(to, '已注册，请激活', 'signup.html', {link: baseurl + 'signup/activate/' + code}, cb);
-}
 
-module.exports = {
-    init: init,
-    sendSignupEmail: sendSignupEmail
-};
 
