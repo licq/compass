@@ -17,7 +17,8 @@ var defaultConfig = {
     emailFrom: "compass_test@126.com",
     rootPath: rootPath,
     hostname: 'localhost',
-    templatePath: rootPath + 'server/templates/'
+    templatePath: rootPath + 'server/templates/',
+    logFileName: 'compass.log'
 };
 
 
@@ -29,6 +30,7 @@ module.exports = {
     test: _.defaults({
         port: process.env.PORT || 3001,
         db: 'mongodb://localhost/compass-test',
+        logFileName: 'compass-test.log'
     }, defaultConfig),
     production: _.defaults({
         port: process.env.PORT || 80,

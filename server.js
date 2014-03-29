@@ -11,6 +11,9 @@ var config = require('./server/config/config')[env];
 
 require('./server/config/mongoose')(config);
 
+var logger = require('./server/config/winston');
+logger.init(config);
+
 require('./server/config/express')(app, config);
 
 require('./server/config/passport')();
