@@ -112,7 +112,9 @@ function saveToDB(mail, address, callback) {
 function parse(mailData, callback) {
     var mailParser = new MailParser({
         debug: false,
-        defaultCharset: 'gbk'
+        defaultCharset: 'gbk',
+        streamAttachments: true,
+        showAttachmentLinks: true
     });
     mailParser.write(mailData);
     mailParser.end();

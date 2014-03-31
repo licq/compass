@@ -37,7 +37,9 @@
     "swig-email-templates": "^1.1.0",
     "redis": "^0.10.1",
     "express-winston": "^0.2.5",
-    "winston": "^0.7.3"
+    "winston": "^0.7.3",
+    "htmlparser2": "^3.7.1",
+    "cheerio": "^0.13.1"
   },
   "devDependencies": {
     "supertest": "~0.10.0",
