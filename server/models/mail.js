@@ -43,6 +43,10 @@ var mailSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
         index: true
+    },
+    mail: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mail'
     }
 });
 

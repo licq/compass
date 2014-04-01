@@ -7,8 +7,7 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
     var query = Resume.find({company: req.user.company})
-        .sort('-created_at')
-        .select('name email mobile applyPosition applyDate');
+        .sort('-created_at');
     if (req.query.page && req.query.pageSize) {
         query.skip((req.query.page - 1) * req.query.pageSize).limit(req.query.pageSize);
     }

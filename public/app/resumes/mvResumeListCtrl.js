@@ -26,11 +26,13 @@ angular.module('compass')
             filterOptions: $scope.states.filterOptions,
 
             columnDefs: [
-                {field: 'name', displayName: '姓名', width: 180},
-                {field: 'email', displayName: '邮箱', width: 100},
-                {field: 'mobile', displayName: '手机', width: 180},
-                {field: 'applyPosition', displayName: '应聘职位', width: 350},
-                {field: 'applyDate', displayName: '时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"', width: 150},
+                {field: 'name', displayName: '姓名',width: 80},
+                {field: 'birthday', displayName: '出生日期', width: 100},
+                {field: 'applyPosition', displayName: '应聘职位'},
+                {field: 'educationHistory[0].school', displayName: '毕业学校', width: 100},
+                {field: 'workExperience[0].company', displayName: '所在公司', width: 180},
+                {field: 'yearsOfExperience', displayName: '工作年限', width: 180},
+                {field: 'channel', displayName: '招聘渠道'},
                 {field: 'actions',
                     displayName: '操作',
                     sortable: false,

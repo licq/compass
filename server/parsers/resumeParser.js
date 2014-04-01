@@ -12,6 +12,7 @@ exports.parse = function (data) {
         resume.channel = 'zhapin';
     }
     resume.company = data.company;
+    resume.mail = data._id;
     return resume;
 };
 

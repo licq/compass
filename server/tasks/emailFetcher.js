@@ -104,8 +104,10 @@ exports.fetch = function (mailbox, callback) {
 
 function saveToDB(mail, address, callback) {
     mail.mailbox = address;
-    Mail.create(mail, function (err) {
-        callback(err);
+    Mail.create(mail, function (err, created) {
+        require('./jobs').addParseResumeJob(created, function () {
+            callback(err);
+        });
     });
 }
 
