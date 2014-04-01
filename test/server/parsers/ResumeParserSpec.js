@@ -21,19 +21,16 @@ describe('ResumeParser', function () {
                 expect(resume.mobile).to.equal('18645149586');
                 expect(resume.applyPosition).to.equal('Java开发实习生（上海）');
                 expect(resume.yearsOfExperience).to.equal('graduating student');
+                expect(resume.projectExperience).to.have.length(3);
                 done(err);
             });
         });
 
-        it.skip('should parse 51job resume correctly', function (done) {
+        it('should parse 51job resume correctly', function (done) {
             fs.readFile(__dirname + '/51jobanotherresume.html', 'utf-8', function (err, data) {
                 var resume = resumeParser.parse51Job(data);
-                console.log(resume);
-                expect(resume.name).to.equal('蒋华辛');
-                expect(resume.email).to.equal('jianghuaxin@live.cn');
-                expect(resume.mobile).to.equal('18645149586');
-                expect(resume.applyPosition).to.equal('Java开发实习生（上海）');
-                expect(resume.yearsOfExperience).to.equal('graduating student');
+                expect(resume.name).to.equal('顾欢');
+                expect(resume.projectExperience).to.have.length(2);
                 done(err);
             });
         });

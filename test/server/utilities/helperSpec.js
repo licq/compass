@@ -32,6 +32,13 @@ describe('helper', function () {
         });
 
         it('should parse only year and month with default date 1', function () {
+            var date = helper.parseDate('2013/9');
+            expect(date.getFullYear()).to.equal(2013);
+            expect(date.getMonth()).to.equal(8);
+            expect(date.getDate()).to.equal(1);
+        });
+
+        it('should parse only year and month with default date 1', function () {
             var date = helper.parseDate('2013 /7');
             expect(date.getFullYear()).to.equal(2013);
             expect(date.getMonth()).to.equal(6);
@@ -143,6 +150,48 @@ describe('helper', function () {
         it('should parse correctly', function () {
             expect(helper.parseItSkillLevel('熟练')).to.equal('basic');
             expect(helper.parseItSkillLevel('精通')).to.equal('advanced');
+        });
+    });
+
+    describe('#isProjectHeader', function () {
+        it('should return correctly', function () {
+            expect(helper.isProjectHeader('2013/9--2014/1：客户关系管理系统')).to.be.true;
+            expect(helper.isProjectHeader('软件环境')).to.be.false;
+        });
+    });
+
+    describe('#isSoftwareEnviroment', function () {
+        it('should return correctly', function () {
+            expect(helper.isSoftwareEnviroment('硬件环境：')).to.be.false;
+            expect(helper.isSoftwareEnviroment('软件环境：')).to.be.true;
+        });
+    });
+
+    describe('#isHardwareEnviroment', function () {
+        it('should return correctly', function () {
+            expect(helper.isHardwareEnviroment('硬件环境：')).to.be.true;
+            expect(helper.isHardwareEnviroment('软件环境')).to.be.false;
+        });
+    });
+
+    describe('#isDevelopmentTools', function () {
+        it('should return correctly', function () {
+            expect(helper.isDevelopmentTools('开发工具：')).to.be.true;
+            expect(helper.isDevelopmentTools('软件环境')).to.be.false;
+        });
+    });
+
+    describe('#isDescription', function () {
+        it('should return correctly', function () {
+            expect(helper.isDescription('项目描述：')).to.be.true;
+            expect(helper.isDescription('软件环境')).to.be.false;
+        });
+    });
+
+    describe('#isResponsibility', function () {
+        it('should return correctly', function () {
+            expect(helper.isResponsibility('责任描述：')).to.be.true;
+            expect(helper.isResponsibility('软件环境')).to.be.false;
         });
     });
 });

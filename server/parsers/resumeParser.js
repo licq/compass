@@ -97,20 +97,29 @@ exports.parse51Job = function (html) {
     resume.projectExperience = [];
 
     var projectTableData = helper.parseTable($('tr:nth-child(9) td table'), $);
-    var projectsLength = (projectTableData.length + 1) / 7;
-    for (var pin = 0; pin < projectsLength; pin++) {
-        var project = {};
-        var items = projectTableData[0 + pin * 7][0].split(/--|：|（|）/);
-        project.from = helper.parseDate(items[0]);
-        project.to = helper.parseDate(items[1]);
-        project.name = items[2];
-        project.softwareEnviroment = projectTableData[1 + pin * 7][1];
-        project.hardwareEnviroment = projectTableData[2 + pin * 7][1];
-        project.developmentTools = projectTableData[3 + pin * 7][1];
-        project.description = projectTableData[4 + pin * 7][1];
-        project.responsibility = projectTableData[5 + pin * 7][1];
-        resume.projectExperience.push(project);
-    }
+    var project = undefined;
+    _.each(projectTableData, function (line) {
+        if (helper.isProjectHeader(line[0])) {
+            if (project) resume.projectExperience.push(project);
+            project = {};
+            var items = line[0].split(/--|：|（|）/);
+            project.from = helper.parseDate(items[0]);
+            project.to = helper.parseDate(items[1]);
+            project.name = items[2];
+        } else if (helper.isSoftwareEnviroment(line[0])) {
+            project.softwareEnviroment = line[1];
+        } else if (helper.isHardwareEnviroment(line[0])) {
+            project.hardwareEnviroment = line[1];
+        } else if (helper.isDevelopmentTools(line[0])) {
+            project.developmentTools = line[1];
+        } else if (helper.isDescription(line[0])) {
+            project.description = line[1];
+        } else if (helper.isResponsibility(line[0])) {
+            project.responsibility = line[1];
+        }
+    });
+
+    resume.projectExperience.push(project);
 
     resume.educationHistory = _.map(helper.parseTable($('tr:nth-child(14) table'), $), function (line) {
         var items = line[0].split(/--|: |（|）/);
@@ -131,7 +140,7 @@ exports.parse51Job = function (html) {
         institution: trainingTable[0][1],
         course: trainingTable[0][2],
         certification: trainingTable[0][3],
-        description: trainingTable[1][0]
+        description: trainingTable[1] ? trainingTable[1][0] : undefined
     });
 
     resume.certifications = _.map(helper.parseTable($('tr:nth-child(25) table'), $), function (line) {

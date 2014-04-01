@@ -47,7 +47,7 @@ var resumeSchema = mongoose.Schema({
         },
         entryTime: {
             type: String,
-            enum: ['immediately', 'within 1 week', 'within 1 mont',
+            enum: ['immediately', 'within 1 week', 'within 1 month',
                 '1 to 3 months', 'after 3 months', 'to be determined']
         },
         selfAssessment: String
