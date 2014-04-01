@@ -8,83 +8,154 @@ var resumeSchema = mongoose.Schema({
         type: String,
         enum: ['male', 'female']
     },
-    applyPosition:String,
+    applyPosition: String,
     applyDate: {
         type: Date,
         default: Date.now()
     },
     matchRate: Number,
-    currentState: {
+    yearsOfExperience: {
         type: String,
-        enum: ['','']
+        enum: ['student', 'graduating student',
+            '1', '2', '3', '4', '5', '8', '10']
     },
 
-    birthDay: {
-        year: Number,
-        month: Number,
-        date: Number
+    birthday: Date,
+
+    hukou: String, //户口
+    residency: String,
+    civilState: {
+        type: String,
+        enum: ['married', 'single', 'secret']
+    },
+    politicalStatus: {
+        type: String,
+        enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others']
     },
 
-    ghetto: String,
+    carrerObjective: {
+        typeOfEmployment: {
+            type: String,
+            enum: ['fulltime', 'parttime', 'intern']
+        },
+        locations: [String],
+        industry: [String],
+        jobCategory: [String],
+        targetSalary: {
+            from: Number,
+            to: Number
+        },
+        entryTime: {
+            type: String,
+            enum: ['immediately', 'within 1 week', 'within 1 mont',
+                '1 to 3 months', 'after 3 months', 'to be determined']
+        },
+        selfAssessment: String
+    },
     job51Id: String,
     selfDescription: String,
-    entryTime: String,
-    desiredIndustris: String,
-    desiredCities: String,
-    desiredSalary: String,
-    targetResponsibility: String,
 
-    workExperiences: [{
-        from: String,
-        to: String,
-        company: String,
-        industry: String,
-        department: String,
-        job: String,
-        jobResponsibility: String
-    }],
+    workExperience: [
+        {
+            from: Date,
+            to: Date,
+            company: String,
+            industry: String,
+            department: String,
+            jobTitle: String,
+            jobDescription: String
+        }
+    ],
 
-    projects: [{
-        name: String,
-        softwareEnviroment: String,
-        hardwareEnviroment: String,
-        developmentTools: String,
-        description: String,
-        responsibility: String
-    }],
+    projectExperience: [
+        {
+            from: Date,
+            to: Date,
+            name: String,
+            softwareEnviroment: String,
+            hardwareEnviroment: String,
+            developmentTools: String,
+            description: String,
+            responsibility: String
+        }
+    ],
 
-    educationHistory: [{
-        from: String,
-        to: String,
-        university: String,
-        major: String,
-        educationLevel: String
-    }],
+    educationHistory: [
+        {
+            from: String,
+            to: String,
+            school: String,
+            major: String,
+            degree: String,
+            description: String,
+            overseas: Boolean
+        }
+    ],
 
-    trainingHistory: [{
-        from: String,
-        to: String,
-        organization: String,
-        subject: String
-        status: String
-        description: String
-    }],
+    trainingHistory: [
+        {
+            from: Date,
+            to: Date,
+            institution: String,
+            location: String,
+            course: String,
+            certification: String,
+            description: String
+        }
+    ],
 
-    certificates: [{
-        date: String,
-        subject: String,
-        score: String
-    }],
+    certifications: [
+        {
+            date: Date,
+            subject: String,
+            score: String
+        }
+    ],
 
-    languageSkills: [{
-        subject: String,
-        skill: String
-    }],
+    languageSkills: [
+        {
+            language: String,
+            level: {
+                type: String,
+                enum: ['not sure', 'average', 'good', 'very good', 'excellent']
+            },
+            readingAndWriting: {
+                type: String,
+                enum: ['not sure', 'average', 'good', 'very good', 'excellent']
+            },
+            listeningAndSpeaking: {
+                type: String,
+                enum: ['not sure', 'average', 'good', 'very good', 'excellent']
+            }
+        }
+    ],
 
-    professionalSkills: [{
-        subject: String,
-        level: String,
-        howlong: String
-    }]
+    languageCertificates: {
+        english: {
+            type: String,
+            enum: ['not participate', 'not passed', 'cet4', 'cet6', 'tem4', 'tem8']
+        },
+        japanese: {
+            type: String,
+            enum: ['none', 'level1', 'level2', 'level3', 'level4']
+        },
+        toefl: Number,
+        gre: Number,
+        gmat: Number,
+        ielts: Number,
+        toeic: Number
+    },
 
+    itSkills: [
+        {
+            skill: String,
+            experience: Number,
+            level: {
+                type: String,
+                enum: ['none', 'expert', 'advanced', 'basic', 'limited']
+            }
+        }
+    ]
 });
+
+mongoose.model('Resume', resumeSchema);

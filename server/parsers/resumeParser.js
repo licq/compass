@@ -1,5 +1,6 @@
 var cheerio = require('cheerio'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    helper = require('../utilities/helper');
 
 exports.parse = function (html) {
     var resume = {};
@@ -58,138 +59,104 @@ exports.parse = function (html) {
 exports.parse51Job = function (html) {
     var resume = {};
     var $ = cheerio.load(html);
-    resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
-    resume.applyDate = new Date($('tr:nth-child(3) .blue1').text());
-    resume.matchRate = $('font b').text();
-    resume.name = $('strong').text();
-    var currents = $('.blue1 b').text().split('|');
-    resume.currentStatus = currents[0];
-    resume.gender = parseGender(currents[1]);
-    resume.birthday = parseBirthday(currents[2].split('(')[1]);
-
-    resume.ghetto = $('tr:nth-child(2) tr:nth-child(2) td:nth-child(2)').text();
-    resume.mobile = $('tr:nth-child(2) tr:nth-child(3) td:nth-child(2)').text().match(/\d+/)[0];
+    resume.name = $('strong').text().trim();
     resume.email = $('a.blue1').text().trim();
-    resume.job51Id = onlyNumber($('td:nth-child(2) span').text());
+    resume.mobile = helper.onlyNumber($('tr:nth-child(2) tr:nth-child(3) td:nth-child(2)').text());
+    resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
+    resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
+    resume.matchRate = helper.parseMatchRate($('font b').text());
 
-    resume.selfDescription = $('#Cur_Val').text();
-    resume.entryTime = $('.table_set tr:nth-child(1) .text_left .text').text();
-    resume.desiredPositions = $('tr:nth-child(3) .text_left .text').text().split('，');
-    resume.desiredCities = splitByCommas($('.table_set tr:nth-child(4) .text_left .text').text());
-    resume.desiredSalary = $('tr:nth-child(5) .text_left .text').text();
-    resume.desiredPosition = $('tr:nth-child(6) .text_left .text').text();
+    var currents = $('.blue1 b').text().split('|');
+    resume.yearsOfExperience = helper.parseYearsOfExperience(currents[0]);
+    resume.birthday = helper.parseDate((currents[2].split('(')[1]));
+    resume.residency = $('tr:nth-child(2) tr:nth-child(2) td:nth-child(2)').text();
+    resume.job51Id = helper.onlyNumber($('td:nth-child(2) span').text());
 
-    resume.workExperiences = $('table:nth-child(3) tr:nth-child(4) table').map(function (i, table) {
-        var items = replaceNewLineAndSpace($(table).children().first().text()).split(/--|: |（|）/);
-        return {
-            from: items[0],
-            to: items[1],
-            company: items[2],
-            industry: $('tr:nth-child(2) td:nth-child(2)', $(table)).text(),
-            department: $('tr:nth-child(3) td:nth-child(1)', $(table)).text().trim(),
-            job: $('tr:nth-child(3) td:nth-child(2)', $(table)).text().trim(),
-            jobResponsibility: $('tr:nth-child(4)', $(table)).text().trim(),
-        };
+    var carrerObjective = resume.carrerObjective = {};
+    carrerObjective.selfAssessment = $('#Cur_Val').text();
+    carrerObjective.entryTime = helper.parseEntryTime($('.table_set tr:nth-child(1) .text_left .text').text());
+    carrerObjective.typeOfEmployment = helper.parseTypeOfEmployment($('tr:nth-child(2) .text_left .text').text());
+    carrerObjective.industry = helper.splitByCommas($('tr:nth-child(3) .text_left .text').text());
+    carrerObjective.locations = helper.splitByCommas($('.table_set tr:nth-child(4) .text_left .text').text());
+    carrerObjective.targetSalary = helper.parseTargetSalary($('tr:nth-child(5) .text_left .text').text());
+    carrerObjective.jobCategory = $('tr:nth-child(6) .text_left .text').text();
+
+    resume.workExperience = [];
+    var workExperienceTableData = helper.parseTable($('table:nth-child(3) tr:nth-child(4) table'), $);
+    var items = workExperienceTableData[0][0].split(/--|：|（|）/);
+    resume.workExperience.push({
+        from: helper.parseDate(items[0]),
+        to: helper.parseDate(items[1]),
+        company: items[2],
+        industry: workExperienceTableData[1][1],
+        department: workExperienceTableData[2][0],
+        jobTitle: workExperienceTableData[2][1],
+        jobDescription: workExperienceTableData[3][0]
     });
 
-    resume.projects = [];
+    resume.projectExperience = [];
 
-    var $trs = $('tr:nth-child(9) td table tr');
-    var projectsLength = ($trs.length + 1) / 7;
+    var projectTableData = helper.parseTable($('tr:nth-child(9) td table'), $);
+    var projectsLength = (projectTableData.length + 1) / 7;
     for (var pin = 0; pin < projectsLength; pin++) {
         var project = {};
-        project.name = replaceNewLineAndSpace($trs.eq(pin * 7 + 0).text());
-        project.softwareEnviroment = replaceNewLineAndSpace($('td:nth-child(2)', $trs.eq(1 + pin * 7)).text());
-        project.hardwareEnviroment = replaceNewLineAndSpace($('td:nth-child(2)', $trs.eq(2 + pin * 7)).text());
-        project.developmentTools = replaceNewLineAndSpace($('td:nth-child(2)', $trs.eq(3 + pin * 7)).text());
-        project.description = replaceNewLineAndSpace($('td:nth-child(2)', $trs.eq(4 + pin * 7)).text());
-        project.responsibility = replaceNewLineAndSpace($('td:nth-child(2)', $trs.eq(5 + pin * 7)).text());
-        resume.projects.push(project);
+        var items = projectTableData[0 + pin * 7][0].split(/--|：|（|）/);
+        project.from = helper.parseDate(items[0]);
+        project.to = helper.parseDate(items[1]);
+        project.name = items[2];
+        project.softwareEnviroment = projectTableData[1 + pin * 7][1];
+        project.hardwareEnviroment = projectTableData[2 + pin * 7][1];
+        project.developmentTools = projectTableData[3 + pin * 7][1];
+        project.description = projectTableData[4 + pin * 7][1];
+        project.responsibility = projectTableData[5 + pin * 7][1];
+        resume.projectExperience.push(project);
     }
 
-    resume.educationHistory = _.map(parseTable($('tr:nth-child(14) table'), $), function (line) {
-        return { dateRange: line[0],
-            university: line[1],
+    resume.educationHistory = _.map(helper.parseTable($('tr:nth-child(14) table'), $), function (line) {
+        var items = line[0].split(/--|: |（|）/);
+        return { from: helper.parseDate(items[0]),
+            to: helper.parseDate(items[1]),
+            school: line[1],
             major: line[2],
-            educationLevel: line[3]
+            degree: line[3]
         }
     });
 
-    var trainingTable = parseTable($('tr:nth-child(20) table'), $);
+    var trainingTable = helper.parseTable($('tr:nth-child(20) table'), $);
     resume.trainingHistory = [];
+    var items = trainingTable[0][0].split(/--|: |（|）/);
     resume.trainingHistory.push({
-        dateRange: trainingTable[0][0],
-        organization: trainingTable[0][1],
-        subject: trainingTable[0][2],
-        status: trainingTable[0][3],
+        from: helper.parseDate(items[0]),
+        to: helper.parseDate(items[1]),
+        institution: trainingTable[0][1],
+        course: trainingTable[0][2],
+        certification: trainingTable[0][3],
         description: trainingTable[1][0]
     });
 
-    resume.certificates = _.map(parseTable($('tr:nth-child(25) table'),$), function(line){
+    resume.certifications = _.map(helper.parseTable($('tr:nth-child(25) table'), $), function (line) {
         return {
-            date: line[0],
+            date: helper.parseDate(line[0]),
             subject: line[1],
-            score: parseInt(line[2],10)
+            score: parseInt(line[2], 10)
         };
     });
 
-    resume.languageSkills = _.map(parseTable($('tr:nth-child(30) table table'), $),function(line){
-        return {
-            subject: line[0],
-            skill: line[1]
-        };
+    resume.languageSkills = [];
+    resume.languageCertificates = {};
+    _.each(helper.parseTable($('tr:nth-child(30) table table'), $), function (line) {
+        if (helper.isEnglishCertificate(line[0])) resume.languageCertificates.english = helper.parseEnglishCertificate(line[1]);
+        else resume.languageSkills.push(helper.parseLanguageSkill(line[0], line[1]));
     });
 
-    resume.professionalSkills = _.map(parseTable($('tr:nth-child(35) table'),$).slice(2),function(line){
+    resume.itSkills = _.map(helper.parseTable($('tr:nth-child(35) table'), $).slice(2), function (line) {
         return {
-            subject: line[0],
-            level: line[1],
-            howlong: line[2]
+            skill: line[0],
+            level: helper.parseItSkillLevel(line[1]),
+            experience: helper.onlyNumber(line[2])
         };
     });
 
     return resume;
 };
 
-function parseGender(input) {
-    return input.trim() === '男' ? 'male' : 'female';
-}
-
-function parseBirthday(input) {
-    var match = input.match(/\d+/g);
-    return {
-        birthYear: match[0],
-        birthMonth: match[1],
-        birthDate: match[2]
-    };
-}
-
-function onlyNumber(input) {
-    var match = input.match(/\d+/g);
-    return match[0];
-}
-
-function splitByCommas(input) {
-    return input.split(/,|,|，/);
-}
-
-function replaceNewLineAndSpace(input) {
-    if (Array.isArray(input)) {
-        return _.forEach(input, function (item) {
-            return item.replace(/\n| +/g, '');
-        });
-    }
-    return input.replace(/\n| +/g, '');
-}
-
-function parseTable(table, $) {
-    var items = [];
-    $('tr', $(table)).each(function () {
-        var item = [];
-        $(this).find('td').each(function () {
-            item.push(replaceNewLineAndSpace($(this).text()));
-        });
-        items.push(item);
-    });
-    return items;
-}
