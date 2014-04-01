@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
     Mail = mongoose.model('Mail'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    jobs = require('../tasks/jobs');
 
 exports.list = function (req, res, next) {
     var query = Mail.find({company: req.user.company})
@@ -20,6 +21,14 @@ exports.list = function (req, res, next) {
     });
 };
 
+
+exports.parse = function (req, res) {
+    console.log('parse');
+    jobs.addParseResumeJob(req.mail, function () {
+        res.end();
+    });
+};
+
 exports.get = function (req, res) {
     res.json(req.mail);
 };
@@ -28,7 +37,7 @@ exports.load = function (req, res, next, id) {
     Mail.findOne({_id: id, company: req.user.company})
         .exec(function (err, mail) {
             if (err) return next(err);
-            if (!mail) return res.send(404, {message: 'not found'});
+            if (!mail) return res.send(404, {message: id + 'not found'});
             req.mail = mail;
             next();
         });

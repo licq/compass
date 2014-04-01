@@ -33,7 +33,7 @@ var yearsOfExperienceMap = {
     '四年以上工作经验': '4',
     '五年以上工作经验': '5',
     '八年以上工作经验': '8',
-    '十年以上工作经验': '10',
+    '十年以上工作经验': '10'
 };
 
 exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
@@ -109,7 +109,7 @@ exports.parseEnglishCertificate = function parseEnglishCertificate(input) {
 };
 
 var languageSkillMap = {
-    '不限': 'not sure'
+    '不限': 'not sure',
     '一般': 'average',
     '良好': 'good',
     '熟练': 'advanced',

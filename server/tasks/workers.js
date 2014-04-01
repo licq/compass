@@ -4,7 +4,9 @@ var kue = require('kue'),
     Email = mongoose.model('Email'),
     _ = require('lodash'),
     emailFetcher = require('./emailFetcher'),
-    logger = require('../config/winston').logger();
+    logger = require('../config/winston').logger(),
+    parser = require('../parsers/resumeParser'),
+    Resume = mongoose.model('Resume');
 
 var jobs = kue.createQueue();
 
@@ -16,6 +18,8 @@ exports.start = function () {
     jobs.process('send signup email', 20, handleSendSignupEmail);
 
     jobs.process('fetch email', 20, handleFetchEmail);
+
+    jobs.process('parse resume', 20, handleParseResume);
 
     jobs.promote(60000, 200);
 };
@@ -43,6 +47,14 @@ function handleFetchEmail(job, done) {
             logger.log(error);
             done(err);
         });
+    });
+}
+
+function handleParseResume(job, done) {
+    logger.log('handleParseResume ', job.data);
+    var resume = parser.parse(job.data);
+    Resume.create(resume, function (err) {
+        done(err);
     });
 }
 

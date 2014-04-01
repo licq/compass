@@ -2,7 +2,20 @@ var cheerio = require('cheerio'),
     _ = require('lodash'),
     helper = require('../utilities/helper');
 
-exports.parse = function (html) {
+exports.parse = function (data) {
+    var resume;
+    if (data.fromAddress.indexOf('51job') > -1) {
+        resume = exports.parse51Job(data.html);
+        resume.channel = '51job';
+    } else if (data.fromAddress.indexOf('zhaopin') > -1) {
+        resume = exports.parseZhaopin(data.html);
+        resume.channel = 'zhapin';
+    }
+    resume.company = data.company;
+    return resume;
+};
+
+exports.parseZhaopin = function (html) {
     var resume = {};
 
     var $ = cheerio.load(html);

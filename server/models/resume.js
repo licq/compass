@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    timestamps = require('mongoose-timestamps');
 
 var resumeSchema = mongoose.Schema({
     name: String,
@@ -155,7 +156,17 @@ var resumeSchema = mongoose.Schema({
                 enum: ['none', 'expert', 'advanced', 'basic', 'limited']
             }
         }
-    ]
+    ],
+
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company'
+    },
+
+    channel: String
+
 });
+
+resumeSchema.plugin(timestamps);
 
 mongoose.model('Resume', resumeSchema);

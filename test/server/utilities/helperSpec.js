@@ -148,8 +148,8 @@ describe('helper', function () {
 
     describe('#parseItSkillLevel', function () {
         it('should parse correctly', function () {
-            expect(helper.parseItSkillLevel('熟练')).to.equal('basic');
-            expect(helper.parseItSkillLevel('精通')).to.equal('advanced');
+            expect(helper.parseItSkillLevel('熟练')).to.equal('advanced');
+            expect(helper.parseItSkillLevel('精通')).to.equal('expert');
         });
     });
 
