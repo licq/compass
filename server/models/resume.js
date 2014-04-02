@@ -27,14 +27,15 @@ var resumeSchema = mongoose.Schema({
     residency: String,
     civilState: {
         type: String,
-        enum: ['married', 'single', 'secret']
+        enum: ['married', 'single', 'divorced','confidential']
     },
     politicalStatus: {
         type: String,
-        enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others']
+        enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others'],
+        default: 'citizen'
     },
 
-    carrerObjective: {
+    careerObjective: {
         typeOfEmployment: {
             type: String,
             enum: ['fulltime', 'parttime', 'intern']
@@ -54,7 +55,6 @@ var resumeSchema = mongoose.Schema({
         selfAssessment: String
     },
     job51Id: String,
-    selfDescription: String,
 
     workExperience: [
         {

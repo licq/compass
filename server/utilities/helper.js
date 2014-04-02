@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 exports.onlyNumber = function onlyNumber(input) {
     var match = input.match(/\d+/g);
     return match[0];
@@ -33,10 +35,15 @@ var yearsOfExperienceMap = {
     '四年以上工作经验': '4',
     '五年以上工作经验': '5',
     '八年以上工作经验': '8',
-    '十年以上工作经验': '10'
+    '十年以上工作经验': '10',
+    '2年工作经验': '2'
 };
 
 exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
+    var match;
+    if (match = input.match(/(\d+)年工作经验/)) {
+        return match[1];
+    }
     return yearsOfExperienceMap[input.trim()];
 };
 
@@ -44,13 +51,21 @@ var entryTimeMap = {
     '待定': 'to be determined',
     '即时': 'immediately',
     '一周以内': 'within 1 week',
-    '一个月内': 'within 1 month',
+    '一个月': 'within 1 month',
     '1-3个月': '1 to 3 months',
-    '三个月后': 'after 3 months'
+    '三个月后': 'after 3 months',
+    '立即': 'immediately'
 };
 
 exports.parseEntryTime = function parseEntryTime(input) {
-    return entryTimeMap[input.trim()];
+    var result = undefined;
+    _.forEach(entryTimeMap, function (value,key) {
+        if (input.indexOf(key) > -1) {
+            result = value;
+            return false;
+        }
+    });
+    return result;
 };
 
 var typeOfEmploymentMap = {
@@ -68,15 +83,24 @@ exports.splitByCommas = function splitByCommas(input) {
 
 exports.parseTargetSalary = function parseTargetSalary(input) {
     if (input.match(/面议/)) return {from: 0, to: 0};
+    var match = input.match(/(\d+).*?(\d+)/);
+    if (match) {
+        return {
+            from: match[1],
+            to: match[2]
+        };
+    }
 };
 
 exports.replaceEmpty = function replaceEmpty(input) {
     if (Array.isArray(input)) {
-        return _.forEach(input, function (item) {
-            return item.replace(/\n| +/g, '');
+        return _.filter(_.map(input, function (item) {
+            return item.replace(/\n| +/g, ' ').trim();
+        }), function (item) {
+            return item.length !== 0;
         });
     }
-    return input.replace(/\n| +/g, '');
+    return input.replace(/\n| +/g, ' ').trim();
 };
 
 exports.parseTable = function parseTable(table, $) {
@@ -85,6 +109,18 @@ exports.parseTable = function parseTable(table, $) {
         var item = [];
         $(this).find('td').each(function () {
             item.push(exports.replaceEmpty($(this).text()));
+        });
+        items.push(item);
+    });
+    return items;
+};
+
+exports.parseTableHtml = function parseTableHtml(table, $) {
+    var items = [];
+    $('tr', $(table)).each(function () {
+        var item = [];
+        $(this).find('td').each(function () {
+            item.push(exports.replaceEmpty($(this).html()));
         });
         items.push(item);
     });
@@ -113,14 +149,32 @@ var languageSkillMap = {
     '一般': 'average',
     '良好': 'good',
     '熟练': 'advanced',
-    '精通': 'expert'
+    '精通': 'expert',
+};
+
+var languageMap = {
+    '英语': 'english',
+    '日语': 'japanese',
+    '其它': 'other',
+    '其他': 'other'
+};
+
+exports.parseLanguage = function parseLanguage(input) {
+    return languageMap[input.trim()];
+};
+
+exports.parseLanguageLevel = function parseLanguageLevel(input) {
+    var result = undefined;
+    _.forEach(languageSkillMap, function (value,key) {
+        if (input.indexOf(key) > -1) {
+            result = value;
+            return false;
+        }
+    });
+    return result;
 };
 
 exports.parseLanguageSkill = function parseLanguageSkill(summary, detail) {
-    var languageMap = {
-        '英语': 'english',
-        '日语': 'japanese'
-    };
     var languageSkill = {};
     var sumItems = summary.split(/（|）/);
     languageSkill.language = languageMap[sumItems[0].trim()];
@@ -137,7 +191,8 @@ var itSkillLevelMap = {
     '一般': 'basic',
     '了解': 'limited',
     '熟练': 'advanced',
-    '精通': 'expert'
+    '精通': 'expert',
+    '良好': 'limited'
 };
 
 
@@ -167,4 +222,50 @@ exports.isDescription = function isDescription(input) {
 
 exports.isResponsibility = function isResponsibility(input) {
     return input.indexOf('责任描述') > -1;
+};
+
+var civilStateMap = {
+    '未婚': 'single',
+    '已婚': 'married',
+    '离异': 'divorced',
+    '保密': 'confidential'
+};
+
+exports.parseCivilState = function parseCivilState(input) {
+    return civilStateMap[input.trim()];
+};
+
+var politicalStatusMap = {
+    '党员': 'party member',
+    '团员': 'league member',
+    '民主党派': 'democratic part',
+    '无党派': 'no party',
+    '群众': 'citizen',
+    '其他': 'others'};
+exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
+    return politicalStatusMap[input.trim()];
+};
+
+exports.parseDateRange = function parseDateRange(input) {
+    var parts = input.split(/--|：/g);
+    return {
+        from: exports.parseDate(parts[0]),
+        to: exports.parseDate(parts[1])
+    };
+};
+
+var degreeMap = {
+    '初中': 'junior high',
+    '中技': 'technical school',
+    '高中': 'high school',
+    '中专': 'polytechnic',
+    '大专': 'associate',
+    '本科': 'bachelor',
+    'MBA': 'mba',
+    '硕士': 'master',
+    '博士': 'doctorate',
+    '其他': 'others'
+};
+exports.parseDegree = function parseDegree(input) {
+    return degreeMap[input.trim()];
 };

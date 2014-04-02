@@ -57,15 +57,23 @@ describe('helper', function () {
         });
     });
 
+    describe('#parsePoliticalStatus', function () {
+        it('should parse correctly', function () {
+            expect(helper.parsePoliticalStatus('团员')).to.equal('league member');
+        });
+    });
+
     describe('#parseYearsOfExperience', function () {
         it('should return correctly', function () {
             expect(helper.parseYearsOfExperience('应届毕业生')).to.equal('graduating student');
+            expect(helper.parseYearsOfExperience('2年工作经验')).to.equal('2');
         });
     });
 
     describe('#parseEntryTime', function () {
         it('should parse correctly', function () {
             expect(helper.parseEntryTime('待定')).to.equal('to be determined');
+            expect(helper.parseEntryTime('我目前在职，正考虑换个新环境（如有合适的工作机会，到岗时间一个月左右）')).to.equal('within 1 month');
         });
     });
 
@@ -113,7 +121,7 @@ describe('helper', function () {
             var $ = cheerio.load(html);
             var table = $('table');
             var data = helper.parseTable(table, $);
-            expect(data[0][0]).to.equal('2013/7--至今：中国平安保险（10000人以上）[4个月]');
+            expect(data[0][0]).to.equal('2013 /7--至今：中国平安保险（10000人以上） [ 4个月]');
             expect(data[1][0]).to.equal('所属行业：');
             expect(data[1][1]).to.equal('保险');
             expect(data[2][0]).to.equal('销售');
@@ -192,6 +200,32 @@ describe('helper', function () {
         it('should return correctly', function () {
             expect(helper.isResponsibility('责任描述：')).to.be.true;
             expect(helper.isResponsibility('软件环境')).to.be.false;
+        });
+    });
+
+    describe('#parseCivilState', function () {
+        it('should return correctly', function () {
+            expect(helper.parseCivilState('未婚')).to.equal('single');
+            expect(helper.parseCivilState('已婚')).to.equal('married');
+            expect(helper.parseCivilState('离异')).to.equal('divorced');
+            expect(helper.parseCivilState('保密')).to.equal('confidential');
+        });
+    });
+
+    describe('#parseDateRange', function () {
+        it('should return correctly', function () {
+            var dateRange = helper.parseDateRange('2012/08--至今：');
+            expect(dateRange.from.getFullYear()).to.equal(2012);
+            expect(dateRange.from.getMonth()).to.equal(7);
+            expect(dateRange.to.getFullYear()).to.equal(9999);
+        });
+    });
+
+    describe('#parseLanguageLevel', function () {
+        it('should return correctly', function () {
+            expect(helper.parseLanguageLevel('熟练')).to.equal('advanced');
+            expect(helper.parseLanguageLevel('读写能力熟练')).to.equal('advanced');
+            expect(helper.parseLanguageLevel('听说能力良好')).to.equal('good');
         });
     });
 });
