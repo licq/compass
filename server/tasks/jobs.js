@@ -64,9 +64,15 @@ exports.findFetchEmailJob = function findFetchEmailJob(email, cb) {
 };
 
 exports.addParseResumeJob = function (mail, cb) {
-    logger.log('addParseResumeJob:',mail._id);
-    mail.title = 'parse mail ' + mail._id;
-    jobs.create('parse resume', mail).attempts(3).save();
+    logger.log('addParseResumeJob:', mail._id);
+    var data = {
+        html: mail.html,
+        title: mail.subject,
+        company: mail.company,
+        _id: mail._id,
+        fromAddress: mail.fromAddress
+    };
+    jobs.create('parse resume', data).attempts(3).save();
     cb();
 };
 

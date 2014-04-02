@@ -98,32 +98,41 @@ exports.parse = function (data) {
     function parseProjectExperience(table) {
         if (table.length === 0) return;
 
-        var divs = table.find('div.resume_p');
-        var html = helper.parseTableHtml(table, $)[0][0];
+        try {
+            var divs = table.find('div.resume_p');
+            var html = helper.parseTableHtml(table, $)[0][0];
 
-        var titleRegexp = /<p>(.*?)<br>/g;
-        var projectTitles = [];
-        var matchResult;
-        while (matchResult = titleRegexp.exec(html)) {
-            projectTitles.push(matchResult[1]);
+            var projectTitles = html.split(/<div.*?<\/div>\s*?<div.*?<\/div>/g).slice(0, -1);
+            var projectLength = divs.length / 2;
+            return _.times(projectLength, function (n) {
+                var firstDiv = divs.eq(n * 2);
+                var secondDiv = divs.eq(n * 2 + 1);
+                var parts = helper.replaceEmpty(projectTitles[n].split(/<br\/?>|<\/?p>/g));
+                var divideAt = parts[0].indexOf('：');
+                var dateRange = helper.parseDateRange(parts[0].substr(0, divideAt));
+
+                var result = {
+                    from: dateRange.from,
+                    to: dateRange.to,
+                    name: parts[0].substr(divideAt + 1),
+                    responsibility: helper.replaceEmpty($(firstDiv).text()).substr(5),
+                    description: $(secondDiv).text().trim().substr(5)
+                };
+
+                _.forEach(parts.slice(1), function (item) {
+                    console.log(item);
+                    var parts = item.split(/：/g);
+                    if (parts[0].trim() === '开发工具') result.developmentTools = parts[1];
+                    else if (parts[0].trim() === '软件环境') result.softwareEnviroment = parts[1];
+                    else if (parts[0].trim() === '硬件环境') result.hardwareEnviroment = paths[1];
+                });
+
+                return result;
+            });
+        } catch (e) {
+            logger.error(e);
+            throw e;
         }
-        var project1Additional = html.substr(0, html.indexOf('<p>'));
-        projectTitles[0] = project1Additional + projectTitles[0];
-
-        var projectLength = divs.length / 2;
-        return _.times(projectLength, function (n) {
-            var firstDiv = divs.eq(n * 2);
-            var secondDiv = divs.eq(n * 2 + 1);
-            var divideAt = projectTitles[n].indexOf('：');
-            var dateRange = helper.parseDateRange(projectTitles[n].substr(0, divideAt));
-            return {
-                from: dateRange.from,
-                to: dateRange.to,
-                name: projectTitles[n].substr(divideAt + 1).trim(),
-                responsibility: helper.replaceEmpty($(firstDiv).text()).substr(5),
-                description: $(secondDiv).text().trim().substr(5)
-            }
-        });
     }
 
     function parseCertifications(table) {
