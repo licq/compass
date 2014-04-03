@@ -37,6 +37,8 @@ module.exports = function (app) {
     app.param('userId', sessions.requiresLogin, users.load);
 
     app.get('/api/resumes', sessions.requiresLogin, resumes.list);
+    app.get('/api/resumes/:resumeId', resumes.get);
+    app.param('resumeId', sessions.requiresLogin, resumes.load);
 
     app.all('/api/*', function (req, res) {
         logger.error('request unknown url ' + req.url);
