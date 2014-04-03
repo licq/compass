@@ -26,7 +26,7 @@ var resumeSchema = mongoose.Schema({
     residency: String,
     civilState: {
         type: String,
-        enum: ['married', 'single', 'divorced','confidential']
+        enum: ['married', 'single', 'divorced', 'confidential']
     },
     politicalStatus: {
         type: String,
@@ -127,6 +127,20 @@ var resumeSchema = mongoose.Schema({
                 type: String,
                 enum: ['not sure', 'average', 'good', 'very good', 'excellent']
             }
+        }
+    ],
+
+    inSchoolPractices: [
+        {
+            from: Date,
+            to: Date,
+            content: String
+        }
+    ],
+
+    inSchoolStudy: [
+        {
+            content: String
         }
     ],
 

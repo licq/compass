@@ -19,10 +19,15 @@ exports.parse = function (data) {
     resume.certifications = parseCertifications(findTable('证书'));
     resume.itSkills = parseItSkills(findTable('专业技能'));
     resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
-    resume.projectExperience = parseProjectExperience(findTable('项目经验'))
+    resume.projectExperience = parseProjectExperience(findTable('项目经验'));
+    resume.inSchoolPractices = paseInSchoolPractices(findTable('在校实践经验'));
+    resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
+    resume.applyPosition = helper.parseApplyPosition(data.subject);
+
     resume.channel = '智联招聘';
     resume.company = data.company;
     resume.mail = data.mailId;
+
     return resume;
 
     function findTable(name, another) {
@@ -59,20 +64,19 @@ exports.parse = function (data) {
                 else if (helper.isResidency(item)) resume.residency = item.substr(4);
             });
 
-            if(contactInfoLine){
+            if (contactInfoLine) {
                 var items = helper.replaceEmpty(contactInfoLine.split(/\s+|\s*\|\s*/g));
-                _.forEach(items,function(item){
-                    if(helper.isPoliticalStatus(item)) resume.politicalStatus = helper.parsePoliticalStatus(item);
-                    if(helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
+                _.forEach(items, function (item) {
+                    if (helper.isPoliticalStatus(item)) resume.politicalStatus = helper.parsePoliticalStatus(item);
+                    if (helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
                 })
             }
-            if(mobileLine) resume.mobile = helper.onlyNumber(mobileLine);
-            if(emailLine) resume.email = table.find('a').text();
+            if (mobileLine) resume.mobile = helper.onlyNumber(mobileLine);
+            if (emailLine) resume.email = table.find('a').text();
 
             return  resume;
         } catch (err) {
             logger.error(err.stack);
-            throw err;
         }
     }
 
@@ -89,8 +93,21 @@ exports.parse = function (data) {
                 selfAssessment: helper.replaceEmpty($('.resume_p:nth-child(1)').text())
             };
         } catch (err) {
-            logger.error(err);
+            logger.error(err.stack);
         }
+    }
+
+    function paseInSchoolPractices(table) {
+        if (table.length === 0) return;
+        var data = helper.parseTable(table, $);
+        return _.map(data, function (line) {
+            var dateRange = helper.parseDateRange(line[0]);
+            return {
+                from: dateRange.from,
+                to: dateRange.to,
+                content: line[1]
+            };
+        });
     }
 
     function parseWorkExperience(table) {
@@ -117,8 +134,7 @@ exports.parse = function (data) {
             });
             return workExperience;
         } catch (e) {
-            logger.error(e.stacktrace);
-            throw e;
+            logger.error(e.stack);
         }
     }
 
@@ -158,8 +174,7 @@ exports.parse = function (data) {
                 return result;
             });
         } catch (e) {
-            logger.error(e);
-            throw e;
+            logger.error(e.stack);
         }
     }
 
@@ -176,7 +191,7 @@ exports.parse = function (data) {
                 };
             });
         } catch (e) {
-            logger.error(e);
+            logger.error(e.stack);
         }
     }
 
@@ -197,7 +212,6 @@ exports.parse = function (data) {
             });
         } catch (e) {
             logger.error(e.stack);
-            throw e;
         }
     }
 
@@ -213,7 +227,7 @@ exports.parse = function (data) {
                 };
             });
         } catch (e) {
-            logger.error(e);
+            logger.error(e.stack);
         }
     }
 
@@ -230,7 +244,17 @@ exports.parse = function (data) {
                 };
             });
         } catch (e) {
-            logger.error(e);
+            logger.error(e.stack);
+        }
+    }
+
+    function parseInSchoolStudy(table) {
+        if (table.length === 0) return;
+        try {
+            var data = helper.parseTableHtml(table, $);
+            return helper.replaceEmpty(data[0][0].split(/<br>|<\/?div.*?>|<\/?p>/g));
+        } catch (err) {
+            logger.error(err.stack);
         }
     }
 };

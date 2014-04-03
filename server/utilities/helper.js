@@ -316,3 +316,10 @@ exports.isMobileLine = function isMobileLine(input) {
     return exports.onlyNumber(input).length === 11;
 };
 
+exports.parseApplyPosition = function parseApplyPosition(input) {
+    if (input) {
+        var start = input.indexOf('应聘');
+        var end = input.lastIndexOf('-');
+        return input.substring(start + 3, end);
+    }
+};

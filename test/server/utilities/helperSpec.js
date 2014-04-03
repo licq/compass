@@ -298,5 +298,9 @@ describe('helper', function () {
         });
     });
 
-
+    describe('#parseApplyPosition', function () {
+        it('should return correctly', function () {
+            expect(helper.parseApplyPosition('(Zhaopin.com) 应聘 预付储值卡销售-上海-张毅')).to.equal('预付储值卡销售-上海');
+        });
+    });
 });
