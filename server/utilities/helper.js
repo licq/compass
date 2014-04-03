@@ -22,7 +22,7 @@ exports.parseDate = function parseDate(input) {
     }
 
     var match = input.match(/\d+/g);
-    if(_.isNull(match)) console.log('match is null ', input);
+    if (_.isNull(match)) console.log('match is null ', input);
     var result = new Date();
     result.setYear(parseInt(match[0], 10));
     result.setMonth(parseInt(match[1], 10) - 1);
@@ -61,7 +61,8 @@ var entryTimeMap = {
     '一个月': 'within 1 month',
     '1-3个月': '1 to 3 months',
     '三个月后': 'after 3 months',
-    '立即': 'immediately'
+    '立即': 'immediately',
+    '应届毕业生': 'immediately'
 };
 
 exports.parseEntryTime = function parseEntryTime(input) {
@@ -255,8 +256,6 @@ exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
 
 exports.parseDateRange = function parseDateRange(input) {
     var parts = input.split(/--|：/g);
-    if(_.isEmpty(parts[0])) console.log('part 0 is null',input);
-    if(_.isEmpty(parts[1])) console.log('part 1 is null',input);
     return {
         from: exports.parseDate(parts[0]),
         to: exports.parseDate(parts[1])
@@ -287,8 +286,11 @@ exports.isCivilState = function isCivilState(input) {
     return _.has(civilStateMap, input.trim());
 };
 
+exports.replaceInnerSpace = function replaceInnerSpace(input){
+    return input.replace(/\s+/g,'');
+}
 exports.isBirthday = function isBirthday(input) {
-    return (/\d\d\d\d年\d\d?月/).test(input.trim());
+    return (/\d\d\d\d年\d\d?月/).test(exports.replaceInnerSpace(input));
 };
 
 exports.isHukou = function isHukou(input) {
