@@ -268,10 +268,35 @@ describe('helper', function () {
         });
     });
 
+    describe('#isMobileLine', function () {
+        it('should return correctly', function () {
+            expect(helper.isMobileLine('15721128797(手机')).to.be.true;
+            expect(helper.isMobileLine('2年工作经验 | 团员 安徽省安庆市 246003')).to.be.false;
+        });
+    });
+
+    describe('#isPoliticalStatus', function () {
+        it('should return correctly', function () {
+            expect(helper.isPoliticalStatus('团员')).to.be.true;
+            expect(helper.isPoliticalStatus('党员')).to.be.true;
+            expect(helper.isPoliticalStatus('群众')).to.be.true;
+            expect(helper.isPoliticalStatus('上海')).to.be.false;
+        });
+    });
+
+    describe('#isYearsOfExperience', function () {
+        it('should return correctly', function () {
+            expect(helper.isYearsOfExperience('2年工作经验')).to.be.true;
+            expect(helper.isHukou('上海')).to.be.false;
+        });
+    });
+
     describe('#isResidency', function () {
         it('should return correctly', function () {
             expect(helper.isResidency('现居住于上海-浦东新区')).to.be.true;
             expect(helper.isResidency('20年12月')).to.be.false;
         });
     });
+
+
 });

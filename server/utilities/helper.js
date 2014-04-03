@@ -108,7 +108,7 @@ exports.replaceEmpty = function replaceEmpty(input) {
             return item.length !== 0;
         });
     }
-    return input.replace(/\n| +/g, ' ').trim();
+    return input.replace(/\n|\s+/g, ' ').trim();
 };
 
 exports.parseTable = function parseTable(table, $) {
@@ -275,7 +275,9 @@ var degreeMap = {
     '其他': 'others'
 };
 exports.parseDegree = function parseDegree(input) {
-    return degreeMap[input.trim()];
+    if (input) {
+        return degreeMap[input.trim()];
+    }
 };
 
 exports.isGender = function isGender(input) {
@@ -286,11 +288,12 @@ exports.isCivilState = function isCivilState(input) {
     return _.has(civilStateMap, input.trim());
 };
 
-exports.replaceInnerSpace = function replaceInnerSpace(input){
-    return input.replace(/\s+/g,'');
-}
+exports.removeSpaces = function replaceInnerSpace(input) {
+    return input.replace(/\s+/g, '');
+};
+
 exports.isBirthday = function isBirthday(input) {
-    return (/\d\d\d\d年\d\d?月/).test(exports.replaceInnerSpace(input));
+    return (/\d\d\d\d年\d\d?月/).test(exports.removeSpaces(input));
 };
 
 exports.isHukou = function isHukou(input) {
@@ -299,5 +302,17 @@ exports.isHukou = function isHukou(input) {
 
 exports.isResidency = function isResidency(input) {
     return input.indexOf('现居住') > -1;
+};
+
+exports.isYearsOfExperience = function isYearsOfExperience(input) {
+    return input.indexOf('工作经验') > -1 || input.indexOf('毕业生') > -1;
+};
+
+exports.isPoliticalStatus = function isPoliticalStatus(input) {
+    return _.has(politicalStatusMap, input.trim());
+};
+
+exports.isMobileLine = function isMobileLine(input) {
+    return exports.onlyNumber(input).length === 11;
 };
 
