@@ -219,13 +219,59 @@ describe('helper', function () {
             expect(dateRange.from.getMonth()).to.equal(7);
             expect(dateRange.to.getFullYear()).to.equal(9999);
         });
+        it('should return correctly 2', function () {
+            var dateRange = helper.parseDateRange('2008/08 -- 至今：');
+            expect(dateRange.from.getFullYear()).to.equal(2008);
+            expect(dateRange.from.getMonth()).to.equal(7);
+            expect(dateRange.to.getFullYear()).to.equal(9999);
+        });
+
+
     });
 
     describe('#parseLanguageLevel', function () {
         it('should return correctly', function () {
-            expect(helper.parseLanguageLevel('熟练')).to.equal('advanced');
-            expect(helper.parseLanguageLevel('读写能力熟练')).to.equal('advanced');
+            expect(helper.parseLanguageLevel('熟练')).to.equal('very good');
+            expect(helper.parseLanguageLevel('读写能力熟练')).to.equal('very good');
             expect(helper.parseLanguageLevel('听说能力良好')).to.equal('good');
+        });
+    });
+
+    describe('#isGender', function () {
+        it('should return correctly', function () {
+            expect(helper.isGender('男')).to.be.true;
+            expect(helper.isGender('女')).to.be.true;
+            expect(helper.isGender('男女')).to.be.false;
+        });
+    });
+
+    describe('#isCivilState', function () {
+        it('should return correctly', function () {
+            expect(helper.isCivilState('已婚')).to.be.true;
+            expect(helper.isCivilState('未婚')).to.be.true;
+            expect(helper.isCivilState('1980年12月8日')).to.be.false;
+        });
+    });
+
+    describe('#isBirthday', function () {
+        it('should return correctly', function () {
+            expect(helper.isBirthday('2011年12月8日')).to.be.true;
+            expect(helper.isBirthday('2011年12月')).to.be.true;
+            expect(helper.isBirthday('20年12月')).to.be.false;
+        });
+    });
+
+    describe('#isHukou', function () {
+        it('should return correctly', function () {
+            expect(helper.isHukou('户口:上海')).to.be.true;
+            expect(helper.isHukou('上海')).to.be.false;
+        });
+    });
+
+    describe('#isResidency', function () {
+        it('should return correctly', function () {
+            expect(helper.isResidency('现居住于上海-浦东新区')).to.be.true;
+            expect(helper.isResidency('20年12月')).to.be.false;
         });
     });
 });

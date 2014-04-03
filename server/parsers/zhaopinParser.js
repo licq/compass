@@ -30,21 +30,27 @@ exports.parse = function (data) {
             var basicInfos = table.find('td:nth-child(2)').html().split('<br>');
             var line1Items = helper.replaceEmpty(basicInfos[0].split('|'));
             var line2Items = helper.replaceEmpty(basicInfos[1].split(/\s+|\s*\|\s*/g));
-            return {
+            var basic = {
                 name: table.find('td:nth-child(1) span').text().trim(),
-                gender: helper.parseGender(line1Items[0]),
-                civilState: helper.parseCivilState(line1Items[1]),
-                birthday: helper.parseDate(line1Items[2]),
-                hukou: line1Items[3].split('：')[1],
-                residency: line1Items[4].substr(4),
                 yearsOfExperience: helper.parseYearsOfExperience(line2Items[0]),
                 politicalStatus: helper.parsePoliticalStatus(line2Items[1]),
                 mobile: helper.onlyNumber(basicInfos[2]),
                 email: $('table:nth-child(3) a').text()
             };
+
+            _.forEach(line1Items, function (item) {
+                if (helper.isGender(item)) basic.gender = helper.parseGender(item);
+                else if (helper.isCivilState(item)) basic.civilState = helper.parseCivilState(item);
+                else if (helper.isBirthday(item)) basic.birthday = helper.parseDate(item);
+                else if (helper.isHukou(item)) basic.hukou = item.split('：')[1];
+                else if (helper.isResidency(item)) basic.residency = item.substr(4);
+            });
+            return  basic;
+
+
         } catch (err) {
-            logger.error(err);
-            return {};
+            logger.error(err.stack);
+            throw err;
         }
     }
 
@@ -58,7 +64,7 @@ exports.parse = function (data) {
                 jobCategory: helper.splitByCommas(objectiveTableData[1][1]),
                 targetSalary: helper.parseTargetSalary(objectiveTableData[2][1]),
                 entryTime: helper.parseEntryTime(objectiveTableData[3][1]),
-                selfAssessment: helper.replaceEmpty($('.resume_p:nth-child(1)').text()),
+                selfAssessment: helper.replaceEmpty($('.resume_p:nth-child(1)').text())
             };
         } catch (err) {
             logger.error(err);
@@ -69,11 +75,10 @@ exports.parse = function (data) {
         if (table.length === 0) return;
         try {
             var workExperience = [];
-            table.children()
-                .filter(function (index) {
-                    return index % 2 === 0;
-                }).each(function () {
-                    var dateRange = helper.parseDateRange($(this).children().first().text());
+            table.children().each(function () {
+                var dateRangeText = $(this).children().first().text();
+                if (dateRangeText.trim().length > 0) {
+                    var dateRange = helper.parseDateRange(dateRangeText);
                     var contents = $(this).children().last().html().split(/<br\/?>/g);
                     var companyInfo = helper.replaceEmpty(contents[0].split('|'));
                     var industryInfo = helper.replaceEmpty(contents[1].split('|'));
@@ -86,11 +91,12 @@ exports.parse = function (data) {
                         industry: industryInfo[0],
                         jobDescription: helper.replaceEmpty(contents.slice(2).join(''))
                     });
-
-                });
+                }
+            });
             return workExperience;
         } catch (e) {
-            logger.error(e);
+            logger.error(e.stacktrace);
+            throw e;
         }
     }
 

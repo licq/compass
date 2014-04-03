@@ -5,17 +5,24 @@ exports.onlyNumber = function onlyNumber(input) {
     return match[0];
 };
 
+var genderMap = {
+    '男': 'male',
+    '女': 'female',
+};
+
 exports.parseGender = function parseGender(input) {
-    return input.trim() === '男' ? 'male' : 'female';
+    return genderMap[input.trim()];
 };
 
 exports.parseDate = function parseDate(input) {
-    if (input.trim() === '至今') {
+    if (input.indexOf('至今') > -1) {
         var date = new Date();
         date.setFullYear(9999);
         return date;
     }
+
     var match = input.match(/\d+/g);
+    if(_.isNull(match)) console.log('match is null ', input);
     var result = new Date();
     result.setYear(parseInt(match[0], 10));
     result.setMonth(parseInt(match[1], 10) - 1);
@@ -59,7 +66,7 @@ var entryTimeMap = {
 
 exports.parseEntryTime = function parseEntryTime(input) {
     var result = undefined;
-    _.forEach(entryTimeMap, function (value,key) {
+    _.forEach(entryTimeMap, function (value, key) {
         if (input.indexOf(key) > -1) {
             result = value;
             return false;
@@ -148,8 +155,8 @@ var languageSkillMap = {
     '不限': 'not sure',
     '一般': 'average',
     '良好': 'good',
-    '熟练': 'advanced',
-    '精通': 'expert',
+    '熟练': 'very good',
+    '精通': 'excellent',
 };
 
 var languageMap = {
@@ -165,7 +172,7 @@ exports.parseLanguage = function parseLanguage(input) {
 
 exports.parseLanguageLevel = function parseLanguageLevel(input) {
     var result = undefined;
-    _.forEach(languageSkillMap, function (value,key) {
+    _.forEach(languageSkillMap, function (value, key) {
         if (input.indexOf(key) > -1) {
             result = value;
             return false;
@@ -248,6 +255,8 @@ exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
 
 exports.parseDateRange = function parseDateRange(input) {
     var parts = input.split(/--|：/g);
+    if(_.isEmpty(parts[0])) console.log('part 0 is null',input);
+    if(_.isEmpty(parts[1])) console.log('part 1 is null',input);
     return {
         from: exports.parseDate(parts[0]),
         to: exports.parseDate(parts[1])
@@ -269,3 +278,24 @@ var degreeMap = {
 exports.parseDegree = function parseDegree(input) {
     return degreeMap[input.trim()];
 };
+
+exports.isGender = function isGender(input) {
+    return _.has(genderMap, input.trim());
+};
+
+exports.isCivilState = function isCivilState(input) {
+    return _.has(civilStateMap, input.trim());
+};
+
+exports.isBirthday = function isBirthday(input) {
+    return (/\d\d\d\d年\d\d?月/).test(input.trim());
+};
+
+exports.isHukou = function isHukou(input) {
+    return input.trim().indexOf('户口') > -1;
+};
+
+exports.isResidency = function isResidency(input) {
+    return input.indexOf('现居住') > -1;
+};
+
