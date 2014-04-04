@@ -20,14 +20,12 @@ exports.parse = function (data) {
     resume.itSkills = parseItSkills(findTable('专业技能'));
     resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
     resume.projectExperience = parseProjectExperience(findTable('项目经验'));
-    resume.inSchoolPractices = paseInSchoolPractices(findTable('在校实践经验'));
+    resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'));
     resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
-    resume.applyPosition = helper.parseApplyPosition(data.subject);
-
+    resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
     resume.channel = '智联招聘';
     resume.company = data.company;
     resume.mail = data.mailId;
-
     return resume;
 
     function findTable(name, another) {
@@ -97,7 +95,7 @@ exports.parse = function (data) {
         }
     }
 
-    function paseInSchoolPractices(table) {
+    function parseInSchoolPractices(table) {
         if (table.length === 0) return;
         var data = helper.parseTable(table, $);
         return _.map(data, function (line) {
@@ -137,7 +135,6 @@ exports.parse = function (data) {
             logger.error(e.stack);
         }
     }
-
 
     function parseProjectExperience(table) {
         if (table.length === 0) return;

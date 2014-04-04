@@ -15,10 +15,7 @@ var resumeSchema = mongoose.Schema({
         default: Date.now()
     },
     matchRate: Number,
-    yearsOfExperience: {
-        type: String,
-//        enum: ['student', 'graduating student', '1', '2', '3', '4', '5', '8', '10']
-    },
+    yearsOfExperience: Number,
 
     birthday: Date,
 

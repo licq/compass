@@ -34,24 +34,36 @@ exports.parseMatchRate = function parseMatchRate(input) {
     return parseInt(exports.onlyNumber(input), 10);
 };
 
-var yearsOfExperienceMap = {
-    '应届毕业生': 'graduating student',
-    '一年以上工作经验': '1',
-    '两年以上工作经验': '2',
-    '三年以上工作经验': '3',
-    '四年以上工作经验': '4',
-    '五年以上工作经验': '5',
-    '八年以上工作经验': '8',
-    '十年以上工作经验': '10',
-    '2年工作经验': '2'
+var chineseToNumberMap = {
+    '一': 1,
+    '二': 2,
+    '两': 2,
+    '三': 3,
+    '四': 4,
+    '五': 5,
+    '六': 6,
+    '七': 7,
+    '八': 8,
+    '九': 9,
+    '十': 10
 };
 
 exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
-    var match;
-    if (match = input.match(/(\d+)年工作经验/)) {
-        return match[1];
+    if (input.indexOf('应届') > -1) {
+        return 0;
     }
-    return yearsOfExperienceMap[input.trim()];
+    if (input.indexOf('学生') > -1) {
+        return -1;
+    }
+    console.log(input);
+    if (input.indexOf('工作经验') > -1) {
+        var first = input.trim().substr(0, 1);
+        if (/\d+/.test(first)) {
+            return _.parseInt(first);
+        } else {
+            return chineseToNumberMap[first];
+        }
+    }
 };
 
 var entryTimeMap = {
@@ -316,10 +328,23 @@ exports.isMobileLine = function isMobileLine(input) {
     return exports.onlyNumber(input).length === 11;
 };
 
-exports.parseApplyPosition = function parseApplyPosition(input) {
+exports.parseApplyPosition = function parseZhaopinApplyPosition(input) {
     if (input) {
         var start = input.indexOf('应聘');
         var end = input.lastIndexOf('-');
         return input.substring(start + 3, end);
     }
+};
+
+exports.chunkByEmptyArray = function chunk(input) {
+    var result = [];
+    var start = 0;
+    _.forEach(input, function (elem, i) {
+        if (_.isEqual(elem, [''])) {
+            result.push(input.slice(start, i));
+            start = i + 1;
+        }
+    });
+    result.push(input.slice(start));
+    return result;
 };

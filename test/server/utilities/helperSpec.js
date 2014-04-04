@@ -63,10 +63,11 @@ describe('helper', function () {
         });
     });
 
-    describe('#parseYearsOfExperience', function () {
+   ('#parseYearsOfExperience', function () {
         it('should return correctly', function () {
-            expect(helper.parseYearsOfExperience('应届毕业生')).to.equal('graduating student');
-            expect(helper.parseYearsOfExperience('2年工作经验')).to.equal('2');
+            expect(helper.parseYearsOfExperience('应届毕业生')).to.equal(0);
+            expect(helper.parseYearsOfExperience('2年工作经验')).to.equal(2);
+            expect(helper.parseYearsOfExperience('一年以上工作经验')).to.equal(1);
         });
     });
 
@@ -298,9 +299,53 @@ describe('helper', function () {
         });
     });
 
-    describe('#parseApplyPosition', function () {
+    describe('#parseZhaopinApplyPosition', function () {
         it('should return correctly', function () {
-            expect(helper.parseApplyPosition('(Zhaopin.com) 应聘 预付储值卡销售-上海-张毅')).to.equal('预付储值卡销售-上海');
+            expect(helper.parseZhaopinApplyPosition('(Zhaopin.com) 应聘 预付储值卡销售-上海-张毅')).to.equal('预付储值卡销售-上海');
+        });
+    });
+
+    describe('#chunkByEmptyArray', function () {
+        it('should return correctly', function () {
+            expect(helper.chunkByEmptyArray([
+                [1, 2, 3]
+            ])).to.deep.equal([
+                    [
+                        [1, 2, 3]
+                    ]
+                ]);
+            expect(helper.chunkByEmptyArray([
+                [1, 2, 3],
+                [''],
+                [4, 5]
+            ])).to.deep.equal([
+                    [
+                        [1, 2, 3]
+                    ],
+                    [
+                        [4, 5]
+                    ]
+                ]);
+
+            expect(helper.chunkByEmptyArray([
+                [1, 2, 3],
+                [2, 7, 8],
+                [''],
+                [4, 5],
+                [''],
+                [6]
+            ])).to.deep.equal([
+                    [
+                        [1, 2, 3],
+                        [2, 7, 8]
+                    ],
+                    [
+                        [4, 5]
+                    ],
+                    [
+                        [6]
+                    ]
+                ]);
         });
     });
 });
