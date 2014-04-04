@@ -26,6 +26,7 @@ exports.parse = function (data) {
     resume.channel = '智联招聘';
     resume.company = data.company;
     resume.mail = data.mailId;
+    console.log('resume:', resume);
     return resume;
 
     function findTable(name, another) {
@@ -161,11 +162,10 @@ exports.parse = function (data) {
                 };
 
                 _.forEach(parts.slice(1), function (item) {
-                    console.log(item);
                     var parts = item.split(/：/g);
                     if (parts[0].trim() === '开发工具') result.developmentTools = parts[1];
                     else if (parts[0].trim() === '软件环境') result.softwareEnviroment = parts[1];
-                    else if (parts[0].trim() === '硬件环境') result.hardwareEnviroment = paths[1];
+                    else if (parts[0].trim() === '硬件环境') result.hardwareEnviroment = parts[1];
                 });
 
                 return result;

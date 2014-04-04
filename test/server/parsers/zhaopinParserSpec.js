@@ -10,7 +10,7 @@ describe('ZhaopinParser', function () {
                 var resume = resumeParser.parse({
                     html: data
                 });
-                expect(resume.name).to.equal('朱巧满');
+                expect(resume.name).to.equal('李阳');
                 console.log(resume);
                 done(err);
             });

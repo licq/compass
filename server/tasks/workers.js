@@ -57,6 +57,7 @@ function handleParseResume(job, done) {
         resume = parser.parse(job.data);
     }catch(err){
         job.log('error:', err.stack);
+        throw err;
     }
     Resume.create(resume, function (err) {
         done(err);

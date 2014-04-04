@@ -328,7 +328,7 @@ exports.isMobileLine = function isMobileLine(input) {
     return exports.onlyNumber(input).length === 11;
 };
 
-exports.parseApplyPosition = function parseZhaopinApplyPosition(input) {
+exports.parseZhaopinApplyPosition = function parseZhaopinApplyPosition(input) {
     if (input) {
         var start = input.indexOf('应聘');
         var end = input.lastIndexOf('-');

@@ -2,7 +2,7 @@ var fs = require('fs'),
     resumeParser = require('../../../server/parsers/job51Parser'),
     expect = require('chai').expect;
 
-describe.only('job51Parser', function () {
+describe('job51Parser', function () {
 
     describe('#parse', function () {
         it.only('should parse 51job resume correctly', function (done) {

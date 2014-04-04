@@ -135,11 +135,7 @@ var resumeSchema = mongoose.Schema({
         }
     ],
 
-    inSchoolStudy: [
-        {
-            content: String
-        }
-    ],
+    inSchoolStudy: [String ],
 
     languageCertificates: {
         english: {
