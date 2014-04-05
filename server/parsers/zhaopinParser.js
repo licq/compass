@@ -26,7 +26,7 @@ exports.parse = function (data) {
     resume.channel = '智联招聘';
     resume.company = data.company;
     resume.mail = data.mailId;
-    console.log('resume:', resume);
+
     return resume;
 
     function findTable(name, another) {
@@ -74,8 +74,8 @@ exports.parse = function (data) {
             if (emailLine) resume.email = table.find('a').text();
 
             return  resume;
-        } catch (err) {
-            logger.error(err.stack);
+        } catch (e) {
+            logger.error(e.stack);
         }
     }
 
@@ -91,22 +91,26 @@ exports.parse = function (data) {
                 entryTime: helper.parseEntryTime(objectiveTableData[3][1]),
                 selfAssessment: helper.replaceEmpty($('.resume_p:nth-child(1)').text())
             };
-        } catch (err) {
-            logger.error(err.stack);
+        } catch (e) {
+            logger.error(e.stack);
         }
     }
 
     function parseInSchoolPractices(table) {
         if (table.length === 0) return;
-        var data = helper.parseTable(table, $);
-        return _.map(data, function (line) {
-            var dateRange = helper.parseDateRange(line[0]);
-            return {
-                from: dateRange.from,
-                to: dateRange.to,
-                content: line[1]
-            };
-        });
+        try {
+            var data = helper.parseTable(table, $);
+            return _.map(data, function (line) {
+                var dateRange = helper.parseDateRange(line[0]);
+                return {
+                    from: dateRange.from,
+                    to: dateRange.to,
+                    content: line[1]
+                };
+            });
+        } catch (e) {
+            logger.error(e.stack);
+        }
     }
 
     function parseWorkExperience(table) {
@@ -250,8 +254,8 @@ exports.parse = function (data) {
         try {
             var data = helper.parseTableHtml(table, $);
             return helper.replaceEmpty(data[0][0].split(/<br>|<\/?div.*?>|<\/?p>/g));
-        } catch (err) {
-            logger.error(err.stack);
+        } catch (e) {
+            logger.error(e.stack);
         }
     }
 };

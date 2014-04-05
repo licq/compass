@@ -63,7 +63,7 @@ describe('helper', function () {
         });
     });
 
-   ('#parseYearsOfExperience', function () {
+    describe('#parseYearsOfExperience', function () {
         it('should return correctly', function () {
             expect(helper.parseYearsOfExperience('应届毕业生')).to.equal(0);
             expect(helper.parseYearsOfExperience('2年工作经验')).to.equal(2);

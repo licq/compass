@@ -6,7 +6,7 @@ var express = require('express'),
     passport = require('passport'),
     kue = require('kue'),
     mongoStore = require('connect-mongo')(express),
-    winston = require('winston'),
+    winston = require('./winston'),
     expressWinston = require('express-winston');
 
 module.exports = function (app, config) {
@@ -29,13 +29,7 @@ module.exports = function (app, config) {
         }));
         app.use(express.static(config.rootPath + '/public'));
         app.use(expressWinston.logger({
-            transports: [
-                new winston.transports.Console({
-                    json: false,
-                    colorize: true
-                })
-            ],
-            meta: true,
+            transports: winston.transports,
             msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
         }));
         app.use(express.cookieParser());
@@ -59,12 +53,7 @@ module.exports = function (app, config) {
     });
 
     app.use(expressWinston.errorLogger({
-        transports: [
-            new winston.transports.Console({
-                json: true,
-                colorize: true
-            })
-        ]
+        transports: winston.transports
     }));
 
     app.configure('development', function () {

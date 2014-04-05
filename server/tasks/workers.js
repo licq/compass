@@ -52,15 +52,15 @@ function handleFetchEmail(job, done) {
 
 function handleParseResume(job, done) {
     logger.log('handleParseResume ', job.data);
-    var resume;
     try {
+        var resume;
         resume = parser.parse(job.data);
-    }catch(err){
+        Resume.create(resume, function (err) {
+            done(err);
+        });
+    } catch (err) {
         job.log('error:', err.stack);
-        throw err;
-    }
-    Resume.create(resume, function (err) {
         done(err);
-    });
+    }
 }
 

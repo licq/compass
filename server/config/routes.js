@@ -47,8 +47,8 @@ module.exports = function (app) {
 
     app.all('/api/*', function (err, req, res, next) {
         logger.error(err);
-//        res.status(500).json({message: 'Internal Server Error'});
-        next();
+        res.status(500).json({message: 'Internal Server Error',
+            stack: err.stack});
     });
 
     app.get('*', function (req, res) {

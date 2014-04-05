@@ -58,7 +58,6 @@ exports.parse = function (data) {
         } catch (e) {
             logger.error(e.stack);
         }
-
     }
 
     function parseLanguageSkills(table) {
@@ -97,7 +96,6 @@ exports.parse = function (data) {
     }
 
     function findTable(name) {
-        if (table.length === 0) return;
         var current = $('td.cvtitle:contains(' + name + ')').parent().next();
         while (current.find('table').length === 0 && current.next().length !== 0) {
             current = current.next();
