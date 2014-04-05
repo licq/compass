@@ -10,5 +10,11 @@ exports.parse = function (data) {
     var parser = _.find(parsers, function (parser) {
         return parser.test(data);
     });
-    if (parser) return parser.parse(data);
+
+    if (parser) {
+        return parser.parse(data);
+    }
+    else {
+        throw new Error('not suitable parser for email from ' + data.fromAddress);
+    }
 };
