@@ -55,12 +55,12 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
     if (input.indexOf('学生') > -1) {
         return -1;
     }
-    console.log(input);
+
     if (input.indexOf('工作经验') > -1) {
-        var first = input.trim().substr(0, 1);
-        if (/\d+/.test(first)) {
-            return _.parseInt(first);
+        if (/\d+/.test(input)) {
+            return exports.onlyNumber(input);
         } else {
+            var first = input.trim().charAt(0);
             return chineseToNumberMap[first];
         }
     }
