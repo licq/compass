@@ -169,9 +169,9 @@ function parseProjectExperience(table) {
 
             _.forEach(parts.slice(1), function (item) {
                 var parts = item.split(/：/g);
-                if (parts[0].trim() === '开发工具') result.developmentTools = parts[1];
-                else if (parts[0].trim() === '软件环境') result.softwareEnviroment = parts[1];
-                else if (parts[0].trim() === '硬件环境') result.hardwareEnviroment = parts[1];
+                if (helper.isDevelopmentTools(parts[0])) result.developmentTools = parts[1];
+                else if (helper.isSoftwareEnviroment(parts[0])) result.softwareEnviroment = parts[1];
+                else if (helper.isHardwareEnviroment(parts[0])) result.hardwareEnviroment = parts[1];
             });
 
             return result;
@@ -256,4 +256,3 @@ function parseInSchoolStudy(table) {
         logger.error(e.stack);
     }
 }
-

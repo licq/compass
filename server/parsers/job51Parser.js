@@ -32,7 +32,6 @@ exports.parse = function (data) {
         }
         return current;
     }
-
 };
 
 exports.test = function (data) {
