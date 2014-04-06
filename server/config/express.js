@@ -30,6 +30,7 @@ module.exports = function (app, config) {
         app.use(express.static(config.rootPath + '/public'));
         app.use(expressWinston.logger({
             transports: winston.transports,
+            meta: false,
             msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
         }));
         app.use(express.cookieParser());
