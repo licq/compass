@@ -18,13 +18,16 @@
             <div class="col-md-12">
                 <div class="widget">
                     <div class="widget-head">
-                        <div class="pull-left">{{mail.fromName}}( {{mail.fromAddress}})</div>
+                        <div class="pull-left">
+                            <span>{{mail.fromName}}({{mail.fromAddress}})</span>
+                            <span class="mail-title">{{mail.subject}}</span>
+                        </div>
+
                         <div class="pull-right">{{mail.date | date:'yyyy/MM/dd hh:mm:ss'}}</div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="widget-content">
-                        <div class="well" ng-bind-html="mail.html">
-                        </div>
+                        <iframe class="mail-frame" ng-src="{{mail.htmlUrl}}"></iframe>
                     </div>
                     <div class="widget-foot">
                         <button class="btn btn-sm btn-primary" ng-click="parse()">重新解析</button>

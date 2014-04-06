@@ -25,9 +25,9 @@ module.exports = function (app) {
     app.param('emailId', sessions.requiresLogin, emails.load);
 
     app.get('/api/mails', sessions.requiresLogin, mails.list);
-    app.get('/api/mails/:mailId', mails.get);
-    app.put('/api/mails/:mailId', mails.parse);
-    app.param('mailId', sessions.requiresLogin, mails.load);
+    app.get('/api/mails/:id', sessions.requiresLogin, mails.get);
+    app.put('/api/mails/:id', sessions.requiresLogin, mails.parse);
+    app.get('/api/mails/:id/html', sessions.requiresLogin, mails.getHtml);
 
     app.post('/api/users', sessions.requiresLogin, users.create);
     app.get('/api/users', sessions.requiresLogin, users.list);

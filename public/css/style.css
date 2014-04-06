@@ -2265,3 +2265,14 @@ footer .copy {
     float: none;
     display: none;
 }
+
+.mail-title {
+    margin-left: 50px;
+    font-size: 15px;
+}
+
+.mail-frame {
+    width: 100%;
+    height: 800px;
+    border: none;
+}

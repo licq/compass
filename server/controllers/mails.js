@@ -21,24 +21,36 @@ exports.list = function (req, res, next) {
     });
 };
 
-
-exports.parse = function (req, res) {
-    console.log('parse');
-    jobs.addParseResumeJob(req.mail, function () {
-        res.end();
-    });
-};
-
-exports.get = function (req, res) {
-    res.json(req.mail);
-};
-
-exports.load = function (req, res, next, id) {
-    Mail.findOne({_id: id, company: req.user.company})
+exports.getHtml = function (req, res) {
+    Mail.findOne({_id: req.params.id, company: req.user.company})
+        .select('html')
         .exec(function (err, mail) {
             if (err) return next(err);
             if (!mail) return res.send(404, {message: id + 'not found'});
-            req.mail = mail;
-            next();
+            res.send(mail.html);
+        });
+};
+
+
+exports.parse = function (req, res) {
+    Mail.findOne({_id: req.params.id, company: req.user.company})
+        .select('html subject company fromAddress')
+        .exec(function (err, mail) {
+            if (err) return next(err);
+            if (!mail) return res.send(404, {message: id + 'not found'});
+            jobs.addParseResumeJob(mail, function () {
+                res.end();
+            });
+        });
+};
+
+exports.get = function (req, res) {
+    Mail.findOne({_id: req.params.id, company: req.user.company})
+        .select('subject date fromAddress fromName')
+        .exec(function (err, mail) {
+            if (err) return next(err);
+            if (!mail) return res.send(404, {message: id + 'not found'});
+            var result = {htmlUrl: req.url + '/html'};
+            res.json(_.extend(result,mail._doc));
         });
 };
