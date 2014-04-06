@@ -19,24 +19,24 @@ angular.module('compass')
         var dateFilter = $filter('date');
         return function (date) {
             return dateFilter(date, 'yyyy年M月');
-        }
+        };
     })
     .filter('shortDate', function ($filter) {
         var dateFilter = $filter('date');
         return function (date) {
             return dateFilter(date, 'yyyy年M月d日');
-        }
+        };
     })
     .filter('longDate', function ($filter) {
         var dateFilter = $filter('date');
         return function (date) {
             return dateFilter(date, 'yyyy年M月d日 HH:mm:ss');
-        }
+        };
     })
     .filter('yearsOfExperience', function () {
         return function (input) {
             if (input === 0) return '应届毕业生';
             if (input === -1) return '学生';
             return '' + input + '年';
-        }
+        };
     });
