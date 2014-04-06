@@ -5,7 +5,7 @@ var fs = require('fs'),
 describe('job51Parser', function () {
 
     describe('#parse', function () {
-        it('should parse 51job resume correctly', function (done) {
+        it.only('should parse 51job resume correctly', function (done) {
             fs.readFile(__dirname + '/51jobresume.html', 'utf-8', function (err, data) {
                 var resume = resumeParser.parse({
                     html: data

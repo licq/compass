@@ -123,24 +123,24 @@ exports.replaceEmpty = function replaceEmpty(input) {
     return input.replace(/\n|\s+/g, ' ').trim();
 };
 
-exports.parseTable = function parseTable(table, $) {
+exports.parseTable = function parseTable(table) {
     var items = [];
-    $('tr', $(table)).each(function () {
+    table.find('tr').each(function () {
         var item = [];
-        $(this).find('td').each(function () {
-            item.push(exports.replaceEmpty($(this).text()));
+        this.find('td').each(function () {
+            item.push(exports.replaceEmpty(this.text()));
         });
         items.push(item);
     });
     return items;
 };
 
-exports.parseTableHtml = function parseTableHtml(table, $) {
+exports.parseTableHtml = function parseTableHtml(table) {
     var items = [];
-    $('tr', $(table)).each(function () {
+    table.find('tr').each(function () {
         var item = [];
-        $(this).find('td').each(function () {
-            item.push(exports.replaceEmpty($(this).html()));
+        this.find('td').each(function () {
+            item.push(exports.replaceEmpty(this.html()));
         });
         items.push(item);
     });
