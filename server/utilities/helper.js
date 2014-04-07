@@ -58,7 +58,7 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
 
     if (input.indexOf('工作经验') > -1) {
         if (/\d+/.test(input)) {
-            return exports.onlyNumber(input);
+            return _.parseInt(exports.onlyNumber(input));
         } else {
             var first = input.trim().charAt(0);
             return chineseToNumberMap[first];
@@ -348,3 +348,15 @@ exports.chunkByEmptyArray = function chunk(input) {
     result.push(input.slice(start));
     return result;
 };
+
+exports.isProjectDescription = function isProjectDescription(input) {
+    return input.indexOf('项目描述') > -1;
+};
+
+exports.isProjectResponsibility = function isProjectResponsibility(input) {
+    return input.indexOf('责任描述') > -1;
+};
+
+exports.removeTags = function removeTags(input) {
+    return input.replace(/<\/?.+?>/g, '').replace(/(&nbsp;)+/g, '');
+}

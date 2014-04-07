@@ -169,7 +169,11 @@ var resumeSchema = mongoose.Schema({
         ref: 'Company'
     },
 
-    channel: String
+    channel: String,
+    mail: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mail'
+    }
 
 });
 

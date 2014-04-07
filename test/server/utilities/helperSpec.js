@@ -348,4 +348,24 @@ describe('helper', function () {
                 ]);
         });
     });
+
+    describe('#isProjectDescription', function () {
+        it('should return correctly', function () {
+            expect(helper.isProjectDescription('责任描述：数据清理和模型设计')).to.be.false;
+            expect(helper.isProjectDescription('项目描述：本次项目，选用国美电器某门店的进销存系统数据作为分析对象。')).to.be.true;
+        });
+    });
+
+    describe('#isProjectResponsibility', function () {
+        it('should return correctly', function () {
+            expect(helper.isProjectResponsibility('责任描述：数据清理和模型设计')).to.be.true;
+            expect(helper.isProjectResponsibility('项目描述：本次项目，选用国美电器某门店的进销存系统数据作为分析对象。')).to.be.false;
+        });
+    });
+
+    describe('#removeTags', function () {
+        it('should remove all tags', function () {
+            expect(helper.removeTags('<br>beijing</html>tianjin<div id="awsome">shanghai&nbsp;&nbsp;')).to.equal('beijingtianjinshanghai');
+        });
+    });
 });
