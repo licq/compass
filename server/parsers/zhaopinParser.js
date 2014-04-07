@@ -147,36 +147,7 @@ function parseProjectExperience(table) {
     if (table.length === 0) return;
 
     try {
-//        var divs = table.find('div.resume_p');
         var html = table.find('td').html();
-
-//        var projectTitles = html.split(/<div.*?<\/div>\s*?<div.*?<\/div>/g).slice(0, -1);
-//        var projectLength = divs.length / 2;
-//        return _.times(projectLength, function (n) {
-//            console.log(projectLength);
-//            var firstDiv = divs.eq(n * 2);
-//            var secondDiv = divs.eq(n * 2 + 1);
-//            var parts = helper.replaceEmpty(projectTitles[n].split(/<br\/?>|<\/?p>/g));
-//            var divideAt = parts[0].indexOf('：');
-//            var dateRange = helper.parseDateRange(parts[0].substr(0, divideAt));
-//
-//            var result = {
-//                from: dateRange.from,
-//                to: dateRange.to,
-//                name: parts[0].substr(divideAt + 1),
-//                responsibility: helper.replaceEmpty(firstDiv.text()).substr(5),
-//                description: secondDiv.text().trim().substr(5)
-//            };
-//
-//            _.forEach(parts.slice(1), function (item) {
-//                var parts = item.split(/：/g);
-//                if (helper.isDevelopmentTools(parts[0])) result.developmentTools = parts[1];
-//                else if (helper.isSoftwareEnviroment(parts[0])) result.softwareEnviroment = parts[1];
-//                else if (helper.isHardwareEnviroment(parts[0])) result.hardwareEnviroment = parts[1];
-//            });
-//            return result;
-//        });
-//        console.log(html);
         var projects = html.split(/<\/div><br>/g);
         return _.map(projects, function (project) {
             var parts = helper.replaceEmpty(project.substr(0, project.indexOf('<div')).split(/<br\/?>|<\/?p>/g));
@@ -205,12 +176,11 @@ function parseProjectExperience(table) {
 
             return result;
         });
-
-
     } catch (e) {
         logger.error(e.stack);
     }
 }
+
 function parseCertifications(table) {
     if (table.length === 0) return;
     try {
