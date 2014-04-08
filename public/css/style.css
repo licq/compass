@@ -2280,3 +2280,11 @@ footer .copy {
 .resume-table {
     margin-top: 10px;
 }
+
+.resume table tr td:nth-child(1) {
+    width: 200px;
+}
+
+.nav-tabs li a {
+    cursor: pointer;
+}

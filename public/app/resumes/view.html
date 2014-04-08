@@ -12,10 +12,12 @@
 
 </div>
 
-<div class="matter">
+<div class="matter resume">
 <div class="container">
 <div class="row">
 <div class="col-md-12">
+<tabset>
+<tab heading="简历">
 <div class="widget">
     <div class="widget-head">
         <div class="pull-left">个人信息</div>
@@ -24,7 +26,7 @@
     <div class="widget-content">
         <table class="table table-bordered table-responsive">
             <tr>
-                <td class="">姓名</td>
+                <td>姓名</td>
                 <td>{{resume.name}}</td>
                 <td>性别</td>
                 <td>{{resume.gender | gender}}</td>
@@ -335,8 +337,11 @@
     </div>
     <div class="widget-footer"></div>
 </div>
-
-
+</tab>
+<tab heading="原始邮件" select="setMailHtml()">
+    <iframe class="mail-frame" ng-src="{{mailHtml}}"></iframe>
+</tab>
+</tabset>
 </div>
 </div>
 </div>
