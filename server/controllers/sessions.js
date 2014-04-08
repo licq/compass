@@ -8,14 +8,14 @@ exports.authenticate = function (req, res, next) {
     passport.authenticate('local',
         { badRequestMessage: '用户名或密码不正确' },
         function (err, user, info) {
-        var error = err || info;
-        if (error) return res.json(401, error);
+            var error = err || info;
+            if (error) return res.json(401, error);
 
-        req.logIn(user, function (err) {
-            if (err) return res.json(err);
-            return next();
-        });
-    })(req, res, next);
+            req.logIn(user, function (err) {
+                if (err) return res.json(err);
+                return next();
+            });
+        })(req, res, next);
 };
 
 exports.rememberMe = function (req, res, next) {
@@ -23,9 +23,9 @@ exports.rememberMe = function (req, res, next) {
         return res.json(req.user);
     }
 
-    Token.create({user: req.user._id}, function (err, tokenId) {
+    Token.create({user: req.user._id}, function (err, token) {
         if (!err) {
-            res.cookie('remember_me', tokenId, { path: '/', httpOnly: true, maxAge: 604800000 });
+            res.cookie('remember_me', token.id, { path: '/', httpOnly: true, maxAge: 604800000 });
         }
         res.json(req.user);
     });

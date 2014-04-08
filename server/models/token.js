@@ -9,9 +9,14 @@ var tokenSchema = mongoose.Schema({
         ref: 'User'},
     _id: {
         type: String,
-        default: uuid.v1(),
         unique: true
     }
+});
+
+tokenSchema.pre('save', function (next) {
+    if (!this.isNew) return next();
+    this._id = uuid.v1();
+    next();
 });
 
 mongoose.model('Token', tokenSchema);

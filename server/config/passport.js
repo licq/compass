@@ -37,12 +37,17 @@ module.exports = function () {
     ));
 
     passport.use(new RememberMeStrategy(
-        function (token, done) {
-            Token.findByIdAndRemove(token, function (err, user) {
+        function (tokenId, done) {
+            Token.findByIdAndRemove(tokenId, function (err, token) {
                 if (err) return done(err);
-                if (!user) return done(null, false);
+                if (!token) return done(null, false);
 
-                return done(null, user);
+                User.findById(token.user, function (err, user) {
+                    if (err) return done(err);
+                    if (!user) return done(null, false);
+
+                    return done(null, user);
+                });
             });
         },
         function (user, done) {
