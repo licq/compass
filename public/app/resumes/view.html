@@ -20,41 +20,55 @@
                     <div class="widget-head">
                         <div class="pull-left">{{resume.name}}</div>
                         <div class="pull-right">{{resume.applyPosition}}</div>
+                        <div class="clearfix"></div>
                     </div>
                     <div class="widget-content">
-                        <div class="basic-info">
-                            <table>
-                                <tr>
-                                    <td>姓名</td>
-                                    <td>{{resume.name}}</td>
-                                    <td>性别</td>
-                                    <td>{{resume.gender}}</td>
-                                    <td>出生年月</td>
-                                    <td>{{resume.birthday | yearAndMonth}}</td>
-                                    <td>工作年限</td>
-                                    <td>{{resume.yearsOfExperience | yearsOfExperience}}</td>
-                                </tr>
-                                <tr>
-                                    <td>户口</td>
-                                    <td>{{resume.hukou}}</td>
-                                    <td>居住地</td>
-                                    <td>{{resume.residency}}</td>
-                                    <td>政治面貌</td>
-                                    <td>{{resume.politicalStatus}}</td>
-                                    <td>婚姻状况</td>
-                                    <td>{{resume.civilState}}</td>
-                                </tr>
-                                <tr>
-                                    <td>手机</td>
-                                    <td>{{resume.mobile}}</td>
-                                    <td>邮箱</td>
-                                    <td>{{resume.email}}</td>
-                                    <td>渠道</td>
-                                    <td>{{resume.channel}}</td>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>姓名</td>
+                                        <td>{{resume.name}}</td>
+                                        <td>性别</td>
+                                        <td>{{resume.gender}}</td>
+                                        <td>出生年月</td>
+                                        <td>{{resume.birthday | yearAndMonth}}</td>
+                                        <td>工作年限</td>
+                                        <td>{{resume.yearsOfExperience | yearsOfExperience}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>户口</td>
+                                        <td>{{resume.hukou}}</td>
+                                        <td>居住地</td>
+                                        <td>{{resume.residency}}</td>
+                                        <td>政治面貌</td>
+                                        <td>{{resume.politicalStatus}}</td>
+                                        <td>婚姻状况</td>
+                                        <td>{{resume.civilState}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>手机</td>
+                                        <td>{{resume.mobile}}</td>
+                                        <td>邮箱</td>
+                                        <td>{{resume.email}}</td>
+                                        <td>渠道</td>
+                                        <td>{{resume.channel}}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
 
-                                </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3>工作经验</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div ng-repeat="work in resume.workExperience">
 
-                            </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="widget-footer"></div>

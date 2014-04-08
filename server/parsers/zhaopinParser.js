@@ -150,6 +150,7 @@ function parseProjectExperience(table) {
         var html = table.find('td').html();
         var projects = html.split(/<\/div><br>/g);
         return _.map(projects, function (project) {
+            project = project + '</div>';
             var parts = helper.replaceEmpty(project.substr(0, project.indexOf('<div')).split(/<br\/?>|<\/?p>/g));
             var titleParts = parts[0].split('：');
             var dateRange = helper.parseDateRange(titleParts[0]);
@@ -161,10 +162,9 @@ function parseProjectExperience(table) {
             };
 
             _.forEach(descriptions, function (description) {
-                description = helper.removeTags(description);
-                var parts = description.split('：');
-                if (helper.isProjectDescription(parts[0])) result.description = parts[1];
-                if (helper.isProjectResponsibility(parts[0])) result.responsibility = parts[1];
+                description = helper.removeSpaces(helper.removeTags(description));
+                if (helper.isProjectDescription(description.substr(0, 4))) result.description = description.substr(5);
+                if (helper.isProjectResponsibility(description.substr(0, 4))) result.responsibility = description.substr(5);
             });
 
             _.forEach(parts.slice(1), function (item) {
