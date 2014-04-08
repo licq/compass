@@ -38,7 +38,7 @@ angular.module('compass')
             if (input === 0) return '应届毕业生';
             if (input === -1) return '学生';
             if (typeof(input) === 'undefined') return '';
-            return '' + input + '年';    
+            return '' + input + '年';
         };
     })
     .filter('gender', function () {
@@ -146,7 +146,7 @@ angular.module('compass')
                 'excellent': '精通',
             };
             return languageSkillMap[input];
-        }
+        };
     })
     .filter('englishCertificate', function () {
         return function (input) {
@@ -171,7 +171,7 @@ angular.module('compass')
                 'level4': '四级',
             };
             return japaneseCertificateMap[input];
-        }
+        };
     })
     .filter('itSkillLevel', function () {
         return function (input) {
