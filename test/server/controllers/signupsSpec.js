@@ -33,8 +33,7 @@ describe('singups', function () {
                     .expect(200)
                     .expect('Content-Type', /json/)
                     .end(function (err) {
-                        if (err) return done(err);
-                        done();
+                        done(err);
                     });
             });
         });
@@ -42,7 +41,7 @@ describe('singups', function () {
 
     describe('PUT /api/signups/:id', function () {
         it('should create company and user', function (done) {
-            Factory('signup', function (signup) {
+            Factory.create('signup', function (signup) {
                 request(app)
                     .put('/api/signups/' + signup._id)
                     .expect(200)

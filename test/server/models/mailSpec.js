@@ -42,9 +42,9 @@ describe('Mail', function () {
         });
 
         it('should associate one company', function (done) {
-            Factory('company', function (company) {
-                Factory('email', {company: company._id}, function (email) {
-                    Factory('mail', {mailbox: email.address}, function (mail) {
+            Factory.create('company', function (company) {
+                Factory.create('email', {company: company._id}, function (email) {
+                    Factory.create('mail', {mailbox: email.address}, function (mail) {
                         expect(mail.company.equals(company._id)).to.be.true;
                         expect(mail.fromName).to.equal(mail.from[0].name);
                         expect(mail.fromAddress).to.equal(mail.from[0].address);

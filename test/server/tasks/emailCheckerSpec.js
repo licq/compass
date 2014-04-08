@@ -1,3 +1,5 @@
+'use strict';
+
 var emailChecker = require('../../../server/tasks/emailChecker'),
     expect = require('chai').expect;
 

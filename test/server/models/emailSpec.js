@@ -33,7 +33,7 @@ describe('Email', function () {
         });
 
         it('should fail to save an existing email address again', function (done) {
-            Factory('email', function (email) {
+            Factory.create('email', function (email) {
                 Factory.build('email', {address: email.address}, function (aemail) {
                     aemail.save(function (err) {
                         expect(err).to.exist;
@@ -91,7 +91,7 @@ describe('Email', function () {
 
     describe('#setActivity', function () {
         it('should set activity to the same email account', function (done) {
-            Factory('email', function (email) {
+            Factory.create('email', function (email) {
                 Email.setActivity({
                     address: email.address,
                     count: 10,

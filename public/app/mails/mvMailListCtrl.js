@@ -55,7 +55,9 @@ angular.module('compass')
 
         $scope.$watch('states', function (newVal, oldVal) {
             if (newVal !== oldVal) {
-                if (newVal.pagingOptions.pageSize !== oldVal.pagingOptions.pageSize) $scope.states.pagingOptions.currentPage = 1;
+                if (newVal.pagingOptions.pageSize !== oldVal.pagingOptions.pageSize) {
+                    $scope.states.pagingOptions.currentPage = 1;
+                }
                 $scope.getMails($scope.states.pagingOptions.pageSize, $scope.states.pagingOptions.currentPage,
                     $scope.states.filterOptions.filterText);
             }

@@ -16,7 +16,7 @@ describe('/api/mails', function () {
         Company.remove().exec();
         User.remove().exec();
 
-        Factory('user', function (user) {
+        Factory.create('user', function (user) {
             Factory.build('mail', function (mail) {
                 mailId = mail._id;
                 mail.company = user.company;

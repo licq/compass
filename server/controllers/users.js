@@ -29,7 +29,7 @@ exports.create = function (req, res) {
     });
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res,next) {
     req.loadedUser.deleted = true;
     req.loadedUser.save(function (err) {
         if (err) return next(err);

@@ -1,3 +1,5 @@
+'use strict';
+
 var Factory = require('factory-lady'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),

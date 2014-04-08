@@ -1,3 +1,5 @@
+'use strict';
+
 var mailer = require('../../../server/tasks/mailer');
 
 describe.skip('mailer', function () {

@@ -1,43 +1,9 @@
+'use strict';
+
 var cheerio = require('cheerio'),
     _ = require('lodash'),
     helper = require('../utilities/helper'),
     logger = require('../config/winston').logger();
-
-exports.parse = function (data) {
-    var $ = cheerio.load(data.html);
-    var resume = parseBasicInfo($('table tr:nth-child(2) table'));
-    resume.name = $('strong').text().trim();
-    resume.careerObjective = parseCareerObjective(findTable('求职意向'));
-    resume.careerObjective.selfAssessment = $('#Cur_Val').text();
-    resume.workExperience = parseWorkExperience(findTable('工作经验'));
-    resume.projectExperience = parseProjectExperience(findTable('项目经验'));
-    resume.educationHistory = parseEducationHistory(findTable('教育经历'));
-    resume.trainingHistory = parseTrainingHistory(findTable('培训经历'));
-    resume.certifications = parseCertifications(findTable('证'));
-    resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
-    resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'));
-    resume.itSkills = parseItSkills(findTable('IT'));
-    resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'));
-    resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
-    resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
-    resume.matchRate = helper.parseMatchRate($('font b').text());
-    resume.channel = '前程无忧';
-    resume.mail = data.mailId;
-    resume.company = data.company;
-    return resume;
-
-    function findTable(name) {
-        var current = $('td.cvtitle:contains(' + name + ')').parent().next();
-        while (current.find('table').length === 0 && current.next().length !== 0) {
-            current = current.next();
-        }
-        return current;
-    }
-};
-
-exports.test = function (data) {
-    return data.fromAddress.indexOf('51job') > -1;
-};
 
 function parseCertifications(table) {
     if (table.length === 0) return;
@@ -176,7 +142,7 @@ function parseEducationHistory(table) {
                 major: tableData[n * 2][2],
                 degree: helper.parseDegree(tableData[n * 2][3]),
                 description: tableData[n * 2 + 1][0]
-            }
+            };
         });
     } catch (e) {
         logger.error(e.stack);
@@ -230,7 +196,7 @@ function parseLanguageCertificates(table) {
             return line[0].indexOf('等级') > -1;
         }), function (line) {
             if (helper.isEnglishCertificate(line[0]))
-                languageCertificates.english = helper.parseEnglishCertificate(line[1])
+                languageCertificates.english = helper.parseEnglishCertificate(line[1]);
         });
         return languageCertificates;
     } catch (e) {
@@ -254,3 +220,41 @@ function parseInSchoolPractices(table) {
         logger.error(e.stack);
     }
 }
+
+exports.parse = function (data) {
+    var $ = cheerio.load(data.html);
+    var findTable = function (name) {
+        var current = $('td.cvtitle:contains(' + name + ')').parent().next();
+        while (current.find('table').length === 0 && current.next().length !== 0) {
+            current = current.next();
+        }
+        return current;
+    };
+
+    var resume = parseBasicInfo($('table tr:nth-child(2) table'));
+    resume.name = $('strong').text().trim();
+    resume.careerObjective = parseCareerObjective(findTable('求职意向'));
+    resume.careerObjective.selfAssessment = $('#Cur_Val').text();
+    resume.workExperience = parseWorkExperience(findTable('工作经验'));
+    resume.projectExperience = parseProjectExperience(findTable('项目经验'));
+    resume.educationHistory = parseEducationHistory(findTable('教育经历'));
+    resume.trainingHistory = parseTrainingHistory(findTable('培训经历'));
+    resume.certifications = parseCertifications(findTable('证'));
+    resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
+    resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'));
+    resume.itSkills = parseItSkills(findTable('IT'));
+    resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'));
+    resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
+    resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
+    resume.matchRate = helper.parseMatchRate($('font b').text());
+    resume.channel = '前程无忧';
+    resume.mail = data.mailId;
+    resume.company = data.company;
+    return resume;
+
+};
+
+exports.test = function (data) {
+    return data.fromAddress.indexOf('51job') > -1;
+};
+

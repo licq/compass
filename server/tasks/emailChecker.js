@@ -1,3 +1,5 @@
+"use strict";
+
 var POPClient = require('poplib'),
     logger = require('../config/winston').logger();
 
@@ -50,7 +52,7 @@ exports.check = function (mailbox, callback) {
         if (status === true) logger.info("verify QUIT success");
         else logger.info("verify QUIT failed");
 
-        if (correct) callback(null)
+        if (correct) callback(null);
         else callback('login failed');
     });
-}
+};

@@ -1,3 +1,5 @@
+'use strict';
+
 var emailFetcher = require('../../../server/tasks/emailFetcher'),
     expect = require('chai').expect,
     mailer = require('../../../server/tasks/mailer'),

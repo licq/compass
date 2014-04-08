@@ -16,7 +16,7 @@ describe('users', function () {
     beforeEach(function (done) {
         User.remove().exec();
         Company.remove().exec();
-        Factory('user', function (user) {
+        Factory.create('user', function (user) {
             existUser = user;
             request(app).post('/api/sessions')
                 .send({email: user.email, password: user.password})

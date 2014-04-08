@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash'),
     logger = require('../config/winston').logger();
 

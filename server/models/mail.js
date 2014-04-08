@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
     timestamps = require('mongoose-timestamps');

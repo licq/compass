@@ -52,7 +52,7 @@ userSchema.virtual('info').get(function () {
         name: this.name,
         email: this.email,
         id: this._id
-    }
+    };
 });
 
 var validatePresenceOf = function (value) {

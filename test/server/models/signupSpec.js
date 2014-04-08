@@ -34,7 +34,7 @@ describe('Signup', function () {
 
 
         it('should show error if the company already existed', function (done) {
-            Factory('company', function (company) {
+            Factory.create('company', function (company) {
                 Factory.build('signup', {companyName: company.name}, function (signup) {
                     signup.save(function (err) {
                         expect(err).to.exist;
@@ -47,7 +47,7 @@ describe('Signup', function () {
         });
 
         it('should show error if the user already existed', function (done) {
-            Factory('user', function (user) {
+            Factory.create('user', function (user) {
                 Factory.build('signup', {'adminEmail': user.email}, function (signup) {
                     signup.save(function (err) {
                         expect(err).to.exist;
@@ -70,7 +70,7 @@ describe('Signup', function () {
 
     describe('#activate', function () {
         it('should create new company and admin use when activate', function (done) {
-            Factory('signup', function (signup) {
+            Factory.create('signup', function (signup) {
                 signup.activate(function (err, company, user) {
                     expect(err).to.not.exist;
                     expect(company).to.exist;

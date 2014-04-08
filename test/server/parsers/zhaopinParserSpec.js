@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
     resumeParser = require('../../../server/parsers/zhaopinParser'),
     expect = require('chai').expect;

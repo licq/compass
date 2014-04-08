@@ -3,15 +3,23 @@
 angular.module('compass')
     .filter('state', function () {
         return function (input) {
-            if (!input) return '正常';
-            if (input === 'connect failed') return '服务器无法连接';
-            if (input === 'login failed') return '用户名或密码不正确';
+            if (!input) {
+                return '正常';
+            }
+            if (input === 'connect failed') {
+                return '服务器无法连接';
+            }
+            if (input === 'login failed') {
+                return '用户名或密码不正确';
+            }
             return input;
         };
     })
     .filter('deletedState', function () {
         return function (deleted) {
-            if (deleted) return '已删除';
+            if (deleted) {
+                return '已删除';
+            }
             return '正常';
         };
     })
@@ -35,78 +43,72 @@ angular.module('compass')
     })
     .filter('yearsOfExperience', function () {
         return function (input) {
-            if (input === 0) return '应届毕业生';
-            if (input === -1) return '学生';
-            if (typeof(input) === 'undefined') return '';
+            if (input === 0) {
+                return '应届毕业生';
+            }
+            if (input === -1) {
+                return '学生';
+            }
+            if (typeof(input) === 'undefined') {
+                return '';
+            }
             return '' + input + '年';
         };
     })
     .filter('gender', function () {
         return function (input) {
-            if (input === 'male') return '男';
-            if (input === 'female') return '女';
+            var genderMap = {
+                'male': '男',
+                'female': '女'
+            };
+            return genderMap[input];
         };
     })
     .filter('politicalStatus', function () {
         return function (input) {
-            switch (input) {
-                case 'party member':
-                    return '党员';
-                case 'league member':
-                    return '团员';
-                case 'democratic part':
-                    return '民主党派';
-                case 'no party':
-                    return '无党派';
-                case 'citizen':
-                    return '群众';
-                case 'others':
-                    return '其他';
-            }
+            var politicalStatusMap = {
+                'party member': '党员',
+                'league member': '团员',
+                'democratic part': '民主党派',
+                'no party': '无党派',
+                'citizen': '群众',
+                'others': '其他'
+            };
+            return politicalStatusMap[input];
         };
     })
     .filter('civilState', function () {
         return function (input) {
-            switch (input) {
-                case 'married':
-                    return '已婚';
-                case 'single':
-                    return '单身';
-                case 'divorced':
-                    return '离异';
-                case 'confidential':
-                    return '隐私';
-            }
+            var civilStateMap = {
+                'single': '单身',
+                'married': '已婚',
+                'divorced': '离异',
+                'confidential': '隐私'
+            };
+            return civilStateMap[input];
         };
     })
     .filter('typeOfEmployment', function () {
         return function (input) {
-            switch (input) {
-                case 'fulltime':
-                    return '全职';
-                case 'parttime':
-                    return '兼职';
-                case 'intern':
-                    return '实习';
-            }
+            var typeOfEmploymentMap = {
+                'fulltime': '全职',
+                'parttime': '兼职',
+                'intern': '实习'
+            };
+            return typeOfEmploymentMap[input];
         };
     })
     .filter('entryTime', function () {
         return function (input) {
-            switch (input) {
-                case 'immediately':
-                    return '立即';
-                case 'within 1 week':
-                    return '一周以内';
-                case 'within 1 month':
-                    return '一个月以内';
-                case '1 to 3 months':
-                    return '一到三个月';
-                case 'after 3 months':
-                    return '三个月以上';
-                case 'to be determined':
-                    return '待定';
-            }
+            var entryTimeMap = {
+                'immediately': '立即',
+                'within 1 week': '一周以内',
+                'within 1 month': '一个月以内',
+                '1 to 3 months': '一到三个月',
+                'after 3 months': '三个月以上',
+                'to be determined': '待定'
+            };
+            return entryTimeMap[input];
         };
     })
     .filter('degree', function () {

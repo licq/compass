@@ -1,45 +1,10 @@
+'use strict';
+
+
 var cheerio = require('cheerio'),
     logger = require('../config/winston').logger(),
     _ = require('lodash'),
     helper = require('../utilities/helper');
-
-exports.parse = function (data) {
-    var $ = cheerio.load(data.html);
-    var resume;
-    if ($('html html').length > 0) {
-        resume = parseBasicInfo($('td tr:nth-child(1) table:nth-child(1)'));
-        resume.letter = helper.replaceEmpty($('html html p').text());
-    } else {
-        resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'));
-    }
-
-    resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标'));
-    resume.workExperience = parseWorkExperience(findTable('工作经历'));
-    resume.educationHistory = parseEducationHistory(findTable('教育经历'));
-    resume.certifications = parseCertifications(findTable('证书'));
-    resume.itSkills = parseItSkills(findTable('专业技能'));
-    resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
-    resume.projectExperience = parseProjectExperience(findTable('项目经验'));
-    resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'));
-    resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
-    resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
-    resume.channel = '智联招聘';
-    resume.company = data.company;
-    resume.mail = data.mailId;
-
-    return resume;
-
-    function findTable(name, another) {
-        var table = $('span:contains(' + name + ')').closest('table').next().next();
-        if (table.length !== 0) return table;
-        return  $('span:contains(' + another + ')').closest('table').next().next();
-    }
-};
-
-exports.test = function (data) {
-    return data.fromAddress.indexOf('zhaopin') > -1;
-};
-
 
 function parseBasicInfo(table) {
     if (table.length === 0) return {};
@@ -237,3 +202,42 @@ function parseInSchoolStudy(table) {
         logger.error(e.stack);
     }
 }
+
+exports.parse = function (data) {
+    var $ = cheerio.load(data.html);
+    var findTable = function (name, another) {
+        var table = $('span:contains(' + name + ')').closest('table').next().next();
+        if (table.length !== 0) return table;
+        return  $('span:contains(' + another + ')').closest('table').next().next();
+    };
+
+    var resume;
+    if ($('html html').length > 0) {
+        resume = parseBasicInfo($('td tr:nth-child(1) table:nth-child(1)'));
+        resume.letter = helper.replaceEmpty($('html html p').text());
+    } else {
+        resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'));
+    }
+
+    resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标'));
+    resume.workExperience = parseWorkExperience(findTable('工作经历'));
+    resume.educationHistory = parseEducationHistory(findTable('教育经历'));
+    resume.certifications = parseCertifications(findTable('证书'));
+    resume.itSkills = parseItSkills(findTable('专业技能'));
+    resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
+    resume.projectExperience = parseProjectExperience(findTable('项目经验'));
+    resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'));
+    resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
+    resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
+    resume.channel = '智联招聘';
+    resume.company = data.company;
+    resume.mail = data.mailId;
+
+    return resume;
+
+};
+
+exports.test = function (data) {
+    return data.fromAddress.indexOf('zhaopin') > -1;
+};
+

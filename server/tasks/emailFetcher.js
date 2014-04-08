@@ -1,3 +1,5 @@
+'use strict';
+
 var POPClient = require('poplib'),
     _ = require('lodash'),
     MailParser = require('mailparser').MailParser,
@@ -5,6 +7,29 @@ var POPClient = require('poplib'),
     Mail = mongoose.model('Mail'),
     logger = require('../config/winston').logger();
 
+function saveToDB(mail, address, callback) {
+    mail.mailbox = address;
+    Mail.create(mail, function (err, created) {
+        require('./jobs').addParseResumeJob(created, function () {
+            callback(err);
+        });
+    });
+}
+
+function parse(mailData, callback) {
+    var mailParser = new MailParser({
+        debug: false,
+        defaultCharset: 'gbk',
+        streamAttachments: true,
+        showAttachmentLinks: true
+    });
+    mailParser.write(mailData);
+    mailParser.end();
+
+    mailParser.on('end', function (mail) {
+        callback(mail);
+    });
+}
 
 exports.fetch = function (mailbox, callback) {
     var correct = false;
@@ -102,26 +127,3 @@ exports.fetch = function (mailbox, callback) {
 };
 
 
-function saveToDB(mail, address, callback) {
-    mail.mailbox = address;
-    Mail.create(mail, function (err, created) {
-        require('./jobs').addParseResumeJob(created, function () {
-            callback(err);
-        });
-    });
-}
-
-function parse(mailData, callback) {
-    var mailParser = new MailParser({
-        debug: false,
-        defaultCharset: 'gbk',
-        streamAttachments: true,
-        showAttachmentLinks: true
-    });
-    mailParser.write(mailData);
-    mailParser.end();
-
-    mailParser.on('end', function (mail) {
-        callback(mail);
-    });
-}

@@ -1,3 +1,5 @@
+'use strict';
+
 var jobs = require('../../../server/tasks/jobs'),
     Factory = require('../factory'),
     mongoose = require('mongoose'),

@@ -1,3 +1,5 @@
+"use strict";
+
 var kue = require('kue'),
     mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
@@ -48,7 +50,7 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
 
         job.save(function (err) {
             if (err) logger.info(err);
-            callback && callback(err);
+            if (callback) callback(err);
         });
     };
 

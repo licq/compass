@@ -31,7 +31,7 @@ describe('User', function () {
         });
 
         it('should fail to save an existing user again', function (done) {
-            Factory('user', function (user) {
+            Factory.create('user', function (user) {
                 Factory.build('user', {email: user.email}, function (user2) {
                     user2.save(function (err) {
                         expect(err).to.exist;
@@ -65,7 +65,7 @@ describe('User', function () {
 
     describe('#attributes', function () {
         it('should have createdat and updatedat timestamp', function (done) {
-            Factory('user', function (user) {
+            Factory.create('user', function (user) {
                 expect(user.created_at).to.exist;
                 expect(user.updated_at).to.exist;
                 done();

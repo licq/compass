@@ -1,3 +1,5 @@
+"use strict";
+
 var _ = require('lodash');
 
 exports.onlyNumber = function onlyNumber(input) {
@@ -78,7 +80,7 @@ var entryTimeMap = {
 };
 
 exports.parseEntryTime = function parseEntryTime(input) {
-    var result = undefined;
+    var result;
     _.forEach(entryTimeMap, function (value, key) {
         if (input.indexOf(key) > -1) {
             result = value;
@@ -184,7 +186,7 @@ exports.parseLanguage = function parseLanguage(input) {
 };
 
 exports.parseLanguageLevel = function parseLanguageLevel(input) {
-    var result = undefined;
+    var result;
     _.forEach(languageSkillMap, function (value, key) {
         if (input.indexOf(key) > -1) {
             result = value;
@@ -367,4 +369,4 @@ exports.isProjectResponsibility = function isProjectResponsibility(input) {
 
 exports.removeTags = function removeTags(input) {
     return input.replace(/<\/?.+?>/g, '').replace(/(&nbsp;)+/g, '');
-}
+};

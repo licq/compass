@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
     resumeParser = require('../../../server/parsers/job51Parser'),
     expect = require('chai').expect;

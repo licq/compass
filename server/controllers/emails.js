@@ -33,7 +33,7 @@ exports.create = function (req, res) {
     });
 };
 
-exports.delete = function (req, res) {
+exports.delete = function (req, res,next) {
     req.email.remove(function (err) {
         if (err) return next(err);
         jobs.removeFetchEmailJob(req.email);

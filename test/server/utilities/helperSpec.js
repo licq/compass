@@ -1,8 +1,10 @@
+'use strict';
+
 var expect = require('chai').expect,
     helper = require('../../../server/utilities/helper'),
     cheerio = require('cheerio');
 
-describe.only('helper', function () {
+describe('helper', function () {
     describe('#onlyNumber', function () {
         it('should only return the number string', function () {
             expect(helper.onlyNumber('bejing123435tianjin')).to.equal('123435');

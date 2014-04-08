@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         express: {
             options: {
-                port: process.env.PORT | 3000
+                port: process.env.PORT || 3000
             },
             dev: {
                 options: {
@@ -87,20 +87,17 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc',
                 reporter: require('jshint-stylish')
             },
-            all: {
-                src: ['gruntfile.js', 'server.js', 'server/**/*.js', 'public/app/**/*.js', 'test/**/*.js', '!test/coverage/**/*.js'],
-                options: {
-                    jshintrc: true
-                }
+            gruntfile: {
+                src: ['gruntfile.js']
             },
             server: {
                 options: {
                     jshintrc: 'server/.jshintrc'
                 },
-                src: ['server/**/*.js']
+                src: ['server/**/*.js', 'server.js']
             },
             app: {
-                src: ['public/**/*.js']
+                src: ['public/app/**/*.js']
             },
             test_server: {
                 src: ['test/server/**/*.js']
@@ -173,7 +170,7 @@ module.exports = function (grunt) {
                     'server': ['**/*']
                 }
             },
-            'test_server':{
+            'test_server': {
                 files: {
                     'test': ['server/**/*']
                 }
@@ -183,7 +180,7 @@ module.exports = function (grunt) {
                     'public': ['app/**/*']
                 }
             },
-            'test_client':{
+            'test_client': {
                 files: {
                     'test': ['client/**/*']
                 }
@@ -225,12 +222,12 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', function (target) {
         if (target === 'client') {
-            return grunt.task.run([ 'concurrent:test', 'karma'])
+            return grunt.task.run([ 'concurrent:test', 'karma']);
         }
         if (target === 'server') {
-            return grunt.task.run(['env:test', 'mochaTest'])
+            return grunt.task.run(['env:test', 'mochaTest']);
         }
-        grunt.task.run(['env:test', 'mochaTest', 'concurrent:test', 'karma'])
+        grunt.task.run(['env:test', 'mochaTest', 'concurrent:test', 'karma']);
     });
 
     grunt.registerTask('default', ['newer:jshint', 'test']);
