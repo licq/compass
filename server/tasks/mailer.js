@@ -37,7 +37,7 @@ function sendEmail(to, subject, template, context, cb) {
                 if (error) {
                     logger.error('Email sent to ' + to + 'failed' + error);
                 } else {
-                    logger.log("Email sent to " + to + 'successfully with ' + response.message);
+                    logger.info("Email sent to " + to + 'successfully with ' + response.message);
                 }
                 if (cb) return cb(error);
             });

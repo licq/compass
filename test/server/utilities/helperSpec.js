@@ -2,7 +2,7 @@ var expect = require('chai').expect,
     helper = require('../../../server/utilities/helper'),
     cheerio = require('cheerio');
 
-describe('helper', function () {
+describe.only('helper', function () {
     describe('#onlyNumber', function () {
         it('should only return the number string', function () {
             expect(helper.onlyNumber('bejing123435tianjin')).to.equal('123435');
@@ -269,10 +269,10 @@ describe('helper', function () {
         });
     });
 
-    describe('#isMobileLine', function () {
+    describe('#isMobile', function () {
         it('should return correctly', function () {
-            expect(helper.isMobileLine('15721128797(手机')).to.be.true;
-            expect(helper.isMobileLine('2年工作经验 | 团员 安徽省安庆市 246003')).to.be.false;
+            expect(helper.isMobile('15721128797(手机')).to.be.true;
+            expect(helper.isMobile('2年工作经验 | 团员 安徽省安庆市 246003')).to.be.false;
         });
     });
 
@@ -282,6 +282,18 @@ describe('helper', function () {
             expect(helper.isPoliticalStatus('党员')).to.be.true;
             expect(helper.isPoliticalStatus('群众')).to.be.true;
             expect(helper.isPoliticalStatus('上海')).to.be.false;
+        });
+    });
+    describe('#isEmail', function () {
+        it('should return correctly', function () {
+            expect(helper.isEmail('Email: aa@bb.com')).to.be.true;
+            expect(helper.isEmail('aa@bb.com')).to.be.false;
+        });
+    });
+
+    describe('#parseEmail', function () {
+        it('should return correctly', function () {
+            expect(helper.parseEmail('Email: aa@bb.com')).to.equal('aa@bb.com');
         });
     });
 

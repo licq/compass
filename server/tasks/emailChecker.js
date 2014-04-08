@@ -15,8 +15,8 @@ exports.check = function (mailbox, callback) {
     });
 
     client.on("error", function (err) {
-        if (err.errno === 111) logger.log("Unable to connect to server, failed");
-        else logger.log("Server error occurred, failed");
+        if (err.errno === 111) logger.info("Unable to connect to server, failed");
+        else logger.info("Server error occurred, failed");
         callback('connect failed');
     });
 
@@ -25,18 +25,18 @@ exports.check = function (mailbox, callback) {
     });
 
     client.on("invalid-state", function (cmd) {
-        logger.log("Invalid state. You tried calling " + cmd);
+        logger.info("Invalid state. You tried calling " + cmd);
     });
 
     client.on("locked", function (cmd) {
-        logger.log("Current command has not finished yet. You tried calling " + cmd);
+        logger.info("Current command has not finished yet. You tried calling " + cmd);
     });
 
     client.on("login", function (status, data) {
         if (status) {
             correct = true;
         } else {
-            logger.log("LOGIN/PASS failed");
+            logger.info("LOGIN/PASS failed");
         }
         client.quit();
     });
@@ -47,8 +47,8 @@ exports.check = function (mailbox, callback) {
 
     client.on("quit", function (status, rawdata) {
 
-        if (status === true) logger.log("verify QUIT success");
-        else logger.log("verify QUIT failed");
+        if (status === true) logger.info("verify QUIT success");
+        else logger.info("verify QUIT failed");
 
         if (correct) callback(null)
         else callback('login failed');

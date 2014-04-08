@@ -44,41 +44,21 @@ exports.test = function (data) {
 function parseBasicInfo(table) {
     if (table.length === 0) return {};
     try {
-        var contactInfoLine;
-        var mobileLine;
-        var emailLine;
         var resume = {};
-
-        var basicInfos = table.find('td:nth-child(2)').html().split('<br>');
-        var line1Items = helper.replaceEmpty(basicInfos[0].split('|'));
-        if (!helper.isMobileLine(basicInfos[1])) {
-            contactInfoLine = basicInfos[1];
-            mobileLine = basicInfos[2];
-            emailLine = basicInfos[3];
-        } else {
-            mobileLine = basicInfos[1];
-            emailLine = basicInfos[2];
-        }
-
         resume.name = table.find('td:nth-child(1) span').text().trim();
-        _.forEach(line1Items, function (item) {
+        resume.email = table.find('a').text();
+        var basicInfos = helper.replaceEmpty(table.find('td:nth-child(2)').html().split(/<br>|\|/g));
+        _.forEach(basicInfos, function (item) {
+            item = helper.removeTags(item);
             if (helper.isGender(item)) resume.gender = helper.parseGender(item);
             else if (helper.isCivilState(item)) resume.civilState = helper.parseCivilState(item);
             else if (helper.isBirthday(item)) resume.birthday = helper.parseDate(item);
             else if (helper.isHukou(item)) resume.hukou = item.split('：')[1];
             else if (helper.isResidency(item)) resume.residency = item.substr(4);
+            else if (helper.isPoliticalStatus(item)) resume.politicalStatus = helper.parsePoliticalStatus(item);
+            else if (helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
+            else if (helper.isMobile(item)) resume.mobile = helper.onlyNumber(item);
         });
-
-        if (contactInfoLine) {
-            var items = helper.replaceEmpty(contactInfoLine.split(/\s+|\s*\|\s*/g));
-            _.forEach(items, function (item) {
-                if (helper.isPoliticalStatus(item)) resume.politicalStatus = helper.parsePoliticalStatus(item);
-                if (helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
-            })
-        }
-        if (mobileLine) resume.mobile = helper.onlyNumber(mobileLine);
-        if (emailLine) resume.email = table.find('a').text();
-
         return  resume;
     } catch (e) {
         logger.error(e.stack);

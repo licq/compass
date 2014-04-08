@@ -12,7 +12,7 @@ var jobs = kue.createQueue();
 
 exports.start = function () {
     jobs.on('error', function (error) {
-        logger.log(error);
+        logger.error('job error',error);
     });
 
     jobs.process('send signup email', 20, handleSendSignupEmail);
@@ -26,7 +26,7 @@ exports.start = function () {
 
 exports.stop = function () {
     jobs.shutdown(function (err) {
-        logger.log('Kue is shut down.', err || '');
+        logger.info('Kue is shut down.', err || '');
         process.exit(0);
     }, 5000);
 };
@@ -36,7 +36,7 @@ function handleSendSignupEmail(job, done) {
 }
 
 function handleFetchEmail(job, done) {
-    logger.log('handleFetchEmail ', job.data);
+    logger.info('handleFetchEmail ', job.data);
     emailFetcher.fetch(job.data, function (err, count) {
         Email.setActivity({
             time: Date.now(),
@@ -44,14 +44,14 @@ function handleFetchEmail(job, done) {
             error: err,
             address: job.data.address
         }, function (error) {
-            logger.log(error);
+            logger.info(error);
             done(err);
         });
     });
 }
 
 function handleParseResume(job, done) {
-    logger.log('handleParseResume ', job.data);
+    logger.info('handleParseResume ', job.data.title);
     try {
         var resume;
         resume = parser.parse(job.data);
@@ -59,7 +59,7 @@ function handleParseResume(job, done) {
             done(err);
         });
     } catch (err) {
-        job.log('error:', err.stack);
+        job.error('error:', err.stack);
         done(err);
     }
 }

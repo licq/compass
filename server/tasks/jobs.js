@@ -34,20 +34,20 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
         }
 
         job.on('complete', function () {
-            logger.log('Fetch ' + email.address + ' complete');
+            logger.info('Fetch ' + email.address + ' complete');
             job.remove(function () {
                 fetchEmailAfter(5);
             });
         });
         job.on('failed', function () {
-            logger.log('Fetch ' + email.address + ' failed');
+            logger.info('Fetch ' + email.address + ' failed');
             job.remove(function () {
                 fetchEmailAfter(10);
             });
         });
 
         job.save(function (err) {
-            if (err) logger.log(err);
+            if (err) logger.info(err);
             callback && callback(err);
         });
     };
@@ -64,7 +64,7 @@ exports.findFetchEmailJob = function findFetchEmailJob(email, cb) {
 };
 
 exports.addParseResumeJob = function (mail, cb) {
-    logger.log('addParseResumeJob:', mail._id);
+    logger.info('addParseResumeJob:', mail._id);
     var data = {
         html: mail.html,
         title: mail.subject,

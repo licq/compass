@@ -17,8 +17,8 @@ exports.fetch = function (mailbox, callback) {
     });
 
     client.on("error", function (err) {
-        if (err.errno === 111) logger.log("Unable to connect to server, failed");
-        else logger.log("Server error occurred, failed");
+        if (err.errno === 111) logger.info("Unable to connect to server, failed");
+        else logger.info("Server error occurred, failed");
         callback('connect failed');
     });
 
@@ -27,11 +27,11 @@ exports.fetch = function (mailbox, callback) {
     });
 
     client.on("invalid-state", function (cmd) {
-        logger.log("Invalid state. You tried calling " + cmd);
+        logger.info("Invalid state. You tried calling " + cmd);
     });
 
     client.on("locked", function (cmd) {
-        logger.log("Current command has not finished yet. You tried calling " + cmd);
+        logger.info("Current command has not finished yet. You tried calling " + cmd);
     });
 
     client.on("login", function (status, data) {
@@ -39,14 +39,14 @@ exports.fetch = function (mailbox, callback) {
             correct = true;
             client.list();
         } else {
-            logger.log("LOGIN/PASS failed");
+            logger.info("LOGIN/PASS failed");
             client.quit();
         }
     });
 
     client.on("list", function (status, msgcount, msgnumber, data, rawdata) {
         if (status === false) {
-            logger.log("LIST failed");
+            logger.info("LIST failed");
             client.quit();
         } else if (msgcount > 0) {
             totalMails = msgcount;
@@ -63,13 +63,13 @@ exports.fetch = function (mailbox, callback) {
             parse(data, function (mail) {
                 saveToDB(mail, mailbox.address, function (err) {
                     if (err) {
-                        logger.log(err);
+                        logger.info(err);
                         client.rset();
                     } else client.dele(msgnumber);
                 });
             });
         } else {
-            logger.log("RETR failed for msgnumber " + msgnumber);
+            logger.info("RETR failed for msgnumber " + msgnumber);
             client.rset();
         }
     });
@@ -81,7 +81,7 @@ exports.fetch = function (mailbox, callback) {
             else
                 client.retr(current);
         } else {
-            logger.log("DELE failed for msgnumber " + msgnumber);
+            logger.info("DELE failed for msgnumber " + msgnumber);
             client.rset();
         }
     });
@@ -91,8 +91,8 @@ exports.fetch = function (mailbox, callback) {
     });
 
     client.on("quit", function (status, rawdata) {
-//        if (status === true) logger.log("QUIT success");
-//        else logger.log("QUIT failed");
+//        if (status === true) logger.info("QUIT success");
+//        else logger.info("QUIT failed");
         if (correct) {
             callback(null, current - 1);
         } else {

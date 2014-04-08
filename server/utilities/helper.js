@@ -324,8 +324,16 @@ exports.isPoliticalStatus = function isPoliticalStatus(input) {
     return _.has(politicalStatusMap, input.trim());
 };
 
-exports.isMobileLine = function isMobileLine(input) {
-    return exports.onlyNumber(input).length === 11;
+exports.isMobile = function isMobile(input) {
+    return input.indexOf('手机') > -1;
+};
+
+exports.isEmail = function isEmail(input) {
+    return input.indexOf('Email') > -1;
+};
+
+exports.parseEmail = function parseEmail(input) {
+    return input.substr(input.indexOf(':') + 1).trim();
 };
 
 exports.parseZhaopinApplyPosition = function parseZhaopinApplyPosition(input) {

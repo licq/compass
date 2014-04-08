@@ -16,7 +16,8 @@ exports.parse = function (data) {
     resume.certifications = parseCertifications(findTable('证'));
     resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
     resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'));
-    resume.itSkills = parseItSkills(findTable('IT 技能'));
+    resume.itSkills = parseItSkills(findTable('IT'));
+    resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'));
     resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
     resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
     resume.matchRate = helper.parseMatchRate($('font b').text());
@@ -166,13 +167,15 @@ function parseProjectExperience(table) {
 function parseEducationHistory(table) {
     if (table.length === 0) return;
     try {
-        return _.map(helper.parseTable(table), function (line) {
-            var items = line[0].split(/--|: |（|）/);
-            return { from: helper.parseDate(items[0]),
-                to: helper.parseDate(items[1]),
-                school: line[1],
-                major: line[2],
-                degree: helper.parseDegree(line[3])
+        var tableData = helper.parseTable(table);
+        return _.times(tableData.length / 2, function (n) {
+            var dateRange = helper.parseDateRange(tableData[n * 2][0]);
+            return { from: dateRange.from,
+                to: dateRange.to,
+                school: tableData[n * 2][1],
+                major: tableData[n * 2][2],
+                degree: helper.parseDegree(tableData[n * 2][3]),
+                description: tableData[n * 2 + 1][0]
             }
         });
     } catch (e) {
@@ -185,10 +188,10 @@ function parseTrainingHistory(table) {
     try {
         var trainingHistory = [];
         var tableData = helper.parseTable(table);
-        var items = tableData[0][0].split(/--|: |（|）/);
+        var dateRange = helper.parseDateRange(tableData[0][0]);
         trainingHistory.push({
-            from: helper.parseDate(items[0]),
-            to: helper.parseDate(items[1]),
+            from: dateRange.from,
+            to: dateRange.to,
             institution: tableData[0][1],
             course: tableData[0][2],
             certification: tableData[0][3],
@@ -201,9 +204,12 @@ function parseTrainingHistory(table) {
 }
 
 function parseItSkills(table) {
+    console.log(table.html());
     if (table.length === 0) return;
     try {
-        return _.map(helper.parseTable(table).slice(2), function (line) {
+        return _.map(_.filter(helper.parseTable(table).slice(2), function (line) {
+            return line.length === 3;
+        }), function (line) {
             return {
                 skill: line[0],
                 level: helper.parseItSkillLevel(line[1]),
@@ -227,6 +233,23 @@ function parseLanguageCertificates(table) {
                 languageCertificates.english = helper.parseEnglishCertificate(line[1])
         });
         return languageCertificates;
+    } catch (e) {
+        logger.error(e.stack);
+    }
+}
+
+function parseInSchoolPractices(table) {
+    if (table.length === 0) return;
+    try {
+        var tableData = helper.parseTable(table);
+        return _.times(tableData.length / 2, function (n) {
+            var dateRange = helper.parseDateRange(tableData[n * 2][0]);
+            return {
+                from: dateRange.from,
+                to: dateRange.to,
+                content: tableData[n * 2][1] + tableData[n * 2 + 1][0]
+            };
+        });
     } catch (e) {
         logger.error(e.stack);
     }

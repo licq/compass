@@ -10,7 +10,7 @@ module.exports = function (config) {
     db.on('error', console.error.bind(console, 'connection error...'));
 
     db.once('open', function () {
-        logger.log('compass db connected');
+        logger.info('compass db connected');
     });
 
     require('../models/user');

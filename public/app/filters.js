@@ -37,7 +37,8 @@ angular.module('compass')
         return function (input) {
             if (input === 0) return '应届毕业生';
             if (input === -1) return '学生';
-            return '' + input + '年';
+            if (typeof(input) === 'undefined') return '';
+            return '' + input + '年';    
         };
     })
     .filter('gender', function () {
