@@ -7,7 +7,8 @@ describe('mvResumeViewCtrl', function () {
 
     beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
         $httpBackend = _$httpBackend_;
-        $httpBackend.expectGET('/api/resumes/7788').respond({address: 'compass@best.com', _id: '7788'});
+        $httpBackend.expectGET('/api/resumes/7788').respond({address: 'compass@best.com', _id: '7788',
+            mail: '8899'});
 
         $scope = $rootScope.$new();
         mvResumeViewCtrl = $controller('mvResumeViewCtrl', {
@@ -21,15 +22,10 @@ describe('mvResumeViewCtrl', function () {
 
         expect($scope.resume).to.exist;
         expect($scope.resume.address).to.equal('compass@best.com');
+
+        $scope.setMailHtml();
+        expect($scope.mailHtml).to.equal('/api/mails/8899/html');
         done();
     });
 
-//    it('should invoke the PUT /api/resumes/:id', function (done) {
-//        $httpBackend.flush();
-//        $httpBackend.expectPUT('/api/resumes/7788').respond(200);
-//        expect($scope.parse).to.exist;
-//        $scope.parse();
-//        $httpBackend.flush();
-//        done();
-//    });
 });

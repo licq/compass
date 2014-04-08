@@ -21,6 +21,7 @@ describe('mvMailViewCtrl', function () {
 
         expect($scope.mail).to.exist;
         expect($scope.mail.address).to.equal('compass@best.com');
+        expect($scope.htmlUrl).to.equal('/api/mails/7788/html');
         done();
     });
 

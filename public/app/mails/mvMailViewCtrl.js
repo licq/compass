@@ -2,7 +2,7 @@ angular.module('compass')
     .controller('mvMailViewCtrl', function ($scope, mvMail, $routeParams, $location, $sce) {
         $scope.mail = mvMail.get({_id: $routeParams.id}, function (mail) {
             $scope.mail = mail;
-            $scope.mail.htmlUrl = $sce.trustAsResourceUrl($scope.mail.htmlUrl);
+            $scope.htmlUrl = '/api/mails/' + mail._id + '/html';
         });
 
         $scope.close = function () {

@@ -50,7 +50,7 @@ exports.get = function (req, res) {
         .exec(function (err, mail) {
             if (err) return next(err);
             if (!mail) return res.send(404, {message: id + 'not found'});
-            var result = {htmlUrl: req.url + '/html'};
-            res.json(_.extend(result,mail._doc));
+
+            res.json(mail);
         });
 };
