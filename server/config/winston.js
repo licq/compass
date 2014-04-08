@@ -6,12 +6,15 @@ exports.init = function (config) {
     exports.transports = [
         new (winston.transports.Console)({
             level: 'info',
-            handleExceptions: true
+            handleExceptions: true,
+            colorize: true,
+            timestamp: true
         }),
         new (winston.transports.File)({
             filename: config.logFileName,
             level: 'error',
-            handleExceptions: true
+            handleExceptions: true,
+            timestamp: true
         })
     ];
 };
