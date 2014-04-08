@@ -23,7 +23,7 @@ describe('mvResumeViewCtrl', function () {
         expect($scope.resume).to.exist;
         expect($scope.resume.address).to.equal('compass@best.com');
 
-        $scope.setMailHtml();
+        $scope.selectMail();
         expect($scope.mailHtml).to.equal('/api/mails/8899/html');
         done();
     });
