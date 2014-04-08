@@ -69,8 +69,8 @@ var resumeSchema = mongoose.Schema({
             from: Date,
             to: Date,
             name: String,
-            softwareEnviroment: String,
-            hardwareEnviroment: String,
+            softwareEnvironment: String,
+            hardwareEnvironment: String,
             developmentTools: String,
             description: String,
             responsibility: String
@@ -79,8 +79,8 @@ var resumeSchema = mongoose.Schema({
 
     educationHistory: [
         {
-            from: String,
-            to: String,
+            from: Date,
+            to: Date,
             school: String,
             major: String,
             degree: String,
@@ -111,7 +111,10 @@ var resumeSchema = mongoose.Schema({
 
     languageSkills: [
         {
-            language: String,
+            language: {
+                type: String,
+                enum: ['english', 'japanese', 'other']
+            },
             level: {
                 type: String,
                 enum: ['not sure', 'average', 'good', 'very good', 'excellent']

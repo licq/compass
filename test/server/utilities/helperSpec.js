@@ -169,17 +169,17 @@ describe('helper', function () {
         });
     });
 
-    describe('#isSoftwareEnviroment', function () {
+    describe('#isSoftwareEnvironment', function () {
         it('should return correctly', function () {
-            expect(helper.isSoftwareEnviroment('硬件环境：')).to.be.false;
-            expect(helper.isSoftwareEnviroment('软件环境：')).to.be.true;
+            expect(helper.isSoftwareEnvironment('硬件环境：')).to.be.false;
+            expect(helper.isSoftwareEnvironment('软件环境：')).to.be.true;
         });
     });
 
-    describe('#isHardwareEnviroment', function () {
+    describe('#isHardwareEnvironment', function () {
         it('should return correctly', function () {
-            expect(helper.isHardwareEnviroment('硬件环境：')).to.be.true;
-            expect(helper.isHardwareEnviroment('软件环境')).to.be.false;
+            expect(helper.isHardwareEnvironment('硬件环境：')).to.be.true;
+            expect(helper.isHardwareEnvironment('软件环境')).to.be.false;
         });
     });
 

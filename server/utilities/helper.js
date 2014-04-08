@@ -224,11 +224,11 @@ exports.isProjectHeader = function isProjectHeader(input) {
     return /\d+.+--.+：.+/.test(input);
 };
 
-exports.isSoftwareEnviroment = function isSoftwareEnviroment(input) {
+exports.isSoftwareEnvironment = function isSoftwareEnvironment(input) {
     return input.indexOf('软件环境') > -1;
 };
 
-exports.isHardwareEnviroment = function isHardwareEnviroment(input) {
+exports.isHardwareEnvironment = function isHardwareEnvironment(input) {
     return input.indexOf('硬件环境') > -1;
 };
 

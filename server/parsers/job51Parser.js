@@ -144,10 +144,10 @@ function parseProjectExperience(table) {
                     project.from = helper.parseDate(items[0]);
                     project.to = helper.parseDate(items[1]);
                     project.name = items[2];
-                } else if (helper.isSoftwareEnviroment(line[0])) {
-                    project.softwareEnviroment = line[1];
-                } else if (helper.isHardwareEnviroment(line[0])) {
-                    project.hardwareEnviroment = line[1];
+                } else if (helper.isSoftwareEnvironment(line[0])) {
+                    project.softwareEnvironment = line[1];
+                } else if (helper.isHardwareEnvironment(line[0])) {
+                    project.hardwareEnvironment = line[1];
                 } else if (helper.isDevelopmentTools(line[0])) {
                     project.developmentTools = line[1];
                 } else if (helper.isDescription(line[0])) {

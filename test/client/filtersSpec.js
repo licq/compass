@@ -42,5 +42,98 @@ describe('filters', function () {
         }));
     });
 
+    describe('gender', function () {
+        it('should return correctly', inject(function (genderFilter) {
+            expect(genderFilter('male')).to.equal('男');
+            expect(genderFilter('female')).to.equal('女');
+        }));
+    });
+
+    describe('politicalStatus', function () {
+        it('should return correctly', inject(function (politicalStatusFilter) {
+            expect(politicalStatusFilter('party member')).to.equal('党员');
+            expect(politicalStatusFilter('league member')).to.equal('团员');
+            expect(politicalStatusFilter('democratic part')).to.equal('民主党派');
+            expect(politicalStatusFilter('no party')).to.equal('无党派');
+            expect(politicalStatusFilter('citizen')).to.equal('群众');
+        }));
+    });
+
+    describe('civilState', function () {
+        it('should return correctly', inject(function (civilStateFilter) {
+            expect(civilStateFilter('single')).to.equal('单身');
+            expect(civilStateFilter('married')).to.equal('已婚');
+            expect(civilStateFilter('divorced')).to.equal('离异');
+            expect(civilStateFilter('confidential')).to.equal('隐私');
+        }));
+    });
+
+    describe('typeOfEmployment', function () {
+        it('should return correctly', inject(function (typeOfEmploymentFilter) {
+            expect(typeOfEmploymentFilter('fulltime')).to.equal('全职');
+            expect(typeOfEmploymentFilter('parttime')).to.equal('兼职');
+            expect(typeOfEmploymentFilter('intern')).to.equal('实习');
+        }));
+    });
+
+    describe('entryTime', function () {
+        it('should return correctly', inject(function (entryTimeFilter) {
+            expect(entryTimeFilter('immediately')).to.equal('立即');
+            expect(entryTimeFilter('within 1 week')).to.equal('一周以内');
+            expect(entryTimeFilter('within 1 month')).to.equal('一个月以内');
+            expect(entryTimeFilter('1 to 3 months')).to.equal('一到三个月');
+            expect(entryTimeFilter('after 3 months')).to.equal('三个月以上');
+            expect(entryTimeFilter('to be determined')).to.equal('待定');
+        }));
+    });
+
+    describe('degree', function () {
+        it('should return correctly', inject(function (degreeFilter) {
+            expect(degreeFilter('junior high')).to.equal('初中');
+            expect(degreeFilter('associate')).to.equal('大专');
+            expect(degreeFilter('master')).to.equal('硕士');
+        }));
+    });
+
+    describe('language', function () {
+        it('should return correctly', inject(function (languageFilter) {
+            expect(languageFilter('english')).to.equal('英语');
+            expect(languageFilter('japanese')).to.equal('日语');
+            expect(languageFilter('other')).to.equal('其他');
+        }));
+    });
+
+    describe('languageSkillLevel', function () {
+        it('should return correctly', inject(function (languageSkillLevelFilter) {
+            expect(languageSkillLevelFilter('not sure')).to.equal('不限');
+            expect(languageSkillLevelFilter('average')).to.equal('一般');
+            expect(languageSkillLevelFilter('good')).to.equal('良好');
+        }));
+    });
+
+    describe('englishCertificate', function () {
+        it('should return correctly', inject(function (englishCertificateFilter) {
+            expect(englishCertificateFilter('tem4')).to.equal('专业四级');
+            expect(englishCertificateFilter('cet6')).to.equal('英语六级');
+            expect(englishCertificateFilter('not participate')).to.equal('未参加');
+        }));
+    });
+
+    describe('japaneseCertificate', function () {
+        it('should return correctly', inject(function (japaneseCertificateFilter) {
+            expect(japaneseCertificateFilter('none')).to.equal('未参加');
+            expect(japaneseCertificateFilter('level1')).to.equal('一级');
+            expect(japaneseCertificateFilter('level4')).to.equal('四级');
+        }));
+    });
+    describe('itSkillLevel', function () {
+        it('should return correctly', inject(function (itSkillLevelFilter) {
+            expect(itSkillLevelFilter('none')).to.equal('无');
+            expect(itSkillLevelFilter('expert')).to.equal('精通');
+            expect(itSkillLevelFilter('advanced')).to.equal('熟练');
+        }));
+    });
+
+
 
 });

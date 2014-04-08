@@ -170,8 +170,8 @@ function parseProjectExperience(table) {
             _.forEach(parts.slice(1), function (item) {
                 var parts = item.split(/：/g);
                 if (helper.isDevelopmentTools(parts[0])) result.developmentTools = parts[1];
-                else if (helper.isSoftwareEnviroment(parts[0])) result.softwareEnviroment = parts[1];
-                else if (helper.isHardwareEnviroment(parts[0])) result.hardwareEnviroment = parts[1];
+                else if (helper.isSoftwareEnvironment(parts[0])) result.softwareEnvironment = parts[1];
+                else if (helper.isHardwareEnvironment(parts[0])) result.hardwareEnvironment = parts[1];
             });
 
             return result;
