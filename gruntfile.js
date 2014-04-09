@@ -34,7 +34,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: ['public/app/**/*.js', 'public/js/**'],
-                tasks: ['newer:jshint:app'],
+                tasks: ['newer:jshint:app', 'karma'],
                 options: {
                     livereload: true,
                 }
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
                     'server.js',
                     'server/**/*.{js,json}'
                 ],
-                tasks: ['newer:jshint:server', 'express:dev', 'wait'],
+                tasks: ['newer:jshint:server', 'env:test', 'mochaTest', 'express:dev', 'wait'],
                 options: {
                     livereload: true,
                     nospawn: true

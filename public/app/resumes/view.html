@@ -75,6 +75,10 @@
                 <td>工作性质</td>
                 <td>{{resume.careerObjective.typeOfEmployment | typeOfEmployment}}</td>
             </tr>
+            <tr ng-show="resume.careerObjective.targetSalary">
+                <td>期望薪水</td>
+                <td>{{resume.careerObjective.targetSalary | targetSalary}}</td>
+            </tr>
             <tr ng-show="resume.careerObjective.locations">
                 <td>工作地点</td>
                 <td>{{resume.careerObjective.locations.join(',')}}</td>

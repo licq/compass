@@ -20,6 +20,9 @@ describe('filters', function () {
         it('should return correctly', inject(function (yearAndMonthFilter) {
             expect(yearAndMonthFilter(new Date(2011, 9, 20))).to.equal('2011年10月');
         }));
+        it('should return 至今 when year is 9999', inject(function (yearAndMonthFilter) {
+            expect(yearAndMonthFilter(new Date(9999, 9, 20))).to.equal('至今');
+        }));
     });
 
     describe('shortDate', function () {
@@ -134,6 +137,11 @@ describe('filters', function () {
         }));
     });
 
-
+    describe('targetSalary', function () {
+        it('should return correctly', inject(function (targetSalaryFilter) {
+            expect(targetSalaryFilter({from: 2001, to: 4000})).to.equal('2001--4000');
+            expect(targetSalaryFilter({from: 0, to: 0})).to.equal('面议');
+        }));
+    });
 
 });
