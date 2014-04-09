@@ -2,6 +2,9 @@
 
 angular.module('compass')
     .controller('mvResumeListCtrl', function ($scope, mvResume, $location, states) {
+        $scope.crumbs = [
+            {text: '简历列表', url: 'resumes'}
+        ];
         states.defaults('mvResumeListCtrl', {
             pagingOptions: {
                 pageSizes: [10, 20, 50],

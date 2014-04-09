@@ -2,7 +2,13 @@
 
 angular.module('compass')
     .controller('mvUserEditCtrl', function ($scope, mvUser, $routeParams, $location) {
-        $scope.user = mvUser.get({_id: $routeParams.id});
+        mvUser.get({_id: $routeParams.id}, function (user) {
+            $scope.user = user;
+            $scope.crumbs = [
+                {text: '用户', url: 'users'},
+                {text: '修改', url: 'edit/' + user._id},
+            ];
+        });
 
         $scope.update = function () {
             $scope.user.$update(function () {

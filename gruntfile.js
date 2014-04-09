@@ -24,6 +24,12 @@ module.exports = function (grunt) {
                     script: 'server.js',
                     node_env: 'production'
                 }
+            },
+            test: {
+                options: {
+                    script: 'server.js',
+                    node_env: 'test'
+                }
             }
         },
         open: {
@@ -62,7 +68,7 @@ module.exports = function (grunt) {
                     'server.js',
                     'server/**/*.{js,json}'
                 ],
-                tasks: ['newer:jshint:server', 'env:test', 'mochaTest', 'express:dev', 'wait'],
+                tasks: ['newer:jshint:server', 'test:server', 'express:dev', 'wait'],
                 options: {
                     livereload: true,
                     nospawn: true
@@ -80,6 +86,13 @@ module.exports = function (grunt) {
                 options: {
                     livereload: true
                 }
+            }
+        },
+        notify_hooks: {
+            options: {
+                enabled: true,
+                max_jshint_notifications: 5, // maximum number of notifications from jshint output
+                title: 'Compass' // defaults to the name in package.json, or will use project directory's name
             }
         },
         jshint: {
@@ -187,6 +200,8 @@ module.exports = function (grunt) {
             }
         }
     });
+
+//    grunt.task.run('notify_hooks');
 
     grunt.registerTask('wait', function () {
         grunt.log.ok('Waiting for server reload...');

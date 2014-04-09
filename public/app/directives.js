@@ -41,4 +41,41 @@ angular.module('compass')
             },
             template: '<button class="btn btn-xs btn-success" ng-click="action()"><i class="fa fa-archive"</button> '
         };
+    })
+    .directive('breadcrumbs', function ($compile) {
+        var template = '<div class="page-head"> ' +
+            '<h2 class="pull-left">主页</h2> ' +
+            '<div class="bread-crumb"> ' +
+            '<a href="/"><i class="fa fa-home"></i>主页</a> ' +
+            '</div> ' +
+            '<div class="clearfix"></div> </div>';
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                crumbs: '='
+            },
+            link: function (scope, elem) {
+                scope.$watch('crumbs', function () {
+                    var currentUrl = '/';
+                    elem.html(template);
+                    var crumbDiv = elem.find('.bread-crumb');
+                    angular.forEach(scope.crumbs, function (crumb) {
+                        currentUrl = currentUrl + crumb.url;
+                        angular.element('<span class="divider">/</span>').appendTo(crumbDiv);
+                        angular.element('<a href=' + currentUrl + '>' + crumb.text + '</a>')
+                            .appendTo(crumbDiv);
+                        currentUrl += '/';
+                    });
+
+                    if (scope.crumbs) {
+                        elem.find('h2').text(scope.crumbs[scope.crumbs.length - 1].text);
+                    }
+
+                    elem.find('a').last().addClass('bread-current');
+
+                    $compile(elem.contents())(scope);
+                });
+            }
+        };
     });

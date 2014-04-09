@@ -26,8 +26,11 @@ angular.module('compass')
     .filter('yearAndMonth', function ($filter) {
         var dateFilter = $filter('date');
         return function (date) {
-            var result=  dateFilter(date, 'yyyy年M月');
-            if(result.indexOf('9999') === 0){
+            if (!date) {
+                return;
+            }
+            var result = dateFilter(date, 'yyyy年M月');
+            if (result.indexOf('9999') === 0) {
                 return '至今';
             }
             return result;
@@ -193,6 +196,9 @@ angular.module('compass')
     })
     .filter('targetSalary', function () {
         return function (range) {
+            if (!range) {
+                return;
+            }
             if (range.from === 0 && range.to === 0) {
                 return '面议';
             }

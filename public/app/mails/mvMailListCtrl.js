@@ -2,6 +2,9 @@
 
 angular.module('compass')
     .controller('mvMailListCtrl', function ($scope, mvMail, $location, states) {
+        $scope.crumbs = [
+            {text: '邮件列表', url: 'mails'}
+        ];
         states.defaults('mvMailListCtrl', {
             pagingOptions: {
                 pageSizes: [10, 20, 50],
