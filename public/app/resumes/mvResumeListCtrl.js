@@ -42,7 +42,12 @@ angular.module('compass')
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
                         '<view-button action="view(row.entity)"></view-button>' +
                         '</div>'}
-            ]
+            ],
+            afterSelectionChange: function (row) {
+                if (row.selected) {
+                    $scope.view(row.entity);
+                }
+            }
         }, $scope.gridDefaults);
 
         $scope.getResumes = function (pageSize, page, searchText) {
