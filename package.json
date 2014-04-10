@@ -38,7 +38,6 @@
         "redis": "^0.10.1",
         "express-winston": "^0.2.5",
         "winston": "^0.7.3",
-        "htmlparser2": "^3.7.1",
         "cheerio": "^0.14.0"
     },
     "devDependencies": {
@@ -47,6 +46,7 @@
         "karma-script-launcher": "~0.1.0",
         "karma-chrome-launcher": "~0.1.3",
         "karma-html2js-preprocessor": "~0.1.0",
+        "karma-phantomjs-launcher": "latest",
         "karma-requirejs": "~0.2.0",
         "karma-coffee-preprocessor": "~0.2.1",
         "karma-coverage": "~0.2.0",
