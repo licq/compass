@@ -9,16 +9,42 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         watch: {
-            code: {
-                files: ['public/app/**/*.js', 'public/js/**','public/**/*.css','gruntfile.js','server.js','server/**/*.{js,json}','public/app/**/*.html', 'server/views/**'],
-                tasks: ['jshint'],
+            client: {
+                files: ['public/app/**'],
+                tasks: ['jshint:client', 'test:client'],
                 options: {
-                    livereload: true,
+                    livereload: true
                 }
             },
-            test: {
-                files: ['test/server/**/*.js','test/client/**/*.js'],
-                tasks: ['jshint']
+            server: {
+                files: ['server.js', 'server/**'],
+                tasks: ['jshint:server']
+            },
+            gruntfile: {
+                files: ['gruntfile.js'],
+                tasks: ['jshint:gruntfile']
+            },
+            testClient: {
+                files: ['test/client/**'],
+                tasks: ['jshint:testClient', 'test:client'],
+            },
+            testServer: {
+                files: ['test/server/**'],
+                tasks: ['jshint:testServer'],
+            },
+
+            styles: {
+                files: ['public/**/*.css'],
+                options: {
+                    livereload: true
+                }
+            },
+
+            rebooted: {
+                files: ['.rebooted'],
+                options: {
+                    livereload: true
+                }
             }
         },
         notify_hooks: {
@@ -42,13 +68,13 @@ module.exports = function (grunt) {
                 },
                 src: ['server/**/*.js', 'server.js']
             },
-            app: {
+            client: {
                 src: ['public/app/**/*.js']
             },
-            test_server: {
+            testServer: {
                 src: ['test/server/**/*.js']
             },
-            test_client: {
+            testClient: {
                 src: ['test/client/**/*.js']
             }
         },
@@ -66,24 +92,21 @@ module.exports = function (grunt) {
                 script: 'server.js',
                 options: {
                     nodeArgs: ['--debug-brk'],
-                    env: {
-                        PORT: require('./server/config/config').port
-                    },
-                    cwd: __dirname,
                 }
             },
 
             dev: {
                 script: 'server.js',
                 options: {
-                    args: [],
-                    ignore: ['public/**'],
-                    ext: 'js,html',
                     nodeArgs: ['--debug'],
-                    env: {
-                        PORT: require('./server/config/config').port
-                    },
-                    cwd: __dirname
+                    ignore: ['public/**', 'test/**'],
+                    callback: function (nodemon) {
+                        nodemon.on('restart', function () {
+                            setTimeout(function () {
+                                require('fs').writeFileSync('.rebooted', 'rebooted');
+                            }, 1000);
+                        });
+                    }
                 }
             }
         },
@@ -104,7 +127,7 @@ module.exports = function (grunt) {
         mochaTest: {
             options: {
                 reporter: 'spec',
-                require: 'server.js'
+                require: 'server.js',
             },
             src: ['test/server/**/*.js']
         },
@@ -124,7 +147,7 @@ module.exports = function (grunt) {
                     'server': ['**/*']
                 }
             },
-            'test_server': {
+            'testServer': {
                 files: {
                     'test': ['server/**/*']
                 }
@@ -134,7 +157,7 @@ module.exports = function (grunt) {
                     'public': ['app/**/*']
                 }
             },
-            'test_client': {
+            'testClient': {
                 files: {
                     'test': ['client/**/*']
                 }
@@ -150,9 +173,7 @@ module.exports = function (grunt) {
         if (target === 'debug') {
             return grunt.task.run(['concurrent:debug']);
         }
-        grunt.task.run([
-            'concurrent:dev'
-        ]);
+        grunt.task.run([ 'concurrent:dev' ]);
     });
 
     grunt.registerTask('test', function (target) {
@@ -162,7 +183,7 @@ module.exports = function (grunt) {
         if (target === 'server') {
             return grunt.task.run(['env:test', 'mochaTest']);
         }
-        grunt.task.run(['env:test', 'mochaTest', 'karma']);
+        grunt.task.run(['test:server', 'test:client']);
     });
 
     grunt.registerTask('default', ['jshint', 'test']);
