@@ -5,6 +5,8 @@ var path = require('path'),
 
 var rootPath = path.normalize(__dirname + '/../../');
 
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 var defaultConfig = {
     emailOptions: {
         host: "smtp.126.com",
@@ -21,8 +23,7 @@ var defaultConfig = {
     logFileName: 'compass.log'
 };
 
-
-module.exports = {
+var configs = {
     development: _.defaults({
         port: process.env.PORT || 3000,
         db: 'mongodb://localhost/compass-dev',
@@ -38,3 +39,4 @@ module.exports = {
     }, defaultConfig)
 };
 
+module.exports = configs[env];
