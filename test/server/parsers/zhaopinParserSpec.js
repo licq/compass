@@ -18,7 +18,7 @@ describe('ZhaopinParser', function () {
             });
         });
 
-        it.only('should parse zhaopin another resume correctly', function (done) {
+        it('should parse zhaopin another resume correctly', function (done) {
             fs.readFile(__dirname + '/zhaopinzhangqianresume.html', 'utf-8', function (err, data) {
                 var resume = resumeParser.parse({
                     html: data
