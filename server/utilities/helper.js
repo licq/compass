@@ -370,3 +370,7 @@ exports.isProjectResponsibility = function isProjectResponsibility(input) {
 exports.removeTags = function removeTags(input) {
     return input.replace(/<\/?.+?>/g, '').replace(/(&nbsp;)+/g, '');
 };
+
+exports.splitByColon = function removeTags(input) {
+    return input.split(/:|：/g);
+};

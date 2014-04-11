@@ -61,7 +61,7 @@ function parseCareerObjective(table) {
         var careerObjective = {};
         var tableData = helper.parseTable(table);
         var items = _.map(tableData, function (line) {
-            return helper.removeSpaces(line[0].split('：')[1]);
+            return helper.removeSpaces(helper.splitByColon(line[0])[1]);
         });
 
         careerObjective.entryTime = helper.parseEntryTime(items[0]);

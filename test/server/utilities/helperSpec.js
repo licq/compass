@@ -382,4 +382,11 @@ describe('helper', function () {
             expect(helper.removeTags('<br>beijing</html>tianjin<div id="awsome">shanghai&nbsp;&nbsp;')).to.equal('beijingtianjinshanghai');
         });
     });
+
+    describe('#splitByColon', function () {
+        it('should return correctly', function () {
+            expect(helper.splitByColon('北京:天津')).to.deep.equal(['北京', '天津']);
+            expect(helper.splitByColon('北京：天津')).to.deep.equal(['北京', '天津']);
+        });
+    });
 });

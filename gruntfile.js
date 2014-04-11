@@ -186,5 +186,5 @@ module.exports = function (grunt) {
         grunt.task.run(['test:server', 'test:client']);
     });
 
-    grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('default', ['jshint', 'test', 'sloc']);
 };

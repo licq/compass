@@ -18,7 +18,7 @@ function parseBasicInfo(table) {
             if (helper.isGender(item)) resume.gender = helper.parseGender(item);
             else if (helper.isCivilState(item)) resume.civilState = helper.parseCivilState(item);
             else if (helper.isBirthday(item)) resume.birthday = helper.parseDate(item);
-            else if (helper.isHukou(item)) resume.hukou = item.split('：')[1];
+            else if (helper.isHukou(item)) resume.hukou = helper.splitByColon(item)[1];
             else if (helper.isResidency(item)) resume.residency = item.substr(4);
             else if (helper.isPoliticalStatus(item)) resume.politicalStatus = helper.parsePoliticalStatus(item);
             else if (helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
@@ -93,11 +93,13 @@ function parseProjectExperience(table) {
 
     try {
         var html = table.find('td').html();
-        var projects = html.split(/<\/div><br>/g);
-        return _.map(projects, function (project) {
+        var projectsHtml = html.split(/<\/div><br>/g);
+        return _.map(_.filter(projectsHtml, function (projectHtml) {
+            return projectHtml.match('.resume_p');
+        }), function (project) {
             project = project + '</div>';
             var parts = helper.replaceEmpty(project.substr(0, project.indexOf('<div')).split(/<br\/?>|<\/?p>/g));
-            var titleParts = parts[0].split('：');
+            var titleParts = helper.splitByColon(parts[0]);
             var dateRange = helper.parseDateRange(titleParts[0]);
             var descriptions = project.match(/<div.+?>.+?<\/div>/g);
             var result = {
@@ -197,7 +199,10 @@ function parseInSchoolStudy(table) {
     if (table.length === 0) return;
     try {
         var data = helper.parseTableHtml(table);
-        return helper.replaceEmpty(data[0][0].split(/<br>|<\/?div.*?>|<\/?p>/g));
+        return _.map(helper.replaceEmpty(data[0][0].split(/<br>|<\/?div.*?>|<\/?p>/g)),
+            function (line) {
+                return helper.removeTags(line);
+            });
     } catch (e) {
         logger.error(e.stack);
     }

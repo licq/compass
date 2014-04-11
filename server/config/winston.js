@@ -7,14 +7,14 @@ var logger;
 exports.init = function (config) {
     exports.transports = [
         new (winston.transports.Console)({
-            level: 'info',
+            level: 'debug',
             handleExceptions: true,
             colorize: true,
             timestamp: true
         }),
         new (winston.transports.File)({
             filename: config.logFileName,
-            level: 'error',
+            level: 'info',
             handleExceptions: true,
             timestamp: true
         })
