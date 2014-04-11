@@ -38,13 +38,13 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
         job.on('complete', function () {
             logger.info('Fetch ' + email.address + ' complete');
             job.remove(function () {
-                fetchEmailAfter(5);
+                fetchEmailAfter(30);
             });
         });
         job.on('failed', function () {
             logger.info('Fetch ' + email.address + ' failed');
             job.remove(function () {
-                fetchEmailAfter(10);
+                fetchEmailAfter(30);
             });
         });
 
