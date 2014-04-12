@@ -24,7 +24,7 @@ module.exports = function (config) {
             'public/vendor/angular-resource/angular-resource.js',
             'public/vendor/angular-route/angular-route.js',
             'public/vendor/angular-sanitize/angular-sanitize.js',
-            'public/vendor/angular-ui-router/release/angular-ui-router.js',
+            'public/vendor/angular-ui-calendar/src/calendar.js',
             'public/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
             'public/vendor/angular-bootstrap/ui-bootstrap.js',
             'public/vendor/ng-grid/ng-grid-2.0.7.min.js',

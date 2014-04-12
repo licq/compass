@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ngGrid'])
+angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid'])
     .run(function ($rootScope) {
         $rootScope.gridDefaults = {
             multiSelect: false,
@@ -89,9 +89,14 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvResumeListCtrl',
                 resolve: routeRoleChecks.user
             })
-            .when('/resumes/:id',{
+            .when('/resumes/:id', {
                 templateUrl: '/app/resumes/view.html',
                 controller: 'mvResumeViewCtrl',
+                resolve: routeRoleChecks.user
+            })
+            .when('/calendar', {
+                templateUrl: '/app/calendar/view.html',
+                controller: 'mvCalendarViewCtrl',
                 resolve: routeRoleChecks.user
             })
             .otherwise({
