@@ -21,4 +21,5 @@ module.exports = function (config) {
     require('../models/signup');
     require('../models/token');
     require('../models/resume');
+    require('../models/emailTemplate');
 };

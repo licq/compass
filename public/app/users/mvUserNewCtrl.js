@@ -21,8 +21,8 @@ angular.module('compass')
             });
         };
 
-        $scope.close = function(){
+        $scope.close = function () {
             $location.path('/users');
-        }
+        };
     });
 
