@@ -21,7 +21,7 @@ angular.module('compass')
                 'month': '月',
                 'day': '天'
             },
-            minTime: 8
+            firstHour: 8
         };
 
     });
