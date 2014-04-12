@@ -7,16 +7,21 @@ angular.module('compass')
         ];
         $scope.eventCalendarConfig = {
             monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
+            monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
             dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', ],
-            editable: true,
+            dayNamesShort: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', ],
             header: {
-                left: 'month basicWeek basicDay agendaWeek agendaDay',
-                center: '面试日历',
-                right: 'today prev,next'
+                right: 'month agendaWeek agendaDay',
+                center: 'title',
+                left: 'prev,next today'
             },
-            dayClick: $scope.alertEventOnClick,
-            eventDrop: $scope.alertOnDrop,
-            eventResize: $scope.alertOnResize,
+            buttonText: {
+                today: '今日',
+                'week': '周',
+                'month': '月',
+                'day': '天'
+            },
+            minTime: 8
         };
 
     });

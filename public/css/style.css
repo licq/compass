@@ -1639,11 +1639,6 @@ header .nav.nav-pills > li > a:hover, header .nav.nav-pills > li > a:focus {
     border-color: #ff3839;
 }
 
-.fc-button-month, .fc-button-agendaWeek, .fc-button-agendaDay {
-    margin-top: -48px;
-    right: 20px;
-}
-
 .fc-widget-header {
     padding: 7px 0px !important;
     color: #666;
