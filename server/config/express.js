@@ -53,6 +53,10 @@ module.exports = function (app, config) {
 
     });
 
+    app.all('/app/*', function (req, res) {
+        res.send(404);
+    });
+
     app.use(expressWinston.errorLogger({
         transports: winston.transports
     }));

@@ -16,8 +16,14 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
+            serverHtmls: {
+                files: ['server/**/*.html'],
+                options: {
+                    livereload: true
+                }
+            },
             server: {
-                files: ['server.js', 'server/**'],
+                files: ['server.js', 'server/**/*.js'],
                 tasks: ['jshint:server']
             },
             gruntfile: {
@@ -32,7 +38,6 @@ module.exports = function (grunt) {
                 files: ['test/server/**'],
                 tasks: ['jshint:testServer'],
             },
-
             styles: {
                 files: ['public/**/*.css'],
                 options: {

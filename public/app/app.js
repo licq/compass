@@ -99,6 +99,10 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvCalendarViewCtrl',
                 resolve: routeRoleChecks.user
             })
+            .when('/settings/emailTemplates', {
+                templateUrl: '/app/emailTemplates/list.html',
+                controller: 'mvEmailTemplateListCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });
