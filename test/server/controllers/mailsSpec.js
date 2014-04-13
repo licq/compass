@@ -6,7 +6,8 @@ var app = require('../../../server'),
     Factory = require('../factory'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
-    Company = mongoose.model('Company');
+    Company = mongoose.model('Company'),
+    helper = require('./helper');
 
 
 describe('/api/mails', function () {
@@ -17,18 +18,11 @@ describe('/api/mails', function () {
         User.remove().exec();
 
         Factory.create('user', function (user) {
-            Factory.build('mail', function (mail) {
+            Factory.create('mail', {company: user.company}, function (mail) {
                 mailId = mail._id;
-                mail.company = user.company;
-                mail.save(function () {
-                    request(app).post('/api/sessions')
-                        .send({email: user.email, password: user.password})
-                        .expect(200)
-                        .end(function (err, res) {
-                            console.log(res.headers['set-cookie']);
-                            cookies = res.headers['set-cookie'].pop().split(';')[0];
-                            done();
-                        });
+                helper.login(user, function (cks) {
+                    cookies = cks;
+                    done();
                 });
             });
         });

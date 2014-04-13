@@ -6,7 +6,8 @@ var app = require('../../../server'),
     expect = require('chai').expect,
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
-    Factory = require('../factory');
+    Factory = require('../factory'),
+    helper = require('./helper');
 
 
 describe('users', function () {
@@ -18,14 +19,10 @@ describe('users', function () {
         Company.remove().exec();
         Factory.create('user', function (user) {
             existUser = user;
-            request(app).post('/api/sessions')
-                .send({email: user.email, password: user.password})
-                .expect(200)
-                .end(function (err, res) {
-                    cookies = res.headers['set-cookie'].pop().split(';')[0];
-                    done();
-                });
-
+            helper.login(user, function (cks) {
+                cookies = cks;
+                done();
+            });
         });
     });
 
