@@ -7,16 +7,21 @@ angular.module('compass')
             height: 500,
             plugins: 'link image',
             menubar: 'tools table format view insert edit',
-            toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright | insertName',
+            toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright | insertName | insertApplyPosition',
             content_css: '/css/tinymce-content.css',
             setup: function (ed) {
-                console.log('in setup');
                 ed.addButton('insertName', {
-                    title: '插入姓名',
-                    img: '/img/star.gif',
+                    text: '插入姓名',
                     onclick: function () {
                         ed.focus();
                         ed.execCommand('mceInsertContent', false, '{{name}}');
+                    }
+                });
+                ed.addButton('insertApplyPosition', {
+                    text: '插入应聘职位',
+                    onclick: function () {
+                        ed.focus();
+                        ed.execCommand('mceInsertContent', false, '{{applyPosition}}');
                     }
                 });
             }
@@ -40,5 +45,9 @@ angular.module('compass')
             }, function (res) {
                 $scope.err = res.data;
             });
+        };
+
+        $scope.cancel = function () {
+            $location.path('/settings/emailTemplates');
         };
     });

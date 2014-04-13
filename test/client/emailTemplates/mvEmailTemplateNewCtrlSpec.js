@@ -46,4 +46,11 @@ describe('mvEmailTemplateNewCtrl', function () {
     it('should have three crumbs', function () {
         expect($scope.crumbs).to.have.length(3);
     });
+
+    it('should go to /settings/emailTemplates when click cancel', inject(function ($location) {
+        var spy = sinon.spy($location, 'path');
+        $scope.cancel();
+
+        expect(spy).to.have.been.calledWith('/settings/emailTemplates');
+    }));
 });
