@@ -29,3 +29,20 @@ exports.create = function (req, res, next) {
         res.send(200);
     });
 };
+
+exports.delete = function (req, res, next) {
+    req.emailTemplate.remove(function (err) {
+        if (err) return next(err);
+        res.send(200);
+    });
+};
+
+exports.load = function (req, res, next, id) {
+    EmailTemplate.findOne({_id: id, company: req.user.company})
+        .exec(function (err, emailTemplate) {
+            if (err) return next(err);
+            if (!emailTemplate) return res.send(404, {message: 'not found'});
+            req.emailTemplate = emailTemplate;
+            next();
+        });
+};

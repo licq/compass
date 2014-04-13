@@ -43,6 +43,8 @@ module.exports = function (app) {
 
     app.get('/api/emailTemplates', sessions.requiresLogin, emailTemplates.list);
     app.post('/api/emailTemplates', sessions.requiresLogin, emailTemplates.create);
+    app.delete('/api/emailTemplates/:emailTemplateId', emailTemplates.delete);
+    app.param('emailTemplateId', sessions.requiresLogin, emailTemplates.load);
 
     app.all('/api/*', function (req, res) {
         logger.error('request unknown url ' + req.url);

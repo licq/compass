@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvEmailTemplateListCtrl', function ($scope, mvEmailTemplate) {
+    .controller('mvEmailTemplateListCtrl', function ($scope, mvEmailTemplate, $location) {
         $scope.crumbs = [
             {text: '设置', url: 'settings'},
             {text: '邮件模板', url: 'emailTemplates'}
@@ -16,7 +16,8 @@ angular.module('compass')
                     displayName: '操作',
                     sortable: false,
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
-                        '<view-button action="view(row.entity)"></view-button>' +
+                        '<edit-button action="edit(row)"></edit-button>' +
+                        '<delete-button action="remove(row)"></delete-button>' +
                         '</div>'}
             ],
 
@@ -26,4 +27,15 @@ angular.module('compass')
                 }
             }
         }, $scope.gridDefaults);
+
+        $scope.edit = function (row) {
+            $location.path('/settings/emailTemplates/edit/' + row.entity._id);
+        };
+
+        $scope.remove = function (row) {
+            var emailTemplate = row.entity;
+            emailTemplate.$delete(function () {
+                $scope.emailTemplates.splice(row.rowIndex, 1);
+            });
+        };
     });

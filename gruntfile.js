@@ -109,7 +109,7 @@ module.exports = function (grunt) {
                         nodemon.on('restart', function () {
                             setTimeout(function () {
                                 require('fs').writeFileSync('.rebooted', 'rebooted');
-                            }, 1000);
+                            }, 3000);
                         });
                     }
                 }

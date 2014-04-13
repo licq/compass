@@ -70,6 +70,15 @@ describe('users', function () {
                 });
         });
     });
+
+    describe('DELETE /api/emailTemplates/:id', function () {
+        it('should return 200', function (done) {
+            var req = request(app).del('/api/emailTemplates/' + emailTemplate._id);
+            req.cookies = cookies;
+            req.expect(200)
+                .end(done);
+        });
+    });
 });
 
 

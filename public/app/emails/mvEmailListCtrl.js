@@ -22,24 +22,22 @@ angular.module('compass')
                     displayName: '操作',
                     sortable: false,
                     cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
-                        '<edit-button action="edit()"></edit-button>' +
-                        '<delete-button action="remove()"></delete-button>' +
+                        '<edit-button action="edit(row)"></edit-button>' +
+                        '<delete-button action="remove(row)"></delete-button>' +
                         '</div>'}
             ]
         }, $scope.gridDefaults);
 
-        $scope.remove = function () {
-            var index = this.row.rowIndex;
-            var email = $scope.emails[index];
+        $scope.remove = function (row) {
+            var email = row.entity;
             if (confirm('真的要删除' + email.address + '吗？')) {
                 email.$delete(function () {
-                    $scope.emails.splice(index, 1);
+                    $scope.emails.splice(row.rowIndex, 1);
                 });
             }
         };
 
-        $scope.edit = function () {
-            var index = this.row.rowIndex;
-            $location.path('/emails/edit/' + $scope.emails[index]._id);
+        $scope.edit = function (row) {
+            $location.path('/emails/edit/' + row.entity._id);
         };
     });
