@@ -18,9 +18,9 @@ exports.create = function (req, res, next) {
         subject: req.body.subject,
         createdBy: req.user,
         company: req.user.company
-    }, function (err, emailTemplate) {
+    }, function (err) {
         if (err) {
-            if (err.code === 11000 || err.code = 11001) {
+            if (err.code === 11000 || err.code === 11001) {
                 return res.json(400, {message: '名称已经存在'});
             } else {
                 return res.json(400, err);

@@ -5,7 +5,8 @@ angular.module('compass')
         $scope.tinymceOptions = {
             language: 'zh_CN',
             height: 500,
-            menubar: 'tools table format view insert edit'
+            menubar: 'tools table format view insert edit',
+            content_css: '/css/tinymce-content.css'
         };
 
         $scope.crumbs = [
