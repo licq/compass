@@ -5,8 +5,21 @@ angular.module('compass')
         $scope.tinymceOptions = {
             language: 'zh_CN',
             height: 500,
+            plugins: 'link image',
             menubar: 'tools table format view insert edit',
-            content_css: '/css/tinymce-content.css'
+            toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright | insertName',
+            content_css: '/css/tinymce-content.css',
+            setup: function (ed) {
+                console.log('in setup');
+                ed.addButton('insertName', {
+                    title: '插入姓名',
+                    img: '/img/star.gif',
+                    onclick: function () {
+                        ed.focus();
+                        ed.execCommand('mceInsertContent', false, '{{name}}');
+                    }
+                });
+            }
         };
 
         $scope.crumbs = [
