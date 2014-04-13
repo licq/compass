@@ -8,11 +8,11 @@
         "angular-mocks": "latest",
         "angular-route": "latest",
         "angular-bootstrap": "0.10.0",
+        "angular-sanitize": "latest",
         "ng-grid": "~2.0.7",
-        "angular-sanitize": "~1.2.15",
-        "angular-ui-calendar": "~0.8.0",
         "fullcalendar": "~1.6.4",
-        "angular-ui-tinymce": "~0.0.4",
-        "tinymce": "git://github.com/jozzhart/tinymce.git#4.0.0"
+        "angular-ui-calendar": "~0.8.0",
+        "tinymce": "git://github.com/licq/tinymce.git#master",
+        "angular-ui-tinymce": "git://github.com/licq/ui-tinymce.git#master"
     }
 }

@@ -6,9 +6,10 @@ angular.module('compass')
             language: 'zh_CN',
             height: 500,
             plugins: 'link image table',
+            statusbar: false,
             menubar: 'tools table format view insert edit',
             toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright | insertName | insertApplyPosition',
-            content_css: '/css/tinymce-content.css',
+            content_css: '/vendor/tinymce/tinymce-content.css',
             setup: function (ed) {
                 ed.addButton('insertName', {
                     text: '插入姓名',
