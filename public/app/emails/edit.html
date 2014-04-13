@@ -28,7 +28,7 @@
                                                placeholder="邮箱帐号" required=""/>
 
                                         <p class="text-danger"
-                                           ng-show="emailForm.account.$error.required && !emailForm.account.$pristine">
+                                           ng-show="emailTemplateForm.account.$error.required && !emailTemplateForm.account.$pristine">
                                             请输入邮箱帐号</p>
 
                                     </div>
@@ -38,7 +38,7 @@
                                                ng-model="email.password" placeholder="密码" required=""/>
 
                                         <p class="text-danger"
-                                           ng-show="emailForm.password.$error.required && !emailForm.password.$pristine">
+                                           ng-show="emailTemplateForm.password.$error.required && !emailTemplateForm.password.$pristine">
                                             请输入密码</p>
                                     </div>
                                     <div class="form-group">
@@ -49,7 +49,7 @@
                                                name="server" required=""/>
 
                                         <p class="text-danger"
-                                           ng-show="emailForm.server.$error.required && !emailForm.server.$pristine">
+                                           ng-show="emailTemplateForm.server.$error.required && !emailTemplateForm.server.$pristine">
                                             请输入邮件服务器地址</p>
 
                                     </div>
@@ -75,7 +75,7 @@
 
                                     <br/>
                                     <button class="btn btn-primary" ng-click="update()"
-                                            ng-disabled="emailForm.$invalid">保存
+                                            ng-disabled="emailTemplateForm.$invalid">保存
                                     </button>
                                     <button class="btn btn-info" ng-click="cancel()">取消</button>
 

@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
-describe.only('EmailTemplate', function () {
+describe('EmailTemplate', function () {
 
     describe('#create', function () {
         it('should show errors if with empty arguments', function (done) {

@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid'])
+angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
+    'ui.tinymce'])
     .run(function ($rootScope) {
         $rootScope.gridDefaults = {
             multiSelect: false,
@@ -102,6 +103,10 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
             .when('/settings/emailTemplates', {
                 templateUrl: '/app/emailTemplates/list.html',
                 controller: 'mvEmailTemplateListCtrl'
+            })
+            .when('/settings/emailTemplates/new', {
+                templateUrl: '/app/emailTemplates/new.html',
+                controller: 'mvEmailTemplateNewCtrl'
             })
             .otherwise({
                 redirectTo: '/'
