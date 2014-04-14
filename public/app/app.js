@@ -10,6 +10,35 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
             showFooter: true,
             i18n: 'zh-cn'
         };
+        $rootScope.tinymceOptions = {
+            language: 'zh_CN',
+            height: 500,
+            plugins: 'link image table',
+            statusbar: false,
+            menubar: 'tools table format view insert edit',
+            toolbar: 'undo redo | styleselect | bold italic | link image | alignleft aligncenter alignright | insertName | insertApplyPosition',
+            content_css: '/vendor/tinymce/tinymce-content.css',
+            setup: function (ed) {
+                ed.addButton('insertName', {
+                    text: '插入姓名',
+                    icon: false,
+                    onclick: function () {
+                        ed.focus();
+                        ed.execCommand('mceInsertContent', false, '{{name}}');
+                    }
+                });
+                ed.addButton('insertApplyPosition', {
+                    text: '插入应聘职位',
+                    icon: false,
+                    onclick: function () {
+                        ed.focus();
+                        ed.execCommand('mceInsertContent', false, '{{applyPosition}}');
+                    }
+                });
+
+                console.log('in setup function');
+            }
+        };
     })
     .config(function ($routeProvider, $locationProvider, $httpProvider) {
         var routeRoleChecks = {

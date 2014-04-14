@@ -44,6 +44,8 @@ module.exports = function (app) {
     app.get('/api/emailTemplates', sessions.requiresLogin, emailTemplates.list);
     app.post('/api/emailTemplates', sessions.requiresLogin, emailTemplates.create);
     app.delete('/api/emailTemplates/:emailTemplateId', emailTemplates.delete);
+    app.get('/api/emailTemplates/:emailTemplateId', emailTemplates.get);
+    app.put('/api/emailTemplates/:emailTemplateId', emailTemplates.update);
     app.param('emailTemplateId', sessions.requiresLogin, emailTemplates.load);
 
     app.all('/api/*', function (req, res) {
@@ -51,8 +53,8 @@ module.exports = function (app) {
         res.send(404);
     });
 
-    app.all('/api/*', function (err, req, res, next) {
-        logger.error(err);
+    app.all('/api/*', function (err, req, res) {
+        logger.error(err.stack);
         res.status(500).json({message: 'Internal Server Error',
             stack: err.stack});
     });

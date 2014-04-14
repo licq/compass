@@ -19,13 +19,7 @@ angular.module('compass')
                         '<edit-button action="edit(row)"></edit-button>' +
                         '<delete-button action="remove(row)"></delete-button>' +
                         '</div>'}
-            ],
-
-            afterSelectionChange: function (row) {
-                if (row.selected) {
-                    $scope.view(row.entity);
-                }
-            }
+            ]
         }, $scope.gridDefaults);
 
         $scope.edit = function (row) {

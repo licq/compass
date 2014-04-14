@@ -1,7 +1,8 @@
 "use strict";
 
 var mongoose = require('mongoose'),
-    EmailTemplate = mongoose.model('EmailTemplate');
+    EmailTemplate = mongoose.model('EmailTemplate'),
+    _ = require('lodash');
 
 exports.list = function (req, res, next) {
     EmailTemplate.find({company: req.user.company})
@@ -11,7 +12,7 @@ exports.list = function (req, res, next) {
         });
 };
 
-exports.create = function (req, res, next) {
+exports.create = function (req, res) {
     EmailTemplate.create({
         name: req.body.name,
         content: req.body.content,
@@ -19,6 +20,25 @@ exports.create = function (req, res, next) {
         createdBy: req.user,
         company: req.user.company
     }, function (err) {
+        if (err) {
+            if (err.code === 11000 || err.code === 11001) {
+                return res.json(400, {message: '名称已经存在'});
+            } else {
+                return res.json(400, err);
+            }
+        }
+        res.send(200);
+    });
+};
+
+exports.get = function (req, res) {
+    res.json(req.emailTemplate);
+};
+
+exports.update = function (req, res) {
+    _.merge(req.emailTemplate, req.body);
+    console.log('enter here');
+    req.emailTemplate.save(function (err) {
         if (err) {
             if (err.code === 11000 || err.code === 11001) {
                 return res.json(400, {message: '名称已经存在'});

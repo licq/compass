@@ -79,6 +79,41 @@ describe('users', function () {
                 .end(done);
         });
     });
+
+    describe('GET /api/emailTemplates/:id', function () {
+        it('should return 200 with json result', function (done) {
+            var req = request(app).get('/api/emailTemplates/' + emailTemplate._id);
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    expect(err).to.not.exist;
+                    expect(res.body).to.have.property('_id', emailTemplate._id.toString());
+                    done();
+                });
+        });
+    });
+
+    describe('PUT /api/emailTemplates/:id', function () {
+        it('should return 200 with correct data', function (done) {
+            var req = request(app).put('/api/emailTemplates/' + emailTemplate._id);
+            req.cookies = cookies;
+            req.send({
+                name: 'change to another name',
+                content: 'new content',
+                subject: 'new subject'
+            })
+                .expect(200)
+                .end(function (err) {
+                    expect(err).to.not.exist;
+                    EmailTemplate.findOne({_id: emailTemplate._id}, function (err, loaded) {
+                        expect(loaded).to.have.property('content', 'new content');
+                        expect(loaded).to.have.property('subject', 'new subject');
+                        done();
+                    });
+                });
+        });
+    });
 });
 
 
