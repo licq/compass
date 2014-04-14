@@ -11,7 +11,7 @@ var app = require('../../../server'),
     helper = require('./helper');
 
 
-describe('users', function () {
+describe('emailTemplates', function () {
     var cookies,
         emailTemplate,
         user;

@@ -2,9 +2,7 @@ var mongoose = require('mongoose'),
     EvaluationCriterion = mongoose.model('EvaluationCriterion'),
     Company = mongoose.model('Company'),
     Factory = require('../factory'),
-    _ = require('lodash'),
     expect = require('chai').expect;
-
 
 describe('EvaluationCriterion', function () {
     var criterionData;
@@ -12,7 +10,7 @@ describe('EvaluationCriterion', function () {
         clearData();
         Factory.create('company', function (company) {
             criterionData = {
-                criterions: [
+                items: [
                     {
                         name: '工作能力',
                         rate: 0.3
@@ -44,6 +42,25 @@ describe('EvaluationCriterion', function () {
                 expect(err.errors.company).to.exist;
                 done();
             });
+        });
+    });
+
+    it('should find the created one', function (done) {
+        EvaluationCriterion.create(criterionData, function () {
+            EvaluationCriterion.findOrCreate(criterionData.company, function (err, criterion) {
+                expect(err).to.not.exist;
+                expect(criterion).to.exist;
+                done();
+            });
+        });
+    });
+
+    it('should create a new one when no exist', function (done) {
+        EvaluationCriterion.findOrCreate(criterionData.company, function (err, criterion) {
+            expect(err).to.not.exist;
+            expect(criterion).to.exist;
+            expect(criterion.items).to.have.length(6);
+            done();
         });
     });
 

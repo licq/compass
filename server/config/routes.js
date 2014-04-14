@@ -8,6 +8,7 @@ var fs = require('fs'),
     users = require('../controllers/users'),
     resumes = require('../controllers/resumes'),
     emailTemplates = require('../controllers/emailTemplates'),
+    evaluationCriterions = require('../controllers/evaluationCriterions'),
     logger = require('./winston').logger();
 
 module.exports = function (app) {
@@ -47,6 +48,8 @@ module.exports = function (app) {
     app.get('/api/emailTemplates/:emailTemplateId', emailTemplates.get);
     app.put('/api/emailTemplates/:emailTemplateId', emailTemplates.update);
     app.param('emailTemplateId', sessions.requiresLogin, emailTemplates.load);
+
+    app.get('/api/evaluationCriterions', sessions.requiresLogin, evaluationCriterions.get);
 
     app.all('/api/*', function (req, res) {
         logger.error('request unknown url ' + req.url);

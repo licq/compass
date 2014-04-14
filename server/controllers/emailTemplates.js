@@ -37,7 +37,6 @@ exports.get = function (req, res) {
 
 exports.update = function (req, res) {
     _.merge(req.emailTemplate, req.body);
-    console.log('enter here');
     req.emailTemplate.save(function (err) {
         if (err) {
             if (err.code === 11000 || err.code === 11001) {
