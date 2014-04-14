@@ -2283,3 +2283,11 @@ footer .copy {
 .nav-tabs li a {
     cursor: pointer;
 }
+
+.ngCellText {
+    padding-top: 10px;
+}
+
+.ngCell input {
+    margin-top: 5px;
+}

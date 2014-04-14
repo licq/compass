@@ -141,6 +141,10 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 templateUrl: '/app/emailTemplates/edit.html',
                 controller: 'mvEmailTemplateEditCtrl'
             })
+            .when('/settings/evaluationCriterions', {
+                templateUrl: '/app/evaluationCriterions/edit.html',
+                controller: 'mvEvaluationCriterionEditCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });

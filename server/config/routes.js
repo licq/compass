@@ -50,6 +50,7 @@ module.exports = function (app) {
     app.param('emailTemplateId', sessions.requiresLogin, emailTemplates.load);
 
     app.get('/api/evaluationCriterions', sessions.requiresLogin, evaluationCriterions.get);
+    app.put('/api/evaluationCriterions', sessions.requiresLogin, evaluationCriterions.update);
 
     app.all('/api/*', function (req, res) {
         logger.error('request unknown url ' + req.url);

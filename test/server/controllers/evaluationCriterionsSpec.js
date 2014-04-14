@@ -60,23 +60,21 @@ describe('evaluationCriterion', function () {
     });
 
 
-    describe.skip('PUT /api/emailTemplates/:id', function () {
-        it('should return 200 with correct data', function (done) {
-            var req = request(app).put('/api/emailTemplates/' + emailTemplate._id);
+    describe('PUT /api/evaluationCriterions', function () {
+        it('should return 200', function (done) {
+            var items = [
+                { name: '工作态度', rate: 1 }
+            ];
+            var req = request(app).put('/api/evaluationCriterions');
             req.cookies = cookies;
             req.send({
-                name: 'change to another name',
-                content: 'new content',
-                subject: 'new subject'
+                items: items,
+                company: user.company
             })
                 .expect(200)
                 .end(function (err) {
                     expect(err).to.not.exist;
-                    EmailTemplate.findOne({_id: emailTemplate._id}, function (err, loaded) {
-                        expect(loaded).to.have.property('content', 'new content');
-                        expect(loaded).to.have.property('subject', 'new subject');
-                        done();
-                    });
+                    done();
                 });
         });
     });

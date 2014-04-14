@@ -28,7 +28,7 @@ angular.module('compass')
 
         $scope.remove = function (row) {
             var emailTemplate = row.entity;
-            if (confirm('真的要删除' + emailTemplate.name + '吗？')){
+            if (confirm('真的要删除' + emailTemplate.name + '吗？')) {
                 emailTemplate.$delete(function () {
                     $scope.emailTemplates.splice(row.rowIndex, 1);
                 });
