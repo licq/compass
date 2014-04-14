@@ -28,8 +28,10 @@ angular.module('compass')
 
         $scope.remove = function (row) {
             var emailTemplate = row.entity;
-            emailTemplate.$delete(function () {
-                $scope.emailTemplates.splice(row.rowIndex, 1);
-            });
+            if (confirm('真的要删除' + emailTemplate.name + '吗？')){
+                emailTemplate.$delete(function () {
+                    $scope.emailTemplates.splice(row.rowIndex, 1);
+                });
+            }
         };
     });

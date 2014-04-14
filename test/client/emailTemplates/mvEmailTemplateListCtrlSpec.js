@@ -4,9 +4,10 @@ describe('mvEmailTemplateListCtrl', function () {
     var $httpBackend,
         mvEmailTemplateListCtrl,
         $scope,
+        confirmStub,
         emailTemplate1, emailTemplate2;
 
-    beforeEach(inject(function (_$httpBackend_, $rootScope, $controller, mvEmailTemplate) {
+    beforeEach(inject(function (_$httpBackend_, $rootScope, $controller, mvEmailTemplate,$window) {
         $httpBackend = _$httpBackend_;
         $scope = $rootScope.$new();
         mvEmailTemplateListCtrl = $controller('mvEmailTemplateListCtrl', {
@@ -14,7 +15,13 @@ describe('mvEmailTemplateListCtrl', function () {
         });
         emailTemplate1 = new mvEmailTemplate({_id: '7788'});
         emailTemplate2 = new mvEmailTemplate({_id: '8899'});
+        confirmStub = sinon.stub($window,'confirm');
+        confirmStub.returns(true);
     }));
+
+    afterEach(function(){
+        confirmStub.restore();
+    });
 
     it('should get the emailTemplate list', function () {
         $httpBackend.expectGET('/api/emailTemplates').respond([]);
