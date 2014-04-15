@@ -4,10 +4,15 @@ var mongoose = require('mongoose'),
     EmailTemplate = mongoose.model('EmailTemplate'),
     Company = mongoose.model('Company'),
     User = mongoose.model('User'),
+    helper = require('../databaseHelper'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
 describe('EmailTemplate', function () {
+
+    beforeEach(function (done) {
+        helper.clearCollections(Company,User,EmailTemplate,done);
+    });
 
     describe('#create', function () {
         it('should show errors if with empty arguments', function (done) {
@@ -57,20 +62,5 @@ describe('EmailTemplate', function () {
 
 
     });
-
-    beforeEach(function (done) {
-        removeAllRelated(done);
-    });
-
-    after(function (done) {
-        removeAllRelated(done);
-    });
-
-    function removeAllRelated(cb) {
-        Company.remove().exec();
-        User.remove().exec();
-        EmailTemplate.remove().exec();
-        cb();
-    }
 });
 

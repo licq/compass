@@ -5,20 +5,18 @@ var mongoose = require('mongoose'),
     Company = mongoose.model('Company'),
     Email = mongoose.model('Email'),
     expect = require('chai').expect,
-    Factory = require('../factory');
+    Factory = require('../factory'),
+    helper = require('../databaseHelper');
 
 describe('Mail', function () {
 
     beforeEach(function (done) {
-        Mail.remove().exec();
-        Company.remove().exec();
-        Email.remove().exec();
-        done();
+        helper.clearCollections(Mail, Company, Email, done);
     });
 
     describe('#validate', function () {
         it('should begin with no mails', function (done) {
-            Mail.find({}, function (err, mails) {
+            Mail.find(function (err, mails) {
                 expect(mails).have.length(0);
                 done();
             });

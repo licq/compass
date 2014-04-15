@@ -24,7 +24,6 @@ exports.parseDate = function parseDate(input) {
     }
 
     var match = input.match(/\d+/g);
-    if (_.isNull(match)) console.log('match is null ', input);
     var result = new Date();
     result.setYear(parseInt(match[0], 10));
     result.setMonth(parseInt(match[1], 10) - 1);

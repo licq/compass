@@ -143,6 +143,10 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 templateUrl: '/app/evaluationCriterions/edit.html',
                 controller: 'mvEvaluationCriterionEditCtrl'
             })
+            .when('/applications/new', {
+                templateUrl: '/app/applications/list.html',
+                controller: 'mvNewApplicationListCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });

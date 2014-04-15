@@ -4,13 +4,12 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
     expect = require('chai').expect,
-    Factory = require('../factory');
+    Factory = require('../factory'),
+    helper = require('../databaseHelper');
 
 describe('User', function () {
-    after(function (done) {
-        User.remove().exec();
-        Company.remove().exec();
-        done();
+    beforeEach(function(done){
+        helper.clearCollections(Company,User,done);
     });
 
     describe('#validate', function () {

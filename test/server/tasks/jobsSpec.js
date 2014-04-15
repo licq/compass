@@ -20,7 +20,6 @@ describe.skip('jobs', function () {
             Factory.build('email', function (email) {
                 jobs.addFetchEmailJob(email, function () {
                     jobs.findFetchEmailJob(email, function (err, job) {
-                        console.log('called find revoke');
                         expect(err).to.not.exist;
                         expect(job).to.exist;
                         jobs.removeFetchEmailJob(email);

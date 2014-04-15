@@ -4,20 +4,19 @@ var mongoose = require('mongoose'),
     Email = mongoose.model('Email'),
     Company = mongoose.model('Company'),
     expect = require('chai').expect,
-    Factory = require('../factory');
+    Factory = require('../factory'),
+    helper = require('../databaseHelper');
 
 describe('Email', function () {
 
-    before(function (done) {
-        Email.remove().exec();
-        Company.remove().exec();
-        done();
+    beforeEach(function (done) {
+        helper.clearCollections(Email, Company, done);
     });
 
     describe('#validate', function () {
         it('should begin with no emails', function (done) {
-            Email.find({}, function (err, emails) {
-                expect(emails).have.length(0);
+            Email.count(function (err, count) {
+                expect(count).to.equal(0);
                 done();
             });
         });
@@ -112,5 +111,4 @@ describe('Email', function () {
             });
         });
     });
-})
-;
+});

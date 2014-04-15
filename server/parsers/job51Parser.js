@@ -170,7 +170,6 @@ function parseTrainingHistory(table) {
 }
 
 function parseItSkills(table) {
-    console.log(table.html());
     if (table.length === 0) return;
     try {
         return _.map(_.filter(helper.parseTable(table).slice(2), function (line) {

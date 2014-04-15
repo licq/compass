@@ -9,6 +9,7 @@ var fs = require('fs'),
     resumes = require('../controllers/resumes'),
     emailTemplates = require('../controllers/emailTemplates'),
     evaluationCriterions = require('../controllers/evaluationCriterions'),
+    applications = require('../controllers/applications'),
     logger = require('./winston').logger();
 
 module.exports = function (app) {
@@ -51,6 +52,8 @@ module.exports = function (app) {
 
     app.get('/api/evaluationCriterions', sessions.requiresLogin, evaluationCriterions.get);
     app.put('/api/evaluationCriterions', sessions.requiresLogin, evaluationCriterions.update);
+
+    app.get('/api/applications', sessions.requiresLogin, applications.list);
 
     app.all('/api/*', function (req, res) {
         logger.error('request unknown url ' + req.url);

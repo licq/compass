@@ -5,9 +5,13 @@ var mongoose = require('mongoose'),
     Company = mongoose.model('Company'),
     User = mongoose.model('User'),
     expect = require('chai').expect,
-    Factory = require('../factory');
+    Factory = require('../factory'),
+    helper = require('../databaseHelper');
 
 describe('Signup', function () {
+    beforeEach(function (done) {
+        helper.clearCollections(User, Company, Signup, done);
+    });
 
     describe('#validate', function () {
         it('should show errors if with empty arguments', function (done) {
@@ -79,20 +83,6 @@ describe('Signup', function () {
                 });
             });
         });
-    });
-
-    beforeEach(function (done) {
-        User.remove().exec();
-        Company.remove().exec();
-        Signup.remove().exec();
-        done();
-    });
-
-    after(function (done) {
-        User.remove().exec();
-        Company.remove().exec();
-        Signup.remove().exec();
-        done();
     });
 });
 

@@ -2,24 +2,13 @@ var mongoose = require('mongoose'),
     Resume = mongoose.model('Resume'),
     Company = mongoose.model('Company'),
     Application = mongoose.model('Application'),
+    helper = require('../databaseHelper'),
     expect = require('chai').expect,
     Factory = require('../factory');
 
 describe('Resume', function () {
-    function clearData() {
-        Resume.remove().exec();
-        Company.remove().exec();
-        Application.remove().exec();
-    }
-
     beforeEach(function (done) {
-        clearData();
-        done();
-    });
-
-    after(function (done) {
-        clearData();
-        done();
+        helper.clearCollections(Resume,Company,Application,done);
     });
 
     describe('create', function () {
