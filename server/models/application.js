@@ -12,6 +12,7 @@ var applicationSchema = mongoose.Schema({
         ref: 'Resume'
     },
     applyPosition: String,
+    applyDate: Date,
     birthday: Date,
     degree: String,
     gender: String,

@@ -192,14 +192,14 @@ resumeSchema.post('save', function (resume) {
         company: resume.company,
         gender: resume.gender,
         status: 'new',
-        resume: resume._id
+        resume: resume._id,
+        applyDate: resume.applyDate || new Date()
     });
     if (resume.educationHistory && resume.educationHistory.length > 0) {
         application.degree = resume.educationHistory[0].degree;
     }
     application.save(function (err) {
-        if (err) logger.error(err.stack);
-        console.log('saved successfully');
+        if (err) logger.error('save application to mongo failed ', resume._id, err.stack);
     });
 });
 
