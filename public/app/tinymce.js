@@ -35,17 +35,16 @@ angular.module('ui.tinymce', [])
                     var options = {
                         // Update model when calling setContent (such as from the source editor popup)
                         setup: function (ed) {
-                            var args;
-                            ed.on('init', function (args) {
+                            ed.on('init', function () {
                                 ngModel.$render();
                             });
                             // Update model on button click
-                            ed.on('ExecCommand', function (e) {
+                            ed.on('ExecCommand', function () {
                                 ed.save();
                                 updateView();
                             });
                             // Update model on keypress
-                            ed.on('KeyUp', function (e) {
+                            ed.on('KeyUp', function () {
                                 ed.save();
                                 updateView();
                             });
@@ -64,7 +63,9 @@ angular.module('ui.tinymce', [])
                         elements: attrs.id
                     };
                     var result = angular.extend(options, uiTinymceConfig, expression);
-                    if (userSetup) expression.setup = userSetup;
+                    if (userSetup) {
+                        expression.setup = userSetup;
+                    }   
                     return result;
                 };
 

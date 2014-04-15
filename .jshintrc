@@ -24,7 +24,8 @@
         "expect": true,
         "confirm": true,
         "_": true,
-        "toastr": true
+        "toastr": true,
+        "tinymce": true
     },
     "predef": [ // Extra globals.
         "define",
