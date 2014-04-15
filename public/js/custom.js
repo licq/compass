@@ -355,14 +355,6 @@ $(function () {
     });
 });
 
-
-/* CL Editor */
-
-$(".cleditor").cleditor({
-    width: "auto",
-    height: "auto"
-});
-
 /* Modal fix */
 
 $('.modal').appendTo($('body'));
