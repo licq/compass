@@ -7,7 +7,8 @@ var Factory = require('factory-lady'),
     Signup = mongoose.model('Signup'),
     Email = mongoose.model('Email'),
     Mail = mongoose.model('Mail'),
-    EmailTemplate = mongoose.model('EmailTemplate');
+    EmailTemplate = mongoose.model('EmailTemplate'),
+    Resume = mongoose.model('Resume');
 
 var companyCounter = 1;
 
@@ -79,6 +80,15 @@ Factory.define('emailTemplate', EmailTemplate, {
     subject: 'hello',
     company: Factory.assoc('company', 'id'),
     createdBy: Factory.assoc('user', 'id')
+});
+
+var resumeCounter = 1;
+Factory.define('resume', Resume, {
+    name: function (cb) {
+        cb('name' + resumeCounter++);
+    },
+    company: Factory.assoc('company', 'id'),
+    applyPosition: 'cio'
 });
 
 module.exports = Factory;

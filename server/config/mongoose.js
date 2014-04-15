@@ -23,4 +23,5 @@ module.exports = function (config) {
     require('../models/resume');
     require('../models/emailTemplate');
     require('../models/evaluationCriterion');
+    require('../models/application');
 };

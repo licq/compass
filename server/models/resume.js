@@ -1,4 +1,5 @@
 var mongoose = require('mongoose'),
+    logger = require('../config/winston').logger(),
     timestamps = require('mongoose-timestamps');
 
 var resumeSchema = mongoose.Schema({
@@ -181,5 +182,25 @@ var resumeSchema = mongoose.Schema({
 });
 
 resumeSchema.plugin(timestamps);
+
+resumeSchema.post('save', function (resume) {
+    var Application = mongoose.model('Application');
+    var application = new Application({
+        name: resume.name,
+        applyPosition: resume.applyPosition,
+        birthday: resume.birthday,
+        company: resume.company,
+        gender: resume.gender,
+        status: 'new',
+        resume: resume._id
+    });
+    if (resume.educationHistory && resume.educationHistory.length > 0) {
+        application.degree = resume.educationHistory[0].degree;
+    }
+    application.save(function (err) {
+        if (err) logger.error(err.stack);
+        console.log('saved successfully');
+    });
+});
 
 mongoose.model('Resume', resumeSchema);
