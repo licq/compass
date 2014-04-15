@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvUserEditCtrl', function ($scope, mvUser, $routeParams, $location) {
+    .controller('mvUserEditCtrl', function ($scope, mvUser, $routeParams, $location,mvNotifier) {
         mvUser.get({_id: $routeParams.id}, function (user) {
             $scope.user = user;
             $scope.crumbs = [
@@ -13,9 +13,11 @@ angular.module('compass')
         $scope.update = function () {
             $scope.user.$update(function () {
                 $location.path('/users');
+                mvNotifier.notify('添加用户成功');
             }, function (err) {
                 console.log(err);
                 $scope.err = err.data;
+                mvNotifier.error('添加用户失败');
             });
         };
 

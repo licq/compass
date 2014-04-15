@@ -66,7 +66,7 @@ describe('mvEvaluationCriterionEditCtrl', function () {
         expect($scope.evaluationCriterion.items[1].rate).to.equal(1);
     });
 
-    it('should PUT /api/evaluationCriterions', function () {
+    it('should PUT /api/evaluationCriterions', inject(function (mvNotifier) {
         $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
             {
                 name: '主动性',
@@ -81,9 +81,37 @@ describe('mvEvaluationCriterionEditCtrl', function () {
                 rate: 0.5
             }
         ];
+
+        var spy = sinon.spy(mvNotifier, 'notify');
         $httpBackend.expectPUT('/api/evaluationCriterions', {items: items, company: 'company'}).respond(200);
         $scope.evaluationCriterion.items = items;
         $scope.save();
         $httpBackend.flush();
-    });
+        expect(spy).to.have.been.calledWith('修改保存成功');
+    }));
+
+    it('should show error if put /api/evaluationCriterions failed', inject(function (mvNotifier) {
+        $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
+            {
+                name: '主动性',
+                rate: 0.5
+            }
+        ]});
+        $httpBackend.flush();
+
+        var items = [
+            {
+                name: '主动性',
+                rate: 0.5
+            }
+        ];
+
+        var spy = sinon.spy(mvNotifier, 'error');
+        $httpBackend.expectPUT('/api/evaluationCriterions', {items: items, company: 'company'}).respond(500);
+        $scope.evaluationCriterion.items = items;
+        $scope.save();
+        $httpBackend.flush();
+        expect(spy).to.have.been.calledWith('修改保存失败');
+    }));
+
 });

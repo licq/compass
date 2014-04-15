@@ -13,7 +13,8 @@ describe('mvLoginCtrl', function () {
         });
     }));
 
-    it('should redirect to /dashboard when login success', inject(function ($location) {
+    it('should redirect to /dashboard when login success', inject(function ($location, mvNotifier) {
+        var notifySpy = sinon.spy(mvNotifier, 'notify');
         var userData = {email: 'email', password: 'password', remember_me: true};
         $httpBackend.expectPOST('/api/sessions', userData)
             .respond({email: 'email'});
@@ -25,10 +26,11 @@ describe('mvLoginCtrl', function () {
         $httpBackend.flush();
         expect(spy).to.have.been.calledWith('/dashboard');
         expect(spy).to.have.been.calledOnce;
-
+        expect(notifySpy).to.have.been.calledWith('登陆成功');
     }));
 
-    it('should show error when login failed', function () {
+    it('should show error when login failed', inject(function (mvNotifier) {
+        var notifySpy = sinon.spy(mvNotifier, 'error');
         var userData = {email: 'email', password: 'password', remember_me: true};
         $httpBackend.expectPOST('/api/sessions', userData)
             .respond(401, {message: 'error'});
@@ -38,6 +40,6 @@ describe('mvLoginCtrl', function () {
         $scope.login();
         $httpBackend.flush();
         expect($scope.errorMessage).to.equal('error');
-
-    });
+        expect(notifySpy).to.have.been.calledWith('登陆失败');
+    }));
 });

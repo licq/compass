@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvEvaluationCriterionEditCtrl', function ($scope, mvEvaluationCriterion) {
+    .controller('mvEvaluationCriterionEditCtrl', function ($scope, mvEvaluationCriterion, mvNotifier) {
         mvEvaluationCriterion.get(function (criterion) {
             $scope.evaluationCriterion = criterion;
         }, function (res) {
@@ -44,6 +44,11 @@ angular.module('compass')
         };
 
         $scope.save = function () {
-            $scope.evaluationCriterion.$update();
+            $scope.evaluationCriterion.$update(function () {
+                mvNotifier.notify('修改保存成功');
+            }, function (res) {
+                console.log(res.body);
+                mvNotifier.error('修改保存失败');
+            });
         };
     });

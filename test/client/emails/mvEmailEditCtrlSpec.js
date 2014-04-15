@@ -30,16 +30,32 @@ describe('mvEmailEditCtrl', function () {
         expect($scope.email).to.exist;
     });
 
-    it('should update email and redirect to /emails', inject(function ($location) {
-        $httpBackend.expectGET('/api/emails/7788').respond(emailData);
-        $httpBackend.flush();
+    describe('update email', function () {
+        beforeEach(function(){
+            $httpBackend.expectGET('/api/emails/7788').respond(emailData);
+            $httpBackend.flush();
+        });
 
-        $httpBackend.expectPUT('/api/emails/7788', emailData).respond(200);
-        var spy = sinon.spy($location, 'path');
+        it('should update email and redirect to /emails', inject(function ($location, mvNotifier) {
+            var notifySpy = sinon.spy(mvNotifier, 'notify');
+            $httpBackend.expectPUT('/api/emails/7788', emailData).respond(200);
+            var spy = sinon.spy($location, 'path');
 
-        $scope.update();
-        $httpBackend.flush();
+            $scope.update();
+            $httpBackend.flush();
 
-        expect(spy).to.have.been.calledWith('/emails');
-    }));
+            expect(spy).to.have.been.calledWith('/emails');
+            expect(notifySpy).to.have.been.calledWith('简历邮箱修改成功');
+        }));
+        it('should show error if failed', inject(function (mvNotifier) {
+            var notifySpy = sinon.spy(mvNotifier, 'error');
+            $httpBackend.expectPUT('/api/emails/7788', emailData).respond(500,{message: 'error'});
+
+            $scope.update();
+            $httpBackend.flush();
+
+            expect($scope.err).to.exist;
+            expect(notifySpy).to.have.been.calledWith('简历邮箱修改失败');
+        }));
+    });
 });

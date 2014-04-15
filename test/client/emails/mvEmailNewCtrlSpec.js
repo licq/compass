@@ -18,22 +18,40 @@ describe('mvEmailNewCtrl', function () {
         expect($scope.email.port).to.equal(110);
     });
 
-    it('should create new email and redirect to /emails', inject(function ($location) {
-        var emailData = {
-            address: 'aa@aa.com',
-            account: 'aa',
-            password: 'aa',
-            server: 'aa.com',
-            port: 110
-        };
+    describe('create new email', function () {
+        var emailData;
+        beforeEach(function () {
+            emailData = {
+                address: 'aa@aa.com',
+                account: 'aa',
+                password: 'aa',
+                server: 'aa.com',
+                port: 110
+            };
+        });
 
-        $httpBackend.expectPOST('/api/emails', emailData).respond(200);
-        var spy = sinon.spy($location, 'path');
-        _.merge($scope.email, emailData);
+        it('should redirect to /emails when success', inject(function ($location, mvNotifier) {
+            var notifySpy = sinon.spy(mvNotifier, 'notify');
+            $httpBackend.expectPOST('/api/emails', emailData).respond(200);
+            var spy = sinon.spy($location, 'path');
+            _.merge($scope.email, emailData);
 
-        $scope.create();
-        $httpBackend.flush();
+            $scope.create();
+            $httpBackend.flush();
 
-        expect(spy).to.have.been.calledWith('/emails');
-    }));
+            expect(spy).to.have.been.calledWith('/emails');
+            expect(notifySpy).to.have.been.calledWith('添加简历邮箱成功');
+        }));
+
+        it('should show error when create failed', inject(function ($location, mvNotifier) {
+            var notifySpy = sinon.spy(mvNotifier, 'error');
+            $httpBackend.expectPOST('/api/emails', emailData).respond(500, {message: 'error'});
+            _.merge($scope.email, emailData);
+
+            $scope.create();
+            $httpBackend.flush();
+
+            expect(notifySpy).to.have.been.calledWith('添加简历邮箱失败');
+        }));
+    });
 });

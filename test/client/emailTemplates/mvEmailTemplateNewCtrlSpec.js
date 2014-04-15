@@ -17,12 +17,13 @@ describe('mvEmailTemplateNewCtrl', function () {
         expect($scope.emailTemplate).to.exist;
     });
 
-    it('should create new EmailTemplate and redirect to /settings/emailTemplates', inject(function ($location) {
+    it('should create new EmailTemplate and redirect to /settings/emailTemplates', inject(function ($location, mvNotifier) {
         var data = {
             subject: 'This is the email template subject',
             name: 'This is the email template name',
             content: 'this is the the email template content'
         };
+        var notifySpy = sinon.spy(mvNotifier, 'notify');
 
         $httpBackend.expectPOST('/api/emailTemplates', data).respond(200);
         var spy = sinon.spy($location, 'path');
@@ -32,16 +33,19 @@ describe('mvEmailTemplateNewCtrl', function () {
         $httpBackend.flush();
 
         expect(spy).to.have.been.calledWith('/settings/emailTemplates');
+        expect(notifySpy).to.have.been.calledWith('添加邮件模板成功');
     }));
 
-    it('should set error when remote failed', function () {
+    it('should set error when remote failed', inject(function (mvNotifier) {
+        var notifySpy = sinon.spy(mvNotifier, 'error');
         $httpBackend.expectPOST('/api/emailTemplates').respond(400, {message: 'name is duplicated'});
 
         $scope.create();
         $httpBackend.flush();
 
         expect($scope.err).to.exist;
-    });
+        expect(notifySpy).to.have.been.calledWith('添加邮件模板失败');
+    }));
 
     it('should have three crumbs', function () {
         expect($scope.crumbs).to.have.length(3);

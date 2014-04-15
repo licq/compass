@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvEmailTemplateEditCtrl', function ($scope, $routeParams, $location, mvEmailTemplate) {
+    .controller('mvEmailTemplateEditCtrl', function ($scope, $routeParams, $location, mvEmailTemplate,mvNotifier) {
         mvEmailTemplate.get({_id: $routeParams.id}, function (emailTemplate) {
             $scope.emailTemplate = emailTemplate;
             $scope.crumbs = [
@@ -12,8 +12,10 @@ angular.module('compass')
         $scope.update = function () {
             $scope.emailTemplate.$update(function () {
                 $location.path('/settings/emailTemplates');
+                mvNotifier.notify('修改邮件模板成功');
             }, function (res) {
                 $scope.err = res.data;
+                mvNotifier.error('修改简历模板失败');
             });
         };
 

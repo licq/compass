@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvEmailTemplateNewCtrl', function ($scope, mvEmailTemplate, $location) {
+    .controller('mvEmailTemplateNewCtrl', function ($scope, mvEmailTemplate, $location,mvNotifier) {
         $scope.emailTemplate = new mvEmailTemplate();
 
         $scope.crumbs = [
@@ -17,8 +17,10 @@ angular.module('compass')
         $scope.create = function () {
             $scope.emailTemplate.$save(function () {
                 $location.path('/settings/emailTemplates');
+                mvNotifier.notify('添加邮件模板成功');
             }, function (res) {
                 $scope.err = res.data;
+                mvNotifier.error('添加邮件模板失败');
             });
         };
 

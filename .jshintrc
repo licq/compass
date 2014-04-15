@@ -23,7 +23,8 @@
         "angular": true,
         "expect": true,
         "confirm": true,
-        "_": true
+        "_": true,
+        "toastr": true
     },
     "predef": [ // Extra globals.
         "define",

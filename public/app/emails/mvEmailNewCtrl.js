@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvEmailNewCtrl', function ($scope, $location, mvEmail) {
+    .controller('mvEmailNewCtrl', function ($scope, $location, mvEmail, mvNotifier) {
         $scope.crumbs = [
             {text: '简历邮箱', url: 'emails'},
             {text: '新增', url: 'new'}
@@ -14,9 +14,11 @@ angular.module('compass')
             $scope.saving = true;
             $scope.email.$save(function () {
                 $location.path('/emails');
+                mvNotifier.notify('添加简历邮箱成功');
             }, function (err) {
                 $scope.saving = false;
                 $scope.err = err.data;
+                mvNotifier.error('添加简历邮箱失败');
             });
         };
 

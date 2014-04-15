@@ -25,7 +25,8 @@ describe('mvEmailTemplateEditCtrl', function () {
         expect($scope.emailTemplate).to.exist;
     });
 
-    it('should update emailTemplate and redirect to /emailTemplates', inject(function ($location) {
+    it('should update emailTemplate and redirect to /emailTemplates', inject(function ($location,mvNotifier) {
+        var notifySpy = sinon.spy(mvNotifier, 'notify');
         $httpBackend.expectGET('/api/emailTemplates/7788').respond(emailTemplateData);
         $httpBackend.flush();
 
@@ -36,9 +37,11 @@ describe('mvEmailTemplateEditCtrl', function () {
         $httpBackend.flush();
 
         expect(spy).to.have.been.calledWith('/settings/emailTemplates');
+        expect(notifySpy).to.have.been.calledWith('修改邮件模板成功');
     }));
 
-    it('should show error if update failed', function () {
+    it('should show error if update failed', inject(function (mvNotifier) {
+        var notifySpy = sinon.spy(mvNotifier,'error');
         $httpBackend.expectGET('/api/emailTemplates/7788').respond(emailTemplateData);
         $httpBackend.flush();
 
@@ -49,7 +52,8 @@ describe('mvEmailTemplateEditCtrl', function () {
 
         expect($scope.err).to.exist;
         expect($scope.err.message).to.equal('名称重复');
-    });
+        expect(notifySpy).to.have.been.calledWith('修改简历模板失败');
+    }));
 
     it('should have correct breadcrumbs', function () {
         $httpBackend.expectGET('/api/emailTemplates/7788').respond(emailTemplateData);
