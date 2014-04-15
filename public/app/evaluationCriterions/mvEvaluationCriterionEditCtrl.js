@@ -47,7 +47,7 @@ angular.module('compass')
             $scope.evaluationCriterion.$update(function () {
                 mvNotifier.notify('修改保存成功');
             }, function (res) {
-                console.log(res.body);
+                $scope.err = res.data;
                 mvNotifier.error('修改保存失败');
             });
         };

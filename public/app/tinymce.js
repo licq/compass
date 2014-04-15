@@ -65,7 +65,7 @@ angular.module('ui.tinymce', [])
                     var result = angular.extend(options, uiTinymceConfig, expression);
                     if (userSetup) {
                         expression.setup = userSetup;
-                    }   
+                    }
                     return result;
                 };
 

@@ -17,7 +17,6 @@ angular.module('compass')
                 $location.path('/emails');
                 mvNotifier.notify('简历邮箱修改成功');
             }, function (res) {
-                console.log(res);
                 $scope.saving = false;
                 $scope.err = res.data;
                 mvNotifier.error('简历邮箱修改失败');
