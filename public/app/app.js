@@ -35,8 +35,6 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                         ed.execCommand('mceInsertContent', false, '{{applyPosition}}');
                     }
                 });
-
-                console.log('in setup function');
             }
         };
     })
