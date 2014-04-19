@@ -122,6 +122,21 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvResumeViewCtrl',
                 resolve: routeRoleChecks.user
             })
+            .when('/companies', {
+                templateUrl: '/app/companies/list.html',
+                controller: 'mvCompanyListCtrl',
+                resolve: routeRoleChecks.user
+            })
+            .when('/companies/new', {
+                templateUrl: '/app/companies/new.html',
+                controller: 'mvCompanyNewCtrl',
+                resolve: routeRoleChecks.user
+            })
+            .when('/companies/edit/:id', {
+                templateUrl: '/app/companies/edit.html',
+                controller: 'mvCompanyEditCtrl',
+                resolve: routeRoleChecks.user
+            })
             .when('/calendar', {
                 templateUrl: '/app/calendar/view.html',
                 controller: 'mvCalendarViewCtrl',

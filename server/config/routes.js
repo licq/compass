@@ -10,7 +10,8 @@ var fs = require('fs'),
     emailTemplates = require('../controllers/emailTemplates'),
     evaluationCriterions = require('../controllers/evaluationCriterions'),
     applications = require('../controllers/applications'),
-    logger = require('./winston').logger();
+    logger = require('./winston').logger(),
+    companies = require('../controllers/companies');
 
 module.exports = function (app) {
 
@@ -38,6 +39,10 @@ module.exports = function (app) {
     app.put('/api/users/:userId', users.update);
     app.delete('/api/users/:userId', users.delete);
     app.param('userId', sessions.requiresLogin, users.load);
+
+    app.get('/api/companies', sessions.requiresLogin, companies.list);
+    app.get('/api/companies/:companyId', companies.get);
+    app.param('companyId', sessions.requiresLogin, companies.load);
 
     app.get('/api/resumes', sessions.requiresLogin, resumes.list);
     app.get('/api/resumes/:resumeId', resumes.get);
