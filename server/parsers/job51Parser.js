@@ -8,7 +8,9 @@ var cheerio = require('cheerio'),
 function parseCertifications(table) {
     if (table.length === 0) return;
     try {
-        return _.map(helper.parseTable(table), function (line) {
+        return _.map(_.filter(helper.parseTable(table), function (element, index) {
+            return index % 2 === 0;
+        }), function (line) {
             return {
                 date: helper.parseDate(line[0]),
                 subject: line[1],
@@ -64,12 +66,21 @@ function parseCareerObjective(table) {
             return helper.removeSpaces(helper.splitByColon(line[0])[1]);
         });
 
-        careerObjective.entryTime = helper.parseEntryTime(items[0]);
-        careerObjective.typeOfEmployment = helper.parseTypeOfEmployment(items[1]);
-        careerObjective.industry = helper.splitByCommas(items[2]);
-        careerObjective.locations = helper.splitByCommas(items[3]);
-        careerObjective.targetSalary = helper.parseTargetSalary(items[4]);
-        careerObjective.jobCategory = helper.splitByCommas(items[5]);
+        _.forEach(items, function (item) {
+            if (helper.isEntryTime(item)) {
+                careerObjective.entryTime = helper.parseEntryTime(item);
+            } else if (helper.isTypeOfEmployment(item)) {
+                careerObjective.typeOfEmployment = helper.parseTypeOfEmployment(item);
+            } else if (helper.isIndustry(item)) {
+                careerObjective.industry = helper.splitByCommas(item);
+            } else if (helper.isLocations(item)) {
+                careerObjective.locations = helper.splitByCommas(item);
+            } else if (helper.isTargetSalary(item)) {
+                careerObjective.targetSalary = helper.parseTargetSalary(item);
+            } else if (helper.isJobCategory(item)) {
+                careerObjective.jobCategory = helper.splitByCommas(item);
+            }
+        });
         return careerObjective;
     } catch (e) {
         logger.error(e.stack);
@@ -134,14 +145,14 @@ function parseEducationHistory(table) {
     if (table.length === 0) return;
     try {
         var tableData = helper.parseTable(table);
-        return _.times(tableData.length / 2, function (n) {
-            var dateRange = helper.parseDateRange(tableData[n * 2][0]);
+        return _.times((tableData.length + 1) / 3, function (n) {
+            var dateRange = helper.parseDateRange(tableData[n * 3][0]);
             return { from: dateRange.from,
                 to: dateRange.to,
-                school: tableData[n * 2][1],
-                major: tableData[n * 2][2],
-                degree: helper.parseDegree(tableData[n * 2][3]),
-                description: tableData[n * 2 + 1][0]
+                school: tableData[n * 3][1],
+                major: tableData[n * 3][2],
+                degree: helper.parseDegree(tableData[n * 3][3]),
+                description: tableData[n * 3 + 1][0]
             };
         });
     } catch (e) {
@@ -166,6 +177,18 @@ function parseTrainingHistory(table) {
         return trainingHistory;
     } catch (e) {
         logger.error(e.stack);
+    }
+}
+
+function parseInSchoolStudy(table) {
+    if (table.length === 0) return;
+    try {
+        var data = helper.parseTable(table);
+        return _.map(data, function (item) {
+            return item.join(' ');
+        });
+    } catch (e) {
+        logger.error('parse in school study failed: ', e.stack);
     }
 }
 
@@ -243,6 +266,7 @@ exports.parse = function (data) {
     resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'));
     resume.itSkills = parseItSkills(findTable('IT'));
     resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'));
+    resume.inSchoolStudy = parseInSchoolStudy(findTable('所获奖项'));
     resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
     resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
     resume.matchRate = helper.parseMatchRate($('font b').text());

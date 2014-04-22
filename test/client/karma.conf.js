@@ -29,7 +29,6 @@ module.exports = function (config) {
             'public/vendor/angular-bootstrap/ui-bootstrap.js',
             'public/vendor/ng-grid/ng-grid-2.0.7.min.js',
             'public/vendor/tinymce/tinymce.min.js',
-            'public/vendor/angular-ui-tinymce/src/tinymce.js',
             'public/vendor/toastr/toastr.min.js',
             'public/app/app.js',
             'public/app/directives.js',
