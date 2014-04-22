@@ -88,6 +88,41 @@ function parseWorkExperience(table) {
         logger.error(e.stack);
     }
 }
+
+function parseTrainingHistory(table) {
+    if (table.length === 0) return;
+
+    try {
+        var htmls = helper.parseTableHtml(table);
+        return _.map(_.filter(htmls, function (value, index) {
+            return index % 2 === 0;
+        }), function (element) {
+            var lines = element[0].split('<br>');
+            var items = helper.splitByColon(lines.shift());
+            var dateRange = helper.parseDateRange(items[0]);
+            var training = {
+                from: dateRange.from,
+                to: dateRange.to,
+                institution: items[1]
+            };
+            _.forEach(lines, function (line) {
+                if (helper.isTrainingCourse(line)) {
+                    training.course = helper.splitByColon(line)[1];
+                } else if (helper.isTrainingCertification(line)) {
+                    training.certification = helper.splitByColon(line)[1];
+                } else if (helper.isTrainingLocation(line)) {
+                    training.location = helper.splitByColon(line)[1];
+                } else if (helper.isTrainingDescription(line)) {
+                    training.description = helper.splitByColon(line)[1];
+                }
+            });
+            return training;
+        });
+    } catch (e) {
+        logger.error('parse failed: ', e.stack);
+    }
+}
+
 function parseProjectExperience(table) {
     if (table.length === 0) return;
 
@@ -233,6 +268,7 @@ exports.parse = function (data) {
     resume.projectExperience = parseProjectExperience(findTable('项目经验'));
     resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'));
     resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
+    resume.trainingHistory = parseTrainingHistory(findTable('培训经历'));
     resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
     resume.channel = '智联招聘';
     resume.company = data.company;

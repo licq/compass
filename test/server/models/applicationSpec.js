@@ -2,12 +2,11 @@ var mongoose = require('mongoose'),
     Application = mongoose.model('Application'),
     expect = require('chai').expect,
     ObjectId = mongoose.Schema.Types.ObjectId,
-    Factory = require('../factory'),
     helper = require('../databaseHelper');
 
 describe.skip('Application', function () {
-    beforeEach(function(done){
-        helper.clearCollections(Application,done);
+    beforeEach(function (done) {
+        helper.clearCollections(Application, done);
     });
 
     describe('create', function () {

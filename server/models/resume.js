@@ -1,5 +1,8 @@
+"use strict";
+
 var mongoose = require('mongoose'),
     logger = require('../config/winston').logger(),
+    mongoosastic = require('mongoosastic'),
     timestamps = require('mongoose-timestamps');
 
 var resumeSchema = mongoose.Schema({
@@ -37,9 +40,18 @@ var resumeSchema = mongoose.Schema({
             type: String,
             enum: ['fulltime', 'parttime', 'intern']
         },
-        locations: [String],
-        industry: [String],
-        jobCategory: [String],
+        locations: {
+            type: Array,
+            es_type: 'string'
+        },
+        industry: {
+            type: Array,
+            es_type: 'string'
+        },
+        jobCategory: {
+            type: Array,
+            es_type: 'string'
+        },
         targetSalary: {
             from: Number,
             to: Number
@@ -182,6 +194,7 @@ var resumeSchema = mongoose.Schema({
 });
 
 resumeSchema.plugin(timestamps);
+resumeSchema.plugin(mongoosastic);
 
 resumeSchema.post('save', function (resume) {
     var Application = mongoose.model('Application');
@@ -203,4 +216,17 @@ resumeSchema.post('save', function (resume) {
     });
 });
 
-mongoose.model('Resume', resumeSchema);
+var Resume = mongoose.model('Resume', resumeSchema);
+
+var stream = Resume.synchronize(), count = 0;
+
+stream.on('data', function (err, doc) {
+    if(err) logger.error('index resume failed: ', err.stack);
+    else count++;
+});
+stream.on('close', function () {
+    logger.info('indexed ' + count + ' documents!');
+});
+stream.on('error', function (err) {
+    logger.info('index resume failed',err.stack);
+});

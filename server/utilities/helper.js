@@ -373,3 +373,42 @@ exports.removeTags = function removeTags(input) {
 exports.splitByColon = function removeTags(input) {
     return input.split(/:|：/g);
 };
+
+exports.isTrainingCourse = function isTraningCourse(input) {
+    return input.indexOf('培训课程') > -1;
+};
+
+exports.isTrainingLocation = function isTraningLocatioin(input) {
+    return input.indexOf('培训地点') > -1;
+};
+
+exports.isTrainingCertification = function isTraningLocatioin(input) {
+    return input.indexOf('所获证书') > -1;
+};
+exports.isTrainingDescription = function isTraningLocatioin(input) {
+    return input.indexOf('培训描述') > -1;
+};
+
+exports.isEntryTime = function isEntryTime(input) {
+    return input.indexOf('到岗时间') > -1;
+};
+
+exports.isTypeOfEmployment = function isTypeOfEmployment(input) {
+    return input.indexOf('工作性质') > -1;
+};
+
+exports.isIndustry = function isIndustry(input) {
+    return input.indexOf('希望行业') > -1;
+};
+
+exports.isLocations = function isLocations(input) {
+    return input.indexOf('目标地点') > -1;
+};
+
+exports.isTargetSalary = function isTargetSalary(input) {
+    return input.indexOf('期望月薪') > -1;
+};
+
+exports.isJobCategory = function isJobCategory(input) {
+    return input.indexOf('目标职能') > -1;
+};

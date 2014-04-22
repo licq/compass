@@ -389,4 +389,73 @@ describe('helper', function () {
             expect(helper.splitByColon('北京：天津')).to.deep.equal(['北京', '天津']);
         });
     });
+
+    describe('#isTrainingCourse', function () {
+        it('should return correctly', function () {
+            expect(helper.isTrainingCourse('培训课程：问卷设计、SPSS实战培训')).to.be.true;
+            expect(helper.isTrainingCourse('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+    describe('#isTrainingLocation', function () {
+        it('should return correctly', function () {
+            expect(helper.isTrainingLocation('培训课程：问卷设计、SPSS实战培训')).to.be.false;
+            expect(helper.isTrainingLocation('培训地点：北京化工大学主教学楼')).to.be.true;
+        });
+    });
+
+    describe('#isTrainingCertification', function () {
+        it('should return correctly', function () {
+            expect(helper.isTrainingCertification('所获证书：无')).to.be.true;
+            expect(helper.isTrainingCertification('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+    describe('#isTrainingDescription', function () {
+        it('should return correctly', function () {
+            expect(helper.isTrainingDescription('培训描述：培训过程中，首先，主要是对问卷设计中的注意事项，问卷处理中的问题进行培训；其次，主要对SPSS功能和使用的培训；最后，将SPSS与EXCEL融合进行培训，将SPSS与EXCEL的使用互补。')).to.be.true;
+            expect(helper.isTrainingDescription('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+
+    describe('#isEntryTime', function () {
+        it('should return correctly', function () {
+            expect(helper.isEntryTime('到岗时间： 一周以内')).to.be.true;
+            expect(helper.isEntryTime('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+
+    describe('#isTypeOfEmployment', function () {
+        it('should return correctly', function () {
+            expect(helper.isTypeOfEmployment('工作性质： 实习')).to.be.true;
+            expect(helper.isTypeOfEmployment('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+
+    describe('#isIndustry', function () {
+        it('should return correctly', function () {
+            expect(helper.isIndustry('希望行业： 实习')).to.be.true;
+            expect(helper.isIndustry('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+    
+    describe('#isLocations', function () {
+        it('should return correctly', function () {
+            expect(helper.isLocations('目标地点： 北京')).to.be.true;
+            expect(helper.isLocations('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+
+    describe('#isTargetSalary', function () {
+        it('should return correctly', function () {
+            expect(helper.isTargetSalary('期望月薪： 面议/月')).to.be.true;
+            expect(helper.isTargetSalary('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+
+    describe('#isJobCategory', function () {
+        it('should return correctly', function () {
+            expect(helper.isJobCategory('目标职能： 工程师')).to.be.true;
+            expect(helper.isJobCategory('培训地点：北京化工大学主教学楼')).to.be.false;
+        });
+    });
+
 });
