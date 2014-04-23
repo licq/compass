@@ -2291,3 +2291,7 @@ footer .copy {
 .ngCell input {
     margin-top: 5px;
 }
+
+.searchForm {
+    margin-top: 10px;
+}

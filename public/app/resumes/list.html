@@ -4,6 +4,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <div class="searchForm">
+                    <form name="searchForm" class="form-horizontal" novalidate="">
+                        <div class="form-group">
+                            <div class="col-md-5 col-md-offset-3">
+                                <input type="text" class="form-control" name="q"
+                                       ng-model="states.searchOptions.q">
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-primary" ng-click="search()">搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget">
                     <div class="widget-head">
                         <div class="pull-left">简历列表</div>

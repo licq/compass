@@ -271,8 +271,8 @@ exports.parse = function (data) {
     resume.trainingHistory = parseTrainingHistory(findTable('培训经历'));
     resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
     resume.channel = '智联招聘';
-    resume.company = data.company;
-    resume.mail = data.mailId;
+    resume.company = data.company.toString();
+    resume.mail = data.mailId.toString();
 
     return resume;
 

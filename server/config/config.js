@@ -27,15 +27,18 @@ var configs = {
     development: _.defaults({
         port: process.env.PORT || 3000,
         db: 'mongodb://localhost/compass-dev',
+        elastic_index: 'compass-dev'
     }, defaultConfig),
     test: _.defaults({
         port: process.env.PORT || 3001,
         db: 'mongodb://localhost/compass-test',
-        logFileName: 'compass-test.log'
+        logFileName: 'compass-test.log',
+        elastic_index: 'compass-test'
     }, defaultConfig),
     production: _.defaults({
         port: process.env.PORT || 80,
-        db: 'mongodb://localhost/compass'
+        db: 'mongodb://localhost/compass',
+        elastic_index: 'compass'
     }, defaultConfig)
 };
 

@@ -11,9 +11,7 @@ angular.module('compass')
                 pageSize: 10,
                 currentPage: 1
             },
-            filterOptions: {
-                filterText: '',
-                useExternalFilter: true
+            searchOptions: {
             }
         });
 
@@ -26,8 +24,10 @@ angular.module('compass')
             enablePaging: true,
             totalServerItems: 'totalResumesCount',
             pagingOptions: $scope.states.pagingOptions,
-            filterOptions: $scope.states.filterOptions,
-
+            filterOptions: {
+                filterText: '',
+                useExternalFilter: true
+            },
             columnDefs: [
                 {field: 'name', displayName: '姓名', width: 80},
                 {field: 'birthday', displayName: '出生日期', width: 100, cellFilter: 'yearAndMonth'},
@@ -50,8 +50,10 @@ angular.module('compass')
             }
         }, $scope.gridDefaults);
 
-        $scope.getResumes = function (pageSize, page, searchText) {
-            mvResume.query({pageSize: pageSize, page: page, searchText: searchText}, function (resumes, responseHeaders) {
+        $scope.getResumes = function () {
+            var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize, page: $scope.states.pagingOptions.currentPage},
+                $scope.states.searchOptions);
+            mvResume.query(query, function (resumes, responseHeaders) {
                 $scope.totalResumesCount = parseInt(responseHeaders('totalCount'), 10);
                 $scope.resumes = resumes;
                 if (!$scope.$$phase) {
@@ -60,21 +62,23 @@ angular.module('compass')
             });
         };
 
+        $scope.getResumes();
 
-        $scope.getResumes($scope.states.pagingOptions.pageSize, $scope.states.pagingOptions.currentPage);
-
-        $scope.$watch('states', function (newVal, oldVal) {
+        $scope.$watch('states.pagingOptions', function (newVal, oldVal) {
             if (newVal !== oldVal) {
-                if (newVal.pagingOptions.pageSize !== oldVal.pagingOptions.pageSize) {
+                if (newVal.pageSize !== oldVal.pageSize) {
                     $scope.states.pagingOptions.currentPage = 1;
                 }
-                $scope.getResumes($scope.states.pagingOptions.pageSize, $scope.states.pagingOptions.currentPage,
-                    $scope.states.filterOptions.filterText);
+                $scope.getResumes();
             }
         }, true);
 
         $scope.view = function (resume) {
             $location.path('/resumes/' + resume._id);
         };
-    })
-;
+
+        $scope.search = function(){
+            $scope.states.pagingOptions.currentPage = 1;
+            $scope.getResumes();
+        };
+    });

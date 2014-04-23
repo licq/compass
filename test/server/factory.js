@@ -87,6 +87,13 @@ Factory.define('resume', Resume, {
     name: function (cb) {
         cb('name' + resumeCounter++);
     },
+    workExperience: [
+        {
+            from: new Date(),
+            to: new Date(),
+            company: '阿里巴巴'
+        }
+    ],
     company: Factory.assoc('company', 'id'),
     applyPosition: 'cio'
 });

@@ -271,8 +271,8 @@ exports.parse = function (data) {
     resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
     resume.matchRate = helper.parseMatchRate($('font b').text());
     resume.channel = '前程无忧';
-    resume.mail = data.mailId;
-    resume.company = data.company;
+    resume.mail = data.mailId.toString();
+    resume.company = data.company.toString();
     return resume;
 
 };
