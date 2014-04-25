@@ -26,7 +26,7 @@
     "kue": "Jedius/kue",
     "lodash": "~2.4.1",
     "mailparser": "^0.4.1",
-    "mongoosastic": "^0.2.6",
+    "mongoosastic": "licq/mongoosastic",
     "mongoose": "~3.8.3",
     "mongoose-timestamps": "0.0.1",
     "node-uuid": "^1.4.1",

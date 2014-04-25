@@ -56,7 +56,7 @@ describe('mvResumeListCtrl', function () {
         it('should change current page to 1 after change pagesize', function () {
             $scope.states.pagingOptions.pageSize = 20;
             setTimeout(function () {
-                expect($scope.states.pagingOptions.currentPage).to.equal(1)
+                expect($scope.states.pagingOptions.currentPage).to.equal(1);
             }, 100);
         });
 

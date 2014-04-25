@@ -20,7 +20,9 @@ var defaultConfig = {
     rootPath: rootPath,
     hostname: 'localhost',
     templatePath: rootPath + 'server/templates/',
-    logFileName: 'compass.log'
+    logFileName: 'compass.log',
+    elastic_host: 'localhost',
+    elastic_port: 9200
 };
 
 var configs = {

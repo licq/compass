@@ -8,32 +8,17 @@ var mongoose = require('mongoose'),
 exports.list = function (req, res, next) {
     var query = {
         query: {
-            term: {
-                company: req.user.company.toString()
-            }
-        }
-    };
-    if (req.query.q) {
-        query.query.query_string = {
-            query: req.query.q
-        };
-    }
-//    query.sort = {created_at: {order: 'desc'}};
-    if (req.query.page && req.query.pageSize) {
-        query.from = (req.query.page - 1) * req.query.pageSize;
-        query.size = req.query.pageSize;
-    }
-
-    query = {
-        query: {
             filtered: {
                 query: {
-                    query_string:{
-                        query: "'阿里巴巴'"
+                    match: {
+                        _all: {
+                            query: req.query.q || "",
+                            operator: 'and'
+                        }
                     }
                 },
-                filter:{
-                    term:{
+                filter: {
+                    term: {
                         company: req.user.company.toString()
                     }
                 }
@@ -41,10 +26,13 @@ exports.list = function (req, res, next) {
         }
     };
 
-    console.log(JSON.stringify(query));
+    if (req.query.page && req.query.pageSize) {
+        query.from = (req.query.page - 1) * req.query.pageSize;
+        query.size = req.query.pageSize;
+    }
+
     Resume.search(query, function (err, results) {
         if (err) return next(err);
-        console.log(results);
         return res.header('totalCount', results.hits.total)
             .json(_.map(results.hits.hits, '_source'));
     });

@@ -20,7 +20,7 @@ module.exports = function (config) {
     require('../models/mail');
     require('../models/signup');
     require('../models/token');
-    require('../models/resume')(config);
+    require('../models/resume');
     require('../models/emailTemplate');
     require('../models/evaluationCriterion');
     require('../models/application');
