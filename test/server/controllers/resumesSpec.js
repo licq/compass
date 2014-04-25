@@ -29,22 +29,22 @@ describe('#resumes', function () {
         });
     });
 
-    it('should return a list of resumes', function (done) {
+    it('should return all resumes', function (done) {
         var req = request(app).get('/api/resumes');
         req.cookies = cookies;
         req.expect(200)
             .expect('content-type', /json/)
             .end(function (err, res) {
-                expect(res.body).to.have.length(0);
+                expect(res.body).to.have.length(1);
+                expect(res.get('totalCount')).to.equal('1');
                 done(err);
             });
     });
 
-    it('should return a list of resumes', function (done) {
+    it('should return 0 resumes', function (done) {
         var req = request(app).get('/api/resumes?q=搜狐');
         req.cookies = cookies;
         req.expect(200)
-            .expect('content-type', /json/)
             .end(function (err, res) {
                 expect(res.body).to.have.length(0);
                 done(err);
@@ -59,6 +59,7 @@ describe('#resumes', function () {
             .expect('content-type', /json/)
             .end(function (err, res) {
                 expect(res.body).to.have.length(1);
+                expect(res.body[0]).to.have.property('_id');
                 done(err);
             });
     });
