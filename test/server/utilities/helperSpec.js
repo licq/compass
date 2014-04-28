@@ -436,7 +436,7 @@ describe('helper', function () {
             expect(helper.isIndustry('培训地点：北京化工大学主教学楼')).to.be.false;
         });
     });
-    
+
     describe('#isLocations', function () {
         it('should return correctly', function () {
             expect(helper.isLocations('目标地点： 北京')).to.be.true;

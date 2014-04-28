@@ -18,6 +18,10 @@ angular.module('compass')
         $scope.states = states.get('mvResumeListCtrl');
 
         $scope.totalResumesCount = 0;
+        $scope.degrees = [
+            {key: 'agerange1', range: '1-3'},
+            {key: 'agerange2', range: '2-4'}
+        ];
 
         $scope.gridOptions = angular.extend({
             data: 'resumes',
@@ -53,6 +57,7 @@ angular.module('compass')
         $scope.getResumes = function () {
             var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize, page: $scope.states.pagingOptions.currentPage},
                 $scope.states.searchOptions);
+            console.log($scope.states.searchOptions);
             mvResume.query(query, function (resumes, responseHeaders) {
                 $scope.totalResumesCount = parseInt(responseHeaders('totalCount'), 10);
                 $scope.resumes = resumes;
@@ -77,7 +82,7 @@ angular.module('compass')
             $location.path('/resumes/' + resume._id);
         };
 
-        $scope.search = function(){
+        $scope.search = function () {
             $scope.states.pagingOptions.currentPage = 1;
             $scope.getResumes();
         };

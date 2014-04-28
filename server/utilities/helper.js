@@ -170,7 +170,7 @@ var languageSkillMap = {
     '一般': 'average',
     '良好': 'good',
     '熟练': 'very good',
-    '精通': 'excellent',
+    '精通': 'excellent'
 };
 
 var languageMap = {

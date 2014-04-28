@@ -15,6 +15,25 @@ exports.list = function (req, res, next) {
                     }
                 }
             }
+        },
+        facets: {
+            applyPosition: {
+                terms: {
+                    field: 'applyPosition.original'
+                }
+            },
+            highestDegree: {
+                terms: {
+                    field: 'highestDegree'
+                }
+            },
+            age: {
+                histogram: {
+                    key_script: "DateTime.now().year - doc['birthday'].date.year",
+                    value_script: 1,
+                    interval: 5
+                }
+            }
         }
     };
 
@@ -26,11 +45,11 @@ exports.list = function (req, res, next) {
                     operator: 'and'
                 }
             }
-        }
+        };
     } else {
         query.query.filtered.query = {
             match_all: {}
-        }
+        };
     }
 
     if (req.query.page && req.query.pageSize) {
@@ -40,11 +59,12 @@ exports.list = function (req, res, next) {
 
     Resume.search(query, function (err, results) {
         if (err) return next(err);
-        return res.header('totalCount', results.hits.total)
-            .json(_.map(results.hits.hits, function (hit) {
-                hit._source._id = hit._id;
-                return hit._source;
-            }));
+
+        results.hits.hits = _.map(results.hits.hits, function (hit) {
+            hit._source._id = hit._id;
+            return hit._source;
+        });
+        return res.json(results);
     });
 };
 

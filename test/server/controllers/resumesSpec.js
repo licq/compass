@@ -35,8 +35,16 @@ describe('#resumes', function () {
         req.expect(200)
             .expect('content-type', /json/)
             .end(function (err, res) {
-                expect(res.body).to.have.length(1);
-                expect(res.get('totalCount')).to.equal('1');
+                expect(res.body.hits.total).to.equal(1);
+                expect(res.body.facets.applyPosition.terms).to.have.length(1);
+                expect(res.body.facets.applyPosition.terms[0].term).to.equal('cio');
+                expect(res.body.facets.applyPosition.terms[0].count).to.equal(1);
+                expect(res.body.facets.highestDegree.terms).to.have.length(1);
+                expect(res.body.facets.highestDegree.terms[0].term).to.equal('master');
+                expect(res.body.facets.highestDegree.terms[0].count).to.equal(1);
+                expect(res.body.facets.age.entries).to.have.length(1);
+                expect(res.body.facets.age.entries[0].key).to.equal(0);
+                expect(res.body.facets.age.entries[0].count).to.equal(1);
                 done(err);
             });
     });
@@ -46,7 +54,7 @@ describe('#resumes', function () {
         req.cookies = cookies;
         req.expect(200)
             .end(function (err, res) {
-                expect(res.body).to.have.length(0);
+                expect(res.body.hits.total).to.equal(0);
                 done(err);
             });
     });
@@ -58,8 +66,8 @@ describe('#resumes', function () {
         req.expect(200)
             .expect('content-type', /json/)
             .end(function (err, res) {
-                expect(res.body).to.have.length(1);
-                expect(res.body[0]).to.have.property('_id');
+                expect(res.body.hits.total).to.equal(1);
+                expect(res.body.hits.hits[0]).to.have.property('_id');
                 done(err);
             });
     });

@@ -87,6 +87,11 @@ Factory.define('resume', Resume, {
     name: function (cb) {
         cb('name' + resumeCounter++);
     },
+    birthday: Date.now(),
+    applyPosition: 'cio',
+    educationHistory: {
+        degree: 'master'
+    },
     workExperience: [
         {
             from: new Date(),
@@ -94,8 +99,7 @@ Factory.define('resume', Resume, {
             company: '阿里巴巴'
         }
     ],
-    company: Factory.assoc('company', 'id'),
-    applyPosition: 'cio'
+    company: Factory.assoc('company', 'id')
 });
 
 module.exports = Factory;

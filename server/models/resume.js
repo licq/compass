@@ -181,6 +181,12 @@ var resumeSchema = mongoose.Schema({
     }
 });
 
+resumeSchema.virtual('highestDegree').get(function () {
+    if (this.educationHistory && this.educationHistory.length > 0) {
+        return this.educationHistory[0].degree;
+    }
+});
+
 resumeSchema.plugin(timestamps);
 resumeSchema.plugin(mongoosastic, {
     index: config.elastic_index,
@@ -195,9 +201,18 @@ resumeSchema.plugin(mongoosastic, {
                 index: 'not_analyzed'
             },
             applyPosition: {
-                type: 'string',
-                include_in_all: false,
-                index: 'not_analyzed'
+                type: 'multi_field',
+                fields: {
+                    applyPosition: {
+                        type: 'string',
+                        include_in_all: true,
+                        analyzer: 'ik'
+                    },
+                    original: {
+                        type: 'string',
+                        index: 'not_analyzed'
+                    }
+                }
             },
             birthday: {
                 type: 'date',
@@ -287,6 +302,11 @@ resumeSchema.plugin(mongoosastic, {
                 format: 'dateOptionalTime',
                 include_in_all: false,
                 index: 'not_analyzed'
+            },
+            highestDegree: {
+                type: 'string',
+                index: 'not_analyzed',
+                include_in_all: false
             },
             educationHistory: {
                 properties: {

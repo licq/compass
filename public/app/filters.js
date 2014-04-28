@@ -118,21 +118,21 @@ angular.module('compass')
             return entryTimeMap[input];
         };
     })
-    .filter('degree', function () {
+    .constant('degrees', {
+        'junior high': '初中',
+        'technical school': '中技',
+        'high school': '高中',
+        'polytechnic': '中专',
+        'associate': '大专',
+        'bachelor': '本科',
+        'mba': 'MBA',
+        'master': '硕士',
+        'doctorate': '博士',
+        'others': '其他'
+    })
+    .filter('degree', function (degrees) {
         return function (input) {
-            var degreeMap = {
-                'junior high': '初中',
-                'technical school': '中技',
-                'high school': '高中',
-                'polytechnic': '中专',
-                'associate': '大专',
-                'bachelor': '本科',
-                'mba': 'MBA',
-                'master': '硕士',
-                'doctorate': '博士',
-                'others': '其他'
-            };
-            return degreeMap[input];
+            return degrees[input];
         };
     })
     .filter('language', function () {
