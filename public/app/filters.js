@@ -204,4 +204,9 @@ angular.module('compass')
             }
             return '' + range.from + '--' + range.to;
         };
+    })
+    .filter('ageRange', function(){
+        return function(age){
+           return '' + age + ' -- ' + (age + 4);
+        };
     });

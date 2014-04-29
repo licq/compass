@@ -1435,8 +1435,13 @@ describe('mvResumeListCtrl', function () {
 
     describe('change currentpage to 2', function () {
         beforeEach(function () {
-            $httpBackend.expectGET('/api/resumes?page=2&pageSize=10').respond(result);
+            $httpBackend.expectGET('/api/resumes?age=20&applyPosition=cio&highestDegree=master&page=2&pageSize=10').respond(result);
             $scope.states.pagingOptions.currentPage = 2;
+            $scope.states.searchOptions = {
+                age: 20,
+                applyPosition: 'cio',
+                highestDegree: 'master'
+            };
             $httpBackend.flush();
         });
 
@@ -1447,10 +1452,14 @@ describe('mvResumeListCtrl', function () {
             }, 100);
         });
 
-        it('should invoke /api/resumes?page=1&q=hello', function () {
+        it('should clear the searchOptions and set currentPage to 1 when change q', function () {
             $scope.states.searchOptions.q = 'hello';
             $scope.search();
             expect($scope.states.pagingOptions.currentPage).to.equal(1);
+            expect($scope.states.searchOptions.age).to.not.exist;
+            expect($scope.states.searchOptions.applyPosition).to.not.exist;
+            expect($scope.states.searchOptions.highestDegree).to.not.exist;
+
         });
     });
 
@@ -1465,8 +1474,58 @@ describe('mvResumeListCtrl', function () {
                     highestDegree: ['master'],
                     applyPosition: ['cio']
                 };
-                $scope.search();
+                $scope.getResumes();
                 $httpBackend.flush();
             });
+    });
+
+    describe('setAge', function () {
+        it('should set the query age parameter', function () {
+            var spy = sinon.spy($scope,'getResumes');
+            $scope.setAge(20);
+
+            expect($scope.states.searchOptions).to.have.property('age',20);
+            expect(spy.called).to.be.true;
+        });
+
+        it('should clear the query age parameter', function(){
+            var spy = sinon.spy($scope, 'getResumes');
+            $scope.setAge();
+            expect($scope.states.searchOptions.age).to.not.exist;
+            expect(spy.called).to.be.true;
+        });
+    });
+
+    describe('setApplyPosition', function () {
+        it('should set the query applyposition parameter', function () {
+            var spy = sinon.spy($scope,'getResumes');
+            $scope.setApplyPosition('cio');
+            expect($scope.states.searchOptions).to.have.property('applyPosition','cio');
+            expect(spy.called).to.be.true;
+        });
+
+        it('should clear the query applyposition parameter', function(){
+            var spy = sinon.spy($scope, 'getResumes');
+            $scope.setApplyPosition();
+            expect($scope.states.searchOptions.applyPosition).to.not.exist;
+            expect(spy.called).to.be.true;
+        });
+    });
+
+    describe('setHighestDegree', function () {
+        it('should set the query highestDegree parameter', function () {
+            var spy = sinon.spy($scope,'getResumes');
+            $scope.setHighestDegree('master');
+
+            expect($scope.states.searchOptions).to.have.property('highestDegree','master');
+            expect(spy.called).to.be.true;
+        });
+
+        it('should clear the query highestdegree parameter', function(){
+            var spy = sinon.spy($scope, 'getResumes');
+            $scope.setHighestDegree();
+            expect($scope.states.searchOptions.highestDegree).to.not.exist;
+            expect(spy.called).to.be.true;
+        });
     });
 });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvResumeListCtrl', function ($scope, mvResume, $location, states,$http) {
+    .controller('mvResumeListCtrl', function ($scope, mvResume, $location, states, $http) {
         $scope.crumbs = [
             {text: '简历列表', url: 'resumes'}
         ];
@@ -51,8 +51,7 @@ angular.module('compass')
         $scope.getResumes = function () {
             var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize, page: $scope.states.pagingOptions.currentPage},
                 $scope.states.searchOptions);
-            console.log(JSON.stringify(query));
-            $http.get('/api/resumes',{params:query}).success(function (result) {
+            $http.get('/api/resumes', {params: query}).success(function (result) {
                 $scope.totalResumesCount = result.hits.total;
                 $scope.resumes = result.hits.hits;
                 $scope.facets = result.facets;
@@ -78,6 +77,28 @@ angular.module('compass')
         };
 
         $scope.search = function () {
+            $scope.states.pagingOptions.currentPage = 1;
+            delete $scope.states.searchOptions.applyPosition;
+            delete $scope.states.searchOptions.age;
+            delete $scope.states.searchOptions.highestDegree;
+
+            $scope.getResumes();
+        };
+
+        $scope.setApplyPosition = function (applyPosition) {
+            $scope.states.searchOptions.applyPosition = applyPosition;
+            $scope.states.pagingOptions.currentPage = 1;
+            $scope.getResumes();
+        };
+
+        $scope.setAge = function (age) {
+            $scope.states.searchOptions.age = age;
+            $scope.states.pagingOptions.currentPage = 1;
+            $scope.getResumes();
+        };
+
+        $scope.setHighestDegree = function (highestDegree) {
+            $scope.states.searchOptions.highestDegree = highestDegree;
             $scope.states.pagingOptions.currentPage = 1;
             $scope.getResumes();
         };

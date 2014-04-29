@@ -16,24 +16,49 @@
                                     <button class="btn btn-primary" ng-click="search()">搜索</button>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">应聘职位</label>
-
-                                <div class="col-md-3">
-                                    <input type="text" class="form-control" name="applyPosition"
-                                           ng-model="states.searchOptions.applyPosition">
-                                    </input>
+                            <div class="row resume-filters">
+                                <div class="col-md-1 col-md-offset-1">
+                                    应聘职位
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="col-lg-2 control-label">学历</label>
-
-                                    <div class="col-lg-1">
-                                        <select class="form-control" ng-model="states.searchOptions.degree">
-                                            <option ng-repeat="degree in degrees" value="{{degree.key}}">{{degree.value}}</option>
-                                        </select>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <a ng-click="setApplyPosition()">全部</a>
+                                        </div>
+                                        <div class="col-md-3" ng-repeat="term in facets.applyPosition.terms">
+                                            <a ng-click="setApplyPosition(term.term)">{{term.term}}</a>
+                                        </div>
                                     </div>
-
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1 col-md-offset-1">
+                                    年龄
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <a ng-click="setAge()">全部</a>
+                                        </div>
+                                        <div class="col-md-3" ng-repeat="entry in facets.age.entries">
+                                            <a ng-click="setAge(entry.key)">{{entry.key | ageRange}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1 col-md-offset-1">
+                                    学历
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <a ng-click="setHighestDegree()">全部</a>
+                                        </div>
+                                        <div class="col-md-3" ng-repeat="term in facets.highestDegree.terms">
+                                            <a ng-click="setHighestDegree(term.term)">{{term.term | degree}}</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

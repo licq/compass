@@ -144,4 +144,11 @@ describe('filters', function () {
         }));
     });
 
+    describe('ageRange', function () {
+        it('should return age range', inject(function (ageRangeFilter) {
+            expect(ageRangeFilter(20)).to.equal('20 -- 24');
+            expect(ageRangeFilter(40)).to.equal('40 -- 44');
+        }));
+    });
+
 });
