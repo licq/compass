@@ -71,4 +71,49 @@ describe('#resumes', function () {
                 done(err);
             });
     });
+
+    describe('using facets query', function () {
+        beforeEach(function (done) {
+            var birthday = new Date();
+            birthday.setFullYear(birthday.getFullYear() - 20);
+
+            Factory.build('resume', {company: existUser.company,
+                applyPosition: '销售主管',
+                educationHistory: [
+                    {
+                        degree: 'associate'
+                    }
+                ],
+                birthday: birthday
+            }, function (resume) {
+                resume.save(function () {
+                    setTimeout(done, 1000);
+                });
+            });
+        });
+
+        it('should return only one result if query for highestDegree=associate', function (done) {
+            var req = request(app).get('/api/resumes?highestDegree=associate');
+
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    expect(res.body.hits.total).to.equal(1);
+                    done(err);
+                });
+        });
+
+        it('should return no result if query for highestDegree=associate', function (done) {
+            var req = request(app).get('/api/resumes?highestDegree=associate&age=20&age=25&applyPosition=cio');
+
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    expect(res.body.hits.total).to.equal(0);
+                    done(err);
+                });
+        });
+    });
 });

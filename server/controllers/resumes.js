@@ -5,14 +5,31 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     jobs = require('../tasks/jobs');
 
+function makeTermFilter(queryValue, termKey) {
+    if (queryValue) {
+        var term = {};
+        term[termKey] = queryValue;
+
+        if (Array.isArray(queryValue)) {
+            return {terms: term};
+        } else {
+            return {term: term };
+        }
+    }
+}
+
 exports.list = function (req, res, next) {
     var query = {
         query: {
             filtered: {
                 filter: {
-                    term: {
-                        company: req.user.company.toString()
-                    }
+                    and: [
+                        {
+                            term: {
+                                company: req.user.company.toString()
+                            }
+                        }
+                    ]
                 }
             }
         },
@@ -57,6 +74,35 @@ exports.list = function (req, res, next) {
         query.size = req.query.pageSize;
     }
 
+    var filters = query.query.filtered.filter.and;
+    var highestDegreeFilter = makeTermFilter(req.query.highestDegree, 'highestDegree');
+    if (highestDegreeFilter) {
+        filters.push(highestDegreeFilter);
+    }
+    var applyPositionFilter = makeTermFilter(req.query.applyPosition, 'applyPosition.original');
+    if (applyPositionFilter) {
+        filters.push(applyPositionFilter);
+    }
+
+    if (req.query.age) {
+        if (!Array.isArray(req.query.age)) {
+            req.query.age = [req.query.age];
+        }
+        filters.push({or: _.map(req.query.age, function (age) {
+            age = _.parseInt(age);
+            return {
+                script: {
+                    script: 'DateTime.now().year -doc[\'birthday\'].date.year >= lowerAge ' +
+                        '&& DateTime.now().year -doc[\'birthday\'].date.year < higherAge',
+                    params: {
+                        lowerAge: age,
+                        higherAge: age + 4
+                    }
+                }
+            };
+        })});
+    }
+
     Resume.search(query, function (err, results) {
         if (err) return next(err);
 
@@ -66,7 +112,8 @@ exports.list = function (req, res, next) {
         });
         return res.json(results);
     });
-};
+}
+;
 
 exports.get = function (req, res) {
     res.json(req.resume);
@@ -81,3 +128,4 @@ exports.load = function (req, res, next, id) {
             next();
         });
 };
+
