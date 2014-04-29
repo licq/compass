@@ -93,7 +93,7 @@ exports.list = function (req, res, next) {
             return {
                 script: {
                     script: 'DateTime.now().year -doc[\'birthday\'].date.year >= lowerAge ' +
-                        '&& DateTime.now().year -doc[\'birthday\'].date.year < higherAge',
+                        '&& DateTime.now().year -doc[\'birthday\'].date.year <= higherAge',
                     params: {
                         lowerAge: age,
                         higherAge: age + 4
@@ -103,6 +103,7 @@ exports.list = function (req, res, next) {
         })});
     }
 
+    console.log(JSON.stringify(query));
     Resume.search(query, function (err, results) {
         if (err) return next(err);
 
