@@ -1453,4 +1453,20 @@ describe('mvResumeListCtrl', function () {
             expect($scope.states.pagingOptions.currentPage).to.equal(1);
         });
     });
+
+    describe('query using facets', function () {
+        it('should invoke /api/resumes?page=1&pageSize=10&q=hello&age=20&highestDegree=master&applyPosition=cio',
+            function () {
+                $httpBackend.expectGET('/api/resumes?age=20&age=25&applyPosition=cio&highestDegree=master&page=1&pageSize=10&q=hello')
+                    .respond(result);
+                $scope.states.searchOptions = {
+                    q: 'hello',
+                    age: [20, 25],
+                    highestDegree: ['master'],
+                    applyPosition: ['cio']
+                };
+                $scope.search();
+                $httpBackend.flush();
+            });
+    });
 });
