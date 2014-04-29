@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-    .controller('mvResumeListCtrl', function ($scope, mvResume, $location, states) {
+    .controller('mvResumeListCtrl', function ($scope, mvResume, $location, states,$http) {
         $scope.crumbs = [
             {text: '简历列表', url: 'resumes'}
         ];
@@ -16,13 +16,7 @@ angular.module('compass')
         });
 
         $scope.states = states.get('mvResumeListCtrl');
-
         $scope.totalResumesCount = 0;
-        $scope.degrees = [
-            {key: 'agerange1', range: '1-3'},
-            {key: 'agerange2', range: '2-4'}
-        ];
-
         $scope.gridOptions = angular.extend({
             data: 'resumes',
             enablePaging: true,
@@ -57,10 +51,11 @@ angular.module('compass')
         $scope.getResumes = function () {
             var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize, page: $scope.states.pagingOptions.currentPage},
                 $scope.states.searchOptions);
-            console.log($scope.states.searchOptions);
-            mvResume.query(query, function (resumes, responseHeaders) {
-                $scope.totalResumesCount = parseInt(responseHeaders('totalCount'), 10);
-                $scope.resumes = resumes;
+            console.log(JSON.stringify(query));
+            $http.get('/api/resumes',{params:query}).success(function (result) {
+                $scope.totalResumesCount = result.hits.total;
+                $scope.resumes = result.hits.hits;
+                $scope.facets = result.facets;
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
