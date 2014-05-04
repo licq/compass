@@ -16,6 +16,8 @@ angular.module('compass')
             }
         });
 
+        $scope.currentPage = 3;
+
         $scope.states = states.get('mvNewApplicationListCtrl');
         $scope.totalApplicationCount = 0;
 
@@ -48,6 +50,15 @@ angular.module('compass')
         $scope.setHighestDegree = function (highestDegree) {
             $scope.states.searchOptions.highestDegree = highestDegree;
             $scope.states.pagingOptions.currentPage = 1;
+            $scope.getApplications();
+        };
+
+        $scope.showPagination = function(){
+            return $scope.totalApplicationCount > $scope.states.pagingOptions.pageSize;
+        };
+
+        $scope.pageChanged = function(){
+            $scope.states.pagingOptions.currentPage = $scope.currentPage;
             $scope.getApplications();
         };
     });

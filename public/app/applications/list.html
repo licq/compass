@@ -146,6 +146,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12">
+                <row>
+                    <div class="col-md-3">
+                        共计{{totalApplicationCount}}
+                    </div>
+                    <div class="col-md-6" ng-show="showPagination()">
+                        <pagination boundary-links="true" total-items="totalApplicationCount"
+                                    items-per-page="states.pagingOptions.pageSize"
+                                    ng-model="states.pagingOptions.currentPage"
+                                    ng-change="getApplications()"
+                                    previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                                    last-text="&raquo;">
+                        </pagination>
+                    </div>
+                </row>
+            </div>
         </div>
 
     </div>

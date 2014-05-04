@@ -1493,4 +1493,19 @@ describe('mvNewApplicationListCtrl', function () {
         });
     });
 
+    describe('showPagination', function () {
+        it('should show pagination bar when totalCount bigger than pageSize', function () {
+            $scope.states.pagingOptions.pageSize = 50;
+            $scope.totalApplicationCount = 51;
+            expect($scope.showPagination()).to.be.true;
+        });
+
+        it('should show pagination bar when totalCount smaller than or equal to pageSize', function () {
+            $scope.states.pagingOptions.pageSize = 50;
+            $scope.totalApplicationCount = 49;
+            expect($scope.showPagination()).to.be.false;
+        });
+
+    });
+
 });
