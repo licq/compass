@@ -18,7 +18,7 @@ describe('Resume', function () {
 
     describe('elasticsearch', function () {
         it('should not have resume indexes in elasticsearch', function (done) {
-            Resume.search({query: {match_all: {}}}, function (err, res) {
+            Resume.query({}, function (err, res) {
                 expect(err).to.not.exist;
                 expect(res.hits.total).to.equal(0);
                 done();
@@ -27,38 +27,20 @@ describe('Resume', function () {
     });
 
     describe('create', function () {
-        it('should create successfully', function (done) {
-            Factory.build('resume', function (resume) {
-                resume.save(function (err, saved) {
-                    expect(err).to.not.exist;
-                    setTimeout(function () {
-                        Application.findOne({resume: saved._id}, function (err, application) {
-                            expect(err).to.not.exist;
-                            expect(application).to.exist;
-                            expect(application.company.toString()).to.equal(resume.company.toString());
-                            done();
-                        });
-                    }, 1000);
-                });
-            });
-        });
         it('should index to elasticsearch', function (done) {
             Factory.create('resume', function (resume) {
+                expect(resume.status).to.equal('new');
                 resume.on('es-indexed', function () {
                     setTimeout(function () {
-                        Resume.search({
-                            query: {
-                                match_all: {}
-                            }
-                        }, function (err, res) {
+                        Resume.query({}, function (err, res) {
                             expect(err).to.not.exist;
                             expect(res.hits.total).to.equal(1);
+                            expect(res.hits.hits[0].status).to.equal('new');
                             done();
                         });
                     }, 1000);
                 });
             });
         });
-
     });
 });

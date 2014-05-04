@@ -2299,3 +2299,11 @@ footer .copy {
 .resume-filters {
     margin-top: 10px;
 }
+
+.application-action-buttons .btn{
+    margin-top: 10px;
+}
+
+.withbottomborder {
+    border-bottom: 1px solid #999;
+}

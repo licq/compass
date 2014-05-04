@@ -4,17 +4,21 @@ var mongoose = require('mongoose'),
     logger = require('../config/winston').logger(),
     mongoosastic = require('mongoosastic'),
     config = require('../config/config'),
+    _ = require('lodash'),
     timestamps = require('mongoose-timestamps');
 
-var workSchema = mongoose.Schema({
-    from: Date,
-    to: Date,
-    company: String,
-    industry: String,
-    department: String,
-    jobTitle: String,
-    jobDescription: String
-});
+function makeTermFilter(queryValue, termKey) {
+    if (queryValue) {
+        var term = {};
+        term[termKey] = queryValue;
+
+        if (Array.isArray(queryValue)) {
+            return {terms: term};
+        } else {
+            return {term: term };
+        }
+    }
+}
 
 var resumeSchema = mongoose.Schema({
     name: String,
@@ -67,7 +71,15 @@ var resumeSchema = mongoose.Schema({
     },
     job51Id: String,
 
-    workExperience: [workSchema],
+    workExperience: [{
+        from: Date,
+        to: Date,
+        company: String,
+        industry: String,
+        department: String,
+        jobTitle: String,
+        jobDescription: String
+    }],
     projectExperience: [
         {
             from: Date,
@@ -178,6 +190,10 @@ var resumeSchema = mongoose.Schema({
     mail: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Mail'
+    },
+    status: {
+        type: String,
+        default: 'new'
     }
 });
 
@@ -186,6 +202,115 @@ resumeSchema.virtual('highestDegree').get(function () {
         return this.educationHistory[0].degree;
     }
 });
+
+resumeSchema.statics.query = function (params, callback) {
+    var queryConditions = {
+        query: {
+            filtered: {
+                filter: {
+                    and: []
+                }
+            }
+        },
+        facets: {
+            applyPosition: {
+                terms: {
+                    field: 'applyPosition.original'
+                }
+            },
+            highestDegree: {
+                terms: {
+                    field: 'highestDegree'
+                }
+            },
+            age: {
+                histogram: {
+                    key_script: "DateTime.now().year - doc['birthday'].date.year",
+                    value_script: 1,
+                    interval: 5
+                }
+            }
+        }
+    };
+
+
+    if (params.q) {
+        queryConditions.query.filtered.query = {
+            match: {
+                _all: {
+                    query: params.q,
+                    operator: 'and'
+                }
+            }
+        };
+    } else {
+        queryConditions.query.filtered.query = {
+            match_all: {}
+        };
+    }
+
+    if (params.page && params.pageSize) {
+        queryConditions.from = (params.page - 1) * params.pageSize;
+        queryConditions.size = params.pageSize;
+    }
+
+    var filters = queryConditions.query.filtered.filter.and;
+    if (params.company) {
+        filters.push({term: {
+            company: params.company
+        }});
+    }
+
+    var highestDegreeFilter = makeTermFilter(params.highestDegree, 'highestDegree');
+    if (highestDegreeFilter) {
+        filters.push(highestDegreeFilter);
+    }
+    var applyPositionFilter = makeTermFilter(params.applyPosition, 'applyPosition.original');
+    if (applyPositionFilter) {
+        filters.push(applyPositionFilter);
+    }
+
+    if (params.status) {
+        filters.push({
+            term: {
+                status: params.status
+            }
+        });
+    }
+
+    if (params.age) {
+        if (!Array.isArray(params.age)) {
+            params.age = [params.age];
+        }
+        filters.push({or: _.map(params.age, function (age) {
+            age = _.parseInt(age);
+            return {
+                script: {
+                    script: 'DateTime.now().year -doc[\'birthday\'].date.year >= lowerAge ' +
+                        '&& DateTime.now().year -doc[\'birthday\'].date.year <= higherAge',
+                    params: {
+                        lowerAge: age,
+                        higherAge: age + 4
+                    }
+                }
+            };
+        })});
+    }
+
+    if(filters.length === 0){
+        delete queryConditions.query.filtered.filter.and;
+    }
+    console.log('in resume ', JSON.stringify(queryConditions));
+    this.search(queryConditions, function (err, results) {
+        if (err) return callback(err);
+
+        results.hits.hits = _.map(results.hits.hits, function (hit) {
+            hit._source._id = hit._id;
+            return hit._source;
+        });
+        return callback(null, results);
+    });
+};
 
 resumeSchema.plugin(timestamps);
 resumeSchema.plugin(mongoosastic, {
@@ -568,29 +693,13 @@ resumeSchema.plugin(mongoosastic, {
                 type: 'long',
                 index: 'not_analyzed',
                 include_in_all: false
+            },
+            status: {
+                type: 'string',
+                index: 'not_analyzed'
             }
         }
     }
-});
-
-resumeSchema.post('save', function (resume) {
-    var Application = mongoose.model('Application');
-    var application = new Application({
-        name: resume.name,
-        applyPosition: resume.applyPosition,
-        birthday: resume.birthday,
-        company: resume.company,
-        gender: resume.gender,
-        status: 'new',
-        resume: resume._id,
-        applyDate: resume.applyDate || new Date()
-    });
-    if (resume.educationHistory && resume.educationHistory.length > 0) {
-        application.degree = resume.educationHistory[0].degree;
-    }
-    application.save(function (err) {
-        if (err) logger.error('save application to mongo failed ', resume._id, err.stack);
-    });
 });
 
 var Resume = mongoose.model('Resume', resumeSchema);
@@ -610,4 +719,3 @@ Resume.createMapping(function (err, mapping) {
         console.log(err);
     });
 });
-

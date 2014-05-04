@@ -9,7 +9,8 @@ var app = require('../../../server'),
     Resume = mongoose.model('Resume'),
     Application = mongoose.model('Application'),
     Factory = require('../factory'),
-    helper = require('./helper');
+    helper = require('./helper'),
+    databaseHelper = require('../databaseHelper');
 
 
 describe('applications', function () {
@@ -17,30 +18,20 @@ describe('applications', function () {
         resume,
         user;
 
-    function cleanData() {
-        User.remove().exec();
-        Company.remove().exec();
-        Application.remove().exec();
-        Resume.remove().exec();
-    }
-
     beforeEach(function (done) {
-        cleanData();
-        Factory.create('user', function (createdUser) {
-            user = createdUser;
-            Factory.create('resume', {company: user.company}, function (createdResume) {
-                resume = createdResume;
-                helper.login(user, function (cks) {
-                    cookies = cks;
-                    done();
+        databaseHelper.clearCollections(User, Company, Application,
+            Resume, function () {
+                Factory.create('user', function (createdUser) {
+                    user = createdUser;
+                    Factory.create('resume', {company: user.company}, function (createdResume) {
+                        resume = createdResume;
+                        helper.login(user, function (cks) {
+                            cookies = cks;
+                            setTimeout(done, 1500);
+                        });
+                    });
                 });
             });
-        });
-    });
-
-    after(function (done) {
-        cleanData();
-        done();
     });
 
     describe('GET /api/applications?status=new&pageSize=10&page=1', function () {
@@ -50,8 +41,12 @@ describe('applications', function () {
             req.expect(200)
                 .expect('content-type', /json/)
                 .end(function (err, res) {
-                    expect(res.body).to.have.length(1);
-                    expect(res.get('totalCount')).to.equal('1');
+                    var result = res.body;
+                    expect(result.hits.total).to.equal(1);
+                    expect(result.hits.hits).to.have.length(1);
+                    expect(result.facets.age).to.exist;
+                    expect(result.facets.highestDegree).to.exist;
+                    expect(result.facets.applyPosition).to.exist;
                     done(err);
                 });
         });
