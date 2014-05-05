@@ -1,0 +1,16 @@
+<breadcrumbs crumbs="crumbs"></breadcrumbs>
+
+<div class="matter resume">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-include="'/app/common/resumeView.html'"></div>
+                <div>
+                    <button class="btn btn-success" ng-click="pursue(resume._id)">面试</button>
+                    <button class="btn btn-danger" ng-click="archive(resume._id)">归档</button>
+                    <button class="btn btn-warning" ng-click="undetermine(resume._id)">待定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

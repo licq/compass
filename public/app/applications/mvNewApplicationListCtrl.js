@@ -84,9 +84,10 @@ angular.module('compass')
                     index = i;
                 }
             });
-            console.log('index',index);
+
             if (index > -1) {
                 $scope.applications.splice(index, 1);
+                $scope.totalApplicationCount -= 1;
             }
         }
 

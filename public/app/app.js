@@ -123,7 +123,7 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 resolve: routeRoleChecks.user
             })
             .when('/applications/new/:id',{
-                templateUrl: '/app/resumes/view.html',
+                templateUrl: '/app/applications/view.html',
                 controller: 'mvNewApplicationViewCtrl',
                 resolve: routeRoleChecks.user
             })
