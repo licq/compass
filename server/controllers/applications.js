@@ -20,6 +20,14 @@ exports.get = function (req, res) {
     res.json(req.resume);
 };
 
+exports.update = function(req, res, next){
+    req.resume.status = req.query.status;
+    req.resume.save(function(err){
+        if(err) return next(err);
+        res.send(200);
+    });
+};
+
 exports.load = function (req, res, next, id) {
     Resume.findOne({_id: id})
         .exec(function (err, resume) {

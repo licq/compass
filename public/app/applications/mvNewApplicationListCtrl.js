@@ -33,6 +33,21 @@ angular.module('compass')
             });
         };
 
+        function getOneMoreApplication() {
+            if ($scope.totalApplicationCount > $scope.states.pagingOptions.currentPage * $scope.states.pagingOptions.pageSize) {
+                var query = angular.extend({pageSize: 1,
+                        page: $scope.states.pagingOptions.currentPage * $scope.states.pagingOptions.pageSize,
+                        status: 'new'},
+                    $scope.states.searchOptions);
+
+                $http.get('/api/applications', {params: query}).success(function (result) {
+                    if (result.hits.hits && result.hits.hits.length > 0) {
+                        $scope.applications.push(result.hits.hits[0]);
+                    }
+                });
+            }
+        }
+
         $scope.getApplications();
 
         $scope.setApplyPosition = function (applyPosition) {
@@ -53,12 +68,31 @@ angular.module('compass')
             $scope.getApplications();
         };
 
-        $scope.showPagination = function(){
+        $scope.showPagination = function () {
             return $scope.totalApplicationCount > $scope.states.pagingOptions.pageSize;
         };
 
-        $scope.pageChanged = function(){
+        $scope.pageChanged = function () {
             $scope.states.pagingOptions.currentPage = $scope.currentPage;
             $scope.getApplications();
+        };
+
+        function removeFromApplications(id) {
+            var index;
+            angular.forEach($scope.applications, function (application, i) {
+                if (application._id === id) {
+                    index = i;
+                }
+            });
+            if (index) {
+                $scope.applications.splice(index, 1);
+            }
+        }
+
+        $scope.archive = function (id) {
+            mvApplication.archive({_id: id}, function () {
+                removeFromApplications(id);
+                getOneMoreApplication();
+            });
         };
     });

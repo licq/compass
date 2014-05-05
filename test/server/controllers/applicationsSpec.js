@@ -64,6 +64,17 @@ describe('applications', function () {
                 });
         });
     });
+
+    describe('PUT /api/applications/:id', function(){
+        it('should set status to archived', function (done) {
+           var req = request(app).put('/api/applications/' + resume._id + '?status=archived');
+            req.cookies = cookies;
+            req.expect(200)
+                .end(function(err){
+                    done(err);
+                });
+        });
+    });
 });
 
 
