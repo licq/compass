@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 
 describe('Resume', function () {
     this.timeout(10000);
-    beforeEach(function (done) {
+    before(function (done) {
         helper.clearCollections(Resume, Company, Application, function () {
             Resume.clearAll(function () {
                 setTimeout(done, 1500);
@@ -27,18 +27,89 @@ describe('Resume', function () {
     });
 
     describe('create', function () {
+        var company;
+        before(function (done) {
+            var birthday = new Date();
+            birthday.setFullYear(birthday.getFullYear() - 20);
+            Factory.create('resume', {
+                applyPosition: '销售主管',
+                educationHistory: [
+                    {
+                        degree: 'associate'
+                    }
+                ],
+                birthday: birthday
+            }, function (resume) {
+                company = resume.company;
+                setTimeout(done, 1000);
+            });
+        });
+
         it('should index to elasticsearch', function (done) {
-            Factory.create('resume', function (resume) {
-                expect(resume.status).to.equal('new');
-                resume.on('es-indexed', function () {
-                    setTimeout(function () {
-                        Resume.query({}, function (err, res) {
-                            expect(err).to.not.exist;
-                            expect(res.hits.total).to.equal(1);
-                            expect(res.hits.hits[0].status).to.equal('new');
-                            done();
-                        });
-                    }, 1000);
+            Resume.query({}, function (err, res) {
+                expect(err).to.not.exist;
+                expect(res.hits.total).to.equal(1);
+                expect(res.hits.hits[0].status).to.equal('new');
+                done();
+            });
+        });
+
+        it('should return 0 resumes when q not found', function (done) {
+            Resume.query({company: company, q: '搜狐'}, function (err, results) {
+                expect(results.hits.total).to.equal(0);
+                done(err);
+            });
+        });
+
+        it('should return one resumes if q found', function (done) {
+            Resume.query({company: company, q: '阿里巴巴'}, function (err, results) {
+                expect(results.hits.total).to.equal(1);
+                done(err);
+            });
+        });
+
+        describe('using highestDegree filter', function () {
+            it('should return only one result if query for highestDegree=associate', function (done) {
+                Resume.query({highestDegree: 'associate'}, function (err, results) {
+                    expect(results.hits.total).to.equal(1);
+                    done(err);
+                });
+            });
+
+            it('should return no result if query for highestDegree=master', function (done) {
+                Resume.query({highestDegree: 'master'}, function (err, results) {
+                    expect(results.hits.total).to.equal(0);
+                    done(err);
+                });
+            });
+        });
+        describe('using applyPosition filter', function () {
+            it('should return only one result if query for applyPosition=销售主管', function (done) {
+                Resume.query({applyPosition: '销售主管'}, function (err, results) {
+                    expect(results.hits.total).to.equal(1);
+                    done(err);
+                });
+            });
+
+            it('should return no result if query for applyPosition=cio', function (done) {
+                Resume.query({applyPosition: 'cio'}, function (err, results) {
+                    expect(results.hits.total).to.equal(0);
+                    done(err);
+                });
+            });
+        });
+        describe('using age filter', function () {
+            it('should return only one result if query for age=[20,25]', function (done) {
+                Resume.query({age: [20,25]}, function (err, results) {
+                    expect(results.hits.total).to.equal(1);
+                    done(err);
+                });
+            });
+
+            it('should return no result if query for age=30', function (done) {
+                Resume.query({age: 30}, function (err, results) {
+                    expect(results.hits.total).to.equal(0);
+                    done(err);
                 });
             });
         });
