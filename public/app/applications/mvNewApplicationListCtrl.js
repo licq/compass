@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvNewApplicationListCtrl', function ($scope, states, mvApplication, $http) {
+    .controller('mvNewApplicationListCtrl', function ($scope, states, mvApplication, $http, $window) {
         $scope.crumbs = [
             {
                 text: '新应聘',
@@ -78,19 +78,36 @@ angular.module('compass')
         };
 
         function removeFromApplications(id) {
-            var index;
+            var index = -1;
             angular.forEach($scope.applications, function (application, i) {
                 if (application._id === id) {
                     index = i;
                 }
             });
-            if (index) {
+            console.log('index',index);
+            if (index > -1) {
                 $scope.applications.splice(index, 1);
             }
         }
 
         $scope.archive = function (id) {
-            mvApplication.archive({_id: id}, function () {
+            if ($window.confirm('确认将该应聘简历归档？归档后的简历可在人才库找到')) {
+                mvApplication.archive({_id: id}, function () {
+                    removeFromApplications(id);
+                    getOneMoreApplication();
+                });
+            }
+        };
+
+        $scope.pursue = function(id){
+            mvApplication.pursue({_id: id}, function() {
+                removeFromApplications(id);
+                getOneMoreApplication();
+            });
+        };
+
+        $scope.undetermine = function(id){
+            mvApplication.undetermine({_id: id}, function() {
                 removeFromApplications(id);
                 getOneMoreApplication();
             });

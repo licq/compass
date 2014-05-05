@@ -7,6 +7,20 @@ angular.module('compass')
                 params: {
                     status: 'archived'
                 }
+            },
+            pursue: {
+                method: 'PUT',
+                isArray: false,
+                params: {
+                    status: 'pursued'
+                }
+            },
+            undetermine: {
+                method: 'PUT',
+                isArray: false,
+                params: {
+                    status: 'undetermined'
+                }
             }
         });
     });

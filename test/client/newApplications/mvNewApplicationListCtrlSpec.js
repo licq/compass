@@ -1508,9 +1508,17 @@ describe('mvNewApplicationListCtrl', function () {
     });
 
     describe('archive', function () {
-        beforeEach(function () {
+        var confirmStub;
+        beforeEach(inject(function ($window) {
             $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=archived').respond(200);
+            confirmStub = sinon.stub($window,'confirm');
+            confirmStub.returns(true);
+        }));
+
+        afterEach(function(){
+           confirmStub.restore();
         });
+
         it('should put /api/applicatioins/:id and delete from client', function () {
             $scope.archive('5355c145b5f85ce10e5aa596');
             $httpBackend.flush();
@@ -1529,6 +1537,76 @@ describe('mvNewApplicationListCtrl', function () {
             });
             $scope.totalApplicationCount = 60;
             $scope.archive('5355c145b5f85ce10e5aa596');
+            $httpBackend.flush();
+            expect($scope.applications).to.have.length(10);
+        });
+    });
+
+    describe('pursued', function () {
+        var confirmStub;
+        beforeEach(inject(function ($window) {
+            $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=pursued').respond(200);
+            confirmStub = sinon.stub($window,'confirm');
+            confirmStub.returns(true);
+        }));
+
+        afterEach(function(){
+            confirmStub.restore();
+        });
+
+        it('should put /api/applicatioins/:id and delete from client', function () {
+            $scope.pursue('5355c145b5f85ce10e5aa596');
+            $httpBackend.flush();
+            $scope.applications.forEach(function (application) {
+                expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
+            });
+            expect($scope.applications).to.have.length(9);
+        });
+        it('should get back one application', function () {
+            $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
+                hits: {
+                    hits: [{
+                        _id: '7788'
+                    }]
+                }
+            });
+            $scope.totalApplicationCount = 60;
+            $scope.pursue('5355c145b5f85ce10e5aa596');
+            $httpBackend.flush();
+            expect($scope.applications).to.have.length(10);
+        });
+    });
+
+    describe('undetermined', function () {
+        var confirmStub;
+        beforeEach(inject(function ($window) {
+            $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=undetermined').respond(200);
+            confirmStub = sinon.stub($window,'confirm');
+            confirmStub.returns(true);
+        }));
+
+        afterEach(function(){
+            confirmStub.restore();
+        });
+
+        it('should put /api/applicatioins/:id and delete from client', function () {
+            $scope.undetermine('5355c145b5f85ce10e5aa596');
+            $httpBackend.flush();
+            $scope.applications.forEach(function (application) {
+                expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
+            });
+            expect($scope.applications).to.have.length(9);
+        });
+        it('should get back one application', function () {
+            $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
+                hits: {
+                    hits: [{
+                        _id: '7788'
+                    }]
+                }
+            });
+            $scope.totalApplicationCount = 60;
+            $scope.undetermine('5355c145b5f85ce10e5aa596');
             $httpBackend.flush();
             expect($scope.applications).to.have.length(10);
         });
