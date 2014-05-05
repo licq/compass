@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
     Resume = mongoose.model('Resume'),
     Company = mongoose.model('Company'),
-    Application = mongoose.model('Application'),
     helper = require('../databaseHelper'),
     expect = require('chai').expect,
     Factory = require('../factory');
@@ -9,7 +8,7 @@ var mongoose = require('mongoose'),
 describe('Resume', function () {
     this.timeout(10000);
     before(function (done) {
-        helper.clearCollections(Resume, Company, Application, function () {
+        helper.clearCollections(Resume, Company, function () {
             Resume.clearAll(function () {
                 setTimeout(done, 1500);
             });

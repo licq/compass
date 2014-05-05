@@ -7,7 +7,6 @@ var app = require('../../../server'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
     Resume = mongoose.model('Resume'),
-    Application = mongoose.model('Application'),
     Factory = require('../factory'),
     helper = require('./helper'),
     databaseHelper = require('../databaseHelper');
@@ -19,7 +18,7 @@ describe('applications', function () {
         user;
 
     beforeEach(function (done) {
-        databaseHelper.clearCollections(User, Company, Application,
+        databaseHelper.clearCollections(User, Company,
             Resume, function () {
                 Factory.create('user', function (createdUser) {
                     user = createdUser;
