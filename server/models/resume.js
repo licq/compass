@@ -71,15 +71,17 @@ var resumeSchema = mongoose.Schema({
     },
     job51Id: String,
 
-    workExperience: [{
-        from: Date,
-        to: Date,
-        company: String,
-        industry: String,
-        department: String,
-        jobTitle: String,
-        jobDescription: String
-    }],
+    workExperience: [
+        {
+            from: Date,
+            to: Date,
+            company: String,
+            industry: String,
+            department: String,
+            jobTitle: String,
+            jobDescription: String
+        }
+    ],
     projectExperience: [
         {
             from: Date,
@@ -248,6 +250,9 @@ resumeSchema.statics.query = function (params, callback) {
             match_all: {}
         };
     }
+    if (params.sort) {
+        queryConditions.sort = params.sort;
+    }
 
     if (params.page && params.pageSize) {
         queryConditions.from = (params.page - 1) * params.pageSize;
@@ -297,10 +302,10 @@ resumeSchema.statics.query = function (params, callback) {
         })});
     }
 
-    if(filters.length === 0){
+    if (filters.length === 0) {
         delete queryConditions.query.filtered.filter.and;
     }
-    console.log('in resume ', JSON.stringify(queryConditions));
+
     this.search(queryConditions, function (err, results) {
         if (err) return callback(err);
 

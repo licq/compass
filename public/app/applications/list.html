@@ -85,14 +85,16 @@
                                             <div class="row">
                                                 <div class="col-md-11">
                                                     <div class="row">
-                                                        <div class="col-md-1">应聘职位</div>
-                                                        <div class="col-md-3">{{application.applyPosition}}</div>
-                                                        <div class="col-md-3">{{application.gender | gender}}</div>
-                                                        <div class="col-md-3">{{application.birthday | yearAndMonth}}
-                                                        </div>
+                                                        <span class="col-md-2">应聘职位</span>
+                                                        <span class="col-md-3">{{application.applyPosition}}</span>
+                                                        <span class="col-md-3">{{application.gender | gender}}</span>
+                                                        <span class="col-md-2">{{application.birthday | yearAndMonth}}
+                                                        </span>
+                                                        <span class="col-md-2">{{application.created_at | shortDate}}应聘
+                                                        </span>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-1">最高学历</div>
+                                                        <div class="col-md-2">最高学历</div>
                                                         <div class="col-md-3">{{application.educationHistory[0].from |
                                                             yearAndMonth}}
                                                             -- {{application.educationHistory[0].to | yearAndMonth}}
@@ -100,7 +102,7 @@
                                                         <div class="col-md-3">
                                                             {{application.educationHistory[0].school}}
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             {{application.educationHistory[0].major}}
                                                         </div>
                                                         <div class="col-md-2">{{application.educationHistory[0].degree |
@@ -108,7 +110,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-1">最近工作</div>
+                                                        <div class="col-md-2">最近工作</div>
                                                         <div class="col-md-3">{{application.workExperience[0].from |
                                                             yearAndMonth}}
                                                             -- {{application.workExperience[0].to | yearAndMonth}}
@@ -116,7 +118,7 @@
                                                         <div class="col-md-3">
                                                             {{application.workExperience[0].company}}
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             {{application.workExperience[0].department}}
                                                         </div>
                                                         <div class="col-md-2">
@@ -132,7 +134,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1 application-action-buttons">
-                                                    <button class="btn btn-primary">详细</button>
+                                                    <a href="/applications/new/{{application._id}}"
+                                                       class="btn btn-primary">详细</a>
                                                     <button class="btn btn-success">面试</button>
                                                     <button class="btn btn-danger">归档</button>
                                                     <button class="btn btn-warning">待定</button>

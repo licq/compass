@@ -50,6 +50,20 @@ describe('applications', function () {
                 });
         });
     });
+
+    describe('GET /api/applications/:id', function () {
+        it('should return a resume', function (done) {
+            var req = request(app).get('/api/applications/' + resume._id);
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    var result = res.body;
+                    expect(result).to.have.property('_id');
+                    done(err);
+                });
+        });
+    });
 });
 
 

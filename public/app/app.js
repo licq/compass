@@ -122,6 +122,11 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvResumeViewCtrl',
                 resolve: routeRoleChecks.user
             })
+            .when('/applications/new/:id',{
+                templateUrl: '/app/resumes/view.html',
+                controller: 'mvNewApplicationViewCtrl',
+                resolve: routeRoleChecks.user
+            })
             .when('/companies', {
                 templateUrl: '/app/companies/list.html',
                 controller: 'mvCompanyListCtrl',

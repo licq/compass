@@ -17,7 +17,7 @@ describe('mvResumeViewCtrl', function () {
         });
     }));
 
-    it('should get the eresume list', function (done) {
+    it('should get the resume', function (done) {
         $httpBackend.flush();
 
         expect($scope.resume).to.exist;
