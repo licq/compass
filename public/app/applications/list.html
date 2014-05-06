@@ -13,7 +13,7 @@
                                            ng-model="states.searchOptions.q">
                                 </div>
                                 <div class="col-md-1">
-                                    <button class="btn btn-primary" ng-click="search()">搜索</button>
+                                    <button class="btn btn-primary" ng-click="getApplications()">搜索</button>
                                 </div>
                             </div>
                             <div class="row resume-filters">
@@ -135,9 +135,15 @@
                                                 </div>
                                                 <div class="col-md-1 application-action-buttons">
                                                     <button ng-click="view($index)" class="btn btn-primary">详细</button>
-                                                    <button class="btn btn-success" ng-click="pursue(application._id)">面试</button>
-                                                    <button class="btn btn-danger" ng-click="archive(application._id)">归档</button>
-                                                    <button class="btn btn-warning" ng-click="undetermine(application._id)">待定</button>
+                                                    <button class="btn btn-success" ng-click="pursue(application._id)">
+                                                        面试
+                                                    </button>
+                                                    <button class="btn btn-danger" ng-click="archive(application._id)">
+                                                        归档
+                                                    </button>
+                                                    <button class="btn btn-warning"
+                                                            ng-click="undetermine(application._id)">待定
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,7 +157,7 @@
 
             <div class="col-md-12">
                 <row>
-                    <div class="col-md-3">
+                    <div class="col-md-3" ng-show="initialized">
                         共计{{totalApplicationCount}}
                     </div>
                     <div class="col-md-6" ng-show="showPagination()">
@@ -159,6 +165,7 @@
                                     items-per-page="states.pagingOptions.pageSize"
                                     ng-model="states.pagingOptions.currentPage"
                                     ng-change="getApplications()"
+                                    max-size="7"
                                     previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
                                     last-text="&raquo;">
                         </pagination>

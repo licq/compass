@@ -1,6 +1,5 @@
 angular.module('compass')
     .controller('mvCompanyListCtrl', function ($scope, mvCompany, $location) {
-
         $scope.crumbs = [
             {text: '公司', url: 'companies'}
         ];

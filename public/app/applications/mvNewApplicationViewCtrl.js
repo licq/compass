@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvNewApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, mvNotifier) {
+    .controller('mvNewApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier) {
         $scope.index = $routeParams.index;
         if (states.get('mvNewApplicationListCtrl')) {
             $scope.searchOptions = states.get('mvNewApplicationListCtrl').searchOptions;
@@ -21,6 +21,8 @@ angular.module('compass')
                         {text: $scope.resume.name, url: $scope.resume._id}
                     ];
                     $window.scrollTo(0, 0);
+                } else {
+                    $location.path('/applications/new');
                 }
             });
         }
@@ -33,6 +35,20 @@ angular.module('compass')
         $scope.pursue = function () {
             mvApplication.pursue({_id: $scope.resume._id}, function () {
                 mvNotifier.notify('已将' + $scope.resume.name + '加入面试列表');
+                retrieveApplication();
+            });
+        };
+
+        $scope.undetermine = function () {
+            mvApplication.undetermine({_id: $scope.resume._id}, function () {
+                mvNotifier.notify('已将' + $scope.resume.name + '加入待定列表');
+                retrieveApplication();
+            });
+        };
+
+        $scope.archive = function () {
+            mvApplication.archive({_id: $scope.resume._id}, function () {
+                mvNotifier.notify('已将' + $scope.resume.name + '归档到人才库中');
                 retrieveApplication();
             });
         };

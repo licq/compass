@@ -94,6 +94,7 @@ describe('applications', function () {
                     });
                 });
         });
+       
         it('should set status to undetermined', function (done) {
            var req = request(app).put('/api/applications/' + resume._id + '?status=undetermined');
             req.cookies = cookies;
@@ -103,6 +104,20 @@ describe('applications', function () {
                     Resume.findById(resume._id, function(err,resume){
                         expect(err).to.not.exist;
                         expect(resume.status).to.equal('undetermined');
+                        done();
+                    });
+                });
+        });
+ 
+        it('should set status to archived', function (done) {
+           var req = request(app).put('/api/applications/' + resume._id + '?status=archived');
+            req.cookies = cookies;
+            req.expect(200)
+                .end(function(err){
+                    expect(err).to.not.exist;
+                    Resume.findById(resume._id, function(err,resume){
+                        expect(err).to.not.exist;
+                        expect(resume.status).to.equal('archived');
                         done();
                     });
                 });

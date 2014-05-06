@@ -6,6 +6,7 @@ angular.module('compass')
                 url: '/applications/new'
             }
         ];
+
         states.defaults('mvNewApplicationListCtrl', {
             pagingOptions: {
                 pageSizes: [10, 20, 50],
@@ -16,10 +17,10 @@ angular.module('compass')
             }
         });
 
-        $scope.currentPage = 3;
+        $scope.initialized = false;
 
+        $scope.totalApplicationCount = 999;
         $scope.states = states.get('mvNewApplicationListCtrl');
-        $scope.totalApplicationCount = 0;
 
         $scope.getApplications = function () {
             var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize,
@@ -30,6 +31,7 @@ angular.module('compass')
                 $scope.totalApplicationCount = result.hits.total;
                 $scope.applications = result.hits.hits;
                 $scope.facets = result.facets;
+                $scope.initialized = true;
             });
         };
 
@@ -47,8 +49,6 @@ angular.module('compass')
                 });
             }
         }
-
-        $scope.getApplications();
 
         $scope.setApplyPosition = function (applyPosition) {
             $scope.states.searchOptions.applyPosition = applyPosition;
@@ -69,12 +69,7 @@ angular.module('compass')
         };
 
         $scope.showPagination = function () {
-            return $scope.totalApplicationCount > $scope.states.pagingOptions.pageSize;
-        };
-
-        $scope.pageChanged = function () {
-            $scope.states.pagingOptions.currentPage = $scope.currentPage;
-            $scope.getApplications();
+            return $scope.totalApplicationCount > $scope.states.pagingOptions.pageSize && $scope.initialized;
         };
 
         function removeFromApplications(id) {
@@ -119,4 +114,7 @@ angular.module('compass')
             index += 1;
             $location.path('/applications/new/' + index);
         };
+
+        $scope.getApplications();
+
     });
