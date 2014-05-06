@@ -6,11 +6,10 @@ var mongoose = require('mongoose'),
     Factory = require('../factory');
 
 describe('Resume', function () {
-    this.timeout(10000);
     before(function (done) {
         helper.clearCollections(Resume, Company, function () {
-            Resume.clearAll(function () {
-                setTimeout(done, 1500);
+            Resume.recreateIndex(function () {
+                setTimeout(done, 500);
             });
         });
     });
@@ -30,7 +29,7 @@ describe('Resume', function () {
         before(function (done) {
             var birthday = new Date();
             birthday.setFullYear(birthday.getFullYear() - 20);
-            Factory.create('resume', {
+            Factory.build('resume', {
                 applyPosition: '销售主管',
                 educationHistory: [
                     {
@@ -39,8 +38,10 @@ describe('Resume', function () {
                 ],
                 birthday: birthday
             }, function (resume) {
-                company = resume.company;
-                setTimeout(done, 1000);
+                resume.saveAndIndexSync(function () {
+                    company = resume.company;
+                    done();
+                });
             });
         });
 
@@ -99,7 +100,7 @@ describe('Resume', function () {
         });
         describe('using age filter', function () {
             it('should return only one result if query for age=[20,25]', function (done) {
-                Resume.query({age: [20,25]}, function (err, results) {
+                Resume.query({age: [20, 25]}, function (err, results) {
                     expect(results.hits.total).to.equal(1);
                     done(err);
                 });

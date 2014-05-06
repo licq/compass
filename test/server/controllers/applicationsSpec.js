@@ -22,11 +22,13 @@ describe('applications', function () {
             Resume, function () {
                 Factory.create('user', function (createdUser) {
                     user = createdUser;
-                    Factory.create('resume', {company: user.company}, function (createdResume) {
-                        resume = createdResume;
-                        helper.login(user, function (cks) {
-                            cookies = cks;
-                            setTimeout(done, 1500);
+                    Factory.build('resume', {company: user.company}, function (newResume) {
+                        newResume.saveAndIndexSync(function(){
+                            helper.login(user, function (cks) {
+                                cookies = cks;
+                                resume = newResume;
+                                done();
+                            });
                         });
                     });
                 });

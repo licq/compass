@@ -59,8 +59,8 @@ module.exports = function (app) {
     app.put('/api/evaluationCriterions', sessions.requiresLogin, evaluationCriterions.update);
 
     app.get('/api/applications', sessions.requiresLogin, applications.list);
-    app.get('/api/applications/:applicationId', sessions.requiresLogin,applications.get);
-    app.put('/api/applications/:applicationId', sessions.requiresLogin,applications.update);
+    app.get('/api/applications/:applicationId', sessions.requiresLogin, applications.get);
+    app.put('/api/applications/:applicationId', sessions.requiresLogin, applications.update);
     app.param('applicationId', sessions.requiresLogin, applications.load);
 
     app.all('/api/*', function (req, res) {

@@ -122,11 +122,6 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 controller: 'mvResumeViewCtrl',
                 resolve: routeRoleChecks.user
             })
-            .when('/applications/new/:id',{
-                templateUrl: '/app/applications/view.html',
-                controller: 'mvNewApplicationViewCtrl',
-                resolve: routeRoleChecks.user
-            })
             .when('/companies', {
                 templateUrl: '/app/companies/list.html',
                 controller: 'mvCompanyListCtrl',
@@ -166,6 +161,11 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
             .when('/applications/new', {
                 templateUrl: '/app/applications/list.html',
                 controller: 'mvNewApplicationListCtrl'
+            })
+            .when('/applications/new/:index',{
+                templateUrl: '/app/applications/view.html',
+                controller: 'mvNewApplicationViewCtrl',
+                resolve: routeRoleChecks.user
             })
             .otherwise({
                 redirectTo: '/'

@@ -10,18 +10,16 @@ var app = require('../../../server'),
     expect = require('chai').expect;
 
 describe('#resumes', function () {
-    var cookies, existUser, existResume;
+    var cookies;
 
     beforeEach(function (done) {
         databaseHelper.clearCollections(User, Company, Resume, function () {
-            Resume.clearAll(function () {
+            Resume.clearAll(true, function () {
                 Factory.create('user', function (user) {
-                    existUser = user;
                     helper.login(user, function (cks) {
                         cookies = cks;
-                        Factory.create('resume', {company: user.company}, function (resume) {
-                            existResume = resume;
-                            setTimeout(done, 1000);
+                        Factory.build('resume', {company: user.company}, function (resume) {
+                            resume.saveAndIndexSync(done);
                         });
                     });
                 });

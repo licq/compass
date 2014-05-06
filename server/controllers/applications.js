@@ -20,10 +20,10 @@ exports.get = function (req, res) {
     res.json(req.resume);
 };
 
-exports.update = function(req, res, next){
+exports.update = function (req, res, next) {
     req.resume.status = req.query.status;
-    req.resume.save(function(err){
-        if(err) return next(err);
+    req.resume.saveAndIndexSync(function (err) {
+        if (err) return next(err);
         res.send(200);
     });
 };

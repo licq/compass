@@ -306,6 +306,7 @@ resumeSchema.statics.query = function (params, callback) {
         delete queryConditions.query.filtered.filter.and;
     }
 
+    console.log(JSON.stringify(queryConditions));
     this.search(queryConditions, function (err, results) {
         if (err) return callback(err);
 
@@ -316,6 +317,9 @@ resumeSchema.statics.query = function (params, callback) {
         return callback(null, results);
     });
 };
+resumeSchema.post('remove', function () {
+    this.unIndex();
+});
 
 resumeSchema.plugin(timestamps);
 resumeSchema.plugin(mongoosastic, {
@@ -712,6 +716,7 @@ Resume.createMapping(function (err, mapping) {
     if (err) {
         logger.error('error creating mapping (you can safely ignore this)', err);
     }
+    logger.info(JSON.stringify(mapping));
     var stream = Resume.synchronize() , count = 0;
 
     stream.on('data', function (err, doc) {

@@ -1511,12 +1511,12 @@ describe('mvNewApplicationListCtrl', function () {
         var confirmStub;
         beforeEach(inject(function ($window) {
             $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=archived').respond(200);
-            confirmStub = sinon.stub($window,'confirm');
+            confirmStub = sinon.stub($window, 'confirm');
             confirmStub.returns(true);
         }));
 
-        afterEach(function(){
-           confirmStub.restore();
+        afterEach(function () {
+            confirmStub.restore();
         });
 
         it('should put /api/applicatioins/:id and delete from client', function () {
@@ -1530,9 +1530,11 @@ describe('mvNewApplicationListCtrl', function () {
         it('should get back one application', function () {
             $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
                 hits: {
-                    hits: [{
-                        _id: '7788'
-                    }]
+                    hits: [
+                        {
+                            _id: '7788'
+                        }
+                    ]
                 }
             });
             $scope.totalApplicationCount = 60;
@@ -1546,11 +1548,11 @@ describe('mvNewApplicationListCtrl', function () {
         var confirmStub;
         beforeEach(inject(function ($window) {
             $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=pursued').respond(200);
-            confirmStub = sinon.stub($window,'confirm');
+            confirmStub = sinon.stub($window, 'confirm');
             confirmStub.returns(true);
         }));
 
-        afterEach(function(){
+        afterEach(function () {
             confirmStub.restore();
         });
 
@@ -1565,9 +1567,11 @@ describe('mvNewApplicationListCtrl', function () {
         it('should get back one application', function () {
             $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
                 hits: {
-                    hits: [{
-                        _id: '7788'
-                    }]
+                    hits: [
+                        {
+                            _id: '7788'
+                        }
+                    ]
                 }
             });
             $scope.totalApplicationCount = 60;
@@ -1581,11 +1585,11 @@ describe('mvNewApplicationListCtrl', function () {
         var confirmStub;
         beforeEach(inject(function ($window) {
             $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=undetermined').respond(200);
-            confirmStub = sinon.stub($window,'confirm');
+            confirmStub = sinon.stub($window, 'confirm');
             confirmStub.returns(true);
         }));
 
-        afterEach(function(){
+        afterEach(function () {
             confirmStub.restore();
         });
 
@@ -1600,9 +1604,11 @@ describe('mvNewApplicationListCtrl', function () {
         it('should get back one application', function () {
             $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
                 hits: {
-                    hits: [{
-                        _id: '7788'
-                    }]
+                    hits: [
+                        {
+                            _id: '7788'
+                        }
+                    ]
                 }
             });
             $scope.totalApplicationCount = 60;
@@ -1611,5 +1617,17 @@ describe('mvNewApplicationListCtrl', function () {
             expect($scope.applications).to.have.length(10);
             expect($scope.totalApplicationCount).to.equal(59);
         });
+    });
+
+    describe('view', function () {
+        it('should go to the correct url', inject(function ($location) {
+            var spy = sinon.spy($location, 'path');
+            $scope.states.pagingOptions = {
+                pageSize: 5,
+                currentPage: 20
+            };
+            $scope.view(2);
+            expect(spy).to.have.been.calledWith('/applications/new/98');
+        }));
     });
 });

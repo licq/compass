@@ -1,5 +1,5 @@
 angular.module('compass')
-    .controller('mvNewApplicationListCtrl', function ($scope, states, mvApplication, $http, $window) {
+    .controller('mvNewApplicationListCtrl', function ($scope, states, mvApplication, $http, $window, $location) {
         $scope.crumbs = [
             {
                 text: '新应聘',
@@ -100,17 +100,23 @@ angular.module('compass')
             }
         };
 
-        $scope.pursue = function(id){
-            mvApplication.pursue({_id: id}, function() {
+        $scope.pursue = function (id) {
+            mvApplication.pursue({_id: id}, function () {
                 removeFromApplications(id);
                 getOneMoreApplication();
             });
         };
 
-        $scope.undetermine = function(id){
-            mvApplication.undetermine({_id: id}, function() {
+        $scope.undetermine = function (id) {
+            mvApplication.undetermine({_id: id}, function () {
                 removeFromApplications(id);
                 getOneMoreApplication();
             });
+        };
+
+        $scope.view = function (index) {
+            index += $scope.states.pagingOptions.pageSize * ($scope.states.pagingOptions.currentPage - 1);
+            index += 1;
+            $location.path('/applications/new/' + index);
         };
     });

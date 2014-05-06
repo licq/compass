@@ -8,11 +8,18 @@ describe('mvNewApplicationViewCtrl', function () {
 
     beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
         $httpBackend = _$httpBackend_;
-        $httpBackend.expectGET('/api/applications/7788').respond({name: '张三', _id: '7788', mail: '8899'});
+        $httpBackend.expectGET('/api/applications?page=1&pageSize=1&status=new').respond({
+            hits: {
+                total: 1,
+                hits: [
+                    {name: '张三', _id: '7788', mail: '8899'}
+                ]
+            }
+        });
         $scope = $rootScope.$new();
         mvNewApplicationViewCtrl = $controller('mvNewApplicationViewCtrl', {
             $scope: $scope,
-            $routeParams: {id: '7788'}
+            $routeParams: {index: 1}
         });
 
         $httpBackend.flush();
