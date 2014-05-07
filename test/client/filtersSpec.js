@@ -141,6 +141,7 @@ describe('filters', function () {
         it('should return correctly', inject(function (targetSalaryFilter) {
             expect(targetSalaryFilter({from: 2001, to: 4000})).to.equal('2001--4000');
             expect(targetSalaryFilter({from: 0, to: 0})).to.equal('面议');
+            expect(targetSalaryFilter({})).to.not.exist;
         }));
     });
 

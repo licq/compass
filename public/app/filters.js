@@ -196,7 +196,7 @@ angular.module('compass')
     })
     .filter('targetSalary', function () {
         return function (range) {
-            if (!range) {
+            if (!range || range.from === undefined) {
                 return;
             }
             if (range.from === 0 && range.to === 0) {
