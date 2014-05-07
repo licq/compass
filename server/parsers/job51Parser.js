@@ -6,7 +6,7 @@ var cheerio = require('cheerio'),
     logger = require('../config/winston').logger();
 
 function parseCertifications(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         return _.map(_.filter(helper.parseTable(table), function (element, index) {
             return index % 2 === 0;
@@ -24,7 +24,7 @@ function parseCertifications(table) {
 
 
 function parseBasicInfo(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var resume = {};
 
@@ -44,7 +44,7 @@ function parseBasicInfo(table) {
 }
 
 function parseLanguageSkills(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var languageTable = table.find('table');
         return _.map(_.filter(helper.parseTable(languageTable), function (line) {
@@ -58,7 +58,7 @@ function parseLanguageSkills(table) {
 }
 
 function parseCareerObjective(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var careerObjective = {};
         var tableData = helper.parseTable(table);
@@ -89,7 +89,7 @@ function parseCareerObjective(table) {
 
 
 function parseWorkExperience(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var workExperience = [];
         var tableData = helper.parseTable(table);
@@ -111,7 +111,7 @@ function parseWorkExperience(table) {
 }
 
 function parseProjectExperience(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var projectTableData = helper.parseTable(table);
         return _.map(helper.chunkByEmptyArray(projectTableData), function (projectData) {
@@ -142,7 +142,7 @@ function parseProjectExperience(table) {
 }
 
 function parseEducationHistory(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var tableData = helper.parseTable(table);
         return _.times((tableData.length + 1) / 3, function (n) {
@@ -161,7 +161,7 @@ function parseEducationHistory(table) {
 }
 
 function parseTrainingHistory(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var trainingHistory = [];
         var tableData = helper.parseTable(table);
@@ -181,7 +181,7 @@ function parseTrainingHistory(table) {
 }
 
 function parseInSchoolStudy(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var data = helper.parseTable(table);
         return _.map(data, function (item) {
@@ -193,7 +193,7 @@ function parseInSchoolStudy(table) {
 }
 
 function parseItSkills(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         return _.map(_.filter(helper.parseTable(table).slice(2), function (line) {
             return line.length === 3;
@@ -210,7 +210,7 @@ function parseItSkills(table) {
 }
 
 function parseLanguageCertificates(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var languageTable = table.find('table');
         var languageCertificates = {};
@@ -227,7 +227,7 @@ function parseLanguageCertificates(table) {
 }
 
 function parseInSchoolPractices(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var tableData = helper.parseTable(table);
         return _.times(tableData.length / 2, function (n) {
@@ -245,12 +245,19 @@ function parseInSchoolPractices(table) {
 
 exports.parse = function (data) {
     var $ = cheerio.load(data.html);
-    var findTable = function (name) {
-        var current = $('td.cvtitle:contains(' + name + ')').parent().next();
-        while (current.find('table').length === 0 && current.next().length !== 0) {
-            current = current.next();
+
+    var findTable = function () {
+        var tableNames = Array.prototype.slice.call(arguments, 0);
+        var table;
+        for (var i = 0; i < tableNames.length; i++) {
+            table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
+            while (table.find('table').length === 0 && table.next().length !== 0) {
+                table = table.next();
+            }
+            if (table.length > 0) {
+                return table;
+            }
         }
-        return current;
     };
 
     var resume = parseBasicInfo($('table tr:nth-child(2) table'));

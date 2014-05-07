@@ -151,4 +151,54 @@ describe('filters', function () {
         }));
     });
 
+    describe('showArchiveButtonFilter', function () {
+        it('should return correctly', inject(function (showArchiveButtonFilter) {
+            expect(showArchiveButtonFilter({
+                status: 'new'
+            })).to.be.true;
+            expect(showArchiveButtonFilter({
+                status: 'archived'
+            })).to.be.false;
+            expect(showArchiveButtonFilter({
+                status: 'pursued'
+            })).to.be.true;
+            expect(showArchiveButtonFilter({
+                status: 'undetermined'
+            })).to.be.true;
+        }));
+    });
+
+    describe('showPursueButtonFilter', function () {
+        it('should return correctly', inject(function (showPursueButtonFilter) {
+            expect(showPursueButtonFilter({
+                status: 'new'
+            })).to.be.true;
+            expect(showPursueButtonFilter({
+                status: 'archived'
+            })).to.be.true;
+            expect(showPursueButtonFilter({
+                status: 'pursued'
+            })).to.be.false;
+            expect(showPursueButtonFilter({
+                status: 'undetermined'
+            })).to.be.true;
+        }));
+    });
+
+    describe('showUndetermineButtonFilter', function () {
+        it('should return correctly', inject(function (showUndetermineButtonFilter) {
+            expect(showUndetermineButtonFilter({
+                status: 'new'
+            })).to.be.true;
+            expect(showUndetermineButtonFilter({
+                status: 'archived'
+            })).to.be.false;
+            expect(showUndetermineButtonFilter({
+                status: 'pursued'
+            })).to.be.false;
+            expect(showUndetermineButtonFilter({
+                status: 'undetermined'
+            })).to.be.false;
+        }));
+    });
 });

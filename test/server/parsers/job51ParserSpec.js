@@ -4,7 +4,7 @@ var fs = require('fs'),
     resumeParser = require('../../../server/parsers/job51Parser'),
     expect = require('chai').expect;
 
-describe('job51Parser', function () {
+describe.only('job51Parser', function () {
     describe('#parse', function () {
         it('should parse 51job resume correctly', function (done) {
             fs.readFile(__dirname + '/51jobresume.html', 'utf-8', function (err, data) {

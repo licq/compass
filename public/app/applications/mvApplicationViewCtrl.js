@@ -1,15 +1,15 @@
 angular.module('compass')
-    .controller('mvNewApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier) {
+    .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap) {
         $scope.index = $routeParams.index;
-        if (states.get('mvNewApplicationListCtrl')) {
-            $scope.searchOptions = states.get('mvNewApplicationListCtrl').searchOptions;
+        if (states.get('mvApplicationListCtrl')) {
+            $scope.searchOptions = states.get('mvApplicationListCtrl').searchOptions;
         }
 
         function retrieveApplication() {
             var queryConditions = angular.extend({
                 pageSize: 1,
                 page: $scope.index,
-                status: 'new'
+                status: $routeParams.status
             }, $scope.searchOptions);
 
             $http.get('/api/applications', {params: queryConditions}).success(function (result) {
@@ -17,12 +17,12 @@ angular.module('compass')
                     $scope.totalApplicationCount = result.hits.total;
                     $scope.resume = result.hits.hits[0];
                     $scope.crumbs = [
-                        {text: '新应聘', url: 'applications/new'},
-                        {text: $scope.resume.name, url: $scope.resume._id}
+                        {text: applicationStatusMap[$routeParams.status], url: 'applications/' + $routeParams.status},
+                        {text: $scope.resume.name, url: $routeParams.index}
                     ];
                     $window.scrollTo(0, 0);
                 } else {
-                    $location.path('/applications/new');
+                    $location.path('/applications/' + $routeParams.status);
                 }
             });
         }

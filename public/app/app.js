@@ -158,13 +158,13 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 templateUrl: '/app/evaluationCriterions/edit.html',
                 controller: 'mvEvaluationCriterionEditCtrl'
             })
-            .when('/applications/new', {
+            .when('/applications/:status', {
                 templateUrl: '/app/applications/list.html',
-                controller: 'mvNewApplicationListCtrl'
+                controller: 'mvApplicationListCtrl'
             })
-            .when('/applications/new/:index',{
+            .when('/applications/:status/:index', {
                 templateUrl: '/app/applications/view.html',
-                controller: 'mvNewApplicationViewCtrl',
+                controller: 'mvApplicationViewCtrl',
                 resolve: routeRoleChecks.user
             })
             .otherwise({
@@ -217,6 +217,12 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 $location.path('/login');
             }
         });
+    })
+    .value('applicationStatusMap', {
+        new: '新应聘',
+        archived: '归档',
+        pursued: '约面试',
+        undetermined: '待定'
     });
 
 

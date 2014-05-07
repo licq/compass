@@ -135,14 +135,15 @@
                                                 </div>
                                                 <div class="col-md-1 application-action-buttons">
                                                     <button ng-click="view($index)" class="btn btn-primary">详细</button>
-                                                    <button class="btn btn-success" ng-click="pursue(application._id)">
-                                                        面试
+                                                    <button class="btn btn-success" ng-click="pursue(application._id)"
+                                                            ng-show="application | showPursueButton"> 面试
                                                     </button>
-                                                    <button class="btn btn-danger" ng-click="archive(application._id)">
-                                                        归档
+                                                    <button class="btn btn-danger" ng-click="archive(application._id)"
+                                                            ng-show="application | showArchiveButton"> 归档
                                                     </button>
                                                     <button class="btn btn-warning"
-                                                            ng-click="undetermine(application._id)">待定
+                                                            ng-click="undetermine(application._id)"
+                                                            ng-show="application | showUndetermineButton">待定
                                                     </button>
                                                 </div>
                                             </div>

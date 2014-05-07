@@ -7,7 +7,7 @@ var cheerio = require('cheerio'),
     helper = require('../utilities/helper');
 
 function parseBasicInfo(table) {
-    if (table.length === 0) return {};
+    if (!table) return {};
     try {
         var resume = {};
         resume.name = table.find('td:nth-child(1) span').text().trim();
@@ -30,7 +30,7 @@ function parseBasicInfo(table) {
     }
 }
 function parseCareerObjective(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var objectiveTable = table.find('table');
         var objectiveTableData = helper.parseTable(objectiveTable);
@@ -46,7 +46,7 @@ function parseCareerObjective(table) {
     }
 }
 function parseInSchoolPractices(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var data = helper.parseTable(table);
         return _.map(data, function (line) {
@@ -62,7 +62,7 @@ function parseInSchoolPractices(table) {
     }
 }
 function parseWorkExperience(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var workExperience = [];
         table.children().each(function () {
@@ -90,7 +90,7 @@ function parseWorkExperience(table) {
 }
 
 function parseTrainingHistory(table) {
-    if (table.length === 0) return;
+    if (!table) return;
 
     try {
         var htmls = helper.parseTableHtml(table);
@@ -124,7 +124,7 @@ function parseTrainingHistory(table) {
 }
 
 function parseProjectExperience(table) {
-    if (table.length === 0) return;
+    if (!table) return;
 
     try {
         var html = table.find('td').html();
@@ -164,7 +164,7 @@ function parseProjectExperience(table) {
 }
 
 function parseCertifications(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var certificationTableData = (helper.parseTable(table));
         var certificationLength = (certificationTableData.length + 1) / 3;
@@ -180,7 +180,7 @@ function parseCertifications(table) {
     }
 }
 function parseEducationHistory(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var data = helper.replaceEmpty(helper.parseTableHtml(table)[0][0].split('<br>'));
         return _.map(data, function (line) {
@@ -199,7 +199,7 @@ function parseEducationHistory(table) {
     }
 }
 function parseItSkills(table) {
-    if (!table.length) return;
+    if (!table) return;
     try {
         return _.map(helper.parseTableHtml(table)[0][0].split('<br>'), function (item) {
             var parts = item.split('|');
@@ -214,7 +214,7 @@ function parseItSkills(table) {
     }
 }
 function parseLanguageSkills(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var data = helper.parseTable(table);
         return _.map(data, function (item) {
@@ -231,7 +231,7 @@ function parseLanguageSkills(table) {
 }
 
 function parseInSchoolStudy(table) {
-    if (table.length === 0) return;
+    if (!table) return;
     try {
         var data = helper.parseTableHtml(table);
         return _.map(helper.replaceEmpty(data[0][0].split(/<br>|<\/?div.*?>|<\/?p>/g)),
@@ -245,10 +245,15 @@ function parseInSchoolStudy(table) {
 
 exports.parse = function (data) {
     var $ = cheerio.load(data.html);
-    var findTable = function (name, another) {
-        var table = $('span:contains(' + name + ')').closest('table').next().next();
-        if (table.length !== 0) return table;
-        return  $('span:contains(' + another + ')').closest('table').next().next();
+    var findTable = function () {
+        var tableNames = Array.prototype.slice.call(arguments, 0);
+        var table;
+        for (var i = 0; i < tableNames.length; i++) {
+            table = $('span:contains(' + tableNames[i] + ')').closest('table').next().next();
+            if (table.length > 0) {
+                return table;
+            }
+        }
     };
 
     var resume;
@@ -259,7 +264,7 @@ exports.parse = function (data) {
         resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'));
     }
 
-    resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标'));
+    resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标', '技能专长'));
     resume.workExperience = parseWorkExperience(findTable('工作经历'));
     resume.educationHistory = parseEducationHistory(findTable('教育经历'));
     resume.certifications = parseCertifications(findTable('证书'));

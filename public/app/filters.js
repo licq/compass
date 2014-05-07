@@ -209,4 +209,19 @@ angular.module('compass')
         return function(age){
            return '' + age + ' -- ' + (age + 4);
         };
+    })
+    .filter('showArchiveButton',function(){
+        return function(application) {
+            return application.status !== 'archived';
+        };
+    })
+    .filter('showPursueButton',function(){
+        return function(application) {
+            return application.status !== 'pursued';
+        };
+    })
+    .filter('showUndetermineButton',function(){
+        return function(application) {
+            return application.status === 'new';
+        };
     });

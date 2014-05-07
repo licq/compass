@@ -1,13 +1,13 @@
 angular.module('compass')
-    .controller('mvNewApplicationListCtrl', function ($scope, states, mvApplication, $http, $window, $location) {
+    .controller('mvApplicationListCtrl', function ($scope, states, mvApplication, $http, $window, $location,$routeParams, applicationStatusMap) {
         $scope.crumbs = [
             {
-                text: '新应聘',
-                url: '/applications/new'
+                text: applicationStatusMap[$routeParams.status],
+                url: 'applications/' + $routeParams.status
             }
         ];
 
-        states.defaults('mvNewApplicationListCtrl', {
+        states.defaults('mvApplicationListCtrl' + $routeParams.status, {
             pagingOptions: {
                 pageSizes: [10, 20, 50],
                 pageSize: 50,
@@ -20,12 +20,12 @@ angular.module('compass')
         $scope.initialized = false;
 
         $scope.totalApplicationCount = 999;
-        $scope.states = states.get('mvNewApplicationListCtrl');
+        $scope.states = states.get('mvApplicationListCtrl' + $routeParams.status);
 
         $scope.getApplications = function () {
             var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize,
                     page: $scope.states.pagingOptions.currentPage,
-                    status: 'new'},
+                    status: $routeParams.status},
                 $scope.states.searchOptions);
             $http.get('/api/applications', {params: query}).success(function (result) {
                 $scope.totalApplicationCount = result.hits.total;
@@ -39,7 +39,7 @@ angular.module('compass')
             if ($scope.totalApplicationCount > $scope.states.pagingOptions.currentPage * $scope.states.pagingOptions.pageSize) {
                 var query = angular.extend({pageSize: 1,
                         page: $scope.states.pagingOptions.currentPage * $scope.states.pagingOptions.pageSize,
-                        status: 'new'},
+                        status: $routeParams.status},
                     $scope.states.searchOptions);
 
                 $http.get('/api/applications', {params: query}).success(function (result) {
@@ -112,7 +112,7 @@ angular.module('compass')
         $scope.view = function (index) {
             index += $scope.states.pagingOptions.pageSize * ($scope.states.pagingOptions.currentPage - 1);
             index += 1;
-            $location.path('/applications/new/' + index);
+            $location.path('/applications/' + $routeParams.status + '/' + index);
         };
 
         $scope.getApplications();

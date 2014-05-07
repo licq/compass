@@ -1,12 +1,18 @@
-describe('mvNewApplicationListCtrl', function () {
+describe('mvApplicationListCtrl', function () {
     beforeEach(module('compass'));
 
     var $httpBackend,
-        mvNewApplicationListCtrl,
+        mvApplicationListCtrl,
         $scope,
-        result;
+        result,
+        titles = {
+            new: '新应聘',
+            archived: '归档',
+            pursued: '约面试',
+            undetermined: '待定'
+        };
 
-    beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
+    beforeEach(inject(function (_$httpBackend_, $rootScope) {
         result = {
             took: 40,
             timed_out: false,
@@ -1405,229 +1411,239 @@ describe('mvNewApplicationListCtrl', function () {
                 }
             }
         };
-
         $httpBackend = _$httpBackend_;
-        $httpBackend.expectGET('/api/applications?page=1&pageSize=50&status=new').respond(result);
-
         $scope = $rootScope.$new();
-        mvNewApplicationListCtrl = $controller('mvNewApplicationListCtrl', {
-            $scope: $scope
-        });
-        $httpBackend.flush();
     }));
 
-    it('should get the application list', function () {
-        expect($scope.applications).to.have.length(10);
-        expect($scope.totalApplicationCount).to.equal(20);
-        expect($scope.facets.age.entries).to.have.length(4);
-        expect($scope.facets.applyPosition.terms).to.have.length(4);
-        expect($scope.facets.highestDegree.terms).to.have.length(4);
-    });
+    ['new','undertimined','pursued'].forEach(function(status){
+        describe('/applications/' + status, function () {
+            beforeEach(inject(function ($controller) {
+                $httpBackend.expectGET('/api/applications?page=1&pageSize=50&status=' + status).respond(result);
+                mvApplicationListCtrl = $controller('mvApplicationListCtrl', {
+                    $scope: $scope,
+                    $routeParams: {
+                        status: status
+                    }
+                });
+                $httpBackend.flush();
+            }));
 
-    it('should have correct crumbs', function () {
-        expect($scope.crumbs[0].text).to.equal('新应聘');
-    });
+            it('should invoke the /api/applications', inject(function () {
+                $scope.states.searchOptions = {
+                    q: 'hello',
+                    age: 20,
+                    applyPosition: 'cio',
+                    highestDegree: 'master'
+                };
 
-    it('should invoke the /api/applications', inject(function () {
-        $scope.states.searchOptions = {
-            q: 'hello',
-            age: 20,
-            applyPosition: 'cio',
-            highestDegree: 'master'
-        };
+                $httpBackend.expectGET('/api/applications?age=20&applyPosition=cio&highestDegree=master&page=1&pageSize=50&q=hello&status=' + status).respond(result);
+                $scope.getApplications();
+                $httpBackend.flush();
+                expect($scope.applications).to.have.length(10);
+                expect($scope.totalApplicationCount).to.equal(20);
+            }));
 
-        $httpBackend.expectGET('/api/applications?age=20&applyPosition=cio&highestDegree=master&page=1&pageSize=50&q=hello&status=new').respond(result);
-        $scope.getApplications();
-        $httpBackend.flush();
-        expect($scope.applications).to.have.length(10);
-        expect($scope.totalApplicationCount).to.equal(20);
-    }));
-
-    describe('setAge', function () {
-        it('should set the query age parameter', function () {
-            var spy = sinon.spy($scope, 'getApplications');
-            $scope.setAge(20);
-
-            expect($scope.states.searchOptions).to.have.property('age', 20);
-            expect(spy.called).to.be.true;
-        });
-
-        it('should clear the query age parameter', function () {
-            var spy = sinon.spy($scope, 'getApplications');
-            $scope.setAge();
-            expect($scope.states.searchOptions.age).to.not.exist;
-            expect(spy.called).to.be.true;
-        });
-    });
-
-    describe('setApplyPosition', function () {
-        it('should set the query applyposition parameter', function () {
-            var spy = sinon.spy($scope, 'getApplications');
-            $scope.setApplyPosition('cio');
-            expect($scope.states.searchOptions).to.have.property('applyPosition', 'cio');
-            expect(spy.called).to.be.true;
-        });
-
-        it('should clear the query applyposition parameter', function () {
-            var spy = sinon.spy($scope, 'getApplications');
-            $scope.setApplyPosition();
-            expect($scope.states.searchOptions.applyPosition).to.not.exist;
-            expect(spy.called).to.be.true;
-        });
-    });
-
-    describe('setHighestDegree', function () {
-        it('should set the query highestDegree parameter', function () {
-            var spy = sinon.spy($scope, 'getApplications');
-            $scope.setHighestDegree('master');
-
-            expect($scope.states.searchOptions).to.have.property('highestDegree', 'master');
-            expect(spy.called).to.be.true;
-        });
-
-        it('should clear the query highestdegree parameter', function () {
-            var spy = sinon.spy($scope, 'getApplications');
-            $scope.setHighestDegree();
-            expect($scope.states.searchOptions.highestDegree).to.not.exist;
-            expect(spy.called).to.be.true;
-        });
-    });
-
-    describe('showPagination', function () {
-        it('should show pagination bar when totalCount bigger than pageSize', function () {
-            $scope.states.pagingOptions.pageSize = 50;
-            $scope.totalApplicationCount = 51;
-            expect($scope.showPagination()).to.be.true;
-        });
-
-        it('should show pagination bar when totalCount smaller than or equal to pageSize', function () {
-            $scope.states.pagingOptions.pageSize = 50;
-            $scope.totalApplicationCount = 49;
-            expect($scope.showPagination()).to.be.false;
-        });
-    });
-
-    describe('archive', function () {
-        var confirmStub;
-        beforeEach(inject(function ($window) {
-            $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=archived').respond(200);
-            confirmStub = sinon.stub($window, 'confirm');
-            confirmStub.returns(true);
-        }));
-
-        afterEach(function () {
-            confirmStub.restore();
-        });
-
-        it('should put /api/applicatioins/:id and delete from client', function () {
-            $scope.archive('5355c145b5f85ce10e5aa596');
-            $httpBackend.flush();
-            $scope.applications.forEach(function (application) {
-                expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
+            it('should get the application list', function () {
+                expect($scope.applications).to.have.length(10);
+                expect($scope.totalApplicationCount).to.equal(20);
+                expect($scope.facets.age.entries).to.have.length(4);
+                expect($scope.facets.applyPosition.terms).to.have.length(4);
+                expect($scope.facets.highestDegree.terms).to.have.length(4);
             });
-            expect($scope.applications).to.have.length(9);
-        });
-        it('should get back one application', function () {
-            $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
-                hits: {
-                    hits: [
-                        {
-                            _id: '7788'
+
+            it('should have correct crumbs', function () {
+                expect($scope.crumbs[0].text).to.equal(titles[status]);
+                expect($scope.crumbs[0].url).to.equal('applications/' + status);
+            });
+
+
+            describe('setAge', function () {
+                it('should set the query age parameter', function () {
+                    var spy = sinon.spy($scope, 'getApplications');
+                    $scope.setAge(20);
+
+                    expect($scope.states.searchOptions).to.have.property('age', 20);
+                    expect(spy.called).to.be.true;
+                });
+
+                it('should clear the query age parameter', function () {
+                    var spy = sinon.spy($scope, 'getApplications');
+                    $scope.setAge();
+                    expect($scope.states.searchOptions.age).to.not.exist;
+                    expect(spy.called).to.be.true;
+                });
+            });
+
+            describe('setApplyPosition', function () {
+                it('should set the query applyposition parameter', function () {
+                    var spy = sinon.spy($scope, 'getApplications');
+                    $scope.setApplyPosition('cio');
+                    expect($scope.states.searchOptions).to.have.property('applyPosition', 'cio');
+                    expect(spy.called).to.be.true;
+                });
+
+                it('should clear the query applyposition parameter', function () {
+                    var spy = sinon.spy($scope, 'getApplications');
+                    $scope.setApplyPosition();
+                    expect($scope.states.searchOptions.applyPosition).to.not.exist;
+                    expect(spy.called).to.be.true;
+                });
+            });
+
+            describe('setHighestDegree', function () {
+                it('should set the query highestDegree parameter', function () {
+                    var spy = sinon.spy($scope, 'getApplications');
+                    $scope.setHighestDegree('master');
+
+                    expect($scope.states.searchOptions).to.have.property('highestDegree', 'master');
+                    expect(spy.called).to.be.true;
+                });
+
+                it('should clear the query highestdegree parameter', function () {
+                    var spy = sinon.spy($scope, 'getApplications');
+                    $scope.setHighestDegree();
+                    expect($scope.states.searchOptions.highestDegree).to.not.exist;
+                    expect(spy.called).to.be.true;
+                });
+            });
+
+            describe('showPagination', function () {
+                it('should show pagination bar when totalCount bigger than pageSize', function () {
+                    $scope.states.pagingOptions.pageSize = 50;
+                    $scope.totalApplicationCount = 51;
+                    expect($scope.showPagination()).to.be.true;
+                });
+
+                it('should show pagination bar when totalCount smaller than or equal to pageSize', function () {
+                    $scope.states.pagingOptions.pageSize = 50;
+                    $scope.totalApplicationCount = 49;
+                    expect($scope.showPagination()).to.be.false;
+                });
+            });
+
+            describe('archive', function () {
+                var confirmStub;
+                beforeEach(inject(function ($window) {
+                    $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=archived').respond(200);
+                    confirmStub = sinon.stub($window, 'confirm');
+                    confirmStub.returns(true);
+                }));
+
+                afterEach(function () {
+                    confirmStub.restore();
+                });
+
+                it('should put /api/applicatioins/:id and delete from client', function () {
+                    $scope.archive('5355c145b5f85ce10e5aa596');
+                    $httpBackend.flush();
+                    $scope.applications.forEach(function (application) {
+                        expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
+                    });
+                    expect($scope.applications).to.have.length(9);
+                });
+                it('should get back one application', function () {
+                    $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=' + status).respond({
+                        hits: {
+                            hits: [
+                                {
+                                    _id: '7788'
+                                }
+                            ]
                         }
-                    ]
-                }
+                    });
+                    $scope.totalApplicationCount = 60;
+                    $scope.archive('5355c145b5f85ce10e5aa596');
+                    $httpBackend.flush();
+                    expect($scope.applications).to.have.length(10);
+                });
             });
-            $scope.totalApplicationCount = 60;
-            $scope.archive('5355c145b5f85ce10e5aa596');
-            $httpBackend.flush();
-            expect($scope.applications).to.have.length(10);
-        });
-    });
 
-    describe('pursued', function () {
-        var confirmStub;
-        beforeEach(inject(function ($window) {
-            $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=pursued').respond(200);
-            confirmStub = sinon.stub($window, 'confirm');
-            confirmStub.returns(true);
-        }));
+            describe('pursued', function () {
+                var confirmStub;
+                beforeEach(inject(function ($window) {
+                    $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=pursued').respond(200);
+                    confirmStub = sinon.stub($window, 'confirm');
+                    confirmStub.returns(true);
+                }));
 
-        afterEach(function () {
-            confirmStub.restore();
-        });
+                afterEach(function () {
+                    confirmStub.restore();
+                });
 
-        it('should put /api/applicatioins/:id and delete from client', function () {
-            $scope.pursue('5355c145b5f85ce10e5aa596');
-            $httpBackend.flush();
-            $scope.applications.forEach(function (application) {
-                expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
-            });
-            expect($scope.applications).to.have.length(9);
-        });
-        it('should get back one application', function () {
-            $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
-                hits: {
-                    hits: [
-                        {
-                            _id: '7788'
+                it('should put /api/applicatioins/:id and delete from client', function () {
+                    $scope.pursue('5355c145b5f85ce10e5aa596');
+                    $httpBackend.flush();
+                    $scope.applications.forEach(function (application) {
+                        expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
+                    });
+                    expect($scope.applications).to.have.length(9);
+                });
+                it('should get back one application', function () {
+                    $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=' + status).respond({
+                        hits: {
+                            hits: [
+                                {
+                                    _id: '7788'
+                                }
+                            ]
                         }
-                    ]
-                }
+                    });
+                    $scope.totalApplicationCount = 60;
+                    $scope.pursue('5355c145b5f85ce10e5aa596');
+                    $httpBackend.flush();
+                    expect($scope.applications).to.have.length(10);
+                });
             });
-            $scope.totalApplicationCount = 60;
-            $scope.pursue('5355c145b5f85ce10e5aa596');
-            $httpBackend.flush();
-            expect($scope.applications).to.have.length(10);
-        });
-    });
 
-    describe('undetermined', function () {
-        var confirmStub;
-        beforeEach(inject(function ($window) {
-            $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=undetermined').respond(200);
-            confirmStub = sinon.stub($window, 'confirm');
-            confirmStub.returns(true);
-        }));
+            describe('undetermined', function () {
+                var confirmStub;
+                beforeEach(inject(function ($window) {
+                    $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=undetermined').respond(200);
+                    confirmStub = sinon.stub($window, 'confirm');
+                    confirmStub.returns(true);
+                }));
 
-        afterEach(function () {
-            confirmStub.restore();
-        });
+                afterEach(function () {
+                    confirmStub.restore();
+                });
 
-        it('should put /api/applicatioins/:id and delete from client', function () {
-            $scope.undetermine('5355c145b5f85ce10e5aa596');
-            $httpBackend.flush();
-            $scope.applications.forEach(function (application) {
-                expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
-            });
-            expect($scope.applications).to.have.length(9);
-        });
-        it('should get back one application', function () {
-            $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=new').respond({
-                hits: {
-                    hits: [
-                        {
-                            _id: '7788'
+                it('should put /api/applications/:id and delete from client', function () {
+                    $scope.undetermine('5355c145b5f85ce10e5aa596');
+                    $httpBackend.flush();
+                    $scope.applications.forEach(function (application) {
+                        expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
+                    });
+                    expect($scope.applications).to.have.length(9);
+                });
+                it('should get back one application', function () {
+                    $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=' + status).respond({
+                        hits: {
+                            hits: [
+                                {
+                                    _id: '7788'
+                                }
+                            ]
                         }
-                    ]
-                }
+                    });
+                    $scope.totalApplicationCount = 60;
+                    $scope.undetermine('5355c145b5f85ce10e5aa596');
+                    $httpBackend.flush();
+                    expect($scope.applications).to.have.length(10);
+                    expect($scope.totalApplicationCount).to.equal(59);
+                });
             });
-            $scope.totalApplicationCount = 60;
-            $scope.undetermine('5355c145b5f85ce10e5aa596');
-            $httpBackend.flush();
-            expect($scope.applications).to.have.length(10);
-            expect($scope.totalApplicationCount).to.equal(59);
-        });
-    });
 
-    describe('view', function () {
-        it('should go to the correct url', inject(function ($location) {
-            var spy = sinon.spy($location, 'path');
-            $scope.states.pagingOptions = {
-                pageSize: 5,
-                currentPage: 20
-            };
-            $scope.view(2);
-            expect(spy).to.have.been.calledWith('/applications/new/98');
-        }));
+            describe('view', function () {
+                it('should go to the correct url', inject(function ($location) {
+                    var spy = sinon.spy($location, 'path');
+                    $scope.states.pagingOptions = {
+                        pageSize: 5,
+                        currentPage: 20
+                    };
+                    $scope.view(2);
+                    expect(spy).to.have.been.calledWith('/applications/' + status + '/98');
+                }));
+            });
+        });
     });
 });
