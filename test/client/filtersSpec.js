@@ -166,6 +166,7 @@ describe('filters', function () {
             expect(showArchiveButtonFilter({
                 status: 'undetermined'
             })).to.be.true;
+            expect(showArchiveButtonFilter(undefined)).to.be.undefined;
         }));
     });
 
@@ -183,6 +184,7 @@ describe('filters', function () {
             expect(showPursueButtonFilter({
                 status: 'undetermined'
             })).to.be.true;
+            expect(showPursueButtonFilter(undefined)).to.be.undefined;
         }));
     });
 
@@ -200,6 +202,7 @@ describe('filters', function () {
             expect(showUndetermineButtonFilter({
                 status: 'undetermined'
             })).to.be.false;
+            expect(showUndetermineButtonFilter(undefined)).to.be.undefined;
         }));
     });
 });

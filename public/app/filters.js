@@ -205,23 +205,23 @@ angular.module('compass')
             return '' + range.from + '--' + range.to;
         };
     })
-    .filter('ageRange', function(){
-        return function(age){
-           return '' + age + ' -- ' + (age + 4);
+    .filter('ageRange', function () {
+        return function (age) {
+            return '' + age + ' -- ' + (age + 4);
         };
     })
-    .filter('showArchiveButton',function(){
-        return function(application) {
-            return application.status !== 'archived';
+    .filter('showArchiveButton', function () {
+        return function (application) {
+            return application &&  application.status !== 'archived';
         };
     })
-    .filter('showPursueButton',function(){
-        return function(application) {
-            return application.status !== 'pursued';
+    .filter('showPursueButton', function () {
+        return function (application) {
+            return application && application.status !== 'pursued';
         };
     })
-    .filter('showUndetermineButton',function(){
-        return function(application) {
-            return application.status === 'new';
+    .filter('showUndetermineButton', function () {
+        return function (application) {
+            return application && application.status === 'new';
         };
     });
