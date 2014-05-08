@@ -8,7 +8,8 @@ var Factory = require('factory-lady'),
     Email = mongoose.model('Email'),
     Mail = mongoose.model('Mail'),
     EmailTemplate = mongoose.model('EmailTemplate'),
-    Resume = mongoose.model('Resume');
+    Resume = mongoose.model('Resume'),
+    Event = mongoose.model('Event');
 
 var companyCounter = 1;
 
@@ -92,6 +93,10 @@ Factory.define('resume', Resume, {
     educationHistory: {
         degree: 'master'
     },
+    email: function(cb){
+        cb('email' + resumeCounter++ + '@test.com');
+    },
+    mobile: '18383838338',
     workExperience: [
         {
             from: new Date(),
@@ -102,6 +107,13 @@ Factory.define('resume', Resume, {
     company: Factory.assoc('company', 'id')
 });
 
+Factory.define('event', Event, {
+    application: Factory.assoc('resume', 'id'),
+    time: new Date(),
+    interviewers: [],
+    sendEventAlert: true,
+    emailTemplate: Factory.assoc('emailTemplate', 'id'),
+    createdBy: Factory.assoc('user','id')
+});
+
 module.exports = Factory;
-
-
