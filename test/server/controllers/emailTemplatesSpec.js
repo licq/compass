@@ -8,7 +8,8 @@ var app = require('../../../server'),
     Company = mongoose.model('Company'),
     EmailTemplate = mongoose.model('EmailTemplate'),
     Factory = require('../factory'),
-    helper = require('./helper');
+    helper = require('./helper'),
+    databaseHelper = require('../databaseHelper');
 
 
 describe('emailTemplates', function () {
@@ -16,29 +17,19 @@ describe('emailTemplates', function () {
         emailTemplate,
         user;
 
-    function cleanData() {
-        User.remove().exec();
-        Company.remove().exec();
-        EmailTemplate.remove().exec();
-    }
-
     beforeEach(function (done) {
-        cleanData();
-        Factory.create('user', function (createdUser) {
-            user = createdUser;
-            Factory.create('emailTemplate', {createdBy: user._id, company: user.company}, function (et) {
-                emailTemplate = et;
-                helper.login(user, function (cks) {
-                    cookies = cks;
-                    done();
+        databaseHelper.clearCollections(User, Company, EmailTemplate, function () {
+            Factory.create('user', function (createdUser) {
+                user = createdUser;
+                Factory.create('emailTemplate', {createdBy: user._id, company: user.company}, function (et) {
+                    emailTemplate = et;
+                    helper.login(user, function (cks) {
+                        cookies = cks;
+                        done();
+                    });
                 });
             });
         });
-    });
-
-    after(function (done) {
-        cleanData();
-        done();
     });
 
     describe('POST /api/emailTemplates', function () {
@@ -66,6 +57,25 @@ describe('emailTemplates', function () {
                 .expect('content-type', /json/)
                 .end(function (err, res) {
                     expect(res.body).to.have.length(1);
+                    var et = res.body[0];
+                    expect(et).to.have.property('subject');
+                    expect(et).to.have.property('content');
+                    done(err);
+                });
+        });
+    });
+
+    describe('GET /api/emailTemplates?fields=name', function () {
+        it('should return 200 with json result', function (done) {
+            var req = request(app).get('/api/emailTemplates?fields=name');
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    expect(res.body).to.have.length(1);
+                    var et = res.body[0];
+                    expect(et).to.not.have.property('subject');
+                    expect(et).to.not.have.property('content');
                     done(err);
                 });
         });

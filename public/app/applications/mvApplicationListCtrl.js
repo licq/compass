@@ -116,23 +116,16 @@ angular.module('compass')
             $location.path('/applications/' + $routeParams.status + '/' + index);
         };
 
-        $scope.newEvent = function () {
-            $scope.items = ['item1', 'item2', 'item3'];
-            var modalInstance = $modal.open({
+        $scope.newEvent = function (application) {
+            $modal.open({
                 templateUrl: '/app/interviews/eventNew.html',
                 controller: 'mvEventNewCtrl',
-                //size: size,
+                keyboard: false,
                 resolve: {
-                    items: function () {
-                        return $scope.items;
+                    application: function () {
+                        return application;
                     }
                 }
-            });
-
-            modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
-            }, function () {
-                console.log('Modal dismissed at: ' + new Date());
             });
         };
 

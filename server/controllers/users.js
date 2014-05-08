@@ -5,11 +5,22 @@ var mongoose = require('mongoose'),
     _ = require('lodash');
 
 exports.list = function (req, res, next) {
-    User.find({company: req.user.company})
-        .exec(function (err, users) {
-            if (err) return next(err);
-            return res.json(users);
-        });
+    var query = User.find({
+        company: req.user.company,
+        deleted: false
+    });
+
+    if (req.query.fields) {
+        var fields = req.query.fields;
+        if (!Array.isArray(fields)) {
+            fields = [fields];
+        }
+        query.select(fields.join(','));
+    }
+    query.exec(function (err, users) {
+        if (err) return next(err);
+        return res.json(users);
+    });
 };
 
 exports.create = function (req, res) {
@@ -29,7 +40,7 @@ exports.create = function (req, res) {
     });
 };
 
-exports.delete = function (req, res,next) {
+exports.delete = function (req, res, next) {
     req.loadedUser.deleted = true;
     req.loadedUser.save(function (err) {
         if (err) return next(err);

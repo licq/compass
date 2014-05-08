@@ -1,4 +1,4 @@
-angular.module('compass')
+angular.module('ui.datetimepicker',[])
     .directive('datetimepicker', function () {
         function _byDefault(value, defaultValue) {
             function _isSet(value) {
@@ -64,8 +64,9 @@ angular.module('compass')
                     element.data('DateTimePicker').setDate(ngModel.$viewValue);
                 };
 
-                element.on('dp-change', function () {
-                    scope.apply(function () {
+                console.log();
+                element.on('dp.change', function () {
+                    scope.$apply(function () {
                         var newDate = element.data('DateTimePicker').getDate();
                         ngModel.$setViewValue(newDate);
                     });

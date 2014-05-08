@@ -1,24 +1,33 @@
 angular.module('compass')
-    .controller('mvEventNewCtrl', function ($scope, $modalInstance, mvUser) {
+    .controller('mvEventNewCtrl', function ($scope, $modalInstance, mvUser, mvEmailTemplate, mvEvent, mvNotifier, application) {
         var today = new Date();
         today.setHours(0, 0, 0, 0);
         $scope.today = today;
-
-        $scope.users = [];
-
-        $scope.users = mvUser.query();
-        $scope.open = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.opened = true;
+        $scope.event = {
+            sendEventAlert: false,
+            name: application.name,
+            email: application.email,
+            mobile: application.mobile,
+            application: application._id
         };
 
-        $scope.ok = function () {
-            $modalInstance.close($scope.selected.item);
+        $scope.users = mvUser.query({fields: 'name'});
+
+        $scope.create = function () {
+            mvEvent.save($scope.event, function () {
+                $modalInstance.close();
+                mvNotifier.notify('创建面试邀请成功!');
+            });
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $modalInstance.dismiss();
         };
+
+        $scope.$watch('event.sendEventAlert', function () {
+
+            if ($scope.event.sendEventAlert) {
+                $scope.emailTemplates = $scope.emailTemplates || mvEmailTemplate.query({fields: 'name'});
+            }
+        });
     });

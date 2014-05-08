@@ -7,7 +7,8 @@ var app = require('../../../server'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
     Factory = require('../factory'),
-    helper = require('./helper');
+    helper = require('./helper'),
+    databaseHelper = require('../databaseHelper');
 
 
 describe('users', function () {
@@ -15,21 +16,15 @@ describe('users', function () {
     var existUser;
 
     beforeEach(function (done) {
-        User.remove().exec();
-        Company.remove().exec();
-        Factory.create('user', function (user) {
-            existUser = user;
-            helper.login(user, function (cks) {
-                cookies = cks;
-                done();
+        databaseHelper.clearCollections(User, Company, function () {
+            Factory.create('user', function (user) {
+                existUser = user;
+                helper.login(user, function (cks) {
+                    cookies = cks;
+                    done();
+                });
             });
         });
-    });
-
-    after(function (done) {
-        User.remove().exec();
-        Company.remove().exec();
-        done();
     });
 
     describe('POST /api/users', function () {
@@ -56,8 +51,24 @@ describe('users', function () {
                 .expect('content-type', /json/)
                 .end(function (err, res) {
                     expect(res.body).to.have.length(1);
+                    var u = res.body[0];
+                    expect(u).to.have.property('company');
+                    expect(u).to.have.property('title');
                     done(err);
                 });
+        });
+
+        it('should not return deleted users', function (done) {
+            Factory.create('user', {deleted: true}, function () {
+                var req = request(app).get('/api/users');
+                req.cookies = cookies;
+                req.expect(200)
+                    .end(function (err, res) {
+                        expect(err).to.not.exist;
+                        expect(res.body).to.have.length(1);
+                        done();
+                    });
+            });
         });
     });
 
@@ -86,6 +97,26 @@ describe('users', function () {
                 });
         });
     });
+
+    describe('GET /api/users?fields=name', function () {
+        it('should return 200 with json result', function (done) {
+            var req = request(app).get('/api/users?fields=name');
+            req.cookies = cookies;
+            req.expect(200)
+                .expect('content-type', /json/)
+                .end(function (err, res) {
+                    expect(err).to.not.exist;
+                    var u = res.body[0];
+                    expect(u).to.have.property('name');
+                    expect(u).to.have.property('_id');
+                    expect(u).to.not.have.property('company');
+                    expect(u).to.not.have.property('title');
+                    done();
+                });
+        });
+    });
+
+
 });
 
 

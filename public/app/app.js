@@ -2,7 +2,7 @@
 
 angular.module('compass',
     ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-        'ui.tinymce','ui.select2'])
+        'ui.tinymce','ui.select2','ui.datetimepicker'])
     .run(function ($rootScope) {
         $rootScope.gridDefaults = {
             multiSelect: false,
@@ -167,6 +167,10 @@ angular.module('compass',
                 templateUrl: '/app/applications/view.html',
                 controller: 'mvApplicationViewCtrl',
                 resolve: routeRoleChecks.user
+            })
+            .when('/fuck',{
+                templateUrl: '/app/interviews/eventNew.html',
+                controller: 'mvEventNewCtrl'
             })
             .otherwise({
                 redirectTo: '/'

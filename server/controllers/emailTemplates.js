@@ -5,11 +5,19 @@ var mongoose = require('mongoose'),
     _ = require('lodash');
 
 exports.list = function (req, res, next) {
-    EmailTemplate.find({company: req.user.company})
-        .exec(function (err, templates) {
-            if (err) return next(err);
-            res.json(templates);
-        });
+    var query = EmailTemplate.find({company: req.user.company});
+
+    if(req.query.fields){
+        var fields = req.query.fields;
+        if(!Array.isArray(fields)){
+            fields = [fields];
+        }
+        query.select(fields.join(','));
+    }
+    query.exec(function (err, templates) {
+        if (err) return next(err);
+        res.json(templates);
+    });
 };
 
 exports.create = function (req, res) {
