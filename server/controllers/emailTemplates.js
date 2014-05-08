@@ -12,7 +12,7 @@ exports.list = function (req, res, next) {
         if(!Array.isArray(fields)){
             fields = [fields];
         }
-        query.select(fields.join(','));
+        query.select(fields.join(' '));
     }
     query.exec(function (err, templates) {
         if (err) return next(err);

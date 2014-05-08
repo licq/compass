@@ -54,6 +54,9 @@ describe('users', function () {
                     var u = res.body[0];
                     expect(u).to.have.property('company');
                     expect(u).to.have.property('title');
+                    expect(u).to.not.have.property('hashed_password');
+                    expect(u).to.not.have.property('salt');
+                    expect(u).to.not.have.property('provider');
                     done(err);
                 });
         });
