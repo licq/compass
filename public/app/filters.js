@@ -224,4 +224,9 @@ angular.module('compass')
         return function (application) {
             return application && application.status === 'new';
         };
+    })
+    .filter('showInterviewButton', function () {
+        return function (application) {
+            return application && application.status === 'pursued';
+        };
     });

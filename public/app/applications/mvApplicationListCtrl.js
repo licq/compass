@@ -1,5 +1,6 @@
 angular.module('compass')
-    .controller('mvApplicationListCtrl', function ($scope, states, mvApplication, $http, $window, $location,$routeParams, applicationStatusMap) {
+    .controller('mvApplicationListCtrl',
+    function ($scope, states, mvApplication, $http, $window, $location, $routeParams, applicationStatusMap, $modal) {
         $scope.crumbs = [
             {
                 text: applicationStatusMap[$routeParams.status],
@@ -113,6 +114,26 @@ angular.module('compass')
             index += $scope.states.pagingOptions.pageSize * ($scope.states.pagingOptions.currentPage - 1);
             index += 1;
             $location.path('/applications/' + $routeParams.status + '/' + index);
+        };
+
+        $scope.newEvent = function () {
+            $scope.items = ['item1', 'item2', 'item3'];
+            var modalInstance = $modal.open({
+                templateUrl: '/app/interviews/eventNew.html',
+                controller: 'mvEventNewCtrl',
+                //size: size,
+                resolve: {
+                    items: function () {
+                        return $scope.items;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                console.log('Modal dismissed at: ' + new Date());
+            });
         };
 
         $scope.getApplications();

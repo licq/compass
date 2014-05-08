@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-    'ui.tinymce'])
+angular.module('compass',
+    ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
+        'ui.tinymce','ui.select2'])
     .run(function ($rootScope) {
         $rootScope.gridDefaults = {
             multiSelect: false,
@@ -217,11 +218,12 @@ angular.module('compass', ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', '
                 $location.path('/login');
             }
         });
+
     })
     .value('applicationStatusMap', {
         new: '新应聘',
         archived: '归档',
-        pursued: '约面试',
+        pursued: '通过',
         undetermined: '待定'
     });
 

@@ -134,14 +134,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1 application-action-buttons">
-                                                    <button ng-click="view($index)" class="btn btn-primary">详细</button>
-                                                    <button class="btn btn-success" ng-click="pursue(application._id)"
-                                                            ng-show="application | showPursueButton"> 面试
+                                                    <button ng-click="view($index)" class="btn btn-primary btn-sm">详细</button>
+                                                    <button class="btn btn-success btn-sm" ng-click="newEvent(application._id)"
+                                                            ng-show="application | showInterviewButton">预约面试</button>
+                                                    <button class="btn btn-success btn-sm" ng-click="pursue(application._id)"
+                                                            ng-show="application | showPursueButton"> 通过
                                                     </button>
-                                                    <button class="btn btn-danger" ng-click="archive(application._id)"
+                                                    <button class="btn btn-danger btn-sm" ng-click="archive(application._id)"
                                                             ng-show="application | showArchiveButton"> 归档
                                                     </button>
-                                                    <button class="btn btn-warning"
+                                                    <button class="btn btn-warning btn-sm"
                                                             ng-click="undetermine(application._id)"
                                                             ng-show="application | showUndetermineButton">待定
                                                     </button>

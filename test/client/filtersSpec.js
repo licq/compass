@@ -205,4 +205,21 @@ describe('filters', function () {
             expect(showUndetermineButtonFilter(undefined)).to.be.undefined;
         }));
     });
+    describe('showInterviewButtonFilter', function () {
+        it('should return correctly', inject(function (showInterviewButtonFilter) {
+            expect(showInterviewButtonFilter({
+                status: 'new'
+            })).to.be.false;
+            expect(showInterviewButtonFilter({
+                status: 'archived'
+            })).to.be.false;
+            expect(showInterviewButtonFilter({
+                status: 'pursued'
+            })).to.be.true;
+            expect(showInterviewButtonFilter({
+                status: 'undetermined'
+            })).to.be.false;
+            expect(showInterviewButtonFilter(undefined)).to.be.undefined;
+        }));
+    });
 });

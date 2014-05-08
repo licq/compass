@@ -18,7 +18,7 @@
                                                ng-model="companyName" required>
 
                                         <p class="text-danger"
-                                           ng-show="signupForm.companyName.$invalid && !signupForm.companyName.$pristine">
+                                           ng-show="eventForm.companyName.$invalid && !eventForm.companyName.$pristine">
                                             请输入公司名称</p>
 
                                         <p class="text-danger"
@@ -36,7 +36,7 @@
                                                required>
 
                                         <p class="text-danger"
-                                           ng-show="signupForm.adminName.$invalid && !signupForm.adminName.$pristine">
+                                           ng-show="eventForm.adminName.$invalid && !eventForm.adminName.$pristine">
                                             请输入管理员姓名</p>
 
                                     </div>
@@ -52,11 +52,11 @@
                                                required="">
 
                                         <p class="text-danger"
-                                           ng-show="signupForm.adminEmail.$error.required && !signupForm.adminEmail.$pristine">
+                                           ng-show="eventForm.adminEmail.$error.required && !eventForm.adminEmail.$pristine">
                                             请输入管理员Email</p>
 
                                         <p class="text-danger"
-                                           ng-show="signupForm.adminEmail.$error.email && !signupForm.adminEmail.$pristine">
+                                           ng-show="eventForm.adminEmail.$error.email && !eventForm.adminEmail.$pristine">
                                             邮箱格式不正确</p>
 
                                         <p class="text-danger"
@@ -75,11 +75,11 @@
                                                required="" ng-minlength="6">
 
                                         <p class="text-danger"
-                                           ng-show="signupForm.adminPassword.$error.required && !signupForm.adminPassword.$pristine">
+                                           ng-show="eventForm.adminPassword.$error.required && !eventForm.adminPassword.$pristine">
                                             请输入密码</p>
 
                                         <p class="text-danger"
-                                           ng-show="signupForm.adminPassword.$error.minlength && !signupForm.adminPassword.$pristine">
+                                           ng-show="eventForm.adminPassword.$error.minlength && !eventForm.adminPassword.$pristine">
                                             密码最短为6位</p>
 
                                     </div>
@@ -95,7 +95,7 @@
                                         </div>
                                         <br/>
                                         <button type="submit" class="btn btn-danger" ng-click="create()"
-                                                ng-disabled="signupForm.$invalid || !agree">注册
+                                                ng-disabled="eventForm.$invalid || !agree">注册
                                         </button>
                                         <button type="reset" class="btn btn-success">重置</button>
                                     </div>

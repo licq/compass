@@ -8,7 +8,7 @@ describe('mvApplicationViewCtrl', function () {
         titles = {
             new: '新应聘',
             archived: '归档',
-            pursued: '约面试',
+            pursued: '通过',
             undetermined: '待定'
         };
 
