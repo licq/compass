@@ -11,7 +11,8 @@ var fs = require('fs'),
     evaluationCriterions = require('../controllers/evaluationCriterions'),
     applications = require('../controllers/applications'),
     logger = require('./winston').logger(),
-    companies = require('../controllers/companies');
+    companies = require('../controllers/companies'),
+    events = require('../controllers/events');
 
 module.exports = function (app) {
 
@@ -62,6 +63,8 @@ module.exports = function (app) {
     app.get('/api/applications/:applicationId', sessions.requiresLogin, applications.get);
     app.put('/api/applications/:applicationId', sessions.requiresLogin, applications.update);
     app.param('applicationId', sessions.requiresLogin, applications.load);
+
+    app.post('/api/events', sessions.requiresLogin, events.create);
 
     app.all('/api/*', function (req, res) {
         logger.error('request unknown url ' + req.url);

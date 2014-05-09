@@ -48,7 +48,6 @@ describe('Event', function () {
                 expect(event).to.have.property('name');
                 expect(event).to.have.property('email');
                 expect(event).to.have.property('mobile');
-                expect(event).to.have.property('createdByUserName');
                 expect(event).to.have.property('applyPosition');
                 expect(event).to.have.property('company');
                 done();

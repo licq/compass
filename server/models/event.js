@@ -62,19 +62,6 @@ eventSchema.path('sendEventAlert').validate(function (send) {
 
 eventSchema.pre('save', function (next) {
     var model = this;
-    if (model.createdBy) {
-        User.findById(model.createdBy).select('name').exec(function (err, user) {
-            if (err) return next();
-            model.createdByUserName = user.name;
-            return next();
-        });
-    } else {
-        next();
-    }
-});
-
-eventSchema.pre('save', function (next) {
-    var model = this;
     if (model.interviewers) {
         User.find({_id: {$in: model.interviewers}})
             .select('name')

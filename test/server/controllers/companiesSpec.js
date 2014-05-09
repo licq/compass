@@ -7,19 +7,22 @@ var app = require('../../../server'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
-    helper = require('./helper');
-
+    helper = require('./helper'),
+    databaseHelper = require('../databaseHelper');
 
 describe('/api/companies', function () {
     var cookies, company;
 
-    before(function (done) {
-        Company.remove().exec();
-        User.remove().exec();
-        Factory.create('user', function (user) {
-            helper.login(user, function (cks) {
-                cookies = cks;
-                done();
+    beforeEach(function (done) {
+        databaseHelper.clearCollections(Company, User, function () {
+            Factory.create('company', function(createdCompany){
+                Factory.create('user', {company: createdCompany}, function (user) {
+                    helper.login(user, function (cks) {
+                        company = createdCompany;
+                        cookies = cks;
+                        done();
+                    });
+                });
             });
         });
     });
@@ -40,7 +43,7 @@ describe('/api/companies', function () {
 
     describe('GET /api/companies/:id', function () {
         it('should return 200 with json result', function (done) {
-            var req = request(app).get('/api/companies/' + company._id);
+            var req = request(app).get('/api/companies/' + company.id);
             req.cookies = cookies;
             req.expect(200)
                 .expect('content-type', /json/)
