@@ -5,12 +5,9 @@ angular.module('compass')
         $scope.today = today;
         $scope.event = {
             sendEventAlert: false,
-            name: application.name,
-            email: application.email,
-            mobile: application.mobile,
             application: application._id
         };
-
+        $scope.application = application;
         $scope.users = mvUser.query({fields: 'name'});
 
         $scope.create = function () {

@@ -50,9 +50,7 @@ describe('mvEventNewCtrl', function () {
     });
 
     it('should initialize event', function () {
-        expect($scope.event.name).to.equal('aabb');
-        expect($scope.event.email).to.equal('aa@aa.com');
-        expect($scope.event.mobile).to.equal('137838383838');
+        expect($scope.application).to.exist;
         expect($scope.event.application).to.equal('9900');
         expect($scope.event.sendEventAlert).to.equal(false);
     });
@@ -87,13 +85,12 @@ describe('mvEventNewCtrl', function () {
             $scope.event.interviewers = ['aa', 'bb'];
             $scope.event.emailTemplate = '2233';
             $scope.event.time = '2014/05/09 14:00';
+            $scope.event.duration = 90;
             $httpBackend.flush();
 
             $httpBackend.expectPOST('/api/events',
                 {
-                    name: 'aabb',
-                    email: 'aa@aa.com',
-                    mobile: '137838383838',
+                    duration: 90,
                     application: '9900',
                     time: '2014/05/09 14:00',
                     interviewers: ['aa', 'bb'],

@@ -1,14 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title">创建面试预约--{{event.name}}</h3>
+    <h3 class="modal-title">创建面试预约--{{application.name}}</h3>
 </div>
 <div class="modal-body">
 
     <form name="eventForm" class="form-horizontal" novalidate="">
         <div class="form-group">
             <span class="control-label col-md-3">手机</span>
-            <span class="control-label col-md-2">{{event.mobile}}</span>
+            <span class="control-label col-md-2">{{application.mobile}}</span>
             <span class="control-label col-md-2">邮箱</span>
-            <span class="control-label col-md-3">{{event.email}}</span>
+            <span class="control-label col-md-3">{{application.email}}</span>
         </div>
 
         <div class="form-group">
@@ -24,6 +24,19 @@
                 <p class="text-danger"
                    ng-show="eventForm.time.$invalid && !eventForm.time.$pristine">
                     请输入预约时间</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <lable class="control-label col-md-3">时长</lable>
+            <div class="col-md-9">
+                <input type="text" class="form-control" ng-model="event.duration" name="duration"
+                        placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
+                <p class="text-danger"
+                   ng-show="eventForm.duration.$error.required && !eventForm.duration.$pristine">
+                    请输入时长</p>
+                <p class="text-danger"
+                   ng-show="eventForm.duration.$error.pattern && !eventForm.duration.$pristine">
+                    请输入数字</p>
             </div>
         </div>
         <div class="form-group">
