@@ -110,6 +110,7 @@ Factory.define('resume', Resume, {
 Factory.define('event', Event, {
     application: Factory.assoc('resume', 'id'),
     time: new Date(),
+    duration: 90,
     interviewers: [],
     sendEventAlert: true,
     emailTemplate: Factory.assoc('emailTemplate', 'id'),

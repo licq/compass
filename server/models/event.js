@@ -9,6 +9,10 @@ var eventSchema = mongoose.Schema({
         type: Date,
         required: [true, '邀请时间不能为空']
     },
+    duration: {
+        type: Number,
+        required: [true, '时长不能为空']
+    },
     interviewers: {
         type: [
             {
@@ -38,8 +42,13 @@ var eventSchema = mongoose.Schema({
     name: String,
     email: String,
     mobile: String,
+    applyPosition: String,
     interviewerNames: [String],
-    createdByUserName: String
+    createdByUserName: String,
+    company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company'
+    }
 });
 
 eventSchema.path('interviewers').validate(function (interviewers) {
@@ -85,12 +94,14 @@ eventSchema.pre('save', function (next) {
 eventSchema.pre('save', function (next) {
     var model = this;
     if (model.application) {
-        Resume.findById(model.application).select('name email mobile')
+        Resume.findById(model.application).select('name email mobile applyPosition company')
             .exec(function (err, app) {
                 if (!err) {
                     model.name = app.name;
                     model.email = app.email;
                     model.mobile = app.mobile;
+                    model.applyPosition = app.applyPosition;
+                    model.company = app.company;
                 }
                 next();
             });

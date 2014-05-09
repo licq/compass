@@ -45,10 +45,12 @@ describe('Event', function () {
         it('should auto generate some attributes', function (done) {
             Factory.create('event', {interviewers: [user.id]}, function (event) {
                 expect(event.interviewerNames).to.have.length(1);
-                expect(event.name).to.exist;
-                expect(event.email).to.exist;
-                expect(event.mobile).to.exist;
-                expect(event.createdByUserName).to.exist;
+                expect(event).to.have.property('name');
+                expect(event).to.have.property('email');
+                expect(event).to.have.property('mobile');
+                expect(event).to.have.property('createdByUserName');
+                expect(event).to.have.property('applyPosition');
+                expect(event).to.have.property('company');
                 done();
             });
         });
@@ -62,6 +64,7 @@ describe('Event', function () {
                 expect(err.errors).to.have.property('application');
                 expect(err.errors).to.have.property('interviewers');
                 expect(err.errors).to.have.property('createdBy');
+                expect(err.errors).to.have.property('duration');
                 done();
             });
         });
