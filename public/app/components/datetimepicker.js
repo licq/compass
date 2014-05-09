@@ -64,7 +64,6 @@ angular.module('ui.datetimepicker',[])
                     element.data('DateTimePicker').setDate(ngModel.$viewValue);
                 };
 
-                console.log();
                 element.on('dp.change', function () {
                     scope.$apply(function () {
                         var newDate = element.data('DateTimePicker').getDate();

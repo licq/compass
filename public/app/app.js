@@ -2,7 +2,7 @@
 
 angular.module('compass',
     ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-        'ui.tinymce','ui.select2','ui.datetimepicker'])
+        'ui.tinymce', 'ui.select2', 'ui.datetimepicker'])
     .run(function ($rootScope) {
         $rootScope.gridDefaults = {
             multiSelect: false,
@@ -138,9 +138,9 @@ angular.module('compass',
                 controller: 'mvCompanyEditCtrl',
                 resolve: routeRoleChecks.user
             })
-            .when('/calendar', {
-                templateUrl: '/app/calendar/view.html',
-                controller: 'mvCalendarViewCtrl',
+            .when('/events', {
+                templateUrl: '/app/interviews/list.html',
+                controller: 'mvEventListCtrl',
                 resolve: routeRoleChecks.user
             })
             .when('/settings/emailTemplates', {
@@ -168,7 +168,7 @@ angular.module('compass',
                 controller: 'mvApplicationViewCtrl',
                 resolve: routeRoleChecks.user
             })
-            .when('/fuck',{
+            .when('/fuck', {
                 templateUrl: '/app/interviews/eventNew.html',
                 controller: 'mvEventNewCtrl'
             })
@@ -229,7 +229,27 @@ angular.module('compass',
         archived: '归档',
         pursued: '通过',
         undetermined: '待定'
+    })
+    .value('mvMoment', moment)
+    .constant('uiCalendarConfig', {
+        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
+        monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
+        dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+        dayNamesShort: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+        allDayText: '全天',
+        axisFormat: 'HH:mm',
+        buttonText: {
+            today: '今日',
+            'week': '周',
+            'month': '月',
+            'day': '天'
+        },
+        allDaySlot: false,
+        timeFormat: 'HH:MM',
+        titleFormat: {
+            month: 'yyyy年M月',
+            week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
+            day: 'yyyy年M月d日, dddd'
+
+        }
     });
-
-
-

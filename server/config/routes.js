@@ -64,6 +64,7 @@ module.exports = function (app) {
     app.put('/api/applications/:applicationId', sessions.requiresLogin, applications.update);
     app.param('applicationId', sessions.requiresLogin, applications.load);
 
+    app.get('/api/events', sessions.requiresLogin, events.list);
     app.post('/api/events', sessions.requiresLogin, events.create);
 
     app.all('/api/*', function (req, res) {

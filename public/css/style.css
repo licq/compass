@@ -2309,3 +2309,8 @@ footer .copy {
     padding-bottom: 5px;
     border-bottom: 1px solid #c9c9c9;
 }
+
+.fc-agenda-axis.fc-widget-header {
+    width: 40px;
+    text-align: center;
+}

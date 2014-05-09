@@ -8,13 +8,17 @@ var app = require('../../../server'),
     User = mongoose.model('User'),
     Company = mongoose.model('Company'),
     helper = require('./helper'),
+    Resume = mongoose.model('Resume'),
+    Event = mongoose.model('Event'),
+    EmailTemplate = mongoose.model('EmailTemplate'),
+    moment = require('moment'),
     databaseHelper = require('../databaseHelper');
 
 describe('events', function () {
     var existUser, cookies;
 
     beforeEach(function (done) {
-        databaseHelper.clearCollections(Company, User, function () {
+        databaseHelper.clearCollections(Company, User, Resume, Event, EmailTemplate, function () {
             Factory.create('user', function (user) {
                 existUser = user;
                 helper.login(user, function (cks) {
@@ -58,6 +62,28 @@ describe('events', function () {
                     expect(res.body.err.errors).to.have.property('application');
                     done();
                 });
+        });
+    });
+
+    describe('get /api/events', function () {
+        it('should get back event list correctly', function (done) {
+            var date = moment.utc().format('YYYY-MM-DD');
+            Factory.create('resume', {company: existUser.company}, function (resume) {
+                Factory.create('event', {application: resume,
+                    interviewers: [existUser.id]}, function () {
+                    var req = request(app).get('/api/events?startDate=' + date + '&endDate=' + date + '&user=' + existUser.id);
+                    req.cookies = cookies;
+
+                    req.expect(200)
+                        .expect('content-type', /json/)
+                        .end(function (err, res) {
+                            expect(err).to.not.exist;
+                            expect(res.body).to.have.length(1);
+                            done();
+                        });
+                });
+            });
+
         });
     });
 });
