@@ -16,7 +16,7 @@ describe('mvLoginCtrl', function () {
   it('should redirect to /dashboard when login success', inject(function ($location, mvNotifier) {
     var notifySpy = sinon.spy(mvNotifier, 'notify');
     var userData = {email: 'email', password: 'password', remember_me: true};
-    $httpBackend.expectPOST('/api/sessions', userData)
+    $httpBackend.expectPOST('/publicApi/sessions', userData)
       .respond({email: 'email'});
     var spy = sinon.spy($location, 'path');
 
@@ -32,7 +32,7 @@ describe('mvLoginCtrl', function () {
   it('should show error when login failed', inject(function (mvNotifier) {
     var notifySpy = sinon.spy(mvNotifier, 'error');
     var userData = {email: 'email', password: 'password', remember_me: true};
-    $httpBackend.expectPOST('/api/sessions', userData)
+    $httpBackend.expectPOST('/publicApi/sessions', userData)
       .respond(401, {message: 'error'});
 
     _.merge($scope, userData);

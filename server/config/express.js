@@ -8,11 +8,10 @@ var express = require('express'),
   session = require('express-session'),
   mongoStore = require('connect-mongo')(session),
   winston = require('./winston'),
-  expressWinston = require('express-winston'),
-  env = process.env.NODE_ENV || 'development';
+  expressWinston = require('express-winston');
 
 module.exports = function (app, config) {
-  if ('development' === env) {
+  if ('development' === app.get('env')) {
     swig.setDefaults({cache: false});
     app.set('view cache', false);
   }
@@ -22,7 +21,7 @@ module.exports = function (app, config) {
   app.set('views', config.rootPath + '/server/views');
 
   app.use('/tasks', kue.app);
-  app.use(require('serve-favicon')('public/img/favicon/favicon.png'));
+//  app.use(require('serve-favicon')('public/img/favicon/favicon.png'));
   app.use(require('compression')({
     filter: function (req, res) {
       return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
@@ -53,7 +52,7 @@ module.exports = function (app, config) {
 
   require('./routes')(app);
 
-  app.all('/app/*', function (req, res) {
+  app.route('/app/*', function (req, res) {
     res.send(404);
   });
 
@@ -61,7 +60,7 @@ module.exports = function (app, config) {
     transports: winston.transports
   }));
 
-  if ('development' === env) {
+  if ('development' === app.get('env')) {
     app.use(require('errorHandler')());
   }
 };

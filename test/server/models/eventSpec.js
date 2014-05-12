@@ -2,18 +2,16 @@
 
 var mongoose = require('mongoose'),
   expect = require('chai').expect,
-  Company = mongoose.model('Company'),
-  User = mongoose.model('User'),
   Factory = require('../factory'),
   Resume = mongoose.model('Resume'),
   Event = mongoose.model('Event'),
-  databaseHelper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 describe('Event', function () {
   var user;
 
   beforeEach(function (done) {
-    databaseHelper.clearCollections(Company, User, Resume, Event, function () {
+    helper.clearCollections('Company', 'User', Resume, Event, function () {
       Factory.create('user', function (createdUser) {
         user = createdUser;
         done();

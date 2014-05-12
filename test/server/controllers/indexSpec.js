@@ -2,8 +2,7 @@
 
 var app = require('../../../server'),
   request = require('supertest'),
-  Factory = require('../factory'),
-  expect = require('chai').expect;
+  helper = require('../testHelper');
 
 describe('/', function () {
 
@@ -13,33 +12,20 @@ describe('/', function () {
         .get('/anything')
         .expect(200)
         .expect('Content-Type', /html/)
-        .end(function (err, res) {
-          if (err) {
-            return done(err);
-          }
-          expect(res.text).to.have.string('<html');
-          done();
-        });
+        .expect(/html/, done);
     });
   });
 
   describe('GET /api/nothingshouldcalledthisname', function () {
-    var agent;
-    beforeEach(function (done) {
-      Factory.create('user', function (user) {
-        agent = request.agent(app)
-          .post('/api/sessions')
-          .send({
-            email: user.email,
-            password: user.password
-          }).end(done);
-      });
-      it('should return 404 when call /api/nothing', function (done) {
-        agent.get('/api/nothingshouldcalledthisname')
-          .expect(404, done);
+    it('should return 404 when call /api/nothing', function (done) {
+      helper.clearCollections('User', 'Company', function () {
+        helper.login(function (agent) {
+          setTimeout(function () {
+            agent.get('/api/nothingshouldcalledthisname')
+              .expect(404, done);
+          }, 50);
+        });
       });
     });
   });
 });
-
-

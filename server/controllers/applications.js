@@ -28,8 +28,8 @@ exports.update = function (req, res, next) {
   });
 };
 
-exports.load = function (req, res, next, id) {
-  Resume.findOne({_id: id})
+exports.load = function (req, res, next) {
+  Resume.findOne({_id: req.params.id})
     .exec(function (err, resume) {
       if (err) return next(err);
       if (!resume) return res.send(404, {message: 'not found'});

@@ -1,13 +1,12 @@
-var mongoose = require('mongoose'),
-  Resume = mongoose.model('Resume'),
-  Company = mongoose.model('Company'),
-  helper = require('../databaseHelper'),
+var
+  Resume = require('mongoose').model('Resume'),
+  helper = require('../testHelper'),
   expect = require('chai').expect,
   Factory = require('../factory');
 
 describe('Resume', function () {
   before(function (done) {
-    helper.clearCollections(Resume, Company, function () {
+    helper.clearCollections(Resume, 'Company', function () {
       Resume.recreateIndex(function () {
         setTimeout(done, 500);
       });

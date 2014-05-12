@@ -59,8 +59,8 @@ exports.update = function (req, res) {
   });
 };
 
-exports.load = function (req, res, next, id) {
-  Email.findOne({_id: id, company: req.user.company})
+exports.load = function (req, res, next) {
+  Email.findOne({_id: req.params.id, company: req.user.company})
     .exec(function (err, email) {
       if (err) return next(err);
       if (!email) return res.send(404, {message: 'not found'});

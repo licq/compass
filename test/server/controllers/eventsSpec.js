@@ -1,30 +1,19 @@
 'use strict';
 
-var app = require('../../../server'),
-  request = require('supertest'),
-  expect = require('chai').expect,
+var expect = require('chai').expect,
   Factory = require('../factory'),
-  mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  Company = mongoose.model('Company'),
-  helper = require('./helper'),
-  Resume = mongoose.model('Resume'),
-  Event = mongoose.model('Event'),
-  EmailTemplate = mongoose.model('EmailTemplate'),
   moment = require('moment'),
-  databaseHelper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 describe('events', function () {
-  var existUser, cookies;
+  var existUser, request;
 
   beforeEach(function (done) {
-    databaseHelper.clearCollections(Company, User, Resume, Event, EmailTemplate, function () {
-      Factory.create('user', function (user) {
+    helper.clearCollections('Company', 'User', 'Resume', 'Event', 'EmailTemplate', function () {
+      helper.login(function (agent, user) {
+        request = agent;
         existUser = user;
-        helper.login(user, function (cks) {
-          cookies = cks;
-          done();
-        });
+        done();
       });
     });
   });
@@ -42,19 +31,16 @@ describe('events', function () {
             emailTemplate: et.id
           };
 
-          var req = request(app).post('/api/events');
-          req.cookies = cookies;
-          req.send(eventData)
-            .expect(200)
-            .end(done);
+          request.post('/api/events')
+            .send(eventData)
+            .expect(200, done);
         });
       });
     });
 
     it('should return error if no arguments given', function (done) {
-      var req = request(app).post('/api/events');
-      req.cookies = cookies;
-      req.send({})
+      request.post('/api/events')
+        .send({})
         .expect(400)
         .expect('content-type', /json/)
         .end(function (err, res) {
@@ -71,10 +57,9 @@ describe('events', function () {
       Factory.create('resume', {company: existUser.company}, function (resume) {
         Factory.create('event', {application: resume,
           interviewers: [existUser.id]}, function () {
-          var req = request(app).get('/api/events?startDate=' + date + '&endDate=' + date + '&user=' + existUser.id);
-          req.cookies = cookies;
-
-          req.expect(200)
+          request
+            .get('/api/events?startDate=' + date + '&endDate=' + date + '&user=' + existUser.id)
+            .expect(200)
             .expect('content-type', /json/)
             .end(function (err, res) {
               expect(err).to.not.exist;
@@ -83,7 +68,6 @@ describe('events', function () {
             });
         });
       });
-
     });
   });
 });

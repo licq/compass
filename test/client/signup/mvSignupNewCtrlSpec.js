@@ -17,7 +17,7 @@ describe('mvSignupNewCtrl', function () {
       var signupData = {companyName: 'company',
         adminEmail: 'aa@aa.com', adminName: 'aa',
         adminPassword: 'password'};
-      $httpBackend.expectPOST('/api/signups', signupData)
+      $httpBackend.expectPOST('/publicApi/signups', signupData)
         .respond({_id: '7788'});
       var spy = sinon.spy($location, 'path');
 

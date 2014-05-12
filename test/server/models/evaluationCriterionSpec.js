@@ -1,9 +1,8 @@
-var mongoose = require('mongoose'),
-  EvaluationCriterion = mongoose.model('EvaluationCriterion'),
-  Company = mongoose.model('Company'),
+var
+  EvaluationCriterion = require('mongoose').model('EvaluationCriterion'),
   Factory = require('../factory'),
   expect = require('chai').expect,
-  helper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 describe('EvaluationCriterion', function () {
   var criterionData;
@@ -22,7 +21,7 @@ describe('EvaluationCriterion', function () {
         rate: 0.2
       }
     ];
-    helper.clearCollections(Company, EvaluationCriterion, function () {
+    helper.clearCollections('Company', EvaluationCriterion, function () {
       Factory.create('company', function (company) {
         criterionData = {
           items: items,

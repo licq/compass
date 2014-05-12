@@ -15,7 +15,7 @@ describe('mvSignupActivateCtrl', function () {
     }));
 
     it('should show success page when create success', function () {
-      $httpBackend.expectPUT('/api/signups/7788')
+      $httpBackend.expectPUT('/publicApi/signups/7788')
         .respond(200);
       $httpBackend.flush();
 

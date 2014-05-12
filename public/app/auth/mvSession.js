@@ -2,5 +2,5 @@
 
 angular.module('compass')
   .factory('mvSession', function ($resource) {
-    return $resource('/api/sessions');
+    return $resource('/publicApi/sessions');
   });

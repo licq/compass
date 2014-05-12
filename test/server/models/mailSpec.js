@@ -1,17 +1,15 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-  Mail = mongoose.model('Mail'),
-  Company = mongoose.model('Company'),
-  Email = mongoose.model('Email'),
+var
+  Mail = require('mongoose').model('Mail'),
   expect = require('chai').expect,
   Factory = require('../factory'),
-  helper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 describe('Mail', function () {
 
   beforeEach(function (done) {
-    helper.clearCollections(Mail, Company, Email, done);
+    helper.clearCollections(Mail, 'Company', 'Email', done);
   });
 
   describe('#validate', function () {

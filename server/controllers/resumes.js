@@ -16,8 +16,8 @@ exports.get = function (req, res) {
   res.json(req.resume);
 };
 
-exports.load = function (req, res, next, id) {
-  Resume.findOne({_id: id, company: req.user.company})
+exports.load = function (req, res, next) {
+  Resume.findOne({_id: req.params.id, company: req.user.company})
     .exec(function (err, resume) {
       if (err) return next(err);
       if (!resume) return res.send(404, {message: 'not found'});

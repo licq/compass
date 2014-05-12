@@ -1,47 +1,37 @@
 'use strict';
 
-var app = require('../../../server'),
-  request = require('supertest'),
-  mongoose = require('mongoose'),
-  expect = require('chai').expect,
-  User = mongoose.model('User'),
-  Company = mongoose.model('Company'),
-  Resume = mongoose.model('Resume'),
+var expect = require('chai').expect,
+  Resume = require('mongoose').model('Resume'),
   Factory = require('../factory'),
-  helper = require('./helper'),
-  databaseHelper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 
 describe('applications', function () {
-  var cookies,
-    resume,
-    user;
+  var request,
+    resume;
 
   beforeEach(function (done) {
-    databaseHelper.clearCollections(User, Company,
-      Resume, function () {
-        Factory.create('user', function (createdUser) {
-          user = createdUser;
-          Factory.build('resume', {company: user.company}, function (newResume) {
-            newResume.saveAndIndexSync(function () {
-              helper.login(user, function (cks) {
-                cookies = cks;
-                resume = newResume;
-                done();
-              });
-            });
+    helper.clearCollections('User', 'Company', 'Resume', function () {
+      helper.login(function (agent, user) {
+        request = agent;
+        Factory.build('resume', {company: user.company}, function (newResume) {
+          newResume.saveAndIndexSync(function () {
+            resume = newResume;
+            done();
           });
         });
       });
+    });
   });
 
   describe('GET /api/applications?status=new&pageSize=10&page=1', function () {
     it('should return 200 with json result', function (done) {
-      var req = request(app).get('/api/applications?status=new&pageSize=10&page=1');
-      req.cookies = cookies;
-      req.expect(200)
+      request
+        .get('/api/applications?status=new&pageSize=10&page=1')
+        .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
+          console.log(err);
           var result = res.body;
           expect(result.hits.total).to.equal(1);
           expect(result.hits.hits).to.have.length(1);
@@ -55,14 +45,11 @@ describe('applications', function () {
 
   describe('GET /api/applications/:id', function () {
     it('should return a resume', function (done) {
-      var req = request(app).get('/api/applications/' + resume._id);
-      req.cookies = cookies;
-      req.expect(200)
+      request.get('/api/applications/' + resume._id)
+        .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
-          console.log(err);
-          var result = res.body;
-          expect(result).to.have.property('_id');
+          expect(res.body).to.have.property('_id');
           done(err);
         });
     });
@@ -70,9 +57,8 @@ describe('applications', function () {
 
   describe('PUT /api/applications/:id', function () {
     it('should set status to archived', function (done) {
-      var req = request(app).put('/api/applications/' + resume._id + '?status=archived');
-      req.cookies = cookies;
-      req.expect(200)
+      request.put('/api/applications/' + resume._id + '?status=archived')
+        .expect(200)
         .end(function (err) {
           expect(err).to.not.exist;
           Resume.findById(resume._id, function (err, resume) {
@@ -83,9 +69,8 @@ describe('applications', function () {
         });
     });
     it('should set status to pursued', function (done) {
-      var req = request(app).put('/api/applications/' + resume._id + '?status=pursued');
-      req.cookies = cookies;
-      req.expect(200)
+      request.put('/api/applications/' + resume._id + '?status=pursued')
+        .expect(200)
         .end(function (err) {
           expect(err).to.not.exist;
           Resume.findById(resume._id, function (err, resume) {
@@ -97,9 +82,8 @@ describe('applications', function () {
     });
 
     it('should set status to undetermined', function (done) {
-      var req = request(app).put('/api/applications/' + resume._id + '?status=undetermined');
-      req.cookies = cookies;
-      req.expect(200)
+      request.put('/api/applications/' + resume._id + '?status=undetermined')
+        .expect(200)
         .end(function (err) {
           expect(err).to.not.exist;
           Resume.findById(resume._id, function (err, resume) {
@@ -111,9 +95,8 @@ describe('applications', function () {
     });
 
     it('should set status to archived', function (done) {
-      var req = request(app).put('/api/applications/' + resume._id + '?status=archived');
-      req.cookies = cookies;
-      req.expect(200)
+      request.put('/api/applications/' + resume._id + '?status=archived')
+        .expect(200)
         .end(function (err) {
           expect(err).to.not.exist;
           Resume.findById(resume._id, function (err, resume) {
@@ -125,5 +108,3 @@ describe('applications', function () {
     });
   });
 });
-
-

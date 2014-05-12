@@ -1,26 +1,19 @@
-var app = require('../../../server'),
-  mongoose = require('mongoose'),
-  Resume = mongoose.model('Resume'),
-  databaseHelper = require('../databaseHelper'),
-  User = mongoose.model('User'),
-  Company = mongoose.model('Company'),
+var
+  Resume = require('mongoose').model('Resume'),
+  helper = require('../testHelper'),
   Factory = require('../factory'),
-  helper = require('./helper'),
-  request = require('supertest'),
   expect = require('chai').expect;
 
 describe('#resumes', function () {
-  var cookies;
+  var request;
 
   beforeEach(function (done) {
-    databaseHelper.clearCollections(User, Company, Resume, function () {
+    helper.clearCollections('User', 'Company', 'Resume', function () {
       Resume.clearAll(true, function () {
-        Factory.create('user', function (user) {
-          helper.login(user, function (cks) {
-            cookies = cks;
-            Factory.build('resume', {company: user.company}, function (resume) {
-              resume.saveAndIndexSync(done);
-            });
+        helper.login(function (agent, user) {
+          request = agent;
+          Factory.build('resume', {company: user.company}, function (resume) {
+            resume.saveAndIndexSync(done);
           });
         });
       });
@@ -28,9 +21,8 @@ describe('#resumes', function () {
   });
 
   it('should return all resumes', function (done) {
-    var req = request(app).get('/api/resumes');
-    req.cookies = cookies;
-    req.expect(200)
+    request.get('/api/resumes')
+      .expect(200)
       .expect('content-type', /json/)
       .end(function (err, res) {
         expect(res.body.hits.total).to.equal(1);

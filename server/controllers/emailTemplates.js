@@ -64,9 +64,8 @@ exports.delete = function (req, res, next) {
   });
 };
 
-exports.load = function (req, res, next, id) {
-  console.log('invoke emailTemplates load');
-  EmailTemplate.findOne({_id: id, company: req.user.company})
+exports.load = function (req, res, next) {
+  EmailTemplate.findOne({_id: req.params.id, company: req.user.company})
     .exec(function (err, emailTemplate) {
       if (err) return next(err);
       if (!emailTemplate) return res.send(404, {message: 'not found'});

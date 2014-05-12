@@ -1,27 +1,20 @@
 'use strict';
 
-var app = require('../../../server'),
-  request = require('supertest'),
+var
   expect = require('chai').expect,
   Factory = require('../factory'),
-  mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  Company = mongoose.model('Company'),
-  helper = require('./helper');
+  helper = require('../testHelper');
 
 
 describe('/api/mails', function () {
-  var cookies, mailId;
+  var request, mail;
 
   before(function (done) {
-    Company.remove().exec();
-    User.remove().exec();
-
-    Factory.create('user', function (user) {
-      Factory.create('mail', {company: user.company}, function (mail) {
-        mailId = mail._id;
-        helper.login(user, function (cks) {
-          cookies = cks;
+    helper.clearCollections('User', 'Company', function () {
+      helper.login(function (agent, user) {
+        request = agent;
+        Factory.create('mail', {company: user.company}, function (newMail) {
+          mail = newMail;
           done();
         });
       });
@@ -30,10 +23,8 @@ describe('/api/mails', function () {
 
   describe('GET /api/mails', function () {
     it('should return 200 with json result', function (done) {
-      var req = request(app).get('/api/mails?page=1&pageSize=5');
-      req.cookies = cookies;
-
-      req.expect(200)
+      request.get('/api/mails?page=1&pageSize=5')
+        .expect(200)
         .expect('Content-Type', /json/)
         .end(function (err, res) {
           expect(err).to.not.exist;
@@ -46,14 +37,12 @@ describe('/api/mails', function () {
 
   describe('GET /api/mails/:mailId', function () {
     it('should return 200 with json result', function (done) {
-      var req = request(app).get('/api/mails/' + mailId);
-      req.cookies = cookies;
-
-      req.expect(200)
+      request.get('/api/mails/' + mail.id)
+        .expect(200)
         .expect('Content-Type', /json/)
         .end(function (err, res) {
           expect(err).to.not.exist;
-          expect(mailId.equals(res.body._id)).to.be.true;
+          expect(mail._id.equals(res.body._id)).to.be.true;
           done();
         });
     });

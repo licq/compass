@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
   Company = mongoose.model('Company'),
   expect = require('chai').expect,
   Factory = require('../factory'),
-  helper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 describe('Company', function () {
   beforeEach(function (done) {

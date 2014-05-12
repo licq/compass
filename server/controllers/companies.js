@@ -16,8 +16,8 @@ exports.get = function (req, res) {
   res.json(req.loadedCompany);
 };
 
-exports.load = function (req, res, next, id) {
-  Company.findOne({_id: id})
+exports.load = function (req, res, next) {
+  Company.findOne({_id: req.params.id})
     .select('name created')
     .exec(function (err, loadedCompany) {
       if (err) return next(err);

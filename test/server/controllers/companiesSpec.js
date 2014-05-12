@@ -1,25 +1,19 @@
 'use strict';
 
-var app = require('../../../server'),
-  request = require('supertest'),
-  expect = require('chai').expect,
+var expect = require('chai').expect,
   Factory = require('../factory'),
-  mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  Company = mongoose.model('Company'),
-  helper = require('./helper'),
-  databaseHelper = require('../databaseHelper');
+  helper = require('../testHelper');
 
 describe('/api/companies', function () {
-  var cookies, company;
+  var request, company;
 
   beforeEach(function (done) {
-    databaseHelper.clearCollections(Company, User, function () {
+    helper.clearCollections('Company', 'User', function () {
       Factory.create('company', function (createdCompany) {
         Factory.create('user', {company: createdCompany}, function (user) {
-          helper.login(user, function (cks) {
+          helper.login(user, function (agent) {
             company = createdCompany;
-            cookies = cks;
+            request = agent;
             done();
           });
         });
@@ -29,9 +23,8 @@ describe('/api/companies', function () {
 
   describe('GET /api/companies', function () {
     it('should return 200 with json result', function (done) {
-      var req = request(app).get('/api/companies');
-      req.cookies = cookies;
-      req.expect(200)
+      request.get('/api/companies')
+        .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
           company = res.body[0];
@@ -43,9 +36,8 @@ describe('/api/companies', function () {
 
   describe('GET /api/companies/:id', function () {
     it('should return 200 with json result', function (done) {
-      var req = request(app).get('/api/companies/' + company.id);
-      req.cookies = cookies;
-      req.expect(200)
+      request.get('/api/companies/' + company.id)
+        .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
           expect(err).to.not.exist;
@@ -55,5 +47,3 @@ describe('/api/companies', function () {
     });
   });
 });
-
-

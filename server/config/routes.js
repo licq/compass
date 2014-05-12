@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs'),
+  express = require('express'),
   sessions = require('../controllers/sessions'),
   emails = require('../controllers/emails'),
   signups = require('../controllers/signups'),
@@ -15,68 +16,98 @@ var fs = require('fs'),
   events = require('../controllers/events');
 
 module.exports = function (app) {
-  app.post('/api/sessions', sessions.authenticate, sessions.rememberMe);
-  app.delete('/api/sessions', sessions.clearRememberMe, sessions.logout);
+  var apiRouter = express.Router();
+  var publicApiRouter = express.Router();
 
-  app.post('/api/signups', signups.create);
-  app.put('/api/signups/:code', signups.activate);
+  publicApiRouter.route('/sessions')
+    .post(sessions.authenticate, sessions.rememberMe)
+    .delete(sessions.clearRememberMe, sessions.logout);
 
-  app.all('/api/*', sessions.requiresLogin);
-  app.get('/api/emails', emails.list);
-  app.post('/api/emails', emails.create);
-  app.delete('/api/emails/:emailId', emails.delete);
-  app.get('/api/emails/:emailId', emails.get);
-  app.put('/api/emails/:emailId', emails.update);
-  app.param('emailId', emails.load);
+  publicApiRouter.route('/signups').post(signups.create);
+  publicApiRouter.route('/signups/:code').put(signups.activate);
 
-  app.get('/api/mails', mails.list);
-  app.get('/api/mails/:id', mails.get);
-  app.put('/api/mails/:id', mails.parse);
-  app.get('/api/mails/:id/html', mails.getHtml);
+  apiRouter.use(sessions.requiresLogin);
+  apiRouter.route('/emails')
+    .get(emails.list)
+    .post(emails.create);
 
-  app.post('/api/users', users.create);
-  app.get('/api/users', users.list);
-  app.get('/api/users/:userId', users.get);
-  app.put('/api/users/:userId', users.update);
-  app.delete('/api/users/:userId', users.delete);
-  app.param('userId', users.load);
+  apiRouter.route('/emails/:id')
+    .all(emails.load)
+    .get(emails.get)
+    .delete(emails.delete)
+    .put(emails.update);
 
-  app.get('/api/companies', companies.list);
-  app.get('/api/companies/:companyId', companies.get);
-  app.param('companyId', companies.load);
+  apiRouter.route('/mails')
+    .get(mails.list);
 
-  app.get('/api/resumes', resumes.list);
-  app.get('/api/resumes/:resumeId', resumes.get);
-  app.param('resumeId', resumes.load);
+  app.get('/mails', mails.list);
+  apiRouter.route('/mails/:id')
+    .get(mails.get)
+    .put(mails.parse);
 
-  app.get('/api/emailTemplates', emailTemplates.list);
-  app.post('/api/emailTemplates', emailTemplates.create);
-  app.delete('/api/emailTemplates/:emailTemplateId', emailTemplates.delete);
-  app.get('/api/emailTemplates/:emailTemplateId', emailTemplates.get);
-  app.put('/api/emailTemplates/:emailTemplateId', emailTemplates.update);
-  app.param('emailTemplateId', emailTemplates.load);
+  apiRouter.route('/mails/:id/html')
+    .get(mails.getHtml);
 
-  app.get('/api/evaluationCriterions', evaluationCriterions.get);
-  app.put('/api/evaluationCriterions', evaluationCriterions.update);
+  apiRouter.route('/users')
+    .post(users.create)
+    .get(users.list);
+  apiRouter.route('/users/:id')
+    .all(users.load)
+    .get(users.get)
+    .put(users.update)
+    .delete(users.delete);
 
-  app.get('/api/applications', applications.list);
-  app.get('/api/applications/:applicationId', applications.get);
-  app.put('/api/applications/:applicationId', applications.update);
-  app.param('applicationId', applications.load);
+  apiRouter.route('/companies')
+    .get(companies.list);
+  apiRouter.route('/companies/:id')
+    .all(companies.load)
+    .get(companies.get);
 
-  app.get('/api/events', events.list);
-  app.post('/api/events', events.create);
+  apiRouter.route('/resumes')
+    .get(resumes.list);
+  apiRouter.route('/resumes/:id')
+    .all(resumes.load)
+    .get(resumes.get);
 
-  app.all('/api/*', function (req, res) {
-    logger.error('request unknown url ' + req.url);
+  apiRouter.route('/emailTemplates')
+    .get(emailTemplates.list)
+    .post(emailTemplates.create);
+  apiRouter.route('/emailTemplates/:id')
+    .all(emailTemplates.load)
+    .delete(emailTemplates.delete)
+    .get(emailTemplates.get)
+    .put(emailTemplates.update);
+
+  apiRouter.route('/evaluationCriterions')
+    .get(evaluationCriterions.get)
+    .put(evaluationCriterions.update);
+
+  apiRouter.route('/applications')
+    .get(applications.list);
+  apiRouter.route('/applications/:id')
+    .all(applications.load)
+    .get(applications.get)
+    .put(applications.update);
+
+  apiRouter.route('/events')
+    .get(events.list)
+    .post(events.create);
+
+  apiRouter.use('/*', function (err, req, res, next) {
+    console.log('error');
+    if (!err) return next();
+    logger.error(err.stack);
+    res.send(500, {message: 'Internal Server Error',
+      stack: err.stack});
+  });
+
+  apiRouter.use('/*', function (req, res) {
+    logger.error('request unknown url /api' + req.url);
     res.send(404);
   });
 
-  app.all('/api/*', function (err, req, res, next) {
-    logger.error(err.stack);
-    res.status(500).json({message: 'Internal Server Error',
-      stack: err.stack});
-  });
+  app.use('/api', apiRouter);
+  app.use('/publicApi', publicApiRouter);
 
   app.get('*', function (req, res) {
     res.render('index', {
