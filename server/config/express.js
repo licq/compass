@@ -21,7 +21,7 @@ module.exports = function (app, config) {
   app.set('views', config.rootPath + '/server/views');
 
   app.use('/tasks', kue.app);
-//  app.use(require('serve-favicon')('public/img/favicon/favicon.png'));
+  app.use(require('serve-favicon')('public/img/favicon/favicon.png'));
   app.use(require('compression')({
     filter: function (req, res) {
       return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
@@ -29,6 +29,9 @@ module.exports = function (app, config) {
     threshold: 512
   }));
   app.use(express.static(config.rootPath + '/public'));
+  app.route('/app/*', function (req, res) {
+    res.send(404);
+  });
   app.use(expressWinston.logger({
     transports: winston.transports,
     meta: false,
@@ -51,10 +54,6 @@ module.exports = function (app, config) {
   app.use(passport.authenticate('remember-me'));
 
   require('./routes')(app);
-
-  app.route('/app/*', function (req, res) {
-    res.send(404);
-  });
 
   app.use(expressWinston.errorLogger({
     transports: winston.transports

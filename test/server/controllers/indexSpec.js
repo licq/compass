@@ -28,4 +28,12 @@ describe('/', function () {
       });
     });
   });
+
+  describe('GET /api/* without authentication', function () {
+    it('should return 401', function (done) {
+      request(app)
+        .get('/api/something')
+        .expect(401,done);
+    });
+  });
 });

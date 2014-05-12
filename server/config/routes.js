@@ -93,7 +93,7 @@ module.exports = function (app) {
     .get(events.list)
     .post(events.create);
 
-  apiRouter.use('/*', function (err, req, res, next) {
+  apiRouter.use(function (err, req, res, next) {
     console.log('error');
     if (!err) return next();
     logger.error(err.stack);
@@ -101,7 +101,7 @@ module.exports = function (app) {
       stack: err.stack});
   });
 
-  apiRouter.use('/*', function (req, res) {
+  apiRouter.use(function (req, res) {
     logger.error('request unknown url /api' + req.url);
     res.send(404);
   });
