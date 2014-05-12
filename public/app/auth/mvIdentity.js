@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('compass').factory('mvIdentity', function ($window) {
-    var currentUser;
+  var currentUser;
 
-    if (!!$window.bootstrappedUserObject) {
-        currentUser = $window.bootstrappedUserObject;
+  if (!!$window.bootstrappedUserObject) {
+    currentUser = $window.bootstrappedUserObject;
+  }
+  return {
+    currentUser: currentUser,
+    isAuthenticated: function () {
+      return !!this.currentUser;
     }
-    return {
-        currentUser: currentUser,
-        isAuthenticated: function () {
-            return !!this.currentUser;
-        }
-    };
+  };
 });

@@ -28,7 +28,7 @@ app.listen(config.port);
 console.log('Compass Listening on port ' + config.port + '...');
 
 process.once('SIGTERM', function () {
-    workers.stop();
+  workers.stop();
 });
 
 module.exports = app;

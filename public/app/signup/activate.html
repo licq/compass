@@ -1,27 +1,27 @@
 <div class="admin-form">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="widget wred">
-                    <div class="widget-head">
-                        <i class="icon-lock"></i> 激活
-                    </div>
-                    <div class="widget-content">
-                        <div class="padd">
-                            <div class="well text-success" ng-show="success">
-                                您的注册已激活，请使用邮箱和密码<a href="/login">登陆</a>。
-                            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="widget wred">
+          <div class="widget-head">
+            <i class="icon-lock"></i> 激活
+          </div>
+          <div class="widget-content">
+            <div class="padd">
+              <div class="well text-success" ng-show="success">
+                您的注册已激活，请使用邮箱和密码<a href="/login">登陆</a>。
+              </div>
 
-                            <div class="well text-danger" ng-show="err">
-                                您的注册激活失败。可能因为该公司或邮箱已注册。
-                                <p class="lead">
-                                    {{JSON.stringify(err)}}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <div class="well text-danger" ng-show="err">
+                您的注册激活失败。可能因为该公司或邮箱已注册。
+                <p class="lead">
+                  {{JSON.stringify(err)}}
+                </p>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,87 +1,89 @@
 <div class="modal-header">
-    <h3 class="modal-title">创建面试预约--{{application.name}}</h3>
+  <h3 class="modal-title">创建面试预约--{{application.name}}</h3>
 </div>
 <div class="modal-body">
 
-    <form name="eventForm" class="form-horizontal" novalidate="">
-        <div class="form-group">
-            <span class="control-label col-md-3">手机</span>
-            <span class="control-label col-md-2">{{application.mobile}}</span>
-            <span class="control-label col-md-2">邮箱</span>
-            <span class="control-label col-md-3">{{application.email}}</span>
+  <form name="eventForm" class="form-horizontal" novalidate="">
+    <div class="form-group">
+      <span class="control-label col-md-3">手机</span>
+      <span class="control-label col-md-2">{{application.mobile}}</span>
+      <span class="control-label col-md-2">邮箱</span>
+      <span class="control-label col-md-3">{{application.email}}</span>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-3">时间</label>
+
+      <div class="col-md-9">
+        <div datetimepicker ng-model="event.time" use-seconds="false" min-date="today"
+             side-by-side="true" class='input-group date' data-date-format="YYYY年MM月DD日 HH:mm">
+          <input type='text' class="form-control"/>
+          <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
         </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-3">时间</label>
+        <p class="text-danger"
+           ng-show="eventForm.time.$invalid && !eventForm.time.$pristine">
+          请输入预约时间</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <lable class="control-label col-md-3">时长</lable>
+      <div class="col-md-9">
+        <input type="text" class="form-control" ng-model="event.duration" name="duration"
+               placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
 
-            <div class="col-md-9">
-                <div datetimepicker ng-model="event.time" use-seconds="false" min-date="today"
-                     side-by-side="true" class='input-group date' data-date-format="YYYY年MM月DD日 HH:mm">
-                    <input type='text' class="form-control"/>
-                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                </div>
+        <p class="text-danger"
+           ng-show="eventForm.duration.$error.required && !eventForm.duration.$pristine">
+          请输入时长</p>
 
-                <p class="text-danger"
-                   ng-show="eventForm.time.$invalid && !eventForm.time.$pristine">
-                    请输入预约时间</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <lable class="control-label col-md-3">时长</lable>
-            <div class="col-md-9">
-                <input type="text" class="form-control" ng-model="event.duration" name="duration"
-                        placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
-                <p class="text-danger"
-                   ng-show="eventForm.duration.$error.required && !eventForm.duration.$pristine">
-                    请输入时长</p>
-                <p class="text-danger"
-                   ng-show="eventForm.duration.$error.pattern && !eventForm.duration.$pristine">
-                    请输入数字</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-3">面试官</label>
+        <p class="text-danger"
+           ng-show="eventForm.duration.$error.pattern && !eventForm.duration.$pristine">
+          请输入数字</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-md-3">面试官</label>
 
-            <div class="col-md-9">
-                <select ui-select2 class="form-control" name="interviewers" ng-model="event.interviewers"
-                        ng-required="true" data-placeholder="请选择面试官，可以多选" multiple="true">
-                    <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}</option>
-                </select>
+      <div class="col-md-9">
+        <select ui-select2 class="form-control" name="interviewers" ng-model="event.interviewers"
+                ng-required="true" data-placeholder="请选择面试官，可以多选" multiple="true">
+          <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}</option>
+        </select>
 
-                <p class="text-danger"
-                   ng-show="eventForm.interviewers.$invalid && !eventForm.interviewers.$pristine">
-                    请输入面试官</p>
-            </div>
-        </div>
+        <p class="text-danger"
+           ng-show="eventForm.interviewers.$invalid && !eventForm.interviewers.$pristine">
+          请输入面试官</p>
+      </div>
+    </div>
 
-        <div class="select2-wrapper">
-            <div class="form-group">
-                <label class="control-label col-md-3">发送邮件提醒</label>
+    <div class="select2-wrapper">
+      <div class="form-group">
+        <label class="control-label col-md-3">发送邮件提醒</label>
 
-                <div class="input-group input-group-sm select2-bootstrap-prepend col-md-9">
+        <div class="input-group input-group-sm select2-bootstrap-prepend col-md-9">
 						    <span class="input-group-addon">
                                 <input type="checkbox" ng-model="event.sendEventAlert"/>
 						    </span>
-                    <select ui-select2 class="form-control" name="emailTemplate" ng-model="event.emailTemplate"
-                            data-placeholder="请选择邮件模板" ng-required="event.sendEventAlert"
-                            ng-disabled="!event.sendEventAlert" disabled>
-                        <option value=""></option>
-                        <option ng-repeat="emailTemplate in emailTemplates"
-                                value="{{emailTemplate._id}}">{{emailTemplate.name}}
-                        </option>
-                    </select>
+          <select ui-select2 class="form-control" name="emailTemplate" ng-model="event.emailTemplate"
+                  data-placeholder="请选择邮件模板" ng-required="event.sendEventAlert"
+                  ng-disabled="!event.sendEventAlert" disabled>
+            <option value=""></option>
+            <option ng-repeat="emailTemplate in emailTemplates"
+                    value="{{emailTemplate._id}}">{{emailTemplate.name}}
+            </option>
+          </select>
 
-                    <p class="text-danger"
-                       ng-show="eventForm.emailTemplate.$invalid && !eventForm.emailTemplate.$pristine">
-                        请选择邮件模板
-                    </p>
-                </div>
-            </div>
+          <p class="text-danger"
+             ng-show="eventForm.emailTemplate.$invalid && !eventForm.emailTemplate.$pristine">
+            请选择邮件模板
+          </p>
         </div>
-    </form>
+      </div>
+    </div>
+  </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-click="create()">创建</button>
-    <button class="btn btn-warning" ng-click="cancel()">取消</button>
+  <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-click="create()">创建</button>
+  <button class="btn btn-warning" ng-click="cancel()">取消</button>
 </div>
 

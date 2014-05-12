@@ -1,330 +1,330 @@
 <tabset>
 <tab heading="简历">
 <div class="widget">
-    <div class="widget-head">
-        <div class="pull-left">个人信息</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr>
-                <td>姓名</td>
-                <td>{{resume.name}}</td>
-                <td>性别</td>
-                <td>{{resume.gender | gender}}</td>
-                <td>出生年月</td>
-                <td>{{resume.birthday | yearAndMonth}}</td>
-                <td>工作年限</td>
-                <td>{{resume.yearsOfExperience | yearsOfExperience}}</td>
-            </tr>
-            <tr>
-                <td>户口</td>
-                <td>{{resume.hukou}}</td>
-                <td>居住地</td>
-                <td>{{resume.residency}}</td>
-                <td>政治面貌</td>
-                <td>{{resume.politicalStatus | politicalStatus}}</td>
-                <td>婚姻状况</td>
-                <td>{{resume.civilState | civilState}}</td>
-            </tr>
-            <tr>
-                <td>手机</td>
-                <td>{{resume.mobile}}</td>
-                <td>邮箱</td>
-                <td>{{resume.email}}</td>
-                <td>渠道</td>
-                <td>{{resume.channel}}</td>
-                <td>应聘职位</td>
-                <td>{{resume.applyPosition}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">个人信息</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr>
+        <td>姓名</td>
+        <td>{{resume.name}}</td>
+        <td>性别</td>
+        <td>{{resume.gender | gender}}</td>
+        <td>出生年月</td>
+        <td>{{resume.birthday | yearAndMonth}}</td>
+        <td>工作年限</td>
+        <td>{{resume.yearsOfExperience | yearsOfExperience}}</td>
+      </tr>
+      <tr>
+        <td>户口</td>
+        <td>{{resume.hukou}}</td>
+        <td>居住地</td>
+        <td>{{resume.residency}}</td>
+        <td>政治面貌</td>
+        <td>{{resume.politicalStatus | politicalStatus}}</td>
+        <td>婚姻状况</td>
+        <td>{{resume.civilState | civilState}}</td>
+      </tr>
+      <tr>
+        <td>手机</td>
+        <td>{{resume.mobile}}</td>
+        <td>邮箱</td>
+        <td>{{resume.email}}</td>
+        <td>渠道</td>
+        <td>{{resume.channel}}</td>
+        <td>应聘职位</td>
+        <td>{{resume.applyPosition}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 
 <div class="widget" ng-show="resume.careerObjective">
-    <div class="widget-head">
-        <div class="pull-left">职业目标</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr>
-                <td>自我评价</td>
-                <td>{{resume.careerObjective.selfAssessment}}</td>
-            </tr>
-            <tr ng-show="resume.careerObjective.typeOfEmployment">
-                <td>工作性质</td>
-                <td>{{resume.careerObjective.typeOfEmployment | typeOfEmployment}}</td>
-            </tr>
-            <tr ng-show="resume.careerObjective.targetSalary">
-                <td>期望薪水</td>
-                <td>{{resume.careerObjective.targetSalary | targetSalary}}</td>
-            </tr>
-            <tr ng-show="resume.careerObjective.locations">
-                <td>工作地点</td>
-                <td>{{resume.careerObjective.locations.join(',')}}</td>
-            </tr>
-            <tr ng-show="resume.careerObjective.industry">
-                <td>行业</td>
-                <td>{{resume.careerObjective.industry.join(',')}}</td>
-            </tr>
-            <tr ng-show="resume.careerObjective.jobCategory">
-                <td>工作</td>
-                <td>{{resume.careerObjective.jobCategory.join(',')}}</td>
-            </tr>
-            <tr ng-show="resume.careerObjective.entryTime">
-                <td>上班时间</td>
-                <td>{{resume.careerObjective.entryTime | entryTime}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">职业目标</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr>
+        <td>自我评价</td>
+        <td>{{resume.careerObjective.selfAssessment}}</td>
+      </tr>
+      <tr ng-show="resume.careerObjective.typeOfEmployment">
+        <td>工作性质</td>
+        <td>{{resume.careerObjective.typeOfEmployment | typeOfEmployment}}</td>
+      </tr>
+      <tr ng-show="resume.careerObjective.targetSalary">
+        <td>期望薪水</td>
+        <td>{{resume.careerObjective.targetSalary | targetSalary}}</td>
+      </tr>
+      <tr ng-show="resume.careerObjective.locations">
+        <td>工作地点</td>
+        <td>{{resume.careerObjective.locations.join(',')}}</td>
+      </tr>
+      <tr ng-show="resume.careerObjective.industry">
+        <td>行业</td>
+        <td>{{resume.careerObjective.industry.join(',')}}</td>
+      </tr>
+      <tr ng-show="resume.careerObjective.jobCategory">
+        <td>工作</td>
+        <td>{{resume.careerObjective.jobCategory.join(',')}}</td>
+      </tr>
+      <tr ng-show="resume.careerObjective.entryTime">
+        <td>上班时间</td>
+        <td>{{resume.careerObjective.entryTime | entryTime}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.workExperience">
-    <div class="widget-head">
-        <div class="pull-left">工作经历</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive" ng-repeat="work in resume.workExperience">
-            <tr>
-                <td>时间</td>
-                <td>{{work.from | yearAndMonth}} -- {{work.to | yearAndMonth}}</td>
-            </tr>
-            <tr>
-                <td>公司</td>
-                <td>{{work.company}}</td>
-            </tr>
-            <tr ng-show="work.industry">
-                <td>行业</td>
-                <td>{{work.industry}}</td>
-            </tr>
-            <tr ng-show="work.department">
-                <td>部门</td>
-                <td>{{work.department}}</td>
-            </tr>
-            <tr ng-show="work.jobTitle">
-                <td>职位</td>
-                <td>{{work.jobTitle}}</td>
-            </tr>
-            <tr ng-show="work.jobDescription">
-                <td>职责描述</td>
-                <td>{{work.jobDescription}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">工作经历</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive" ng-repeat="work in resume.workExperience">
+      <tr>
+        <td>时间</td>
+        <td>{{work.from | yearAndMonth}} -- {{work.to | yearAndMonth}}</td>
+      </tr>
+      <tr>
+        <td>公司</td>
+        <td>{{work.company}}</td>
+      </tr>
+      <tr ng-show="work.industry">
+        <td>行业</td>
+        <td>{{work.industry}}</td>
+      </tr>
+      <tr ng-show="work.department">
+        <td>部门</td>
+        <td>{{work.department}}</td>
+      </tr>
+      <tr ng-show="work.jobTitle">
+        <td>职位</td>
+        <td>{{work.jobTitle}}</td>
+      </tr>
+      <tr ng-show="work.jobDescription">
+        <td>职责描述</td>
+        <td>{{work.jobDescription}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.projectExperience">
-    <div class="widget-head">
-        <div class="pull-left">项目经验</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive"
-               ng-repeat="project in resume.projectExperience">
-            <tr>
-                <td>时间</td>
-                <td>{{project.from | yearAndMonth}} -- {{project.to | yearAndMonth}}</td>
-            </tr>
-            <tr>
-                <td>项目名称</td>
-                <td>{{project.name}}</td>
-            </tr>
-            <tr ng-show="project.softwareEnvironment">
-                <td>软件环境</td>
-                <td>{{project.softwareEnvironment}}</td>
-            </tr>
-            <tr ng-show="project.hardwareEnvironment">
-                <td>硬件环境</td>
-                <td>{{project.hardwareEnvironment}}</td>
-            </tr>
-            <tr ng-show="project.developmentTools">
-                <td>开发工具</td>
-                <td>{{project.developmentTools}}</td>
-            </tr>
-            <tr ng-show="project.description">
-                <td>项目描述</td>
-                <td>{{project.description}}</td>
-            </tr>
-            <tr ng-show="project.responsibility">
-                <td>项目职责</td>
-                <td>{{project.responsibility}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">项目经验</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive"
+           ng-repeat="project in resume.projectExperience">
+      <tr>
+        <td>时间</td>
+        <td>{{project.from | yearAndMonth}} -- {{project.to | yearAndMonth}}</td>
+      </tr>
+      <tr>
+        <td>项目名称</td>
+        <td>{{project.name}}</td>
+      </tr>
+      <tr ng-show="project.softwareEnvironment">
+        <td>软件环境</td>
+        <td>{{project.softwareEnvironment}}</td>
+      </tr>
+      <tr ng-show="project.hardwareEnvironment">
+        <td>硬件环境</td>
+        <td>{{project.hardwareEnvironment}}</td>
+      </tr>
+      <tr ng-show="project.developmentTools">
+        <td>开发工具</td>
+        <td>{{project.developmentTools}}</td>
+      </tr>
+      <tr ng-show="project.description">
+        <td>项目描述</td>
+        <td>{{project.description}}</td>
+      </tr>
+      <tr ng-show="project.responsibility">
+        <td>项目职责</td>
+        <td>{{project.responsibility}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.educationHistory">
-    <div class="widget-head">
-        <div class="pull-left">教育经历</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive"
-               ng-repeat="education in resume.educationHistory">
-            <tr>
-                <td>时间</td>
-                <td>{{education.from | yearAndMonth}} -- {{education.to | yearAndMonth}}</td>
-            </tr>
-            <tr>
-                <td>学校</td>
-                <td>{{education.school}}</td>
-            </tr>
-            <tr ng-show="education.major">
-                <td>专业</td>
-                <td>{{education.major}}</td>
-            </tr>
-            <tr ng-show="education.degree">
-                <td>学位</td>
-                <td>{{education.degree | degree}}</td>
-            </tr>
-            <tr ng-show="education.description">
-                <td>附加说明</td>
-                <td>{{education.description}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">教育经历</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive"
+           ng-repeat="education in resume.educationHistory">
+      <tr>
+        <td>时间</td>
+        <td>{{education.from | yearAndMonth}} -- {{education.to | yearAndMonth}}</td>
+      </tr>
+      <tr>
+        <td>学校</td>
+        <td>{{education.school}}</td>
+      </tr>
+      <tr ng-show="education.major">
+        <td>专业</td>
+        <td>{{education.major}}</td>
+      </tr>
+      <tr ng-show="education.degree">
+        <td>学位</td>
+        <td>{{education.degree | degree}}</td>
+      </tr>
+      <tr ng-show="education.description">
+        <td>附加说明</td>
+        <td>{{education.description}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.trainingHistory">
-    <div class="widget-head">
-        <div class="pull-left">培训</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive"
-               ng-repeat="training in resume.trainingHistory">
-            <tr>
-                <td>时间</td>
-                <td>{{training.from | yearAndMonth}} -- {{training.to | yearAndMonth}}</td>
-            </tr>
-            <tr>
-                <td>培训机构</td>
-                <td>{{training.institution}}</td>
-            </tr>
-            <tr ng-show="training.course">
-                <td>课程</td>
-                <td>{{training.course}}</td>
-            </tr>
-            <tr ng-show="training.location">
-                <td>地点</td>
-                <td>{{training.location}}</td>
-            </tr>
-            <tr ng-show="training.certification">
-                <td>取得证书</td>
-                <td>{{training.certification}}</td>
-            </tr>
-            <tr ng-show="training.description">
-                <td>附加说明</td>
-                <td>{{training.description}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">培训</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive"
+           ng-repeat="training in resume.trainingHistory">
+      <tr>
+        <td>时间</td>
+        <td>{{training.from | yearAndMonth}} -- {{training.to | yearAndMonth}}</td>
+      </tr>
+      <tr>
+        <td>培训机构</td>
+        <td>{{training.institution}}</td>
+      </tr>
+      <tr ng-show="training.course">
+        <td>课程</td>
+        <td>{{training.course}}</td>
+      </tr>
+      <tr ng-show="training.location">
+        <td>地点</td>
+        <td>{{training.location}}</td>
+      </tr>
+      <tr ng-show="training.certification">
+        <td>取得证书</td>
+        <td>{{training.certification}}</td>
+      </tr>
+      <tr ng-show="training.description">
+        <td>附加说明</td>
+        <td>{{training.description}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.certifications">
-    <div class="widget-head">
-        <div class="pull-left">证书</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr ng-repeat="certification in resume.certifications">
-                <td>{{certification.date | yearAndMonth}}</td>
-                <td>{{certification.subject}}</td>
-                <td>{{certification.score}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">证书</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr ng-repeat="certification in resume.certifications">
+        <td>{{certification.date | yearAndMonth}}</td>
+        <td>{{certification.subject}}</td>
+        <td>{{certification.score}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.languageSkills">
-    <div class="widget-head">
-        <div class="pull-left">语言能力</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr ng-repeat="skill in resume.languageSkills">
-                <td>{{skill.language | language}}</td>
-                <td ng-show="skill.level">{{skill.level | languageSkillLevel}}</td>
-                <td>读写能力{{skill.readingAndWriting | languageSkillLevel}}</td>
-                <td>听说能力{{skill.listeningAndSpeaking | languageSkillLevel}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">语言能力</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr ng-repeat="skill in resume.languageSkills">
+        <td>{{skill.language | language}}</td>
+        <td ng-show="skill.level">{{skill.level | languageSkillLevel}}</td>
+        <td>读写能力{{skill.readingAndWriting | languageSkillLevel}}</td>
+        <td>听说能力{{skill.listeningAndSpeaking | languageSkillLevel}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.inSchoolPractices">
-    <div class="widget-head">
-        <div class="pull-left">在校实习情况</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr ng-repeat="practice in resume.inSchoolPractices">
-                <td>{{practice.from | yearAndMonth}} -- {{practice.to | yearAndMonth}}</td>
-                <td>{{practice.content}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">在校实习情况</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr ng-repeat="practice in resume.inSchoolPractices">
+        <td>{{practice.from | yearAndMonth}} -- {{practice.to | yearAndMonth}}</td>
+        <td>{{practice.content}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.inSchoolStudy">
-    <div class="widget-head">
-        <div class="pull-left">在校学习情况</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr ng-repeat="study in resume.inSchoolStudy">
-                <td>{{study}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">在校学习情况</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr ng-repeat="study in resume.inSchoolStudy">
+        <td>{{study}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 <div class="widget" ng-show="resume.languageCertifications">
-    <div class="widget-head">
-        <div class="pull-left">语言成绩</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr>
-                <td>{{resume.languageCertifications.english | englishCertificate}}</td>
-                <td>{{resume.languageCertifications.japanese | japaneseCertificate}}</td>
-                <td>{{resume.languageCertifications.toefl}}</td>
-                <td>{{resume.languageCertifications.gre}}</td>
-                <td>{{resume.languageCertifications.gmat}}</td>
-                <td>{{resume.languageCertifications.ielts}}</td>
-                <td>{{resume.languageCertifications.toeic}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">语言成绩</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr>
+        <td>{{resume.languageCertifications.english | englishCertificate}}</td>
+        <td>{{resume.languageCertifications.japanese | japaneseCertificate}}</td>
+        <td>{{resume.languageCertifications.toefl}}</td>
+        <td>{{resume.languageCertifications.gre}}</td>
+        <td>{{resume.languageCertifications.gmat}}</td>
+        <td>{{resume.languageCertifications.ielts}}</td>
+        <td>{{resume.languageCertifications.toeic}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 
 <div class="widget" ng-show="resume.itSkills">
-    <div class="widget-head">
-        <div class="pull-left">IT能力</div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="widget-content">
-        <table class="table table-bordered table-responsive">
-            <tr ng-repeat="skill in resume.itSkills">
-                <td>{{skill.skill}}</td>
-                <td>{{skill.experience}}月</td>
-                <td>{{skill.level | itSkillLevel}}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="widget-footer"></div>
+  <div class="widget-head">
+    <div class="pull-left">IT能力</div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="widget-content">
+    <table class="table table-bordered table-responsive">
+      <tr ng-repeat="skill in resume.itSkills">
+        <td>{{skill.skill}}</td>
+        <td>{{skill.experience}}月</td>
+        <td>{{skill.level | itSkillLevel}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="widget-footer"></div>
 </div>
 </tab>
 <tab heading="原始邮件" select="selectMail()">
-    <iframe class="mail-frame" ng-src="{{mailHtml}}"></iframe>
+  <iframe class="mail-frame" ng-src="{{mailHtml}}"></iframe>
 </tab>
 </tabset>
