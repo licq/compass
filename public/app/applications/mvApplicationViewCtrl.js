@@ -1,9 +1,7 @@
 angular.module('compass')
   .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap) {
     $scope.index = $routeParams.index;
-    if (states.get('mvApplicationListCtrl')) {
-      $scope.searchOptions = states.get('mvApplicationListCtrl').searchOptions;
-    }
+    $scope.searchOptions = states.get('mvApplicationListCtrl' + $routeParams.status).searchOptions || {};
 
     function retrieveApplication() {
       var queryConditions = angular.extend({

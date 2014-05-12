@@ -202,7 +202,7 @@ angular.module('compass',
         return states[key];
       },
       get: function (key) {
-        return states[key];
+        return states[key] || {};
       }
     };
   })

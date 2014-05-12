@@ -33,6 +33,7 @@ var resumeSchema = mongoose.Schema({
     type: Date,
     default: Date.now()
   },
+  photoUrl: String,
   matchRate: Number,
   yearsOfExperience: Number,
 
@@ -587,6 +588,10 @@ resumeSchema.plugin(mongoosastic, {
         index: 'no'
       },
       mobile: {
+        type: 'string',
+        index: 'no'
+      },
+      photoUrl: {
         type: 'string',
         index: 'no'
       },

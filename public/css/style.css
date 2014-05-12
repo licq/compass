@@ -2314,3 +2314,8 @@ footer .copy {
     width: 40px;
     text-align: center;
 }
+
+.img-photo {
+    margin-top: 40px;
+    margin-left: 8px;
+}
