@@ -1,3 +1,5 @@
+"use strict";
+
 var mongoose = require('mongoose'),
   expect = require('chai').expect,
   Company = mongoose.model('Company'),
@@ -51,6 +53,21 @@ describe('Event', function () {
         expect(event).to.have.property('applyPosition');
         expect(event).to.have.property('company');
         done();
+      });
+    });
+
+    it('should change application status to interview', function (done) {
+      Factory.create('resume', {status: 'pursued'}, function (resume) {
+        Factory.build('event', {application: resume, interviewers: [user.id]}, function (event) {
+          event.save(function () {
+            setTimeout(function () {
+              Resume.findById(resume._id, function (err, re) {
+                expect(re.status).to.equal('interview');
+                done();
+              });
+            }, 0);
+          });
+        });
       });
     });
   });

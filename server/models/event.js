@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Resume = mongoose.model('Resume');
+  Resume = mongoose.model('Resume'),
+  logger = require('../config/winston').logger();
 
 var eventSchema = mongoose.Schema({
   time: {
@@ -95,6 +96,17 @@ eventSchema.pre('save', function (next) {
   } else {
     next();
   }
+});
+
+eventSchema.post('save', function () {
+  var model = this;
+  Resume.findById(model.application, function (err, resume) {
+    resume.status = 'interview';
+    resume.save(function (err) {
+      if (err)
+        logger.error('change status of ', model.application, 'failed because of ', err);
+    });
+  });
 });
 
 mongoose.model('Event', eventSchema);
