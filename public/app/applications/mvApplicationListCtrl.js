@@ -117,7 +117,7 @@ angular.module('compass')
     };
 
     $scope.newEvent = function (application) {
-      $modal.open({
+      var newEventModal = $modal.open({
         templateUrl: '/app/interviews/eventNew.html',
         controller: 'mvEventNewCtrl',
         keyboard: false,
@@ -125,6 +125,13 @@ angular.module('compass')
           application: function () {
             return application;
           }
+        }
+      });
+
+      newEventModal.result.then(function (id) {
+        if (id) {
+          removeFromApplications(id);
+          getOneMoreApplication();
         }
       });
     };

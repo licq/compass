@@ -12,7 +12,7 @@ angular.module('compass')
 
     $scope.create = function () {
       mvEvent.save($scope.event, function () {
-        $modalInstance.close();
+        $modalInstance.close($scope.event.application);
         mvNotifier.notify('创建面试邀请成功!');
       });
     };

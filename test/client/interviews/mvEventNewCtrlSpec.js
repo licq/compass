@@ -100,7 +100,7 @@ describe('mvEventNewCtrl', function () {
         .respond(200);
 
       var spy = sinon.spy(mvNotifier, 'notify');
-      modalInstanceMock.expects('close').once();
+      modalInstanceMock.expects('close').once().withArgs($scope.event.application);
       $scope.create();
       $httpBackend.flush();
       modalInstanceMock.verify();

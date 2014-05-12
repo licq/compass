@@ -5,6 +5,8 @@ describe('mvApplicationListCtrl', function () {
     mvApplicationListCtrl,
     $scope,
     result,
+    fakeModal,
+    modalOpenStub,
     titles = {
       new: '新应聘',
       archived: '归档',
@@ -12,7 +14,7 @@ describe('mvApplicationListCtrl', function () {
       undetermined: '待定'
     };
 
-  beforeEach(inject(function (_$httpBackend_, $rootScope) {
+  beforeEach(inject(function (_$httpBackend_, $rootScope, $modal) {
     result = {
       took: 40,
       timed_out: false,
@@ -1413,6 +1415,23 @@ describe('mvApplicationListCtrl', function () {
     };
     $httpBackend = _$httpBackend_;
     $scope = $rootScope.$new();
+    fakeModal = {
+      result: {
+        then: function (confirmCallback, cancelCallback) {
+          this.confirmCallback = confirmCallback;
+          this.cancelCallback = cancelCallback;
+        }
+      },
+      close: function (item) {
+        this.result.confirmCallback(item);
+      },
+      dismiss: function (item) {
+        this.reuslt.cancelCallback(item);
+      }
+    };
+
+    modalOpenStub = sinon.stub($modal, 'open');
+    modalOpenStub.returns(fakeModal);
   }));
 
   ['new', 'undertimined', 'pursued'].forEach(function (status) {
@@ -1643,6 +1662,21 @@ describe('mvApplicationListCtrl', function () {
           $scope.view(2);
           expect(spy).to.have.been.calledWith('/applications/' + status + '/98');
         }));
+      });
+
+      describe('newEvent', function () {
+        it('should open the modal', function () {
+          $scope.newEvent('7788');
+          expect(modalOpenStub).to.be.called;
+        });
+
+        it('should remove the application from the applications list when modal close', function () {
+          $scope.newEvent('5355c145b5f85ce10e5aa596');
+          fakeModal.close('5355c145b5f85ce10e5aa596');
+          angular.forEach($scope.applications,function(app){
+            expect(app._id).to.not.equal('5355c145b5f85ce10e5aa596');
+          });
+        });
       });
     });
   });
