@@ -65,6 +65,7 @@ exports.delete = function (req, res, next) {
 };
 
 exports.load = function (req, res, next, id) {
+  console.log('invoke emailTemplates load');
   EmailTemplate.findOne({_id: id, company: req.user.company})
     .exec(function (err, emailTemplate) {
       if (err) return next(err);

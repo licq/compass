@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var mongoose = require('mongoose'),
   expect = require('chai').expect,
@@ -65,7 +65,7 @@ describe('Event', function () {
                 expect(re.status).to.equal('interview');
                 done();
               });
-            }, 0);
+            }, 500);
           });
         });
       });

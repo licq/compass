@@ -5,53 +5,53 @@ var express = require('express'),
   mongoose = require('mongoose'),
   passport = require('passport'),
   kue = require('kue'),
-  mongoStore = require('connect-mongo')(express),
+  session = require('express-session'),
+  mongoStore = require('connect-mongo')(session),
   winston = require('./winston'),
-  expressWinston = require('express-winston');
+  expressWinston = require('express-winston'),
+  env = process.env.NODE_ENV || 'development';
 
 module.exports = function (app, config) {
-  app.configure('development', function () {
+  if ('development' === env) {
     swig.setDefaults({cache: false});
     app.set('view cache', false);
-  });
-  app.configure(function () {
-    app.engine('html', swig.renderFile);
-    app.set('view engine', 'html');
-    app.set('views', config.rootPath + '/server/views');
+  }
 
-    app.use('/tasks', kue.app);
-    app.use(express.favicon());
-    app.use(express.compress({
-      filter: function (req, res) {
-        return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
-      },
-      level: 9
-    }));
-    app.use(express.static(config.rootPath + '/public'));
-    app.use(expressWinston.logger({
-      transports: winston.transports,
-      meta: false,
-      msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-    }));
-    app.use(express.cookieParser());
-    app.use(express.urlencoded());
-    app.use(express.json());
-    app.use(express.methodOverride());
-    app.use(express.session({
-      secret: 'This is another secret',
-      store: new mongoStore({
-        db: mongoose.connection.db,
-        collection: 'sessions',
-        auto_reconnect: true
-      })
-    }));
+  app.engine('html', swig.renderFile);
+  app.set('view engine', 'html');
+  app.set('views', config.rootPath + '/server/views');
 
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(passport.authenticate('remember-me'));
-    app.use(app.router);
+  app.use('/tasks', kue.app);
+  app.use(require('serve-favicon')('public/img/favicon/favicon.png'));
+  app.use(require('compression')({
+    filter: function (req, res) {
+      return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
+    },
+    threshold: 512
+  }));
+  app.use(express.static(config.rootPath + '/public'));
+  app.use(expressWinston.logger({
+    transports: winston.transports,
+    meta: false,
+    msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+  }));
+  app.use(require('cookie-parser')());
+  app.use(require('body-parser')());
+  app.use(require('method-override')());
+  app.use(session({
+    secret: 'This is another secret',
+    store: new mongoStore({
+      db: mongoose.connection.db,
+      collection: 'sessions',
+      auto_reconnect: true
+    })
+  }));
 
-  });
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(passport.authenticate('remember-me'));
+
+  require('./routes')(app);
 
   app.all('/app/*', function (req, res) {
     res.send(404);
@@ -61,7 +61,7 @@ module.exports = function (app, config) {
     transports: winston.transports
   }));
 
-  app.configure('development', function () {
-    app.use(express.errorHandler());
-  });
+  if ('development' === env) {
+    app.use(require('errorHandler')());
+  }
 };

@@ -69,10 +69,10 @@ function parseWorkExperience(table) {
   try {
     var workExperience = [];
     table.children().each(function () {
-      var dateRangeText = this.children().first().text();
+      var dateRangeText = cheerio(this).children().first().text();
       if (dateRangeText.trim().length > 0) {
         var dateRange = helper.parseDateRange(dateRangeText);
-        var contents = this.children().last().html().split(/<br\/?>/g);
+        var contents = cheerio(this).children().last().html().split(/<br\/?>/g);
         var companyInfo = helper.replaceEmpty(contents[0].split('|'));
         var industryInfo = helper.replaceEmpty(contents[1].split('|'));
         workExperience.push({

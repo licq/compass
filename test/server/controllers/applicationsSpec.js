@@ -60,6 +60,7 @@ describe('applications', function () {
       req.expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
+          console.log(err);
           var result = res.body;
           expect(result).to.have.property('_id');
           done(err);

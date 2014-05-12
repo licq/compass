@@ -26,11 +26,11 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
     port: email.port,
     title: 'fetch email from ' + email.address,
     ssl: email.ssl,
-    _id: email._id
+    id: email._id
   };
 
   var fetchEmailAfter = function (minutes, callback) {
-    var job = jobs.create('fetch email', data, data._id);
+    var job = jobs.create('fetch email', data);
     if (minutes) {
       job.delay(1000 * 60 * minutes);
     }

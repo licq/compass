@@ -14,8 +14,6 @@ require('./server/config/express')(app, config);
 
 require('./server/config/passport')();
 
-require('./server/config/routes')(app);
-
 require('./server/tasks/mailer').init(config);
 
 var workers = require('./server/tasks/workers');

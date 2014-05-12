@@ -2,8 +2,8 @@
 
 var app = require('../../../server'),
   request = require('supertest'),
+  Factory = require('../factory'),
   expect = require('chai').expect;
-
 
 describe('/', function () {
 
@@ -24,11 +24,20 @@ describe('/', function () {
   });
 
   describe('GET /api/nothingshouldcalledthisname', function () {
-    it('should return 404 when call /api/nothing', function (done) {
-      request(app)
-        .get('/api/nothingshouldcalledthisname')
-        .expect(404)
-        .end(done);
+    var agent;
+    beforeEach(function (done) {
+      Factory.create('user', function (user) {
+        agent = request.agent(app)
+          .post('/api/sessions')
+          .send({
+            email: user.email,
+            password: user.password
+          }).end(done);
+      });
+      it('should return 404 when call /api/nothing', function (done) {
+        agent.get('/api/nothingshouldcalledthisname')
+          .expect(404, done);
+      });
     });
   });
 });
