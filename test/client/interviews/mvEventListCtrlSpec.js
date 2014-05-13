@@ -27,9 +27,9 @@ describe('mvEventListCtrl', function () {
     });
 
     it('should get /api/events/user=7788?startTime=:startTime&endTime=:endTime', inject(function (mvMoment) {
-      var today = mvMoment();
-      var startTime = today.startOf('week').format('YYYY-MM-DD');
-      var endTime = today.endOf('week').format('YYYY-MM-DD');
+      var now = mvMoment();
+      var startTime = now.startOf('week').toISOString();
+      var endTime = now.endOf('week').toISOString();
       $httpBackend.expectGET('/api/events?endTime=' + endTime + '&startTime=' + startTime + '&user=7788')
         .respond([
           {
@@ -46,6 +46,8 @@ describe('mvEventListCtrl', function () {
             duration: 90
           }
         ]);
+
+      $scope.retrieveEvents(startTime, endTime);
       $httpBackend.flush();
 
       expect($scope.events).to.have.length(1);

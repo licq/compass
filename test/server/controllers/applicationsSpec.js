@@ -31,7 +31,6 @@ describe('applications', function () {
         .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
-          console.log(err);
           var result = res.body;
           expect(result.hits.total).to.equal(1);
           expect(result.hits.hits).to.have.length(1);

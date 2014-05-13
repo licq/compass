@@ -53,12 +53,13 @@ describe('events', function () {
 
   describe('get /api/events', function () {
     it('should get back event list correctly', function (done) {
-      var date = moment.utc().format('YYYY-MM-DD');
+      var startTime = moment().add('h',-1).toISOString();
+      var endTime = moment().add('h',1).toISOString();
       Factory.create('resume', {company: existUser.company}, function (resume) {
         Factory.create('event', {application: resume,
           interviewers: [existUser.id]}, function () {
           request
-            .get('/api/events?startDate=' + date + '&endDate=' + date + '&user=' + existUser.id)
+            .get('/api/events?startTime=' + startTime + '&endTime=' + endTime + '&user=' + existUser.id)
             .expect(200)
             .expect('content-type', /json/)
             .end(function (err, res) {

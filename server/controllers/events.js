@@ -5,17 +5,10 @@ var mongoose = require('mongoose'),
   moment = require('moment');
 
 exports.list = function (req, res, next) {
-  var startDate;
-  var endDate;
-  if (req.query.startDate) {
-    startDate = moment(req.query.startDate, 'YYYY-MM-DD').startOf('day').toDate();
-    endDate = moment(req.query.endDate, 'YYYY-MM-DD').endOf('day').toDate();
-  } else {
-    startDate = moment().startOf('week').toDate();
-    endDate = moment().endOf('week').toDate();
-  }
+  var startTime = req.query.startTime || moment().startOf('week').toDate();
+  var endTime = req.query.endTime || moment().endOf('week').toDate();
 
-  var query = Event.where('time').gte(startDate).lt(endDate);
+  var query = Event.where('time').gte(startTime).lt(endTime);
   if (req.user) {
     query.or([
       {'createdBy': req.user},

@@ -1,6 +1,7 @@
 'use strict';
 
-var winston = require('winston');
+var moment = require('moment'),
+  winston = require('winston');
 
 var logger;
 
@@ -10,13 +11,17 @@ exports.init = function (config) {
       level: 'debug',
       handleExceptions: true,
       colorize: true,
-      timestamp: true
+      timestamp: function(){
+        return moment().format('YYYY/MM/DD HH:mm:ss:SSS');
+      }
     }),
     new (winston.transports.File)({
       filename: config.logFileName,
       level: 'info',
       handleExceptions: true,
-      timestamp: true
+      timestamp: function(){
+        return moment().format('YYYY/MM/DD HH:mm:ss:SSS');
+      }
     })
   ];
 };

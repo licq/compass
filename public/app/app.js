@@ -245,11 +245,10 @@ angular.module('compass',
       'day': '天'
     },
     allDaySlot: false,
-    timeFormat: 'HH:MM',
+    timeFormat: 'H:mm',
     titleFormat: {
       month: 'yyyy年M月',
       week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
       day: 'yyyy年M月d日, dddd'
-
     }
   });
