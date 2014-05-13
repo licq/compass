@@ -57,4 +57,44 @@ describe('mvEventListCtrl', function () {
       expect($scope.eventsForCalendar[0].end.getTime()).to.equal(mvMoment([2010, 0, 31, 15, 50, 0, 0]).toDate().getTime());
     }));
   });
+
+  describe('showModal', function () {
+    var modalOpenStub,
+      fakeModal,
+      event;
+    beforeEach(inject(function ($modal) {
+      fakeModal = {
+        result: {
+          then: function (confirmCallback, cancelCallback) {
+            this.confirmCallback = confirmCallback;
+            this.cancelCallback = cancelCallback;
+          }
+        },
+        close: function (item) {
+          this.result.confirmCallback(item);
+        },
+        dismiss: function (item) {
+          this.reuslt.cancelCallback(item);
+        }
+      };
+
+      modalOpenStub = sinon.stub($modal, 'open');
+      modalOpenStub.returns(fakeModal);
+
+      event = {
+        id: '7788',
+        name: '张三',
+        mobile: '137373737',
+        email: 'aa@aa.com',
+        time: new Date()
+      };
+
+      $scope.events = [event];
+    }));
+
+    it('should open the modal', function () {
+      $scope.showModal(event);
+        expect(modalOpenStub).to.have.been.called;
+    });
+  });
 });

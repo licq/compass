@@ -19,6 +19,7 @@
              side-by-side="true" class='input-group date' data-date-format="YYYY年MM月DD日 HH:mm">
           <input type='text' class="form-control"/>
           <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+
         </div>
 
         <p class="text-danger"
@@ -31,7 +32,6 @@
       <div class="col-md-9">
         <input type="text" class="form-control" ng-model="event.duration" name="duration"
                placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
-
         <p class="text-danger"
            ng-show="eventForm.duration.$error.required && !eventForm.duration.$pristine">
           请输入时长</p>
@@ -83,7 +83,8 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-click="create()">创建</button>
+  <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-show="isNew" ng-click="create()">创建</button>
+  <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-hide="isNew" ng-click="update()">修改</button>
   <button class="btn btn-warning" ng-click="cancel()">取消</button>
 </div>
 

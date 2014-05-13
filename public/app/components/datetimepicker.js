@@ -1,5 +1,5 @@
 angular.module('ui.datetimepicker', [])
-  .directive('datetimepicker', function () {
+  .directive('datetimepicker', function ($timeout) {
     function _byDefault(value, defaultValue) {
       function _isSet(value) {
         return !(value === null || value === undefined || isNaN(value) || value === '');
@@ -65,9 +65,11 @@ angular.module('ui.datetimepicker', [])
         };
 
         element.on('dp.change', function () {
-          scope.$apply(function () {
-            var newDate = element.data('DateTimePicker').getDate();
-            ngModel.$setViewValue(newDate);
+          $timeout(function () {
+            scope.$apply(function () {
+              var newDate = element.data('DateTimePicker').getDate();
+              ngModel.$setViewValue(newDate);
+            });
           });
         });
       }

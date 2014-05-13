@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment) {
+  .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment, $modal, $filter) {
     $scope.crumbs = [
       {text: '面试日历', url: 'events'},
     ];
@@ -31,8 +31,26 @@ angular.module('compass')
         });
     };
 
-    $scope.showModal = function (event) {
-      console.log(event);
+    $scope.showModal = function (calendarEvent) {
+      var event = $filter('filter')($scope.events, {_id: calendarEvent.id})[0];
+      $modal.open({
+        templateUrl: '/app/interviews/eventNew.html',
+        controller: 'mvEventNewCtrl',
+        keyboard: false,
+        resolve: {
+          application: function () {
+            return {
+              name: event.name,
+              applyPosition: event.applyPosition,
+              mobile: event.mobile,
+              email: event.email
+            };
+          },
+          event: function () {
+            return event;
+          }
+        }
+      });
     };
 
     $scope.eventCalendarConfig = {
