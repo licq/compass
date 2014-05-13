@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap) {
+  .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap, $modal) {
     $scope.index = $routeParams.index;
     $scope.searchOptions = states.get('mvApplicationListCtrl' + $routeParams.status).searchOptions || {};
 
@@ -48,6 +48,25 @@ angular.module('compass')
       mvApplication.archive({_id: $scope.resume._id}, function () {
         mvNotifier.notify('已将' + $scope.resume.name + '归档到人才库中');
         retrieveApplication();
+      });
+    };
+
+    $scope.newEvent = function(){
+      var newEventModal = $modal.open({
+        templateUrl: '/app/interviews/eventNew.html',
+        controller: 'mvEventNewCtrl',
+        keyboard: false,
+        resolve: {
+          application: function () {
+            return $scope.resume;
+          }
+        }
+      });
+
+      newEventModal.result.then(function (id) {
+        if (id) {
+          retrieveApplication();
+        }
       });
     };
   });

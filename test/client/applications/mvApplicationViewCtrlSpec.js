@@ -10,7 +10,29 @@ describe('mvApplicationViewCtrl', function () {
       archived: '归档',
       pursued: '通过',
       undetermined: '待定'
+    },
+    modalOpenStub,
+    fakeModal;
+
+  beforeEach(inject(function ($modal) {
+    fakeModal = {
+      result: {
+        then: function (confirmCallback, cancelCallback) {
+          this.confirmCallback = confirmCallback;
+          this.cancelCallback = cancelCallback;
+        }
+      },
+      close: function (item) {
+        this.result.confirmCallback(item);
+      },
+      dismiss: function (item) {
+        this.reuslt.cancelCallback(item);
+      }
     };
+
+    modalOpenStub = sinon.stub($modal, 'open');
+    modalOpenStub.returns(fakeModal);
+  }));
 
   ['new', 'undertermined', 'archived', 'pursued'].forEach(function (status) {
     describe(status + 'View', function () {
@@ -133,6 +155,27 @@ describe('mvApplicationViewCtrl', function () {
           $httpBackend.flush();
           expect(spy).to.have.been.calledWith('/applications/' + status);
         }));
+      });
+
+      describe('newEvent', function () {
+        it('should open the modal', function () {
+          $scope.newEvent();
+          expect(modalOpenStub).to.be.called;
+        });
+
+        it('should remove the application from the applications list when modal close', function () {
+          $httpBackend.expectGET('/api/applications?page=4&pageSize=1&status=' + status).respond({
+            hits: {
+              total: 5,
+              hits: [
+                {name: '张三', _id: '8899', mail: '8899'}
+              ]
+            }
+          });
+          $scope.newEvent();
+          fakeModal.close('aabb');
+          $httpBackend.flush();
+        });
       });
     });
   });

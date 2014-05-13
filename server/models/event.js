@@ -82,31 +82,29 @@ eventSchema.pre('save', function (next) {
 eventSchema.pre('save', function (next) {
   var model = this;
   if (model.application) {
-    Resume.findById(model.application).select('name email mobile applyPosition company')
-      .exec(function (err, app) {
+    Resume.findById(model.application).select('name email mobile applyPosition company status')
+      .exec(function (err, resume) {
         if (!err) {
-          model.name = app.name;
-          model.email = app.email;
-          model.mobile = app.mobile;
-          model.applyPosition = app.applyPosition;
-          model.company = app.company;
+          model.name = resume.name;
+          model.email = resume.email;
+          model.mobile = resume.mobile;
+          model.applyPosition = resume.applyPosition;
+          model.company = resume.company;
+
+          resume.status = 'interview';
+          resume.saveAndIndexSync(function (err) {
+            if (err) {
+              logger.error('change status of ', resume.name, 'failed because of ', err);
+              next(err);
+            } else {
+              next();
+            }
+          });
         }
-        next();
       });
   } else {
     next();
   }
-});
-
-eventSchema.post('save', function () {
-  var model = this;
-  Resume.findById(model.application, function (err, resume) {
-    resume.status = 'interview';
-    resume.save(function (err) {
-      if (err)
-        logger.error('change status of ', model.application, 'failed because of ', err);
-    });
-  });
 });
 
 mongoose.model('Event', eventSchema);

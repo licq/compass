@@ -6,16 +6,16 @@
       <div class="col-md-12">
         <div ng-include="'/app/common/resumeView.html'"></div>
         <div>
-          <button class="btn btn-success btn-sm" ng-click="newInterview(resume._id)"
+          <button class="btn btn-success btn-sm" ng-click="newEvent()"
                   ng-show="resume | showInterviewButton">预约面试
           </button>
-          <button class="btn btn-success btn-sm" ng-click="pursue(resume._id)"
+          <button class="btn btn-success btn-sm" ng-click="pursue()"
                   ng-show="resume | showPursueButton">通过
           </button>
-          <button class="btn btn-danger btn-sm" ng-click="archive(resume._id)"
+          <button class="btn btn-danger btn-sm" ng-click="archive()"
                   ng-show="resume | showArchiveButton">归档
           </button>
-          <button class="btn btn-warning btn-sm" ng-click="undetermine(resume._id)"
+          <button class="btn btn-warning btn-sm" ng-click="undetermine()"
                   ng-show="resume | showUndetermineButton">待定
           </button>
         </div>
