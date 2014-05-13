@@ -5,7 +5,7 @@ var
   Factory = require('../factory');
 
 describe('Resume', function () {
-  before(function (done) {
+  beforeEach(function (done) {
     helper.clearCollections(Resume, 'Company', function () {
       Resume.recreateIndex(function () {
         setTimeout(done, 500);
@@ -24,8 +24,8 @@ describe('Resume', function () {
   });
 
   describe('create', function () {
-    var company;
-    before(function (done) {
+    var company, mailId, resume;
+    beforeEach(function (done) {
       var birthday = new Date();
       birthday.setFullYear(birthday.getFullYear() - 20);
       Factory.build('resume', {
@@ -36,11 +36,35 @@ describe('Resume', function () {
           }
         ],
         birthday: birthday
-      }, function (resume) {
-        resume.saveAndIndexSync(function () {
-          company = resume.company;
+      }, function (newResume) {
+        mailId = newResume.mail;
+        newResume.saveAndIndexSync(function (err, createdResume) {
+          company = newResume.company;
+          resume = createdResume;
           done();
         });
+      });
+    });
+
+    it('should update the resume parsed from the same mail', function (done) {
+      var birthday = new Date();
+      birthday.setFullYear(birthday.getFullYear() - 20);
+      var resumeData = {
+        applyPosition: 'cio',
+        educationHistory: [
+          {
+            degree: 'associate'
+          }
+        ],
+        birthday: birthday,
+        mail: mailId,
+        company: company
+      };
+
+      Resume.createOrUpdateAndIndex(resumeData, function (err, resumeInDb) {
+        expect(resumeInDb.id).to.equal(resume.id);
+        expect(resumeInDb.applyPosition).to.equal('cio');
+        done();
       });
     });
 
@@ -113,4 +137,5 @@ describe('Resume', function () {
       });
     });
   });
-});
+})
+;

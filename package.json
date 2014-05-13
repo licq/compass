@@ -20,7 +20,7 @@
   "dependencies": {
     "async": "^0.8.0",
     "body-parser": "^1.2.0",
-    "cheerio": "^0.16.0",
+    "cheerio": "^0.14.0",
     "compression": "^1.0.2",
     "connect-mongo": "~0.4.1",
     "cookie-parser": "^1.0.1",
@@ -35,6 +35,7 @@
     "moment": "^2.6.0",
     "mongoosastic": "licq/mongoosastic",
     "mongoose": "~3.8.9",
+    "mongoose-merge-plugin": "0.0.4",
     "mongoose-timestamps": "0.0.1",
     "node-uuid": "^1.4.1",
     "nodemailer": "^0.6.1",

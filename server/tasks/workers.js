@@ -34,8 +34,7 @@ function handleFetchEmail(job, done) {
 function handleParseResume(job, done) {
   logger.info('handleParseResume ', job.data.title);
   try {
-    var resume = new Resume(parser.parse(job.data));
-    resume.saveAndIndex(function (err) {
+    Resume.createOrUpdateAndIndex(parser.parse(job.data),function (err) {
       done(err);
     });
   } catch (err) {
@@ -64,5 +63,3 @@ exports.stop = function () {
     process.exit(0);
   }, 5000);
 };
-
-

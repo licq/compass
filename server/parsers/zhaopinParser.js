@@ -69,10 +69,11 @@ function parseWorkExperience(table) {
   try {
     var workExperience = [];
     table.children().each(function () {
-      var dateRangeText = cheerio(this).children().first().text();
+      console.log(this.html());
+      var dateRangeText = this.children().first().text();
       if (dateRangeText.trim().length > 0) {
         var dateRange = helper.parseDateRange(dateRangeText);
-        var contents = cheerio(this).children().last().html().split(/<br\/?>/g);
+        var contents = this.children().last().html().split(/<br\/?>/g);
         var companyInfo = helper.replaceEmpty(contents[0].split('|'));
         var industryInfo = helper.replaceEmpty(contents[1].split('|'));
         workExperience.push({
@@ -248,6 +249,8 @@ function parseInSchoolStudy(table) {
 
 exports.parse = function (data) {
   var $ = cheerio.load(data.html);
+  console.log($.html());
+  console.log($.text());
   var findTable = function () {
     var tableNames = Array.prototype.slice.call(arguments, 0);
     var table;

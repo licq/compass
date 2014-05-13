@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
   mongoosastic = require('mongoosastic'),
   config = require('../config/config'),
   _ = require('lodash'),
+  merge = require('mongoose-merge-plugin'),
   timestamps = require('mongoose-timestamps');
 
 function makeTermFilter(queryValue, termKey) {
@@ -318,11 +319,30 @@ resumeSchema.statics.query = function (params, callback) {
     return callback(null, results);
   });
 };
+
+var Resume = mongoose.model('Resume', resumeSchema);
+
+resumeSchema.statics.createOrUpdateAndIndex = function (data, cb) {
+  var model = this;
+
+  model.findOne({mail: data.mail}, function (err, resume) {
+    if (err) return cb(err);
+    if (resume) {
+      resume.merge(data);
+    } else {
+      resume = new Resume(data);
+    }
+
+    resume.saveAndIndexSync(cb);
+  });
+};
+
 resumeSchema.post('remove', function () {
   this.unIndex();
 });
 
 resumeSchema.plugin(timestamps);
+resumeSchema.plugin(merge);
 resumeSchema.plugin(mongoosastic, {
   index: config.elastic_index,
   host: config.elastic_host,
@@ -716,7 +736,7 @@ resumeSchema.plugin(mongoosastic, {
   }
 });
 
-var Resume = mongoose.model('Resume', resumeSchema);
+
 Resume.createMapping(function (err, mapping) {
   if (err) {
     logger.error('error creating mapping (you can safely ignore this)', err);

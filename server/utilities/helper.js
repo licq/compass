@@ -1,7 +1,6 @@
 "use strict";
 
-var _ = require('lodash'),
-  $ = require('cheerio');
+var _ = require('lodash');
 
 exports.onlyNumber = function onlyNumber(input) {
   var match = input.match(/\d+/g);
@@ -129,8 +128,8 @@ exports.parseTable = function parseTable(table) {
   var items = [];
   table.find('tr').each(function () {
     var item = [];
-    $(this).find('td').each(function () {
-      item.push(exports.replaceEmpty($(this).text()));
+    this.find('td').each(function () {
+      item.push(exports.replaceEmpty(this.text()));
     });
     items.push(item);
   });
@@ -141,8 +140,8 @@ exports.parseTableHtml = function parseTableHtml(table) {
   var items = [];
   table.find('tr').each(function () {
     var item = [];
-    $(this).find('td').each(function () {
-      item.push(exports.replaceEmpty($(this).html()));
+    this.find('td').each(function () {
+      item.push(exports.replaceEmpty(this.html()));
     });
     items.push(item);
   });

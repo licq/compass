@@ -104,7 +104,8 @@ Factory.define('resume', Resume, {
       company: '阿里巴巴'
     }
   ],
-  company: Factory.assoc('company', 'id')
+  company: Factory.assoc('company', 'id'),
+  mail: Factory.assoc('mail','id')
 });
 
 Factory.define('event', Event, {
