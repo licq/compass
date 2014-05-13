@@ -40,7 +40,8 @@ module.exports = function (app) {
   apiRouter.route('/mails')
     .get(mails.list);
 
-  app.get('/mails', mails.list);
+  apiRouter.route('/mails')
+    .get(mails.list);
   apiRouter.route('/mails/:id')
     .get(mails.get)
     .put(mails.parse);
@@ -94,7 +95,6 @@ module.exports = function (app) {
     .post(events.create);
 
   apiRouter.use(function (err, req, res, next) {
-    console.log('error');
     if (!err) return next();
     logger.error(err.stack);
     res.send(500, {message: 'Internal Server Error',

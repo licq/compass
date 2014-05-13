@@ -320,19 +320,15 @@ resumeSchema.statics.query = function (params, callback) {
   });
 };
 
-var Resume = mongoose.model('Resume', resumeSchema);
-
 resumeSchema.statics.createOrUpdateAndIndex = function (data, cb) {
   var model = this;
-
   model.findOne({mail: data.mail}, function (err, resume) {
     if (err) return cb(err);
     if (resume) {
       resume.merge(data);
     } else {
-      resume = new Resume(data);
+      resume = model(data);
     }
-
     resume.saveAndIndexSync(cb);
   });
 };
@@ -736,7 +732,7 @@ resumeSchema.plugin(mongoosastic, {
   }
 });
 
-
+var Resume = mongoose.model('Resume', resumeSchema);
 Resume.createMapping(function (err, mapping) {
   if (err) {
     logger.error('error creating mapping (you can safely ignore this)', err);

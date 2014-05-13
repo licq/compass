@@ -12,7 +12,7 @@ function parseBasicInfo(table) {
     var resume = {};
     resume.name = table.find('td:nth-child(1) span').text().trim();
     resume.email = table.find('a').text();
-    if(table.find('img')){
+    if (table.find('img')) {
       resume.photoUrl = table.find('img').attr('src');
     }
     var basicInfos = helper.replaceEmpty(table.find('td:nth-child(2)').html().split(/<br>|\|/g));
@@ -69,7 +69,6 @@ function parseWorkExperience(table) {
   try {
     var workExperience = [];
     table.children().each(function () {
-      console.log(this.html());
       var dateRangeText = this.children().first().text();
       if (dateRangeText.trim().length > 0) {
         var dateRange = helper.parseDateRange(dateRangeText);
@@ -249,8 +248,6 @@ function parseInSchoolStudy(table) {
 
 exports.parse = function (data) {
   var $ = cheerio.load(data.html);
-  console.log($.html());
-  console.log($.text());
   var findTable = function () {
     var tableNames = Array.prototype.slice.call(arguments, 0);
     var table;
