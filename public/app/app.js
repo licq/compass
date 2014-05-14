@@ -245,7 +245,7 @@ angular.module('compass',
       'day': '天'
     },
     allDaySlot: false,
-    timeFormat: 'H:mm',
+    timeFormat: 'h:mm{ - h:mm}',
     titleFormat: {
       month: 'yyyy年M月',
       week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
