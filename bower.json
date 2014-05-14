@@ -8,14 +8,14 @@
     "angular-mocks": "latest",
     "angular-route": "latest",
     "angular-sanitize": "latest",
-    "ng-grid": "~2.0.7",
-    "fullcalendar": "~1.6.4",
-    "angular-ui-calendar": "~0.8.0",
+    "ng-grid": "latest",
+    "fullcalendar": "latest",
+    "angular-ui-calendar": "latest",
     "tinymce": "git://github.com/licq/tinymce.git#master",
-    "toastr": "~2.0.1",
-    "angular-bootstrap": "~0.11.0",
-    "moment": "~2.6.0",
-    "eonasdan-bootstrap-datetimepicker": "~3.0.0",
-    "angular-ui-select2": "~0.0.5"
+    "toastr": "latest",
+    "angular-bootstrap": "latest",
+    "moment": "latest",
+    "eonasdan-bootstrap-datetimepicker": "latest",
+    "angular-ui-select2": "latest"
   }
 }
