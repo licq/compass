@@ -1,10 +1,8 @@
 angular.module('compass')
-  .controller('mvEventNewCtrl', function ($scope, $modalInstance, mvUser, mvEmailTemplate, mvEvent, mvNotifier, application, event) {
+  .controller('mvEventNewCtrl', function ($scope, $modalInstance, mvUser, mvEmailTemplate, mvEvent, mvNotifier, event) {
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     $scope.today = today;
-
-    $scope.application = application;
 
     $scope.cancel = function () {
       $modalInstance.dismiss();
@@ -24,20 +22,12 @@ angular.module('compass')
       });
     };
 
-    $scope.isNew = true;
-    $scope.event = {
-      sendEventAlert: false,
-      application: application._id
-    };
-
     mvUser.query({fields: 'name'}, function (res) {
       $scope.users = res;
       mvEmailTemplate.query({fields: 'name'}, function (res) {
         $scope.emailTemplates = res;
-        if (event) {
-          $scope.isNew = false;
-          angular.copy(event, $scope.event);
-        }
+        $scope.isNew = !event._id;
+        $scope.event = event;
       });
     });
   });

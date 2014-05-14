@@ -44,14 +44,6 @@ angular.module('compass')
         controller: 'mvEventNewCtrl',
         keyboard: false,
         resolve: {
-          application: function () {
-            return {
-              name: event.name,
-              applyPosition: event.applyPosition,
-              mobile: event.mobile,
-              email: event.email
-            };
-          },
           event: function () {
             return event;
           }

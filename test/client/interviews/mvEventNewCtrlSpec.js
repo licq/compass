@@ -38,13 +38,12 @@ describe('mvEventNewCtrl', function () {
       $controller('mvEventNewCtrl', {
         $scope: $scope,
         $modalInstance: modalInstanceAPI,
-        application: {
+        event: {
           name: 'aabb',
           email: 'aa@aa.com',
           mobile: '137838383838',
-          _id: '9900'
-        },
-        event: false
+          application: '9900'
+        }
       });
       $httpBackend.flush();
     }));
@@ -52,21 +51,13 @@ describe('mvEventNewCtrl', function () {
     it('should set $scope.isNew to be true', function () {
       expect($scope.isNew).to.be.true;
     });
-    it('should set today to today midnight', function () {
+    it('should set today to today midnight', inject(function (mvMoment) {
       var today = $scope.today;
-      var date = new Date();
-      expect(today.getYear()).to.equal(date.getYear());
-      expect(today.getMonth()).to.equal(date.getMonth());
-      expect(today.getDay()).to.equal(date.getDay());
-      expect(today.getHours()).to.equal(0);
-      expect(today.getMinutes()).to.equal(0);
-      expect(today.getSeconds()).to.equal(0);
-    });
+      expect(mvMoment().diff(today, 'days')).to.equal(0);
+    }));
 
     it('should initialize event', function () {
-      expect($scope.application).to.exist;
       expect($scope.event.application).to.equal('9900');
-      expect($scope.event.sendEventAlert).to.equal(false);
     });
 
     it('should set users ', function () {
@@ -75,7 +66,7 @@ describe('mvEventNewCtrl', function () {
       expect($scope.users[1]._id).to.equal('8899');
     });
 
-    it('should retrieve emailTemplates when sendEventAlert set to true', function () {
+    it('should retrieve emailTemplates', function () {
       expect($scope.emailTemplates).to.have.length(1);
       expect($scope.emailTemplates[0]).to.have.property('_id', '1122');
     });
@@ -95,7 +86,10 @@ describe('mvEventNewCtrl', function () {
             time: '2014/05/09 14:00',
             interviewers: ['aa', 'bb'],
             sendEventAlert: true,
-            emailTemplate: '2233'
+            emailTemplate: '2233',
+            name: 'aabb',
+            email: 'aa@aa.com',
+            mobile: '137838383838',
           })
           .respond(200);
 
@@ -123,19 +117,16 @@ describe('mvEventNewCtrl', function () {
       $controller('mvEventNewCtrl', {
         $scope: $scope,
         $modalInstance: modalInstanceAPI,
-        application: {
-          name: 'aabb',
-          email: 'aa@aa.com',
-          mobile: '137838383838',
-          _id: '9900'
-        },
         event: {
           _id: '9911',
           time: new Date(),
           interviewers: ['222', '333'],
           sendEventAlert: false,
           duration: 60,
-          application: '9900'
+          application: '9900',
+          name: 'aabb',
+          email: 'aa@aa.com',
+          mobile: '137838383838'
         }
       });
       $httpBackend.flush();
@@ -155,7 +146,10 @@ describe('mvEventNewCtrl', function () {
           application: '9900',
           time: '2014/05/09 14:00',
           interviewers: ['222', '333'],
-          sendEventAlert: false
+          sendEventAlert: false,
+          name: 'aabb',
+          email: 'aa@aa.com',
+          mobile: '137838383838'
         })
         .respond(200);
 

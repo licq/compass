@@ -51,16 +51,21 @@ angular.module('compass')
       });
     };
 
-    $scope.newEvent = function(){
+    $scope.newEvent = function () {
       var newEventModal = $modal.open({
         templateUrl: '/app/interviews/eventNew.html',
         controller: 'mvEventNewCtrl',
         keyboard: false,
         resolve: {
-          application: function () {
-            return $scope.resume;
-          },
-          event: false
+          event: function () {
+            return {
+              name: $scope.resume.name,
+              email: $scope.resume.email,
+              mobile: $scope.resume.mobile,
+              application: $scope.resume._id,
+              applyPosition: $scope.resume.applyPosition
+            };
+          }
         }
       });
 

@@ -44,8 +44,6 @@ var eventSchema = mongoose.Schema({
   email: String,
   mobile: String,
   applyPosition: String,
-  interviewerNames: [String],
-  createdByUserName: String,
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company'
@@ -60,24 +58,6 @@ eventSchema.path('interviewers').validate(function (interviewers) {
 eventSchema.path('sendEventAlert').validate(function (send) {
   return !send || !!this.emailTemplate;
 }, '请选择邮件模板');
-
-eventSchema.pre('save', function (next) {
-  var model = this;
-  if (model.interviewers) {
-    User.find({_id: {$in: model.interviewers}})
-      .select('name')
-      .exec(function (err, names) {
-        if (!err) {
-          model.interviewerNames = names.map(function (n) {
-            return n.name;
-          });
-        }
-        next();
-      });
-  } else {
-    next();
-  }
-});
 
 eventSchema.pre('save', function (next) {
   var model = this;

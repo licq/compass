@@ -43,7 +43,6 @@ exports.update = function (req, res, next) {
 
 exports.create = function (req, res) {
   req.body.createdBy = req.user;
-  req.body.createdByUserName = req.user.name;
   Event.create(req.body, function (err) {
     if (err) {
       res.send(400, {err: err});

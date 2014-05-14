@@ -122,10 +122,15 @@ angular.module('compass')
         controller: 'mvEventNewCtrl',
         keyboard: false,
         resolve: {
-          application: function () {
-            return application;
-          },
-          event: false
+          event: function () {
+            return {
+              name: application.name,
+              application: application._id,
+              email: application.email,
+              mobile: application.mobile,
+              applyPosition: application.applyPosition
+            };
+          }
         }
       });
 

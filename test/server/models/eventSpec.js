@@ -44,7 +44,6 @@ describe('Event', function () {
 
     it('should auto generate some attributes', function (done) {
       Factory.create('event', {interviewers: [user.id]}, function (event) {
-        expect(event.interviewerNames).to.have.length(1);
         expect(event).to.have.property('name');
         expect(event).to.have.property('email');
         expect(event).to.have.property('mobile');
