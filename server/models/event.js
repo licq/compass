@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
   logger = require('../config/winston').logger();
 
 var eventSchema = mongoose.Schema({
-  time: {
+  startTime: {
     type: Date,
     required: [true, '邀请时间不能为空']
   },

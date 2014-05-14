@@ -93,6 +93,9 @@ module.exports = function (app) {
   apiRouter.route('/events')
     .get(events.list)
     .post(events.create);
+  apiRouter.route('/events/:id')
+    .all(events.load)
+    .put(events.update);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

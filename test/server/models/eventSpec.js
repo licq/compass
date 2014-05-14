@@ -32,7 +32,7 @@ describe('Event', function () {
     it('should have attributes', function (done) {
       Factory.create('event', {interviewers: [user.id]}, function (evt) {
         Event.findById(evt._id, function (err, event) {
-          expect(event).to.have.property('time');
+          expect(event).to.have.property('startTime');
           expect(event).to.have.property('interviewers');
           expect(event).to.have.property('sendEventAlert');
           expect(event).to.have.property('emailTemplate');
@@ -74,7 +74,7 @@ describe('Event', function () {
     it('should return errors when with no arguments', function (done) {
       new Event().save(function (err) {
         expect(err).to.exist;
-        expect(err.errors).to.have.property('time');
+        expect(err.errors).to.have.property('startTime');
         expect(err.errors).to.have.property('application');
         expect(err.errors).to.have.property('interviewers');
         expect(err.errors).to.have.property('createdBy');

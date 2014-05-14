@@ -1426,7 +1426,7 @@ describe('mvApplicationListCtrl', function () {
         this.result.confirmCallback(item);
       },
       dismiss: function (item) {
-        this.reuslt.cancelCallback(item);
+        this.result.cancelCallback(item);
       }
     };
 

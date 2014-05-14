@@ -2,13 +2,14 @@
 
 var mongoose = require('mongoose'),
   Event = mongoose.model('Event'),
-  moment = require('moment');
+  moment = require('moment'),
+  _ = require('lodash');
 
 exports.list = function (req, res, next) {
   var startTime = req.query.startTime || moment().startOf('week').toDate();
   var endTime = req.query.endTime || moment().endOf('week').toDate();
 
-  var query = Event.where('time').gte(startTime).lt(endTime);
+  var query = Event.where('startTime').gte(startTime).lt(endTime);
   if (req.user) {
     query.or([
       {'createdBy': req.user},
@@ -19,6 +20,24 @@ exports.list = function (req, res, next) {
   query.exec(function (err, results) {
     if (err) return next(err);
     return res.json(results);
+  });
+};
+
+exports.load = function (req, res, next) {
+  Event.findOne({_id: req.params.id, company: req.user.company})
+    .exec(function (err, event) {
+      if (err) return next(err);
+      if (!event) return res.send(404, {message: 'not found'});
+      req.event = event;
+      next();
+    });
+};
+
+exports.update = function (req, res) {
+  _.merge(req.event, req.body);
+  req.event.save(function (err) {
+    if (err) return next(err);
+    res.send(200);
   });
 };
 

@@ -59,7 +59,8 @@ angular.module('compass')
         resolve: {
           application: function () {
             return $scope.resume;
-          }
+          },
+          event: false
         }
       });
 

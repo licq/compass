@@ -15,7 +15,7 @@
       <label class="control-label col-md-3">时间</label>
 
       <div class="col-md-9">
-        <div datetimepicker ng-model="event.time" use-seconds="false" min-date="today"
+        <div datetimepicker ng-model="event.startTime" use-seconds="false" min-date="today"
              side-by-side="true" class='input-group date' data-date-format="YYYY年MM月DD日 HH:mm">
           <input type='text' class="form-control"/>
           <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
@@ -67,7 +67,6 @@
           <select ui-select2 class="form-control" name="emailTemplate" ng-model="event.emailTemplate"
                   data-placeholder="请选择邮件模板" ng-required="event.sendEventAlert"
                   ng-disabled="!event.sendEventAlert" disabled>
-            <option value=""></option>
             <option ng-repeat="emailTemplate in emailTemplates"
                     value="{{emailTemplate._id}}">{{emailTemplate.name}}
             </option>

@@ -26,6 +26,10 @@ describe('mvEventListCtrl', function () {
       ]);
     });
 
+    it('should set selectedUser', function () {
+      expect($scope.selectedUserId).to.equal('7788');
+    });
+
     it('should get /api/events/user=7788?startTime=:startTime&endTime=:endTime', inject(function (mvMoment) {
       var now = mvMoment();
       var startTime = now.startOf('week').toISOString();
@@ -42,7 +46,7 @@ describe('mvEventListCtrl', function () {
             email: 'aa@aa.com',
             createdBy: '7788',
             createdByUserName: '王五',
-            time: mvMoment([2010, 0, 31, 14, 20, 0, 0]).toDate(),
+            startTime: mvMoment([2010, 0, 31, 14, 20, 0, 0]).toDate(),
             duration: 90
           }
         ]);
@@ -82,19 +86,35 @@ describe('mvEventListCtrl', function () {
       modalOpenStub.returns(fakeModal);
 
       event = {
-        id: '7788',
+        _id: '7788',
         name: '张三',
         mobile: '137373737',
         email: 'aa@aa.com',
-        time: new Date()
+        time: new Date(),
+        duration: 90
       };
 
       $scope.events = [event];
+      $scope.eventsForCalendar = [{
+        id: '7788',
+        duration: 90
+      }];
     }));
 
     it('should open the modal', function () {
       $scope.showModal(event);
-        expect(modalOpenStub).to.have.been.called;
+      expect(modalOpenStub).to.have.been.called;
     });
+    it('should update the local events', inject(function (mvMoment) {
+      var newTime = mvMoment([2014,9,10,18,0,0,0]).toDate();
+      $scope.showModal(event);
+      fakeModal.close({
+        _id: '7788',
+        duration: 90,
+        startTime: newTime
+      });
+      expect($scope.eventsForCalendar[0].start.toString()).to.equal(newTime.toString());
+      expect($scope.eventsForCalendar[0].end.toString()).to.equal(mvMoment(newTime).add('minutes',90).toDate().toString());
+    }));
   });
 });

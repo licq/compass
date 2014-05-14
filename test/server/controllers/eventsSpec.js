@@ -3,6 +3,7 @@
 var expect = require('chai').expect,
   Factory = require('../factory'),
   moment = require('moment'),
+  Event = require('mongoose').model('Event'),
   helper = require('../testHelper');
 
 describe('events', function () {
@@ -19,12 +20,12 @@ describe('events', function () {
   });
 
   describe('post /api/events', function () {
-    it('it should post successfully', function (done) {
+    it('should post successfully', function (done) {
       Factory.create('resume', {company: existUser.company}, function (resume) {
         Factory.create('emailTemplate', {company: existUser.company}, function (et) {
           var eventData = {
             application: resume.id,
-            time: '2014/05/09 14:00',
+            startTime: moment().toISOString(),
             duration: '90',
             interviewers: [existUser.id],
             sendEventAlert: true,
@@ -53,8 +54,8 @@ describe('events', function () {
 
   describe('get /api/events', function () {
     it('should get back event list correctly', function (done) {
-      var startTime = moment().add('h',-1).toISOString();
-      var endTime = moment().add('h',1).toISOString();
+      var startTime = moment().add('h', -1).toISOString();
+      var endTime = moment().add('h', 1).toISOString();
       Factory.create('resume', {company: existUser.company}, function (resume) {
         Factory.create('event', {application: resume,
           interviewers: [existUser.id]}, function () {
@@ -66,6 +67,31 @@ describe('events', function () {
               expect(err).to.not.exist;
               expect(res.body).to.have.length(1);
               done();
+            });
+        });
+      });
+    });
+  });
+
+  describe('put /api/events/:id', function () {
+    it('should update event', function (done) {
+      var startTime = moment().add('h', -1).toISOString();
+      Factory.create('resume', {company: existUser.company}, function (resume) {
+        Factory.create('event', {application: resume,
+          interviewers: [existUser.id]}, function (event) {
+          request
+            .put('/api/events/' + event.id)
+            .send({
+              duration: 20,
+              startTime: startTime
+            })
+            .expect(200, function (err) {
+              if (err) return done(err);
+              Event.findById(event.id, function (err, eventFromDb) {
+                expect(eventFromDb.duration).to.equal(20);
+                expect(eventFromDb.startTime.toISOString()).to.equal(startTime);
+                done(err);
+              });
             });
         });
       });

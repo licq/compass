@@ -124,7 +124,8 @@ angular.module('compass')
         resolve: {
           application: function () {
             return application;
-          }
+          },
+          event: false
         }
       });
 
