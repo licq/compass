@@ -86,7 +86,9 @@ describe('events', function () {
               startTime: startTime
             })
             .expect(200, function (err) {
-              if (err) return done(err);
+              if (err) {
+                return done(err);
+              }
               Event.findById(event.id, function (err, eventFromDb) {
                 expect(eventFromDb.duration).to.equal(20);
                 expect(eventFromDb.startTime.toISOString()).to.equal(startTime);

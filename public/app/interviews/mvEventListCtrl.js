@@ -18,7 +18,8 @@ angular.module('compass')
         title: evt.name + '面试(' + evt.applyPosition + ')',
         allDay: false,
         backgroundColor: mvMoment(evt.startTime).isBefore(new Date()) ? 'rgb(128,128,128)' : 'rgb(219,173,255)',
-        textColor: 'black'
+        textColor: 'black',
+        editable: true
       };
     }
 
@@ -74,6 +75,13 @@ angular.module('compass')
       });
     };
 
+    $scope.sync = function (calendarEvent) {
+      var event = $filter('filter')($scope.events, {_id: calendarEvent.id})[0];
+      event.startTime = calendarEvent.start;
+      event.duration = mvMoment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
+      mvEvent.update(event);
+    };
+
     $scope.eventCalendarConfig = {
       timezone: 'local',
       header: {
@@ -86,6 +94,8 @@ angular.module('compass')
       eventClick: $scope.showModal,
       viewRender: function (view) {
         $scope.retrieveEvents(view.start.toISOString(), view.end.toISOString());
-      }
+      },
+      eventDrop: $scope.sync,
+      eventResize: $scope.sync
     };
   });

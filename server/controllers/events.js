@@ -33,7 +33,7 @@ exports.load = function (req, res, next) {
     });
 };
 
-exports.update = function (req, res) {
+exports.update = function (req, res, next) {
   _.merge(req.event, req.body);
   req.event.save(function (err) {
     if (err) return next(err);

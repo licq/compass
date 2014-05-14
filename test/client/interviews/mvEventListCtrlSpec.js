@@ -95,10 +95,12 @@ describe('mvEventListCtrl', function () {
       };
 
       $scope.events = [event];
-      $scope.eventsForCalendar = [{
-        id: '7788',
-        duration: 90
-      }];
+      $scope.eventsForCalendar = [
+        {
+          id: '7788',
+          duration: 90
+        }
+      ];
     }));
 
     it('should open the modal', function () {
@@ -106,15 +108,41 @@ describe('mvEventListCtrl', function () {
       expect(modalOpenStub).to.have.been.called;
     });
     it('should update the local events', inject(function (mvMoment) {
-      var newTime = mvMoment([2014,9,10,18,0,0,0]).toDate();
+      var newTime = mvMoment([2014, 9, 10, 18, 0, 0, 0]).toDate();
       $scope.showModal(event);
       fakeModal.close({
         _id: '7788',
-        duration: 90,
+        duration: 60,
         startTime: newTime
       });
       expect($scope.eventsForCalendar[0].start.toString()).to.equal(newTime.toString());
-      expect($scope.eventsForCalendar[0].end.toString()).to.equal(mvMoment(newTime).add('minutes',90).toDate().toString());
+      expect($scope.eventsForCalendar[0].end.toString()).to.equal(mvMoment(newTime).add('minutes', 60).toDate().toString());
+    }));
+  });
+
+  describe('sync draganddrop and resize', function () {
+    it('should update /api/events/:id and update the events', inject(function (mvMoment) {
+      $httpBackend.expectPUT('/api/events/7788', {
+        _id: '7788',
+        startTime: mvMoment([2019, 5, 5, 8, 0, 0, 0]).toISOString(),
+        duration: 60
+      }).respond(200);
+
+
+      $scope.events = [
+        {
+          _id: '7788',
+          startTime: mvMoment([2014, 5, 5, 0, 0, 0, 0]).toDate(),
+          duration: 90
+        }
+      ];
+      $scope.sync({
+        id: '7788',
+        start: mvMoment([2019, 5, 5, 8, 0, 0, 0]).toDate(),
+        end: mvMoment([2019, 5, 5, 9, 0, 0, 0]).toDate()
+      });
+      $httpBackend.flush();
+      expect($scope.events[0].startTime.toString()).to.equal(mvMoment([2019, 5, 5, 8 , 0, 0, 0]).toDate().toString());
     }));
   });
 });
