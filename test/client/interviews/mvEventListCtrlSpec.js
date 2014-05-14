@@ -104,12 +104,12 @@ describe('mvEventListCtrl', function () {
     }));
 
     it('should open the modal', function () {
-      $scope.showModal(event);
+      $scope.showModal($scope.eventsForCalendar[0]);
       expect(modalOpenStub).to.have.been.called;
     });
     it('should update the local events', inject(function (mvMoment) {
       var newTime = mvMoment([2014, 9, 10, 18, 0, 0, 0]).toDate();
-      $scope.showModal(event);
+      $scope.showModal($scope.eventsForCalendar[0]);
       fakeModal.close({
         _id: '7788',
         duration: 60,
@@ -118,6 +118,13 @@ describe('mvEventListCtrl', function () {
       expect($scope.eventsForCalendar[0].start.toString()).to.equal(newTime.toString());
       expect($scope.eventsForCalendar[0].end.toString()).to.equal(mvMoment(newTime).add('minutes', 60).toDate().toString());
     }));
+
+    it('should delete the event from the calendar and $scope.events', function () {
+      $scope.showModal($scope.eventsForCalendar[0]);
+      fakeModal.close();
+      expect($scope.eventsForCalendar).to.have.length(0);
+      expect($scope.events).to.have.length(0);
+    });
   });
 
   describe('sync draganddrop and resize', function () {

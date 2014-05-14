@@ -22,6 +22,13 @@ angular.module('compass')
       });
     };
 
+    $scope.delete = function () {
+      mvEvent.delete({_id: $scope.event._id}, function () {
+        $modalInstance.close();
+        mvNotifier.notify('已删除面试邀请!');
+      });
+    };
+
     mvUser.query({fields: 'name'}, function (res) {
       $scope.users = res;
       mvEmailTemplate.query({fields: 'name'}, function (res) {

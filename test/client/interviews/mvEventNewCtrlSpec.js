@@ -160,5 +160,18 @@ describe('mvEventNewCtrl', function () {
       modalInstanceMock.verify();
       expect(spy).to.have.been.called;
     }));
+
+    it('should DELETE /api/events/:id and close the window and send notification', inject(function (mvNotifier) {
+      $scope.event.duration = 90;
+      $scope.event.time = '2014/05/09 14:00';
+      $httpBackend.expectDELETE('/api/events/9911').respond(200);
+
+      var spy = sinon.spy(mvNotifier, 'notify');
+      modalInstanceMock.expects('close').once().withExactArgs();
+      $scope.delete();
+      $httpBackend.flush();
+      modalInstanceMock.verify();
+      expect(spy).to.have.been.called;
+    }));
   });
 });

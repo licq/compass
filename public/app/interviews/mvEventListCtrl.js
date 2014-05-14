@@ -6,7 +6,7 @@ angular.module('compass')
       {text: '面试日历', url: 'events'},
     ];
 
-    $scope.eventsForCalendar = [ ];
+    $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
     $scope.selectedUserId = mvIdentity.currentUser._id;
 
@@ -38,7 +38,15 @@ angular.module('compass')
     };
 
     $scope.showModal = function (calendarEvent) {
-      var event = $filter('filter')($scope.events, {_id: calendarEvent.id})[0];
+      var event, index;
+      angular.forEach($scope.events, function (e, i) {
+        if (e._id === calendarEvent.id) {
+          event = e;
+          index = i;
+          return false;
+        }
+      });
+
       var modalInstance = $modal.open({
         templateUrl: '/app/interviews/eventNew.html',
         controller: 'mvEventNewCtrl',
@@ -51,19 +59,13 @@ angular.module('compass')
       });
 
       modalInstance.result.then(function (newEvent) {
-        angular.forEach($scope.events, function (event, index) {
-          if (event._id === newEvent._id) {
-            $scope.events[index] = newEvent;
-            return false;
-          }
-        });
-
-        angular.forEach($scope.eventsForCalendar, function (event, index) {
-          if (event.id === newEvent._id) {
-            $scope.eventsForCalendar[index] = convertCalendarEvent(newEvent);
-            return false;
-          }
-        });
+        if (newEvent) {
+          $scope.events[index] = newEvent;
+          $scope.eventsForCalendar[index] = convertCalendarEvent(newEvent);
+        } else {
+          $scope.events.splice(index, 1);
+          $scope.eventsForCalendar.splice(index, 1);
+        }
       });
     };
 

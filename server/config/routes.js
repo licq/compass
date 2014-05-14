@@ -95,7 +95,8 @@ module.exports = function (app) {
     .post(events.create);
   apiRouter.route('/events/:id')
     .all(events.load)
-    .put(events.update);
+    .put(events.update)
+    .delete(events.delete);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

@@ -99,4 +99,24 @@ describe('events', function () {
       });
     });
   });
+  describe('delete /api/events/:id', function () {
+    it('should delete event', function (done) {
+      Factory.create('resume', {company: existUser.company}, function (resume) {
+        Factory.create('event', {application: resume,
+          interviewers: [existUser.id]}, function (event) {
+          request
+            .del('/api/events/' + event.id)
+            .expect(200, function (err) {
+              if (err) {
+                return done(err);
+              }
+              Event.findById(event.id, function (err, eventFromDb) {
+                expect(eventFromDb).to.not.exist;
+                done(err);
+              });
+            });
+        });
+      });
+    });
+  });
 });

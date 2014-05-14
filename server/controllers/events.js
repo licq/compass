@@ -41,6 +41,13 @@ exports.update = function (req, res, next) {
   });
 };
 
+exports.delete = function (req, res, next) {
+  req.event.remove(function (err) {
+    if (err) return next(err);
+    res.send(200);
+  });
+};
+
 exports.create = function (req, res) {
   req.body.createdBy = req.user;
   Event.create(req.body, function (err) {
