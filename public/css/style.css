@@ -2319,3 +2319,7 @@ footer .copy {
     margin-top: 40px;
     margin-left: 8px;
 }
+
+.modal-footer .btn.pull-left{
+    margin-left: 20px;
+}
