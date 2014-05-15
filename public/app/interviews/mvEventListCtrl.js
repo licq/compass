@@ -14,7 +14,7 @@ angular.module('compass')
       return {
         id: evt._id,
         start: mvMoment(evt.startTime).toDate(),
-        end: mvMoment(evt.startTime).add(evt.duration, 'minutes').toDate(),
+        end: mvMoment(evt.startTime).add('minutes', evt.duration).toDate(),
         title: evt.name + '面试(' + evt.applyPosition + ')',
         allDay: false,
         backgroundColor: mvMoment(evt.startTime).isBefore(new Date()) ? 'rgb(128,128,128)' : 'rgb(219,173,255)',
@@ -70,10 +70,19 @@ angular.module('compass')
     };
 
     $scope.sync = function (calendarEvent) {
-      var event = $filter('filter')($scope.events, {_id: calendarEvent.id})[0];
+      var event, index;
+      angular.forEach($scope.events, function (e, i) {
+        if (e._id === calendarEvent.id) {
+          event = e;
+          index = i;
+          return false;
+        }
+      });
       event.startTime = calendarEvent.start;
       event.duration = mvMoment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
-      mvEvent.update(event);
+      mvEvent.update(event, function () {
+        $scope.eventsForCalendar[index] = convertCalendarEvent(event);
+      });
     };
 
     $scope.eventCalendarConfig = {

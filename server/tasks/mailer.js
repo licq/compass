@@ -10,7 +10,17 @@ function transport() {
   return smtpTransport || (smtpTransport = nodemailer.createTransport("SMTP", emailOptions));
 }
 
-function sendEmail(to, subject, template, context, cb) {
+function send(mail, cb) {
+  transport().sendMail(mail, function (error, response) {
+    if (error) {
+      logger.error('Email sent to ' + mail.to + 'failed' + error);
+    } else {
+      logger.info("Email sent to " + mail.to + 'successfully with ' + response.message);
+    }
+    if (cb) return cb(error);
+  });
+}
+function sendTemplateEmail(to, subject, template, context, cb) {
   emailTemplates(templateOptions, function (err, render) {
     render(template, context, function (err, html) {
       var mail = {
@@ -19,14 +29,7 @@ function sendEmail(to, subject, template, context, cb) {
         subject: subject,
         html: html
       };
-      transport().sendMail(mail, function (error, response) {
-        if (error) {
-          logger.error('Email sent to ' + to + 'failed' + error);
-        } else {
-          logger.info("Email sent to " + to + 'successfully with ' + response.message);
-        }
-        if (cb) return cb(error);
-      });
+      send(mail, cb);
     });
   });
 }
@@ -42,5 +45,10 @@ exports.init = function init(config) {
 };
 
 exports.sendSignupEmail = function sendSignupEmail(to, code, cb) {
-  sendEmail(to, '已注册，请激活', 'signup.html', {link: baseurl + 'signup/activate/' + code}, cb);
+  sendTemplateEmail(to, '已注册，请激活', 'signup.html', {link: baseurl + 'signup/activate/' + code}, cb);
+};
+
+exports.sendEmail = function sendEmail(mail, cb) {
+  mail.from = emailFrom;
+  send(mail, cb);
 };

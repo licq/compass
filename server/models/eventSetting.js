@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamps'),
-  helper = require('../utilities/helper');
+  helper = require('../utilities/helper'),
+  _ = require('lodash');
 
 var eventSettingSchema = mongoose.Schema({
   duration: {
@@ -73,18 +74,20 @@ eventSettingSchema.methods.generateEmails = function (status, event, cb) {
     emails.push({
       subject: '面试提醒',
       to: [event.email],
-      content: helper.render(model[status + 'TemplateToApplier'], event)
+      html: helper.render(model[status + 'TemplateToApplier'], event)
     });
   }
 
   if (model[status + 'ToInterviewer']) {
-    mongoose.model('User').findById(event.interviewers).select('email')
-      .exec(function (err, mails) {
+    mongoose.model('User').where('_id').in(event.interviewers).select('email')
+      .exec(function (err, users) {
         if (err) return cb(err);
         emails.push({
           subject: '面试提醒',
-          to: mails,
-          content: helper.render(model[status + 'TemplateToInterviewer'], event)
+          to: _.map(users, function (user) {
+            return user.email;
+          }),
+          html: helper.render(model[status + 'TemplateToInterviewer'], event)
         });
         cb(null, emails);
       }

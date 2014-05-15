@@ -31,6 +31,12 @@ function handleFetchEmail(job, done) {
   });
 }
 
+function handleSendEmail(job, done) {
+  logger.info('handleSendEmail ', job.data.title);
+  mailer.sendEmail(job.data, done);
+}
+
+
 function handleParseResume(job, done) {
   logger.info('handleParseResume ', job.data.title);
   try {
@@ -49,6 +55,8 @@ exports.start = function () {
   });
 
   jobs.process('send signup email', 20, handleSendSignupEmail);
+
+  jobs.process('send email', 20, handleSendEmail);
 
   jobs.process('fetch email', 20, handleFetchEmail);
 

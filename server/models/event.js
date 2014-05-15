@@ -4,7 +4,9 @@ var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Resume = mongoose.model('Resume'),
   moment = require('moment'),
-  logger = require('../config/winston').logger();
+  logger = require('../config/winston').logger(),
+  kue = require('kue'),
+  jobs = kue.createQueue();
 
 var eventSchema = mongoose.Schema({
   startTime: {
@@ -52,6 +54,7 @@ eventSchema.path('interviewers').validate(function (interviewers) {
 
 eventSchema.pre('save', function (next) {
   var model = this;
+  model.wasNew = model.isNew;
   if (model.application) {
     Resume.findById(model.application).select('name email mobile applyPosition company status')
       .exec(function (err, resume) {
@@ -76,6 +79,33 @@ eventSchema.pre('save', function (next) {
   } else {
     next();
   }
+});
+
+function createSendEmailJob(emails) {
+  emails.forEach(function (email) {
+    email.title = 'send Event Alert Email to ' + email.to;
+    jobs.create('send email', email).save();
+  });
+}
+eventSchema.post('save', function () {
+  if (this.wasNew) {
+    mongoose.model('EventSetting').generateEmails('new', this, function (err, emails) {
+      if (err) logger.error('eventSetting generate Emails failed', err);
+      createSendEmailJob(emails);
+    });
+  } else {
+    mongoose.model('EventSetting').generateEmails('edit', this, function (err, emails) {
+      if (err) logger.error('eventSetting generate Emails failed', err);
+      createSendEmailJob(emails);
+    });
+  }
+});
+
+eventSchema.post('remove', function () {
+  mongoose.model('EventSetting').generateEmails('delete', this, function (err, emails) {
+    if (err) logger.error('eventSetting generate delete emails failed', err);
+    createSendEmailJob(emails);
+  });
 });
 
 mongoose.model('Event', eventSchema);
