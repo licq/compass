@@ -30,6 +30,15 @@ describe('Event', function () {
       });
     });
 
+    it('should send email', function (done) {
+      Factory.build('event', {interviewers: [user.id]}, function (event) {
+        event.save(function (err) {
+          expect(err).to.not.exist;
+          done();
+        });
+      });
+    });
+
     it('should have endTime property', function (done) {
       Factory.build('event', {interviewers: [user.id],
         startTime: moment([2012, 5, 1, 8, 0, 0, 0]).toDate(),

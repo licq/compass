@@ -35,7 +35,15 @@ var configs = {
     port: process.env.PORT || 3001,
     db: 'mongodb://localhost/compass-test',
     logFileName: 'compass-test.log',
-    elastic_index: 'compass-test'
+    elastic_index: 'compass-test',
+    emailOptions: {
+      host: "smtp.1269.com",
+      port: 25,
+      auth: {
+        user: "compass_test@126.com",
+        pass: "compass123"
+      }
+    }
   }, defaultConfig),
   production: _.defaults({
     port: process.env.PORT || 80,

@@ -49,7 +49,7 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
     });
 
     job.save(function (err) {
-      if (err) logger.info(err);
+      if (err) logger.error('job save failed because of',err);
       if (callback) callback(err);
     });
   };

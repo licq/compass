@@ -2,7 +2,8 @@
 
 var expect = require('chai').expect,
   helper = require('../../../server/utilities/helper'),
-  cheerio = require('cheerio');
+  cheerio = require('cheerio'),
+  moment = require('moment');
 
 describe('helper', function () {
   describe('#onlyNumber', function () {
@@ -452,4 +453,16 @@ describe('helper', function () {
     });
   });
 
+  describe('#render', function () {
+    it('should replace name', function () {
+      expect(helper.render('hello,{{姓名}}', {name: 'beijing'})).to.equal('hello,beijing');
+      expect(helper.render('hello,{{姓名}},{{姓名}}', {name: 'beijing'})).to.equal('hello,beijing,beijing');
+      expect(helper.render('hello,{{姓名}},{{应聘职位}}--{{开始时间}}:{{结束时间}}', {
+        name: 'beijing',
+        applyPosition: '销售经理',
+        startTime: moment([2014, 5, 5, 8, 0, 0, 0]),
+        endTime: moment([2014, 5, 5, 9, 0, 0, 0])}))
+        .to.equal('hello,beijing,销售经理--2014年6月5日8:00:2014年6月5日9:00');
+    });
+  });
 });

@@ -25,7 +25,7 @@ function handleFetchEmail(job, done) {
       error: err,
       address: job.data.address
     }, function (error) {
-      logger.info(error);
+      logger.error('handle Fetch Email from ', job.data, error);
       done(err);
     });
   });
@@ -34,7 +34,7 @@ function handleFetchEmail(job, done) {
 function handleParseResume(job, done) {
   logger.info('handleParseResume ', job.data.title);
   try {
-    Resume.createOrUpdateAndIndex(parser.parse(job.data),function (err) {
+    Resume.createOrUpdateAndIndex(parser.parse(job.data), function (err) {
       done(err);
     });
   } catch (err) {

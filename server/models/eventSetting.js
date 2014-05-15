@@ -1,5 +1,8 @@
+'use strict';
+
 var mongoose = require('mongoose'),
-  timestamps = require('mongoose-timestamps');
+  timestamps = require('mongoose-timestamps'),
+  helper = require('../utilities/helper');
 
 var eventSettingSchema = mongoose.Schema({
   duration: {
@@ -27,6 +30,27 @@ var eventSettingSchema = mongoose.Schema({
   deleteTemplateToApplier: {
     type: String
   },
+  newToInterviewer: {
+    type: Boolean,
+    default: false
+  },
+  newTemplateToInterviewer: {
+    type: String
+  },
+  editToInterviewer: {
+    type: Boolean,
+    default: false
+  },
+  editTemplateToInterviewer: {
+    type: String
+  },
+  deleteToInterviewer: {
+    type: Boolean,
+    default: false
+  },
+  deleteTemplateToInterviewer: {
+    type: String
+  },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
@@ -41,5 +65,40 @@ var eventSettingSchema = mongoose.Schema({
 });
 
 eventSettingSchema.plugin(timestamps);
+
+eventSettingSchema.methods.generateEmails = function (status, event, cb) {
+  var model = this,
+    emails = [];
+  if (model[status + 'ToApplier']) {
+    emails.push({
+      subject: '面试提醒',
+      to: [event.email],
+      content: helper.render(model[status + 'TemplateToApplier'], event)
+    });
+  }
+
+  if (model[status + 'ToInterviewer']) {
+    mongoose.model('User').findById(event.interviewers).select('email')
+      .exec(function (err, mails) {
+        if (err) return cb(err);
+        emails.push({
+          subject: '面试提醒',
+          to: mails,
+          content: helper.render(model[status + 'TemplateToInterviewer'], event)
+        });
+        cb(null, emails);
+      }
+    );
+  } else
+    cb(null, emails);
+};
+
+eventSettingSchema.statics.generateEmails = function (status, event, cb) {
+  this.findOne({company: event.company}).exec(function (err, eventSetting) {
+    if (err) return cb(err);
+    if (!eventSetting) return cb(null, []);
+    eventSetting.generateEmails(status, event, cb);
+  });
+};
 
 mongoose.model('EventSetting', eventSettingSchema);

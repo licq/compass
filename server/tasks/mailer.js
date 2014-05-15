@@ -44,4 +44,3 @@ exports.init = function init(config) {
 exports.sendSignupEmail = function sendSignupEmail(to, code, cb) {
   sendEmail(to, '已注册，请激活', 'signup.html', {link: baseurl + 'signup/activate/' + code}, cb);
 };
-

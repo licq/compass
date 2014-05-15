@@ -1,6 +1,7 @@
 "use strict";
 
-var _ = require('lodash');
+var _ = require('lodash'),
+  moment = require('moment');
 
 exports.onlyNumber = function onlyNumber(input) {
   var match = input.match(/\d+/g);
@@ -411,4 +412,12 @@ exports.isTargetSalary = function isTargetSalary(input) {
 
 exports.isJobCategory = function isJobCategory(input) {
   return input.indexOf('目标职能') > -1;
+};
+
+exports.render = function render(template, event) {
+  var dateFormat = 'YYYY年M月D日H:mm';
+  return template.replace(/\{\{姓名\}\}/g, event.name)
+    .replace(/\{\{应聘职位\}\}/g, event.applyPosition)
+    .replace(/\{\{开始时间\}\}/g, moment(event.startTime).format(dateFormat))
+    .replace(/\{\{结束时间\}\}/g, moment(event.endTime).format(dateFormat));
 };

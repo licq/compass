@@ -88,7 +88,7 @@ exports.fetch = function (mailbox, callback) {
       parse(data, function (mail) {
         saveToDB(mail, mailbox.address, function (err) {
           if (err) {
-            logger.info(err);
+            logger.error('save resume to db failed because of', err);
             client.rset();
           } else client.dele(msgnumber);
         });

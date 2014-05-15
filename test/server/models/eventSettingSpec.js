@@ -8,7 +8,7 @@ var
 
 describe('EventSetting', function () {
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', EventSetting, done);
+    helper.clearCollections('Company', 'User', 'Event', EventSetting, done);
   });
 
   describe('#create', function () {
@@ -33,6 +33,33 @@ describe('EventSetting', function () {
         });
       });
     });
+
+    it('should generate email contents', function (done) {
+      Factory.create('eventSetting', {newToApplier: true, newTemplateToApplier: '',
+          newToInterviewer: true, newTemplateToInterviewer: ''},
+        function (eventSetting) {
+          Factory.build('event', {interviewers: [eventSetting.createdBy],
+            email: 'aa@aa.com',
+            company: eventSetting.company}, function (event) {
+            EventSetting.generateEmails('new', event, function (err, emails) {
+              expect(err).to.not.exist;
+              expect(emails).to.have.length(2);
+              expect(emails[0].to).to.deep.equal([event.email]);
+              expect(emails[0].subject).to.equal('面试提醒');
+              expect(emails[1].to[0]).to.equal(eventSetting.createdBy.email);
+              done();
+            });
+          });
+        });
+    });
+    it('should generate 0 emails', function (done) {
+      Factory.build('event', function (event) {
+        EventSetting.generateEmails('new', event, function (err, emails) {
+          expect(err).to.not.exist;
+          expect(emails).to.have.length(0);
+          done();
+        });
+      });
+    });
   });
 });
-
