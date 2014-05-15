@@ -10,7 +10,7 @@ describe('events', function () {
   var existUser, request;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'Resume', 'Event', 'EmailTemplate', function () {
+    helper.clearCollections('Company', 'User', 'Resume', 'Event', function () {
       helper.login(function (agent, user) {
         request = agent;
         existUser = user;
@@ -22,20 +22,16 @@ describe('events', function () {
   describe('post /api/events', function () {
     it('should post successfully', function (done) {
       Factory.create('resume', {company: existUser.company}, function (resume) {
-        Factory.create('emailTemplate', {company: existUser.company}, function (et) {
-          var eventData = {
-            application: resume.id,
-            startTime: moment().toISOString(),
-            duration: '90',
-            interviewers: [existUser.id],
-            sendEventAlert: true,
-            emailTemplate: et.id
-          };
+        var eventData = {
+          application: resume.id,
+          startTime: moment().toISOString(),
+          duration: '90',
+          interviewers: [existUser.id],
+        };
 
-          request.post('/api/events')
-            .send(eventData)
-            .expect(200, done);
-        });
+        request.post('/api/events')
+          .send(eventData)
+          .expect(200, done);
       });
     });
 
@@ -119,4 +115,5 @@ describe('events', function () {
       });
     });
   });
-});
+})
+;

@@ -8,12 +8,12 @@ var fs = require('fs'),
   mails = require('../controllers/mails'),
   users = require('../controllers/users'),
   resumes = require('../controllers/resumes'),
-  emailTemplates = require('../controllers/emailTemplates'),
   evaluationCriterions = require('../controllers/evaluationCriterions'),
   applications = require('../controllers/applications'),
   logger = require('./winston').logger(),
   companies = require('../controllers/companies'),
-  events = require('../controllers/events');
+  events = require('../controllers/events'),
+  eventSettings = require('../controllers/eventSettings');
 
 module.exports = function (app) {
   var apiRouter = express.Router();
@@ -70,14 +70,11 @@ module.exports = function (app) {
     .all(resumes.load)
     .get(resumes.get);
 
-  apiRouter.route('/emailTemplates')
-    .get(emailTemplates.list)
-    .post(emailTemplates.create);
-  apiRouter.route('/emailTemplates/:id')
-    .all(emailTemplates.load)
-    .delete(emailTemplates.delete)
-    .get(emailTemplates.get)
-    .put(emailTemplates.update);
+
+  apiRouter.route('/eventSettings')
+    .get(eventSettings.get);
+  apiRouter.route('/eventSettings')
+    .post(eventSettings.save);
 
   apiRouter.route('/evaluationCriterions')
     .get(evaluationCriterions.get)

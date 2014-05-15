@@ -34,8 +34,6 @@ describe('Event', function () {
         Event.findById(evt._id, function (err, event) {
           expect(event).to.have.property('startTime');
           expect(event).to.have.property('interviewers');
-          expect(event).to.have.property('sendEventAlert');
-          expect(event).to.have.property('emailTemplate');
           expect(event).to.have.property('createdBy');
           done();
         });
@@ -81,13 +79,5 @@ describe('Event', function () {
         done();
       });
     });
-
-    it('should return sendEventAlert required when sendEventAlert set to true and no emailTemplate',
-      function (done) {
-        new Event({sendEventAlert: true}).save(function (err) {
-          expect(err.errors).to.have.property('sendEventAlert');
-          done();
-        });
-      });
   });
 });

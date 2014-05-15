@@ -7,7 +7,7 @@ var Factory = require('factory-lady'),
   Signup = mongoose.model('Signup'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
-  EmailTemplate = mongoose.model('EmailTemplate'),
+  EventSetting = mongoose.model('EventSetting'),
   Resume = mongoose.model('Resume'),
   Event = mongoose.model('Event');
 
@@ -72,13 +72,8 @@ Factory.define('mail', Mail, {
   mailbox: 'bb@bb.com'
 });
 
-var emailTemplateCounter = 1;
-Factory.define('emailTemplate', EmailTemplate, {
-  name: function (cb) {
-    cb('template' + emailTemplateCounter++);
-  },
-  content: 'hello,this is an email from compass',
-  subject: 'hello',
+Factory.define('eventSetting', EventSetting, {
+  duration: 90,
   company: Factory.assoc('company', 'id'),
   createdBy: Factory.assoc('user', 'id')
 });
@@ -105,7 +100,7 @@ Factory.define('resume', Resume, {
     }
   ],
   company: Factory.assoc('company', 'id'),
-  mail: Factory.assoc('mail','id')
+  mail: Factory.assoc('mail', 'id')
 });
 
 Factory.define('event', Event, {
@@ -113,8 +108,6 @@ Factory.define('event', Event, {
   startTime: new Date(),
   duration: 90,
   interviewers: [],
-  sendEventAlert: true,
-  emailTemplate: Factory.assoc('emailTemplate', 'id'),
   createdBy: Factory.assoc('user', 'id')
 });
 

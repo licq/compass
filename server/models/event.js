@@ -27,14 +27,6 @@ var eventSchema = mongoose.Schema({
     ref: 'Resume',
     required: true
   },
-  sendEventAlert: {
-    type: Boolean,
-    default: false
-  },
-  emailTemplate: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'EmailTemplate'
-  },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -53,11 +45,6 @@ var eventSchema = mongoose.Schema({
 eventSchema.path('interviewers').validate(function (interviewers) {
   return interviewers && interviewers.length > 0;
 }, '至少一个面试人员');
-
-
-eventSchema.path('sendEventAlert').validate(function (send) {
-  return !send || !!this.emailTemplate;
-}, '请选择邮件模板');
 
 eventSchema.pre('save', function (next) {
   var model = this;

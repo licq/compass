@@ -8,7 +8,7 @@ describe('mvEventSettingCtrlSpec', function () {
     beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
-      $httpBackend.expectGET('/api/eventSetting').respond({
+      $httpBackend.expectGET('/api/eventSettings').respond({
         duration: 90,
         newToApplier: true,
         newTemplateToApplier: '',
@@ -36,15 +36,15 @@ describe('mvEventSettingCtrlSpec', function () {
       });
     });
 
-    it('should GET /api/eventSetting', function () {
+    it('should GET /api/eventSettings', function () {
       expect($scope.eventSetting).to.exist;
     });
 
     describe('save', function () {
-      it('should POST /api/eventSetting', inject(function (mvNotifier) {
-        var spy = sinon.spy(mvNotifier,'notify');
+      it('should POST /api/eventSettings', inject(function (mvNotifier) {
+        var spy = sinon.spy(mvNotifier, 'notify');
         $scope.eventSetting.newTemplateToApplier = 'hello from test';
-        $httpBackend.expectPOST('/api/eventSetting', {
+        $httpBackend.expectPOST('/api/eventSettings', {
           duration: 90,
           newToApplier: true,
           newTemplateToApplier: 'hello from test',
@@ -57,27 +57,6 @@ describe('mvEventSettingCtrlSpec', function () {
         $httpBackend.flush();
         expect(spy).to.have.been.called;
       }));
-    });
-  });
-
-  describe('eventSetting existed', function () {
-    beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
-      $httpBackend = _$httpBackend_;
-      $scope = $rootScope.$new();
-      $httpBackend.expectGET('/api/eventSetting').respond(function(){
-        return [404];
-      });
-
-      $controller('mvEventSettingCtrl', {
-        $scope: $scope
-      });
-
-      $httpBackend.flush();
-    }));
-
-    it('should create new mvEvent', function () {
-      expect($scope.eventSetting).to.exist;
-      expect($scope.eventSetting.$save).to.exist;
     });
   });
 });

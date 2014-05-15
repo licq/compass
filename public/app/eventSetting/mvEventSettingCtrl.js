@@ -11,16 +11,10 @@ angular.module('compass')
       }
     ];
 
-    mvEventSetting.get(function (res) {
-      $scope.eventSetting = res;
-    }, function (res) {
-      if (res.status === 404) {
-        $scope.eventSetting = new mvEventSetting();
-      }
-    });
+    $scope.eventSetting = mvEventSetting.get();
 
     $scope.save = function () {
-      $scope.eventSetting.$save(function(){
+      mvEventSetting.save($scope.eventSetting, function () {
         mvNotifier.notify('面试设置已保存');
       });
     };
