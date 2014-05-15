@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvEventNewCtrl', function ($scope, $modalInstance, mvUser, mvEvent, mvNotifier, event) {
+  .controller('mvEventNewCtrl', function ($scope, $modalInstance, mvUser, mvEvent, mvNotifier, mvEventSetting, event) {
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     $scope.today = today;
@@ -29,9 +29,15 @@ angular.module('compass')
       });
     };
 
-    mvUser.query({fields: 'name'}, function (res) {
-      $scope.users = res;
-      $scope.isNew = !event._id;
-      $scope.event = event;
+    mvEventSetting.get(function (res) {
+      $scope.eventSetting = res;
+      mvUser.query({fields: 'name'}, function (res) {
+        $scope.users = res;
+        $scope.isNew = !event._id;
+        $scope.event = event;
+        if ($scope.isNew) {
+          $scope.event.duration = $scope.eventSetting.duration;
+        }
+      });
     });
   });

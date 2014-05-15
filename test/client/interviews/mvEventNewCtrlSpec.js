@@ -8,6 +8,7 @@ describe('mvEventNewCtrl', function () {
 
   beforeEach(inject(function (_$httpBackend_, $rootScope) {
     $httpBackend = _$httpBackend_;
+    $httpBackend.expectGET('/api/eventSettings').respond({duration: 90});
     $httpBackend.expectGET('/api/users?fields=name').respond([
       {
         _id: '7788'
@@ -44,6 +45,12 @@ describe('mvEventNewCtrl', function () {
 
     it('should set $scope.isNew to be true', function () {
       expect($scope.isNew).to.be.true;
+    });
+    it('should set $scope.eventSetting', function () {
+      expect($scope.eventSetting).to.have.property('duration', 90);
+    });
+    it('should set duration by default value', function () {
+      expect($scope.event.duration).to.equal(90);
     });
     it('should set today to today midnight', inject(function (mvMoment) {
       var today = $scope.today;

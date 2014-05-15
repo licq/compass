@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
   expect = require('chai').expect,
   Factory = require('../factory'),
   Resume = mongoose.model('Resume'),
+  moment = require('moment'),
   Event = mongoose.model('Event'),
   helper = require('../testHelper');
 
@@ -26,6 +27,15 @@ describe('Event', function () {
           expect(err).to.not.exist;
           done();
         });
+      });
+    });
+
+    it('should have endTime property', function (done) {
+      Factory.build('event', {interviewers: [user.id],
+        startTime: moment([2012, 5, 1, 8, 0, 0, 0]).toDate(),
+        duration: 90}, function (event) {
+        expect(event.endTime.toString()).to.equal(moment([2012, 5, 1, 9, 30, 0, 0]).toDate().toString());
+        done();
       });
     });
 

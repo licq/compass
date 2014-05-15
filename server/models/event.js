@@ -3,6 +3,7 @@
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Resume = mongoose.model('Resume'),
+  moment = require('moment'),
   logger = require('../config/winston').logger();
 
 var eventSchema = mongoose.Schema({
@@ -42,6 +43,9 @@ var eventSchema = mongoose.Schema({
   }
 });
 
+eventSchema.virtual('endTime').get(function () {
+  return moment(this.startTime).add('minutes', this.duration).toDate();
+});
 eventSchema.path('interviewers').validate(function (interviewers) {
   return interviewers && interviewers.length > 0;
 }, '至少一个面试人员');
