@@ -17,12 +17,6 @@ describe('mvEventNewCtrl', function () {
       }
     ]);
 
-    $httpBackend.expectGET('/api/emailTemplates?fields=name').respond([
-      {
-        _id: '1122'
-      }
-    ]);
-
     $scope = $rootScope.$new();
     modalInstanceAPI = {
       dismiss: function () {
@@ -66,16 +60,9 @@ describe('mvEventNewCtrl', function () {
       expect($scope.users[1]._id).to.equal('8899');
     });
 
-    it('should retrieve emailTemplates', function () {
-      expect($scope.emailTemplates).to.have.length(1);
-      expect($scope.emailTemplates[0]).to.have.property('_id', '1122');
-    });
-
     describe('create', function () {
       it('should post /api/events and close the window and send notification', inject(function (mvNotifier) {
-        $scope.event.sendEventAlert = true;
         $scope.event.interviewers = ['aa', 'bb'];
-        $scope.event.emailTemplate = '2233';
         $scope.event.time = '2014/05/09 14:00';
         $scope.event.duration = 90;
 
@@ -85,8 +72,6 @@ describe('mvEventNewCtrl', function () {
             application: '9900',
             time: '2014/05/09 14:00',
             interviewers: ['aa', 'bb'],
-            sendEventAlert: true,
-            emailTemplate: '2233',
             name: 'aabb',
             email: 'aa@aa.com',
             mobile: '137838383838',
@@ -121,7 +106,6 @@ describe('mvEventNewCtrl', function () {
           _id: '9911',
           time: new Date(),
           interviewers: ['222', '333'],
-          sendEventAlert: false,
           duration: 60,
           application: '9900',
           name: 'aabb',
@@ -146,7 +130,6 @@ describe('mvEventNewCtrl', function () {
           application: '9900',
           time: '2014/05/09 14:00',
           interviewers: ['222', '333'],
-          sendEventAlert: false,
           name: 'aabb',
           email: 'aa@aa.com',
           mobile: '137838383838'

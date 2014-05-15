@@ -2320,6 +2320,10 @@ footer .copy {
     margin-left: 8px;
 }
 
-.modal-footer .btn.pull-left{
+.modal-footer .btn.pull-left {
     margin-left: 20px;
+}
+
+.form-horizontal .tab-pane .form-group {
+    margin: 0;
 }

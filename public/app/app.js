@@ -13,7 +13,7 @@ angular.module('compass',
     };
     $rootScope.tinymceOptions = {
       language: 'zh_CN',
-      height: 500,
+      height: 300,
       plugins: 'link image table',
       statusbar: false,
       menubar: 'tools table format view insert edit',
@@ -143,17 +143,9 @@ angular.module('compass',
         controller: 'mvEventListCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/settings/emailTemplates', {
-        templateUrl: '/app/emailTemplates/list.html',
-        controller: 'mvEmailTemplateListCtrl'
-      })
-      .when('/settings/emailTemplates/new', {
-        templateUrl: '/app/emailTemplates/new.html',
-        controller: 'mvEmailTemplateNewCtrl'
-      })
-      .when('/settings/emailTemplates/edit/:id', {
-        templateUrl: '/app/emailTemplates/edit.html',
-        controller: 'mvEmailTemplateEditCtrl'
+      .when('/settings/eventSetting', {
+        templateUrl: '/app/eventSetting/view.html',
+        controller: 'mvEventSettingCtrl'
       })
       .when('/settings/evaluationCriterions', {
         templateUrl: '/app/evaluationCriterions/edit.html',

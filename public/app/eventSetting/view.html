@@ -1,0 +1,151 @@
+<breadcrumbs crumbs="crumbs"></breadcrumbs>
+
+<div class="matter">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="widget">
+          <div class="widget-head">
+            <div class="clearfix"></div>
+          </div>
+          <div class="widget-content">
+            <div class="padd">
+              <form name="eventSettingForm" novalidate="" class="form-horizontal">
+                <div class="well text-danger" ng-show="err">
+                  {{err.message | state}}
+                </div>
+                <fieldset>
+                  <div class="form-group">
+                    <lable class="control-label col-md-1">默认时长</lable>
+                    <div class="col-md-2">
+                      <input type="text" class="form-control" ng-model="eventSetting.duration" name="duration"
+                             placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
+
+                      <p class="text-danger"
+                         ng-show="eventForm.duration.$error.required && !eventForm.duration.$pristine">
+                        请输入时长</p>
+
+                      <p class="text-danger"
+                         ng-show="eventForm.duration.$error.pattern && !eventForm.duration.$pristine">
+                        请输入数字</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <tabset>
+                        <tab heading="创建面试邀请">
+                          <div class="form-group">
+                            <label>
+                              <input type="checkbox" class="icheckbox_square-green"
+                                     ng-model="eventSetting.newToApplier">
+                              当创建面试邀请时，自动发送邮件提醒给应聘者
+                            </label>
+                            <textarea class="form-control placeholder" name="newTemplateToApplier"
+                                      ng-model="eventSetting.newTemplateToApplier" ui-tinymce="tinymceOptions"
+                                      ng-required="eventSetting.newToApplier">
+                            </textarea>
+
+                            <p class="text-danger"
+                               ng-show="eventSettingForm.newTemplateToApplier.$error.required
+                       && !eventSettingForm.newTemplateToApplier.$pristine">
+                              请输入邮件内容模板</p>
+                          </div>
+                          <div class="form-group">
+                            <label>
+                              <input type="checkbox" class="icheckbox_square-green"
+                                     ng-model="eventSetting.newToInterviewer">
+                              当创建面试邀请时，自动发送邮件提醒给面试官
+                            </label>
+                            <textarea class="form-control placeholder" name="newTemplateToInterviewer"
+                                      ng-model="eventSetting.newTemplateToInterviewer" ui-tinymce="tinymceOptions"
+                                      ng-required="eventSetting.newToInterviewer">
+                            </textarea>
+
+                            <p class="text-danger"
+                               ng-show="eventSettingForm.newTemplateToInterviewer.$error.required && !eventSettingForm.newTemplateToInterviewer.$pristine">
+                              请输入邮件内容模板</p>
+                          </div>
+                        </tab>
+                        <tab heading="修改面试邀请">
+                          <div class="form-group">
+                            <label>
+                              <input type="checkbox" class="icheckbox_square-green"
+                                     ng-model="eventSetting.editToApplier">
+                              当修改面试邀请时，自动发送邮件提醒给应聘者
+                            </label>
+                            <textarea class="form-control placeholder" name="editTemplateToApplier"
+                                      ng-model="eventSetting.editTemplateToApplier" ui-tinymce="tinymceOptions"
+                                      ng-required="eventSetting.editToApplier">
+                            </textarea>
+
+                            <p class="text-danger"
+                               ng-show="eventSettingForm.editTemplateToApplier.$error.required
+                       && !eventSettingForm.editTemplateToApplier.$pristine">
+                              请输入邮件内容模板</p>
+                          </div>
+                          <div class="form-group">
+                            <label>
+                              <input type="checkbox" class="icheckbox_square-green"
+                                     ng-model="eventSetting.editToInterviewer">
+                              当修改面试邀请时，自动发送邮件提醒给面试官
+                            </label>
+                            <textarea class="form-control placeholder" name="editTemplateToInterviewer"
+                                      ng-model="eventSetting.editTemplateToInterviewer" ui-tinymce="tinymceOptions"
+                                      ng-required="eventSetting.editToInterviewer">
+                            </textarea>
+
+                            <p class="text-danger"
+                               ng-show="eventSettingForm.editTemplateToInterviewer.$error.required && !eventSettingForm.editTemplateToInterviewer.$pristine">
+                              请输入邮件内容模板</p>
+                          </div>
+                        </tab>
+                        <tab heading="取消面试邀请">
+                          <div class="form-group">
+                            <label>
+                              <input type="checkbox" class="icheckbox_square-green"
+                                     ng-model="eventSetting.deleteToApplier">
+                              当取消面试邀请时，自动发送邮件提醒给应聘者
+                            </label>
+                            <textarea class="form-control placeholder" name="deleteTemplateToApplier"
+                                      ng-model="eventSetting.deleteTemplateToApplier" ui-tinymce="tinymceOptions"
+                                      ng-required="eventSetting.deleteToApplier">
+                            </textarea>
+
+                            <p class="text-danger"
+                               ng-show="eventSettingForm.deleteTemplateToApplier.$error.required
+                       && !eventSettingForm.deleteTemplateToApplier.$pristine">
+                              请输入邮件内容模板</p>
+                          </div>
+                          <div class="form-group">
+                            <label>
+                              <input type="checkbox" class="icheckbox_square-green"
+                                     ng-model="eventSetting.deleteToInterviewer">
+                              当取消面试邀请时，自动发送邮件提醒给面试官
+                            </label>
+                            <textarea class="form-control placeholder" name="deleteTemplateToInterviewer"
+                                      ng-model="eventSetting.deleteTemplateToInterviewer" ui-tinymce="tinymceOptions"
+                                      ng-required="eventSetting.deleteToInterviewer">
+                            </textarea>
+
+                            <p class="text-danger"
+                               ng-show="eventSettingForm.deleteTemplateToInterviewer.$error.required && !eventSettingForm.deleteTemplateToInterviewer.$pristine">
+                              请输入邮件内容模板</p>
+                          </div>
+                        </tab>
+                      </tabset>
+                    </div>
+                  </div>
+                  <br/>
+
+                  <button class="btn btn-primary" ng-click="update()"
+                          ng-disabled="eventSettingForm.$invalid">保存
+                  </button>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
