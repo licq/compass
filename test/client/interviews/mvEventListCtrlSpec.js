@@ -6,6 +6,19 @@ describe('mvEventListCtrl', function () {
 
   beforeEach(inject(function ($controller, $rootScope, _$httpBackend_) {
     $scope = $rootScope.$new();
+    $httpBackend = _$httpBackend_;
+    $httpBackend.expectGET('/api/users?fields=name')
+      .respond([
+        {
+          _id: '1122',
+          name: 'user1'
+        },
+        {
+          _id: '7788',
+          name: 'user2'
+        }
+      ]);
+
     $controller('mvEventListCtrl',
       {$scope: $scope,
         mvIdentity: {
@@ -13,7 +26,8 @@ describe('mvEventListCtrl', function () {
             _id: '7788'
           }
         }});
-    $httpBackend = _$httpBackend_;
+
+    $httpBackend.flush();
   }));
 
   describe('initialization', function () {
@@ -30,11 +44,15 @@ describe('mvEventListCtrl', function () {
       expect($scope.selectedUserId).to.equal('7788');
     });
 
+    it('should get users list', function () {
+      expect($scope.users).to.have.length(2);
+    });
+
     it('should get /api/events/user=7788?startTime=:startTime&endTime=:endTime', inject(function (mvMoment) {
       var now = mvMoment();
-      var startTime = now.startOf('week').toISOString();
-      var endTime = now.endOf('week').toISOString();
-      $httpBackend.expectGET('/api/events?endTime=' + endTime + '&startTime=' + startTime + '&user=7788')
+      $scope.start = now.startOf('week').toISOString();
+      $scope.end = now.endOf('week').toISOString();
+      $httpBackend.expectGET('/api/events?endTime=' + $scope.end + '&startTime=' + $scope.start + '&user=7788')
         .respond([
           {
             _id: '777',
@@ -51,7 +69,7 @@ describe('mvEventListCtrl', function () {
           }
         ]);
 
-      $scope.retrieveEvents(startTime, endTime);
+      $scope.retrieveEvents();
       $httpBackend.flush();
 
       expect($scope.events).to.have.length(1);
@@ -150,6 +168,19 @@ describe('mvEventListCtrl', function () {
       });
       $httpBackend.flush();
       expect($scope.events[0].startTime.toString()).to.equal(mvMoment([2019, 5, 5, 8 , 0, 0, 0]).toDate().toString());
+    }));
+  });
+
+  describe('change selectedUserId', function () {
+    it('should retrieve events', inject(function (mvMoment) {
+      var now = mvMoment();
+      $scope.start = now.startOf('week').toISOString();
+      $scope.end = now.endOf('week').toISOString();
+      $httpBackend.expectGET('/api/events?endTime=' + $scope.end + '&startTime=' + $scope.start + '&user=1122')
+        .respond(200);
+      $scope.selectedUserId = '1122';
+      $scope.retrieveEvents();
+      $httpBackend.flush();
     }));
   });
 });

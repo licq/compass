@@ -35,22 +35,24 @@ describe('EventSetting', function () {
     });
 
     it('should generate email contents', function (done) {
-      Factory.create('eventSetting', {newToApplier: true, newTemplateToApplier: '',
-          newToInterviewer: true, newTemplateToInterviewer: ''},
-        function (eventSetting) {
-          Factory.build('event', {interviewers: [eventSetting.createdBy],
-            email: 'aa@aa.com',
-            company: eventSetting.company}, function (event) {
-            EventSetting.generateEmails('new', event, function (err, emails) {
-              expect(err).to.not.exist;
-              expect(emails).to.have.length(2);
-              expect(emails[0].to).to.deep.equal([event.email]);
-              expect(emails[0].subject).to.equal('面试提醒');
-              expect(emails[1].to[0]).to.equal(eventSetting.createdBy.email);
-              done();
+      Factory.create('user', function (user) {
+        Factory.create('eventSetting', {newToApplier: true, newTemplateToApplier: '',
+            newToInterviewer: true, newTemplateToInterviewer: '', createdBy: user, company: user.company },
+          function (eventSetting) {
+            Factory.build('event', {interviewers: [eventSetting.createdBy],
+              email: 'aa@aa.com',
+              company: eventSetting.company}, function (event) {
+              EventSetting.generateEmails('new', event, function (err, emails) {
+                expect(err).to.not.exist;
+                expect(emails).to.have.length(2);
+                expect(emails[0].to).to.deep.equal([event.email]);
+                expect(emails[0].subject).to.equal('面试提醒');
+                expect(emails[1].to[0]).to.equal(user.email);
+                done();
+              });
             });
           });
-        });
+      });
     });
     it('should generate 0 emails', function (done) {
       Factory.build('event', function (event) {

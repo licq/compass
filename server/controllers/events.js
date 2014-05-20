@@ -10,10 +10,10 @@ exports.list = function (req, res, next) {
   var endTime = req.query.endTime || moment().endOf('week').toDate();
 
   var query = Event.where('startTime').gte(startTime).lt(endTime);
-  if (req.user) {
+  if (req.query.user) {
     query.or([
-      {'createdBy': req.user},
-      {'interviewers': req.user}
+      {'createdBy': req.query.user},
+      {'interviewers': req.query.user}
     ]);
   }
 

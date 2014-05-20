@@ -47,14 +47,6 @@ userSchema.virtual('password').set(function (password) {
   return this._password;
 });
 
-userSchema.virtual('info').get(function () {
-  return {
-    name: this.name,
-    email: this.email,
-    id: this._id
-  };
-});
-
 var validatePresenceOf = function (value) {
   return value && value.length;
 };

@@ -2327,3 +2327,7 @@ footer .copy {
 .form-horizontal .tab-pane .form-group {
     margin: 0;
 }
+
+.select-user-form-in-calendar{
+    margin-top: -60px;
+}

@@ -1,14 +1,18 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment, $modal, $filter) {
+  .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
     $scope.crumbs = [
       {text: '面试日历', url: 'events'},
     ];
 
     $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
-    $scope.selectedUserId = mvIdentity.currentUser._id;
+
+    mvUser.query({fields: 'name'}, function (users) {
+      $scope.users = users;
+      $scope.selectedUserId = mvIdentity.currentUser._id;
+    });
 
     function convertCalendarEvent(evt) {
       return {
@@ -23,11 +27,11 @@ angular.module('compass')
       };
     }
 
-    $scope.retrieveEvents = function (start, end) {
+    $scope.retrieveEvents = function () {
       mvEvent.query(
         {user: $scope.selectedUserId,
-          startTime: start,
-          endTime: end
+          startTime: $scope.start,
+          endTime: $scope.end
         }, function (events) {
           $scope.events = events;
           $scope.eventsForCalendar.length = 0;
@@ -96,7 +100,9 @@ angular.module('compass')
       firstHour: 8,
       eventClick: $scope.showModal,
       viewRender: function (view) {
-        $scope.retrieveEvents(view.start.toISOString(), view.end.toISOString());
+        $scope.start = view.start.toISOString();
+        $scope.end = view.end.toISOString();
+        $scope.retrieveEvents();
       },
       eventDrop: $scope.sync,
       eventResize: $scope.sync

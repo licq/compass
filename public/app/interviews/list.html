@@ -1,13 +1,28 @@
 <breadcrumbs crumbs="crumbs"></breadcrumbs>
 <div class="matter">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="padd">
-          <div ui-calendar="eventCalendarConfig" ng-model="eventSources"
-               calendar="eventCalendar"></div>
+    <form class="form-horizontal select-user-form-in-calendar">
+      <div class="form-group">
+        <label class="control-label col-md-1 col-md-offset-9">选择用户</label>
+
+        <div class="col-md-2">
+          <select ui-select2 class="form-control" name="users" ng-model="selectedUserId"
+                  ng-change="retrieveEvents()">
+            <option value="">全部</option>
+            <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}</option>
+          </select>
         </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="padd">
+        <div ui-calendar="eventCalendarConfig" ng-model="eventSources"
+             calendar="eventCalendar"></div>
       </div>
     </div>
   </div>
+</div>
 </div>
