@@ -143,7 +143,7 @@ function parseProjectExperience(table) {
       var result = {
         from: dateRange.from,
         to: dateRange.to,
-        name: titleParts[1]
+        name: helper.removeSpaces(titleParts[1])
       };
 
       _.forEach(descriptions, function (description) {
@@ -204,15 +204,24 @@ function parseEducationHistory(table) {
 function parseItSkills(table) {
   if (!table) return;
   try {
+    if (table.find('div.resume_p')) return;
     return _.map(helper.parseTableHtml(table)[0][0].split('<br>'), function (item) {
+      item = helper.removeTags(item);
       var parts = item.split('|');
-      return {
-        skill: helper.replaceEmpty(parts[0]),
-        experience: helper.onlyNumber(parts[2]),
-        level: helper.parseItSkillLevel(parts[1])
-      };
+      if (parts.length === 3) {
+        return {
+          skill: helper.replaceEmpty(parts[0]),
+          experience: helper.onlyNumber(parts[2]),
+          level: helper.parseItSkillLevel(parts[1])
+        };
+      } else {
+        return {
+          skill: helper.replaceEmpty(parts[0])
+        };
+      }
     });
-  } catch (e) {
+  }
+  catch (e) {
     logger.error(e.stack);
   }
 }
@@ -267,7 +276,7 @@ exports.parse = function (data) {
     resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'));
   }
 
-  resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标', '技能专长'));
+  resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标', '技能专长', '专业技能'));
   resume.workExperience = parseWorkExperience(findTable('工作经历'));
   resume.educationHistory = parseEducationHistory(findTable('教育经历'));
   resume.certifications = parseCertifications(findTable('证书'));

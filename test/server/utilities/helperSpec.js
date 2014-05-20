@@ -453,6 +453,13 @@ describe('helper', function () {
     });
   });
 
+  describe('#replaceEmpty', function () {
+    it('should return correctly', function () {
+      expect(helper.replaceEmpty('\t深水餐饮管理系统')).to.equal('深水餐饮管理系统');
+      expect(helper.replaceEmpty(' 软件环境：\t windows XP windows 7')).to.equal('软件环境： windows XP windows 7');
+    });
+  });
+
   describe('#render', function () {
     it('should replace name', function () {
       expect(helper.render('hello,{{姓名}}', {name: 'beijing'})).to.equal('hello,beijing');

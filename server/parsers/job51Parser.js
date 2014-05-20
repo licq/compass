@@ -37,6 +37,7 @@ function parseBasicInfo(table) {
     resume.residency = tableData[1][1];
     resume.mobile = helper.onlyNumber(tableData[2][1]);
     resume.email = tableData[3][1];
+    resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
     return resume;
   } catch (e) {
     logger.error(e.stack);
@@ -263,7 +264,7 @@ exports.parse = function (data) {
   var resume = parseBasicInfo($('table tr:nth-child(2) table'));
   resume.name = $('strong').text().trim();
   resume.careerObjective = parseCareerObjective(findTable('求职意向'));
-  resume.careerObjective.selfAssessment = $('#Cur_Val').text();
+  resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text());
   resume.workExperience = parseWorkExperience(findTable('工作经验'));
   resume.projectExperience = parseProjectExperience(findTable('项目经验'));
   resume.educationHistory = parseEducationHistory(findTable('教育经历'));
@@ -287,4 +288,3 @@ exports.parse = function (data) {
 exports.test = function (data) {
   return data.fromAddress.indexOf('51job') > -1;
 };
-

@@ -117,7 +117,7 @@ exports.parseTargetSalary = function parseTargetSalary(input) {
 exports.replaceEmpty = function replaceEmpty(input) {
   if (Array.isArray(input)) {
     return _.filter(_.map(input, function (item) {
-      return item.replace(/\n| +/g, ' ').trim();
+      return item.replace(/\n|\s+/g, ' ').trim();
     }), function (item) {
       return item.length !== 0;
     });
