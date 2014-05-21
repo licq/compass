@@ -91,7 +91,6 @@ module.exports = function (app) {
     .get(events.list)
     .post(events.create);
   apiRouter.route('/events/:id')
-    .all(events.load)
     .put(events.update)
     .delete(events.delete);
 

@@ -1,0 +1,103 @@
+<breadcrumbs crumbs="crumbs"></breadcrumbs>
+
+<div class="matter">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="widget">
+          <div class="widget-content">
+            <div class="withbottomborder" ng-repeat="application in applications">
+              <div class="row">
+                <div class="col-md-1">
+                  <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo">
+                </div>
+                <div class="col-md-11">
+                  <div class="row">
+                    <div class="col-md-11">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <h2>{{application.name}}</h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-11">
+                          <div class="row">
+                            <span class="col-md-2">应聘职位</span>
+                            <span class="col-md-3">{{application.applyPosition}}</span>
+                            <span class="col-md-3">{{application.gender | gender}}</span>
+                                                        <span class="col-md-2">{{application.birthday | yearAndMonth}}
+                                                        </span>
+                                                        <span class="col-md-2">{{application.created_at | shortDate}}应聘
+                                                        </span>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-2">最高学历</div>
+                            <div class="col-md-3">{{application.educationHistory[0].from |
+                              yearAndMonth}}
+                              -- {{application.educationHistory[0].to | yearAndMonth}}
+                            </div>
+                            <div class="col-md-3">
+                              {{application.educationHistory[0].school}}
+                            </div>
+                            <div class="col-md-2">
+                              {{application.educationHistory[0].major}}
+                            </div>
+                            <div class="col-md-2">{{application.educationHistory[0].degree |
+                              degree}}
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-2">最近工作</div>
+                            <div class="col-md-3">{{application.workExperience[0].from |
+                              yearAndMonth}}
+                              -- {{application.workExperience[0].to | yearAndMonth}}
+                            </div>
+                            <div class="col-md-3">
+                              {{application.workExperience[0].company}}
+                            </div>
+                            <div class="col-md-2">
+                              {{application.workExperience[0].department}}
+                            </div>
+                            <div class="col-md-2">
+                              {{application.workExperience[0].jobTitle}}
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="well">
+                                {{application.careerObjective.selfAssessment}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-1 application-action-buttons">
+                          <button ng-click="view($index)" class="btn btn-primary btn-sm">详细</button>
+                          <button class="btn btn-success btn-sm" ng-click="newEvent(application)"
+                                  ng-show="application | showInterviewButton">预约面试
+                          </button>
+                          <button class="btn btn-success btn-sm" ng-click="pursue(application._id)"
+                                  ng-show="application | showPursueButton"> 通过
+                          </button>
+                          <button class="btn btn-danger btn-sm" ng-click="archive(application._id)"
+                                  ng-show="application | showArchiveButton"> 归档
+                          </button>
+                          <button class="btn btn-warning btn-sm"
+                                  ng-click="undetermine(application._id)"
+                                  ng-show="application | showUndetermineButton">待定
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

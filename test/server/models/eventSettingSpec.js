@@ -8,7 +8,7 @@ var
 
 describe('EventSetting', function () {
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'Event', EventSetting, done);
+    helper.clearCollections('Company', 'User', 'Interview', EventSetting, done);
   });
 
   describe('#create', function () {
@@ -39,29 +39,30 @@ describe('EventSetting', function () {
         Factory.create('eventSetting', {newToApplier: true, newTemplateToApplier: '',
             newToInterviewer: true, newTemplateToInterviewer: '', createdBy: user, company: user.company },
           function (eventSetting) {
-            Factory.build('event', {interviewers: [eventSetting.createdBy],
+            EventSetting.generateEmails('new', {interviewers: [eventSetting.createdBy],
               email: 'aa@aa.com',
-              company: eventSetting.company}, function (event) {
-              EventSetting.generateEmails('new', event, function (err, emails) {
-                expect(err).to.not.exist;
-                expect(emails).to.have.length(2);
-                expect(emails[0].to).to.deep.equal([event.email]);
-                expect(emails[0].subject).to.equal('面试提醒');
-                expect(emails[1].to[0]).to.equal(user.email);
-                done();
-              });
+              applyPosition: 'cio',
+              startTime: new Date(),
+              duration: 90,
+              company: user.company
+            }, function (err, emails) {
+              expect(err).to.not.exist;
+              expect(emails).to.have.length(2);
+              expect(emails[0].to).to.deep.equal(['aa@aa.com']);
+              expect(emails[0].subject).to.equal('面试提醒');
+              expect(emails[1].to[0]).to.equal(user.email);
+              done();
             });
           });
       });
     });
+
     it('should generate 0 emails', function (done) {
-      Factory.build('event', function (event) {
-        EventSetting.generateEmails('new', event, function (err, emails) {
-          expect(err).to.not.exist;
-          expect(emails).to.have.length(0);
-          done();
-        });
+      EventSetting.generateEmails('new', {}, function (err, emails) {
+        expect(err).to.not.exist;
+        expect(emails).to.have.length(0);
+        done();
       });
     });
   });
-});
+}) ;

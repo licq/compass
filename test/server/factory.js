@@ -8,8 +8,7 @@ var Factory = require('factory-lady'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
   EventSetting = mongoose.model('EventSetting'),
-  Resume = mongoose.model('Resume'),
-  Event = mongoose.model('Event');
+  Resume = mongoose.model('Resume');
 
 var companyCounter = 1;
 
@@ -103,12 +102,18 @@ Factory.define('resume', Resume, {
   mail: Factory.assoc('mail', 'id')
 });
 
-Factory.define('event', Event, {
+Factory.define('interview', mongoose.model('Interview'), {
   application: Factory.assoc('resume', 'id'),
-  startTime: new Date(),
-  duration: 90,
-  interviewers: [],
-  createdBy: Factory.assoc('user', 'id')
+  company: Factory.assoc('company', 'id'),
+  events: [
+    {
+      startTime: new Date(),
+      duration: 90,
+      interviewers: [],
+      createdBy: Factory.assoc('user', 'id')
+    }
+  ],
+  reviews: []
 });
 
 module.exports = Factory;
