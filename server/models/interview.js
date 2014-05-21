@@ -15,7 +15,8 @@ function interviewersValidator(interviewers) {
 var eventSchema = {
   startTime: {
     type: Date,
-    required: [true, '邀请时间不能为空']
+    required: [true, '邀请时间不能为空'],
+    index: true
   },
   duration: {
     type: Number,
@@ -28,12 +29,14 @@ var eventSchema = {
         ref: 'User'
       }
     ],
-    validate: [interviewersValidator, '至少一个面试人员']
+    validate: [interviewersValidator, '至少一个面试人员'],
+    index: true
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
+    index: true
   }
 };
 
@@ -54,6 +57,8 @@ var interviewSchema = mongoose.Schema({
   mobile: String,
   applyPosition: String
 });
+
+interviewSchema.index({company: 1, application: 1}, {unique: true});
 
 function createSendEmailJob(emails) {
   emails.forEach(function (email) {
