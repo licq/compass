@@ -124,6 +124,10 @@ angular.module('compass',
         controller: 'mvEventListCtrl',
         resolve: routeRoleChecks.user
       })
+      .when('/interviews/unprocessed',{
+        templateUrl: '/app/interviews/unprocessed.html',
+        controller: 'mvInterviewListCtrl'
+      })
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
         controller: 'mvEventSettingCtrl'

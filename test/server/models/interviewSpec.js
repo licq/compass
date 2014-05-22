@@ -194,4 +194,90 @@ describe('Interview', function () {
       });
     });
   });
+
+  describe('retrieve interviews', function () {
+    it('should return unprocessed interviews', function (done) {
+      Factory.create('interview', {events: [
+        {
+          startTime: new Date(),
+          duration: 90,
+          interviewers: [user._id],
+          createdBy: user._id
+        }
+      ]}, function () {
+        Interview.unprocessedFor(user, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
+          done();
+        });
+      });
+    });
+
+    it('should return no interviews when processed', function (done) {
+      Factory.create('interview', {
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ], reviews: [
+          {
+            interviewer: user._id,
+            comment: 'good cio',
+            qualified: true
+          }
+        ]
+      }, function () {
+        Interview.unprocessedFor(user, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(0);
+          done();
+        });
+      });
+    });
+
+    it('should return no interviews when interview has no reviews', function (done) {
+      Factory.create('user', function (anotherUser) {
+        Factory.create('interview', {
+            events: [
+              {
+                startTime: new Date(),
+                duration: 90,
+                interviewers: [user._id],
+                createdBy: user._id
+              }
+            ]
+          },
+          function () {
+            Interview.unprocessedFor(anotherUser, function (err, interviews) {
+              expect(err).to.not.exist;
+              expect(interviews).to.have.length(0);
+              done();
+            });
+          });
+      });
+    });
+
+    it('should return no interviews when current time is before event start time', function (done) {
+      var start = moment().add('days', 1).toDate();
+      Factory.create('interview', {
+        events: [
+          {
+            startTime: start,
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]
+      }, function () {
+        Interview.unprocessedFor(user, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(0);
+          done();
+        });
+      });
+    });
+  });
 });

@@ -13,6 +13,7 @@ var fs = require('fs'),
   logger = require('./winston').logger(),
   companies = require('../controllers/companies'),
   events = require('../controllers/events'),
+  interviews = require('../controllers/interviews'),
   eventSettings = require('../controllers/eventSettings');
 
 module.exports = function (app) {
@@ -93,6 +94,8 @@ module.exports = function (app) {
   apiRouter.route('/events/:id')
     .put(events.update)
     .delete(events.delete);
+  apiRouter.route('/interviews')
+    .get(interviews.list);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

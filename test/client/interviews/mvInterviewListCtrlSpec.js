@@ -12,16 +12,20 @@ describe('mvInterviewListCtrl', function () {
         {
           name: 'user1',
           applyPosition: 'cio',
-          reviews: [
+          events: [
             {
               startTime: '2014-5-18 15:00',
-              interviewer: {
-                _id: '7788',
-                name: 'user1'
-              },
+              duration: 90,
+              interviewers: ['7788']
+            }
+          ],
+          reviews: [
+            {
               qualified: true,
               skill: 9,
-              knowledge: 8
+              knowledge: 8,
+              review: 'excellent software engineer',
+              interviewer: '7788'
             }
           ]
         }

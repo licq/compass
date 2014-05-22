@@ -40,8 +40,18 @@ var eventSchema = {
   }
 };
 
+var reviewSchema = mongoose.Schema({
+  interviewer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    index: true
+  }
+});
+
 var interviewSchema = mongoose.Schema({
   events: [eventSchema ],
+  reviews: [reviewSchema],
   application: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Resume',
@@ -214,6 +224,16 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
       });
     });
   });
+};
+
+interviewSchema.statics.unprocessedFor = function (user, cb) {
+  var now = new Date();
+  this.where('reviews.interviewer').ne(user)
+    .elemMatch('events', {
+      startTime: {$lte: now},
+      'interviewers': user._id
+    })
+    .exec(cb);
 };
 
 mongoose.model('Interview', interviewSchema);
