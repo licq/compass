@@ -18,7 +18,7 @@ module.exports = function (config) {
     files: [
       'public/js/jquery.js',
       'public/vendor/moment/moment.js',
-      'node_modules/lodash/lodash.js',
+      'public/vendor/lodash/dist/lodash.min.js',
       'public/vendor/angular/angular.js',
       'public/vendor/angular-mocks/angular-mocks.js',
       'public/vendor/angular-cookies/angular-cookies.js',

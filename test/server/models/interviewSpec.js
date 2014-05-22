@@ -208,6 +208,7 @@ describe('Interview', function () {
         Interview.unprocessedFor(user, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
+          expect(interviews[0].events[0].interviewers[0]).to.have.property('name', user.name);
           done();
         });
       });

@@ -2305,6 +2305,12 @@ footer .copy {
     width: 80px;
 }
 
+.interview-action-buttons .btn{
+    width: 80px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .withbottomborder {
     padding-bottom: 5px;
     border-bottom: 1px solid #c9c9c9;

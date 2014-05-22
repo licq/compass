@@ -229,4 +229,9 @@ angular.module('compass')
     return function (application) {
       return application && application.status === 'pursued';
     };
+  })
+  .filter('interviewers', function () {
+    return function (interviewers) {
+      return '面试官: ' + _.map(interviewers, 'name').join(',');
+    };
   });

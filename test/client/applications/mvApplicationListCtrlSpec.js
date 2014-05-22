@@ -1672,7 +1672,10 @@ describe('mvApplicationListCtrl', function () {
 
         it('should remove the application from the applications list when modal close', function () {
           $scope.newEvent('5355c145b5f85ce10e5aa596');
-          fakeModal.close('5355c145b5f85ce10e5aa596');
+          fakeModal.close({
+            name: 'aabb',
+            application: '5355c145b5f85ce10e5aa596'
+          });
           angular.forEach($scope.applications,function(app){
             expect(app._id).to.not.equal('5355c145b5f85ce10e5aa596');
           });

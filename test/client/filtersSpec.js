@@ -222,4 +222,20 @@ describe('filters', function () {
       expect(showInterviewButtonFilter(undefined)).to.be.undefined;
     }));
   });
+
+  describe('interviewersFilter', function () {
+    it('should return correctly', inject(function (interviewersFilter) {
+      var interviewers = [
+        {
+          _id: '7788',
+          name: '张三'
+        },
+        {
+          _id: '8899',
+          name: '李四'
+        }
+      ];
+      expect(interviewersFilter(interviewers)).to.equal('面试官: 张三,李四');
+    }));
+  });
 });

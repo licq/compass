@@ -134,9 +134,9 @@ angular.module('compass')
         }
       });
 
-      newEventModal.result.then(function (id) {
-        if (id) {
-          removeFromApplications(id);
+      newEventModal.result.then(function (event) {
+        if (event) {
+          removeFromApplications(event.application);
           getOneMoreApplication();
         }
       });

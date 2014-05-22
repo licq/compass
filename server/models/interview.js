@@ -122,8 +122,11 @@ interviewSchema.statics.addEvent = function (event, cb) {
             resume.saveAndIndexSync(function (err) {
               if (err) return cb(err);
               mongoose.model('EventSetting').generateEmails('new', event, function (err, emails) {
-                if (!err)
+                if (err) {
+                  logger.error('create alert email failed ' + err);
+                } else {
                   createSendEmailJob(emails);
+                }
                 cb(err, interview);
               });
             });
@@ -200,8 +203,11 @@ interviewSchema.statics.updateEvent = function (id, data, cb) {
     interview.save(function (err) {
       if (err) return cb(err);
       mongoose.model('EventSetting').generateEmails('edit', createEmailContext(interview, event), function (err, emails) {
-        if (!err)
+        if (err) {
+          logger.error('create alert email failed ' + err);
+        } else {
           createSendEmailJob(emails);
+        }
         cb(err, interview);
       });
     });
@@ -217,10 +223,12 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
     interview.save(function (err) {
       if (err) return cb(err);
       mongoose.model('EventSetting').generateEmails('delete', createEmailContext(interview, event), function (err, emails) {
-        if (!err) {
+        if (err) {
+          logger.error('create alert email failed ' + err);
+        } else {
           createSendEmailJob(emails);
         }
-        cb(err, interview);
+        cb(null, interview);
       });
     });
   });
@@ -233,6 +241,8 @@ interviewSchema.statics.unprocessedFor = function (user, cb) {
       startTime: {$lte: now},
       'interviewers': user._id
     })
+    .populate('events.interviewers', 'name')
+    .populate('reviews.interviewer', 'name')
     .exec(cb);
 };
 

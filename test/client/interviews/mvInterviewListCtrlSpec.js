@@ -40,7 +40,12 @@ describe('mvInterviewListCtrl', function () {
 
   }));
 
-
+  it('should show crumbs correctly', function () {
+    expect($scope.crumbs).to.deep.equal([{
+      text: '待评价',
+      url: 'interviews/unprocessed'
+    }]);
+  });
   describe('/interviews?status=unprocessed', function () {
     it('should show a list of interviews correctly', function () {
       expect($scope.interviews).to.have.length(1);
