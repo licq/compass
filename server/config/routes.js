@@ -96,6 +96,8 @@ module.exports = function (app) {
     .delete(events.delete);
   apiRouter.route('/interviews')
     .get(interviews.list);
+  apiRouter.route('/interviews/:id')
+    .get(interviews.get);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

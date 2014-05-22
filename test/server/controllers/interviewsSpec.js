@@ -47,4 +47,32 @@ describe('interviews', function () {
       });
     });
   });
+
+  describe('get /api/interviews/:id', function () {
+    it('should return one interview', function (done) {
+      Factory.create('interview', {
+        company: user.company,
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]
+      }, function (interview) {
+        request.get('/api/interviews/' + interview._id)
+          .expect('Content-type', /json/)
+          .expect(200)
+          .end(function (err, res) {
+            if (err) {
+              return done(err);
+            }
+            expect(res.body).to.have.property('_id');
+            expect(res.body.events[0].interviewers[0]).to.have.property('name');
+            done();
+          });
+      });
+    });
+  });
 });

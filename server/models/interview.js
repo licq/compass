@@ -199,7 +199,9 @@ interviewSchema.statics.updateEvent = function (id, data, cb) {
     if (err) return cb(err);
     if (!interview) return cb('interview not found for event with id ' + id);
     var event = interview.events.id(id);
-    _.merge(event, data);
+    event.startTime = data.startTime || event.startTime;
+    event.duration = data.duration || event.startTime;
+    event.interviewers = data.interviewers || event.interviewers;
     interview.save(function (err) {
       if (err) return cb(err);
       mongoose.model('EventSetting').generateEmails('edit', createEmailContext(interview, event), function (err, emails) {
@@ -243,6 +245,7 @@ interviewSchema.statics.unprocessedFor = function (user, cb) {
     })
     .populate('events.interviewers', 'name')
     .populate('reviews.interviewer', 'name')
+    .sort({'events.startTime': -1})
     .exec(cb);
 };
 

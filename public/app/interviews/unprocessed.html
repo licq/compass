@@ -14,7 +14,7 @@
                     <span class="col-md-2">{{interview.applyPosition}}</span>
 
                     <div class="col-md-6 col-md-offset-2">
-                      <div class="row" ng-repeat="event in interview.events">
+                      <div class="row" ng-repeat="event in interview.events | orderBy:'startTime':true">
                         <div class="col-md-5">{{event.startTime | longDate}}</div>
                         <div class="col-md-7">{{event.interviewers | interviewers}}</div>
                       </div>
@@ -40,7 +40,8 @@
                     <div class="col-md-12">
                       <div class="pull-right interview-action-buttons">
                         <button class="btn btn-primary btn-sm">详细</button>
-                        <button class="btn btn-success btn-sm">写评价</button>
+                        <button class="btn btn-success btn-sm " ng-click="newEvent(interview)">预约面试</button>
+                        <button class="btn btn-warning btn-sm">写评价</button>
                       </div>
                     </div>
                   </div>

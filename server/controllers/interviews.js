@@ -11,3 +11,14 @@ exports.list = function (req, res, next) {
     });
   }
 };
+
+exports.get = function (req, res, next) {
+  Interview.findOne({_id: req.params.id, company: req.user.company})
+    .populate('events.interviewers', 'name')
+    .populate('reviews.interviewer', 'name')
+    .exec(function (err, interview) {
+      if (err) return next(err);
+      if (!interview) return res.json(404, {message: 'not found'});
+      res.json(interview);
+    });
+};
