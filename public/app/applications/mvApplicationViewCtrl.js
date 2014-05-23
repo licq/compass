@@ -18,6 +18,8 @@ angular.module('compass')
             {text: applicationStatusMap[$routeParams.status], url: 'applications/' + $routeParams.status},
             {text: $scope.resume.name, url: $routeParams.index}
           ];
+          $scope.title = $scope.resume.name;
+
           $window.scrollTo(0, 0);
         } else {
           $location.path('/applications/' + $routeParams.status);

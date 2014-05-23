@@ -1,74 +1,68 @@
-<breadcrumbs crumbs="crumbs"></breadcrumbs>
-<div class="matter">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
+<div class="page">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
 
-        <div class="widget">
-          <div class="widget-head">
-            <div class="pull-left">修改用户</div>
-            <div class="clearfix"></div>
-          </div>
-          <div class="widget-content">
-            <div class="padd">
-              <form name="userForm" novalidate="">
-                <div class="well text-danger" ng-show="err">
-                  {{err.message}}
-                </div>
-                <fieldset>
-                  <div class="form-group">
-                    <label>姓名</label>
-                    <input type="text" ng-model="user.name" name="name"
-                           class="form-control placeholder"
-                           placeholder="姓名" required=""/>
-
-                    <p class="text-danger"
-                       ng-show="userForm.name.$error.required && !userForm.name.$pristine">
-                      请输入姓名帐号</p>
-                  </div>
-
-                  <div class="form-group">
-                    <label>职位</label>
-                    <input type="text"
-                           class="form-control placeholder"
-                           ng-model="user.title" placeholder="职位"
-                           name="title"/>
-                  </div>
-
-                  <div class="form-group">
-                    <label>邮箱地址</label>
-                    <input type="email" class="form-control"
-                           placeholder="邮箱地址" name="email" ng-model="user.email" required=""/>
-
-                    <p class="text-danger"
-                       ng-show="userForm.email.$error.required && !userForm.email.$pristine">
-                      请输入邮箱地址</p>
-
-                    <p class="text-danger"
-                       ng-show="userForm.email.$error.email && !userForm.email.$pristine">
-                      邮箱格式不正确</p>
-                  </div>
-
-                  <div class="form-group">
-                    <label>密码</label>
-                    <input type="password" class="form-control placeholder" name="password"
-                           ng-model="user.password" placeholder="如不修改密码，请留空" ng-minlength="6"/>
-
-                    <p class="text-danger"
-                       ng-show="userForm.password.$error.minlength && !userForm.password.$pristine">
-                      密码最短为6位</p>
-                  </div>
-
-                  <br/>
-                  <button class="btn btn-primary" ng-click="update()"
-                          ng-disabled="userForm.$invalid">保存
-                  </button>
-                  <button class="btn btn-default" ng-click="cancel()">取消</button>
-
-                </fieldset>
-              </form>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>修改用户</strong>
+        </div>
+        <div class="panel-body">
+          <form name="userForm" novalidate="">
+            <div class="well text-danger" ng-show="err">
+              {{err.message}}
             </div>
-          </div>
+            <fieldset>
+              <div class="form-group">
+                <label>姓名</label>
+                <input type="text" ng-model="user.name" name="name"
+                       class="form-control placeholder"
+                       placeholder="姓名" required=""/>
+
+                <p class="text-danger"
+                   ng-show="userForm.name.$error.required && !userForm.name.$pristine">
+                  请输入姓名帐号</p>
+              </div>
+
+              <div class="form-group">
+                <label>职位</label>
+                <input type="text"
+                       class="form-control placeholder"
+                       ng-model="user.title" placeholder="职位"
+                       name="title"/>
+              </div>
+
+              <div class="form-group">
+                <label>邮箱地址</label>
+                <input type="email" class="form-control"
+                       placeholder="邮箱地址" name="email" ng-model="user.email" required=""/>
+
+                <p class="text-danger"
+                   ng-show="userForm.email.$error.required && !userForm.email.$pristine">
+                  请输入邮箱地址</p>
+
+                <p class="text-danger"
+                   ng-show="userForm.email.$error.email && !userForm.email.$pristine">
+                  邮箱格式不正确</p>
+              </div>
+
+              <div class="form-group">
+                <label>密码</label>
+                <input type="password" class="form-control placeholder" name="password"
+                       ng-model="user.password" placeholder="如不修改密码，请留空" ng-minlength="6"/>
+
+                <p class="text-danger"
+                   ng-show="userForm.password.$error.minlength && !userForm.password.$pristine">
+                  密码最短为6位</p>
+              </div>
+
+              <br/>
+              <button class="btn btn-primary" ng-click="update()"
+                      ng-disabled="userForm.$invalid">保存
+              </button>
+              <button class="btn btn-default" ng-click="cancel()">取消</button>
+
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>

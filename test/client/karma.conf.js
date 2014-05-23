@@ -16,7 +16,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'public/js/jquery.js',
+      'public/vendor/jquery/dist/jquery.min.js',
       'public/vendor/moment/moment.js',
       'public/vendor/lodash/dist/lodash.min.js',
       'public/vendor/angular/angular.js',

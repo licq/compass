@@ -1,182 +1,142 @@
-<breadcrumbs crumbs="crumbs"></breadcrumbs>
-
-<div class="matter">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="searchForm">
-          <form name="searchForm" class="form-horizontal" novalidate="">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-5 col-md-offset-3">
-                  <input type="text" class="form-control" name="q"
-                         ng-model="states.searchOptions.q">
-                </div>
-                <div class="col-md-1">
-                  <button class="btn btn-primary" ng-click="getApplications()">搜索</button>
-                </div>
-              </div>
-              <div class="row resume-filters">
-                <div class="col-md-1 col-md-offset-1">
-                  应聘职位
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <a ng-click="setApplyPosition()">全部</a>
-                    </div>
-                    <div class="col-md-3" ng-repeat="term in facets.applyPosition.terms">
-                      <a ng-click="setApplyPosition(term.term)">{{term.term}}</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-1 col-md-offset-1">
-                  年龄
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <a ng-click="setAge()">全部</a>
-                    </div>
-                    <div class="col-md-3" ng-repeat="entry in facets.age.entries">
-                      <a ng-click="setAge(entry.key)">{{entry.key | ageRange}}</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-1 col-md-offset-1">
-                  学历
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <a ng-click="setHighestDegree()">全部</a>
-                    </div>
-                    <div class="col-md-3" ng-repeat="term in facets.highestDegree.terms">
-                      <a ng-click="setHighestDegree(term.term)">{{term.term | degree}}</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="col-md-12">
-        <div class="widget">
-          <div class="widget-content">
-            <div class="withbottomborder" ng-repeat="application in applications">
-              <div class="row">
-                <div class="col-md-1">
-                  <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo">
-                </div>
-                <div class="col-md-11">
-                  <div class="row">
-                    <div class="col-md-11">
-                      <div class="row">
-                        <div class="col-md-12">
-                          <h2>{{application.name}}</h2>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-11">
-                          <div class="row">
-                            <span class="col-md-2">应聘职位</span>
-                            <span class="col-md-3">{{application.applyPosition}}</span>
-                            <span class="col-md-3">{{application.gender | gender}}</span>
-                                                        <span class="col-md-2">{{application.birthday | yearAndMonth}}
-                                                        </span>
-                                                        <span class="col-md-2">{{application.created_at | shortDate}}应聘
-                                                        </span>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-2">最高学历</div>
-                            <div class="col-md-3">{{application.educationHistory[0].from |
-                              yearAndMonth}}
-                              -- {{application.educationHistory[0].to | yearAndMonth}}
-                            </div>
-                            <div class="col-md-3">
-                              {{application.educationHistory[0].school}}
-                            </div>
-                            <div class="col-md-2">
-                              {{application.educationHistory[0].major}}
-                            </div>
-                            <div class="col-md-2">{{application.educationHistory[0].degree |
-                              degree}}
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-2">最近工作</div>
-                            <div class="col-md-3">{{application.workExperience[0].from |
-                              yearAndMonth}}
-                              -- {{application.workExperience[0].to | yearAndMonth}}
-                            </div>
-                            <div class="col-md-3">
-                              {{application.workExperience[0].company}}
-                            </div>
-                            <div class="col-md-2">
-                              {{application.workExperience[0].department}}
-                            </div>
-                            <div class="col-md-2">
-                              {{application.workExperience[0].jobTitle}}
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="well">
-                                {{application.careerObjective.selfAssessment}}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-1 application-action-buttons">
-                          <button ng-click="view($index)" class="btn btn-primary btn-sm">详细</button>
-                          <button class="btn btn-success btn-sm" ng-click="newEvent(application)"
-                                  ng-show="application | showInterviewButton">预约面试
-                          </button>
-                          <button class="btn btn-success btn-sm" ng-click="pursue(application._id)"
-                                  ng-show="application | showPursueButton"> 通过
-                          </button>
-                          <button class="btn btn-danger btn-sm" ng-click="archive(application._id)"
-                                  ng-show="application | showArchiveButton"> 归档
-                          </button>
-                          <button class="btn btn-warning btn-sm"
-                                  ng-click="undetermine(application._id)"
-                                  ng-show="application | showUndetermineButton">待定
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>{{title}}</strong></div>
+    <div class="panel-body">
+      <form name="searchForm" class="form-horizontal" role="form">
+        <div class="form-group">
+          <div class="col-md-5 col-md-offset-3">
+            <input type="text" class="form-control" name="q"
+                   ng-model="states.searchOptions.q">
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-primary" ng-click="getApplications()">搜索</button>
           </div>
         </div>
-      </div>
+        <div class="form-group">
+          <div class="col-md-1">
+            应聘职位
+          </div>
+          <div class="col-md-11">
+            <ul class="list-inline">
+              <li><a ng-click="setApplyPosition()">全部</a></li>
 
-      <div class="col-md-12">
-        <row>
-          <div class="col-md-3" ng-show="initialized">
-            共计{{totalApplicationCount}}
+              <li ng-repeat="term in facets.applyPosition.terms">
+                <a ng-click="setApplyPosition(term.term)">{{term.term}}</a>
+              </li>
+            </ul>
           </div>
-          <div class="col-md-6" ng-show="showPagination()">
-            <pagination boundary-links="true" total-items="totalApplicationCount"
-                        items-per-page="states.pagingOptions.pageSize"
-                        ng-model="states.pagingOptions.currentPage"
-                        ng-change="getApplications()"
-                        max-size="7"
-                        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
-                        last-text="&raquo;">
-            </pagination>
+        </div>
+        <div class="form-group">
+          <div class="col-md-1">
+            年龄
           </div>
-        </row>
+          <div class="col-md-11">
+            <ul class="list-inline">
+              <li><a ng-click="setAge()">全部</a></li>
+              <li ng-repeat="entry in facets.age.entries">
+                <a ng-click="setAge(entry.key)">{{entry.key | ageRange}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-1">
+            学历
+          </div>
+          <div class="col-md-11">
+            <ul class="list-inline">
+              <li>
+                <a ng-click="setHighestDegree()">全部</a>
+              </li>
+              <li ng-repeat="term in facets.highestDegree.terms">
+                <a ng-click="setHighestDegree(term.term)">{{term.term | degree}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel-body">
+      <div class="row callout callout-info" ng-repeat="application in applications">
+        <div class="col-md-1 resume-name">
+          <h4>{{application.name}}</h4>
+          <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo">
+        </div>
+        <div class="col-md-10">
+          <div class="table-responsive">
+            <table class="table table-no-border">
+              <tbody>
+              <tr>
+                <td>应聘职位</td>
+                <td>{{application.applyPosition}}</td>
+                <td>{{application.gender | gender}}</td>
+                <td>{{application.birthday | yearAndMonth}}</td>
+                <td>{{application.created_at | shortDate}}应聘</td>
+              </tr>
+              <tr>
+                <td>最高学历</td>
+                <td>{{application.educationHistory[0].from |
+                  yearAndMonth}}
+                  -- {{application.educationHistory[0].to | yearAndMonth}}
+                </td>
+                <td>{{application.educationHistory[0].school}}</td>
+                <td>{{application.educationHistory[0].major}}</td>
+                <td>{{application.educationHistory[0].degree | degree}}</td>
+              </tr>
+              <tr>
+                <td>最近工作</td>
+                <td>{{application.workExperience[0].from |
+                  yearAndMonth}}
+                  -- {{application.workExperience[0].to | yearAndMonth}}
+                </td>
+                <td>{{application.workExperience[0].company}}</td>
+                <td>{{application.workExperience[0].department}}</td>
+                <td>{{application.workExperience[0].jobTitle}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <blockquote>
+            <small>
+              {{application.careerObjective.selfAssessment}}
+            </small>
+          </blockquote>
+
+        </div>
+        <div class="col-md-1 application-action-buttons">
+          <button ng-click="view($index)" class="btn btn-primary">详细</button>
+          <button class="btn btn-success" ng-click="newEvent(application)"
+                  ng-show="application | showInterviewButton">预约面试
+          </button>
+          <button class="btn btn-success" ng-click="pursue(application._id)"
+                  ng-show="application | showPursueButton"> 通过
+          </button>
+          <button class="btn btn-danger" ng-click="archive(application._id)"
+                  ng-show="application | showArchiveButton"> 归档
+          </button>
+          <button class="btn btn-warning"
+                  ng-click="undetermine(application._id)"
+                  ng-show="application | showUndetermineButton">待定
+          </button>
+        </div>
       </div>
     </div>
 
-  </div>
+    <div class="col-md-3" ng-show="initialized">
+      共计{{totalApplicationCount}}
+    </div>
+    <div class="col-md-6" ng-show="showPagination()">
+      <pagination boundary-links="true" total-items="totalApplicationCount"
+                  items-per-page="states.pagingOptions.pageSize"
+                  ng-model="states.pagingOptions.currentPage"
+                  ng-change="getApplications()"
+                  max-size="7"
+                  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                  last-text="&raquo;">
+      </pagination>
+    </div>
+  </section>
 </div>
+

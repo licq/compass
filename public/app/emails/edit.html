@@ -1,88 +1,81 @@
-<breadcrumbs crumbs="crumbs"></breadcrumbs>
-<div class="matter">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-
-        <div class="widget">
-          <div class="widget-head">
-            <div class="pull-left">修改邮箱</div>
-            <div class="clearfix"></div>
-          </div>
-          <div class="widget-content">
-            <div class="padd">
-              <form name="emailForm" novalidate="">
-                <div class="well text-danger" ng-show="err">
-                  {{err.message | state}}
-                </div>
-                <fieldset>
-                  <div class="form-group">
-                    <label>邮箱地址</label>
-
-                    <p class="well">{{email.address}}</p>
-                  </div>
-                  <div class="form-group">
-                    <label>邮箱帐号</label>
-                    <input type="text" ng-model="email.account" name="account"
-                           class="form-control placeholder"
-                           placeholder="邮箱帐号" required=""/>
-
-                    <p class="text-danger"
-                       ng-show="emailForm.account.$error.required && !emailForm.account.$pristine">
-                      请输入邮箱帐号</p>
-
-                  </div>
-                  <div class="form-group">
-                    <label>密码</label>
-                    <input type="password" class="form-control placeholder" name="password"
-                           ng-model="email.password" placeholder="密码" required=""/>
-
-                    <p class="text-danger"
-                       ng-show="emailForm.password.$error.required && !emailForm.password.$pristine">
-                      请输入密码</p>
-                  </div>
-                  <div class="form-group">
-                    <label>POP3邮件服务器地址</label>
-                    <input type="text"
-                           class="form-control placeholder"
-                           ng-model="email.server" placeholder="POP3邮件服务器地址"
-                           name="server" required=""/>
-
-                    <p class="text-danger"
-                       ng-show="emailForm.server.$error.required && !emailForm.server.$pristine">
-                      请输入邮件服务器地址</p>
-
-                  </div>
-                  <div class="form-group">
-                    <label>服务器端号</label>
-                    <input type="number" class="form-control placeholder"
-                           ng-model="email.port" placeholder="服务器端口"/>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label>
-                        <input type="checkbox" class="icheckbox_square-green"
-                               ng-model="email.ssl">
-                        使用ssl链接
-                      </label>
-                    </div>
-                    <div class="col-md-6" ng-show="saving">
-                      <label>
-                        验证所需时间稍长，请稍等...
-                      </label>
-                    </div>
-                  </div>
-
-                  <br/>
-                  <button class="btn btn-primary" ng-click="update()"
-                          ng-disabled="emailForm.$invalid">保存
-                  </button>
-                  <button class="btn btn-info" ng-click="cancel()">取消</button>
-
-                </fieldset>
-              </form>
+<div class="page">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>修改邮箱</strong>
+        </div>
+        <div class="panel-body">
+          <form name="emailForm" novalidate="">
+            <div class="well text-danger" ng-show="err">
+              {{err.message | state}}
             </div>
-          </div>
+            <fieldset>
+              <div class="form-group">
+                <label>邮箱地址</label>
+
+                <p>{{email.address}}</p>
+              </div>
+              <div class="form-group">
+                <label>邮箱帐号</label>
+                <input type="text" ng-model="email.account" name="account"
+                       class="form-control placeholder"
+                       placeholder="邮箱帐号" required=""/>
+
+                <p class="text-danger"
+                   ng-show="emailForm.account.$error.required && !emailForm.account.$pristine">
+                  请输入邮箱帐号</p>
+
+              </div>
+              <div class="form-group">
+                <label>密码</label>
+                <input type="password" class="form-control placeholder" name="password"
+                       ng-model="email.password" placeholder="密码" required=""/>
+
+                <p class="text-danger"
+                   ng-show="emailForm.password.$error.required && !emailForm.password.$pristine">
+                  请输入密码</p>
+              </div>
+              <div class="form-group">
+                <label>POP3邮件服务器地址</label>
+                <input type="text"
+                       class="form-control placeholder"
+                       ng-model="email.server" placeholder="POP3邮件服务器地址"
+                       name="server" required=""/>
+
+                <p class="text-danger"
+                   ng-show="emailForm.server.$error.required && !emailForm.server.$pristine">
+                  请输入邮件服务器地址</p>
+
+              </div>
+              <div class="form-group">
+                <label>服务器端号</label>
+                <input type="number" class="form-control placeholder"
+                       ng-model="email.port" placeholder="服务器端口"/>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>
+                    <input type="checkbox" class="icheckbox_square-green"
+                           ng-model="email.ssl">
+                    使用ssl链接
+                  </label>
+                </div>
+                <div class="col-md-6" ng-show="saving">
+                  <label>
+                    验证所需时间稍长，请稍等...
+                  </label>
+                </div>
+              </div>
+
+              <br/>
+              <button class="btn btn-primary" ng-click="update()"
+                      ng-disabled="emailForm.$invalid">保存
+              </button>
+              <button class="btn btn-info" ng-click="cancel()">取消</button>
+
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>

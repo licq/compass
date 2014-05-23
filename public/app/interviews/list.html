@@ -1,28 +1,24 @@
-<breadcrumbs crumbs="crumbs"></breadcrumbs>
-<div class="matter">
-  <div class="container">
-    <form class="form-horizontal select-user-form-in-calendar">
-      <div class="form-group">
-        <label class="control-label col-md-1 col-md-offset-9">选择用户</label>
-
-        <div class="col-md-2">
-          <select ui-select2 class="form-control" name="users" ng-model="selectedUserId"
-                  ng-change="retrieveEvents()">
-            <option value="">全部</option>
-            <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}</option>
-          </select>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <div class="padd">
-        <div ui-calendar="eventCalendarConfig" ng-model="eventSources"
-             calendar="eventCalendar"></div>
-      </div>
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong><span class="glyphicon glyphicon-calendar"></span>面试日历</strong>
     </div>
-  </div>
-</div>
+    <div class="panel-body">
+      <form class="form-horizontal select-user-form-in-calendar" role="form">
+        <div class="form-group">
+          <label class="control-label col-md-1 col-md-offset-9" for="users">选择用户</label>
+
+          <div class="col-md-2">
+            <select ui-select2 class="form-control" id="users" ng-model="selectedUserId"
+                    ng-change="retrieveEvents()">
+              <option value="">全部</option>
+              <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div ui-calendar="eventCalendarConfig" ng-model="eventSources"
+           calendar="eventCalendar"></div>
+    </div>
+  </section>
 </div>

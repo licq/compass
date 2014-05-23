@@ -1,56 +1,61 @@
-<div class="admin-form">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="widget">
-          <div class="widget-head">
-            <i class="icon-lock"></i> 登陆
-          </div>
+<div class="page-signin">
+  <div class="signin-header">
+    <div class="container text-center">
+      <section class="logo">
+        <a href="#/">Compass</a>
+      </section>
+    </div>
+  </div>
 
-          <div class="widget-content">
-            <div class="padd">
-              <form class="form-horizontal" novalidate>
-                <div class="well text-danger" ng-show="!!errorMessage">{{errorMessage}}</div>
-                <div class="form-group">
-                  <label class="control-label col-md-3">Email</label>
-
-                  <div class="col-md-9">
-                    <input type="email" class="form-control" ng-model="email" placeholder="Email"
-                           required>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-md-3">密码</label>
-
-                  <div class="col-md-9">
-                    <input type="password" class="form-control" ng-model="password"
-                           placeholder="密码" required>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-9 col-md-offset-3">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" ng-model="remember_me"> 记住我
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-9 col-md-offset-3">
-                  <button class="btn btn-danger" ng-click="login()">登陆</button>
-                  <button type="reset" class="btn btn-default">重置</button>
-                </div>
-                <br/>
-              </form>
-
+  <div class="signin-body">
+    <div class="container">
+      <div class="form-container">
+        <form class="form-horizontal">
+          <div class="well text-danger" ng-show="!!errorMessage">{{errorMessage}}</div>
+          <fieldset>
+            <div class="form-group">
+              <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                </span>
+                <input type="email"
+                       ng-model="email"
+                       class="form-control"
+                       placeholder="Email"
+                       required>
+              </div>
             </div>
-          </div>
+            <div class="form-group">
+              <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </span>
+                <input type="password"
+                       class="form-control"
+                       placeholder="密码"
+                       ng-model="password"
+                       required>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" ng-model="remember_me"> 记住我
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <a href="#" class="btn btn-primary btn-lg btn-block" ng-click="login()">登陆</a>
+            </div>
+          </fieldset>
+        </form>
+        <section>
+          <p class="text-center"><a href="#/forgot">忘记密码?</a></p>
 
-          <div class="widget-foot">
-            还没有注册? <a href="/signup">注册</a>
-          </div>
-        </div>
+          <p class="text-center text-muted text-small">还没有帐号? <a href="#/signup">注册</a></p>
+        </section>
       </div>
     </div>
   </div>
+
 </div>

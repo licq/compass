@@ -1,37 +1,170 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
 <head>
-  {% include './includes/meta.html' %}
-  {% include './includes/styles.html' %}
+  <meta charset="utf-8">
+  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+  <title>Web Application</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!--<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet'-->
+  <!--type='text/css'>-->
+  <!-- needs images, font... therefore can not be part of ui.css -->
+  <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/vendor/weather-icons/css/weather-icons.min.css">
+  <link rel="stylesheet" href="/vendor/fullcalendar/fullcalendar.css">
+  <link rel="stylesheet" href="/vendor/select2/select2.css">
+  <link rel="stylesheet" href="/vendor/select2/select2-bootstrap.css">
+  <link rel="stylesheet" href="/vendor/ng-grid/ng-grid.min.css"/>
+  <link rel="stylesheet" href="/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"/>
+  <!-- end needs images -->
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/compass.css">
+
 </head>
 
-<body ng-app="compass" class="bigscreen">
-<header>
-  <div class="navbar navbar-fixed-top bs-docs-nav" role="banner">
-    <div ng-include="'/app/common/navbar-top.html'"/>
-  </div>
-</header>
+<body ng-app="compass" id="app" data-custom-background data-off-canvas-nav>
+<!--[if lt IE 9]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
 
-<div class="content">
-  {% include './includes/currentUser.html' %}
-  <div ng-include="'/app/common/sidebar.html'"></div>
-  <div class="mainbar">
-    <div ng-view=""/>
+<div ng-controller="mvNavCtrl">
+  <div
+    ng-hide="!identity.isAuthenticated()"
+    data-ng-cloak
+    class="no-print">
+    <section data-ng-include=" 'app/common/header.html' "
+             id="header" class="top-header"></section>
+
+    <aside data-ng-include=" 'app/common/nav.html' "
+           id="nav-container"></aside>
   </div>
-  <div class="clearfix"></div>
+
+  <div class="view-container">
+    {% include './includes/currentUser.html' %}
+    <section data-ng-view id="content" class="animate-fade-up"></section>
+  </div>
 </div>
+<!-- build:js scripts/vendor.js -->
+<script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/angular/angular.min.js"></script>
+<script src="/vendor/angular-route/angular-route.min.js"></script>
+<script src="/vendor/angular-animate/angular-animate.min.js"></script>
+<script src="/vendor/angular-cookies/angular-cookies.min.js"></script>
+<script src="/vendor/angular-resource/angular-resource.min.js"></script>
+<script src="/vendor/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="/vendor/moment/min/moment-with-langs.min.js"></script>
+<script src="/vendor/lodash/dist/lodash.min.js"></script>
+<!-- endbuild -->
 
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <p class="copy">Copyright &copy; 2013 | <a href="#">Compass</a></p>
-      </div>
-    </div>
-  </div>
-</footer>
+<!-- build:js scripts/ui.js -->
+<script src="/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="/vendor/jquery-spinner/dist/jquery.spinner.min.js"></script>
+<script src="/vendor/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+<script src="/vendor/jquery-steps/build/jquery.steps.min.js"></script>
+<script src="/vendor/toastr/toastr.min.js"></script>
+<script src="/vendor/bootstrap-file-input/bootstrap.file-input.js"></script>
+<script src="/vendor/jquery.slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/vendor/holderjs/holder.js"></script>
+<script src="/vendor/raphael/raphael-min.js"></script>
+<script src="/vendor/morris.js/morris.js"></script>
+<script src="/scripts/vendors/responsive-tables.js"></script>
+<script src="scripts/vendors/jquery.sparkline.min.js"></script>
+<script src="/vendor/flot/jquery.flot.js"></script>
+<script src="/vendor/flot/jquery.flot.resize.js"></script>
+<script src="/vendor/flot/jquery.flot.pie.js"></script>
+<script src="/vendor/flot/jquery.flot.stack.js"></script>
+<script src="/vendor/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+<script src="/vendor/flot/jquery.flot.time.js"></script>
+<script src="/vendor/gauge.js/dist/gauge.min.js"></script>
+<script src="/vendor/jquery.easy-pie-chart/dist/angular.easypiechart.min.js"></script>
+<script src="/vendor/angular-wizard/dist/angular-wizard.min.js"></script>
+<script src="/vendor/textAngular/dist/textAngular-sanitize.min.js"></script>
+<script src="/vendor/textAngular/dist/textAngular.min.js"></script>
+<script src="scripts/vendors/skycons.js"></script>
+<script src="/vendor/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
+<script src="/vendor/ng-tags-input/ng-tags-input.min.js"></script>
+<script src="/vendor/select2/select2.min.js"></script>
+<script src="/vendor/select2/select2_locale_zh-CN.js"></script>
+<script src="/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<!-- endbuild -->
 
-<span class="totop"><a href="#"><i class="fa fa-chevron-up"></i></a></span>
-{% include './includes/scripts.html' %}
+<!-- build:js({.tmp,app}) scripts/app.js -->
+<script type="text/javascript" src="/vendor/ng-grid/build/ng-grid.js"></script>
+<script type="text/javascript" src="/vendor/jquery-ui/ui/jquery-ui.custom.js"></script>
+<script type="text/javascript" src="/vendor/fullcalendar/fullcalendar.js"></script>
+<script type="text/javascript" src="/vendor/angular-ui-calendar/src/calendar.js"></script>
+<script type="text/javascript" src="/vendor/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/vendor/angular-ui-select2/src/select2.js"></script>
+<script type="text/javascript" src="/app/components/tinymce.js"></script>
+
+<script type="text/javascript" src="/app/app.js"></script>
+<script type="text/javascript" src="/app/common/directives.js"></script>
+<script type="text/javascript" src="/app/directives.js"></script>
+<script type="text/javascript" src="/app/filters.js"></script>
+<script type="text/javascript" src="/app/components/datetimepicker.js"></script>
+<script type="text/javascript" src="/app/common/mvNotifier.js"></script>
+
+<script type="text/javascript" src="/app/auth/mvIdentity.js"></script>
+<script type="text/javascript" src="/app/auth/mvSession.js"></script>
+<script type="text/javascript" src="/app/auth/mvAuth.js"></script>
+
+<script type="text/javascript" src="/app/common/mvNavCtrl.js"></script>
+<script type="text/javascript" src="/app/auth/mvLoginCtrl.js"></script>
+
+<script type="text/javascript" src="/app/signup/mvSignupNewCtrl.js"></script>
+<script type="text/javascript" src="/app/signup/mvSignup.js"></script>
+<script type="text/javascript" src="/app/signup/mvSignupSuccessCtrl.js"></script>
+<script type="text/javascript" src="/app/signup/mvSignupActivateCtrl.js"></script>
+
+<script type="text/javascript" src="/app/emails/mvEmail.js"></script>
+<script type="text/javascript" src="/app/emails/mvEmailNewCtrl.js"></script>
+<script type="text/javascript" src="/app/emails/mvEmailListCtrl.js"></script>
+<script type="text/javascript" src="/app/emails/mvEmailEditCtrl.js"></script>
+
+<script type="text/javascript" src="/app/users/mvUser.js"></script>
+<script type="text/javascript" src="/app/users/mvUserNewCtrl.js"></script>
+<script type="text/javascript" src="/app/users/mvUserListCtrl.js"></script>
+<script type="text/javascript" src="/app/users/mvUserEditCtrl.js"></script>
+
+<script type="text/javascript" src="/app/companies/mvCompany.js"></script>
+<script type="text/javascript" src="/app/companies/mvCompanyListCtrl.js"></script>
+
+<script type="text/javascript" src="/app/mails/mvMail.js"></script>
+<script type="text/javascript" src="/app/mails/mvMailListCtrl.js"></script>
+<script type="text/javascript" src="/app/mails/mvMailViewCtrl.js"></script>
+
+<script type="text/javascript" src="/app/resumes/mvResume.js"></script>
+<script type="text/javascript" src="/app/resumes/mvResumeListCtrl.js"></script>
+<script type="text/javascript" src="/app/resumes/mvResumeViewCtrl.js"></script>
+
+<script type="text/javascript" src="/app/eventSetting/mvEventSetting.js"></script>
+<script type="text/javascript" src="/app/eventSetting/mvEventSettingCtrl.js"></script>
+
+<script type="text/javascript" src="/app/evaluationCriterions/mvEvaluationCriterion.js"></script>
+<script type="text/javascript" src="/app/evaluationCriterions/mvEvaluationCriterionEditCtrl.js"></script>
+
+<script type="text/javascript" src="/app/applications/mvApplication.js"></script>
+<script type="text/javascript" src="/app/applications/mvApplicationListCtrl.js"></script>
+<script type="text/javascript" src="/app/applications/mvApplicationViewCtrl.js"></script>
+
+<script type="text/javascript" src="/app/interviews/mvEvent.js"></script>
+<script type="text/javascript" src="/app/interviews/mvEventNewCtrl.js"></script>
+<script type="text/javascript" src="/app/interviews/mvEventListCtrl.js"></script>
+
+<script type="text/javascript" src="/app/interviews/mvInterview.js"></script>
+<script type="text/javascript" src="/app/interviews/mvInterviewListCtrl.js"></script>
+
+
+<script type="text/javascript" src="/app/Chart/ChartCtrl.js"></script>
+<script type="text/javascript" src="/app/Chart/ChartDirective.js"></script>
+
+{% if (process.env.NODE_ENV == 'development') %}
+<script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
+{% endif %}
+<!-- endbuild -->
 </body>
 </html>

@@ -1,25 +1,27 @@
-<div class="admin-form">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="widget wred">
-          <div class="widget-head">
-            <i class="icon-lock"></i> 注册
-          </div>
-          <div class="widget-content">
-            <div class="padd">
-              <p class="well text-success">
-                激活邮件已经发送到{{email}},请查收邮件并根据邮件激活。
-                激活代码为{{code}}
-              </p>
+<div class="page-forgot">
 
-              <p class="well">
-                <a href="/signup/activate/{{code}}">Activate!</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="signin-header">
+    <div class="container text-center">
+      <section class="logo">
+        <a href="#/">Compass</a>
+      </section>
     </div>
+  </div>
+
+  <div class="info text-center">
+    <h2>注册</h2>
+
+    <p class="text-small">激活邮件已经发送到{{email}},请查收邮件并根据邮件激活。
+      激活代码为{{code}}</p>
+  </div>
+
+  <div class="form-container">
+
+    <form class="form-horizontal" name="forgotPasswordForm">
+      <div class="form-group">
+        <a href="#/signup/activate/{{code}}" class="btn btn-lg btn-block btn-primary">激活</a>
+      </div>
+    </form>
+
   </div>
 </div>

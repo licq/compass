@@ -74,7 +74,10 @@ module.exports = function (grunt) {
         src: ['server/**/*.js', 'server.js']
       },
       client: {
-        src: ['public/app/**/*.js']
+        src: ['public/app/**/*.js'],
+        options: {
+          ignores: ['public/app/Chart/*.js']
+        }
       },
       testServer: {
         src: ['test/server/**/*.js']

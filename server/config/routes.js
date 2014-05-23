@@ -106,17 +106,27 @@ module.exports = function (app) {
       stack: err.stack});
   });
 
-  apiRouter.use(function (req, res) {
-    logger.error('request unknown url /api' + req.url);
-    res.send(404);
-  });
-
   app.use('/api', apiRouter);
   app.use('/publicApi', publicApiRouter);
 
-  app.get('*', function (req, res) {
+  app.get('/', function (req, res) {
     res.render('index', {
       bootstrappedUser: req.user
     });
+  });
+
+  app.use(function (req, res) {
+    logger.error('request unknown url /api' + req.url);
+
+    res.status(404);
+    if (req.accepts('html')) {
+      return res.render('404', { url: req.url });
+    }
+
+    if (req.accepts('json')) {
+      return res.send({ error: 'Not found' });
+    }
+
+    res.type('txt').send('Not found');
   });
 };

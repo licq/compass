@@ -21,7 +21,7 @@ module.exports = function (app, config) {
   app.set('views', config.rootPath + '/server/views');
 
   app.use('/tasks', kue.app);
-  app.use(require('serve-favicon')('public/img/favicon/favicon.png'));
+  app.use(require('serve-favicon')('public/favicon.ico'));
   app.use(require('compression')({
     filter: function (req, res) {
       return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));

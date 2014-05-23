@@ -8,6 +8,8 @@ angular.module('compass')
       }
     ];
 
+    $scope.title = applicationStatusMap[$routeParams.status];
+
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
       pagingOptions: {
         pageSizes: [10, 20, 50],

@@ -6,13 +6,22 @@ var app = require('../../../server'),
 
 describe('/', function () {
 
-  describe('GET /anything', function () {
+  describe('GET /', function () {
     it('should return 200 with html result', function (done) {
       request(app)
-        .get('/anything')
+        .get('/')
         .expect(200)
         .expect('Content-Type', /html/)
         .expect(/html/, done);
+    });
+  });
+
+  describe('GET /others', function () {
+    it('should return 404 with html result', function (done) {
+      request(app)
+        .get('/others')
+        .expect(404)
+        .expect('Content-Type', /html/, done);
     });
   });
 

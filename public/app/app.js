@@ -3,23 +3,6 @@
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
     'ui.tinymce', 'ui.select2', 'ui.datetimepicker'])
-  .run(function ($rootScope) {
-    $rootScope.gridDefaults = {
-      multiSelect: false,
-      headerRowHeight: 40,
-      rowHeight: 40,
-      showFooter: true,
-      i18n: 'zh-cn'
-    };
-    $rootScope.tinymceOptions = {
-      language: 'zh_CN',
-      height: 300,
-      plugins: 'link image table',
-      statusbar: false,
-      menubar: 'tools table format view insert edit',
-      content_css: '/vendor/tinymce/tinymce-content.css'
-    };
-  })
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     var routeRoleChecks = {
       user: { auth: function (mvAuth) {
@@ -32,8 +15,8 @@ angular.module('compass',
     };
 
     $routeProvider
-      .when('/', {
-        templateUrl: '/app/index/index.html',
+      .when('/welcome', {
+        templateUrl: '/app/common/welcome.html',
         resolve: routeRoleChecks.anonymous
       })
       .when('/login', {
@@ -57,39 +40,39 @@ angular.module('compass',
         resolve: routeRoleChecks.user
       })
       .
-      when('/emails', {
+      when('/settings/emails', {
         templateUrl: '/app/emails/list.html',
         controller: 'mvEmailListCtrl'
       })
-      .when('/emails/new', {
+      .when('/settings/emails/new', {
         templateUrl: '/app/emails/new.html',
         controller: 'mvEmailNewCtrl'
       })
-      .when('/emails/edit/:id', {
+      .when('/settings/emails/edit/:id', {
         templateUrl: '/app/emails/edit.html',
         controller: 'mvEmailEditCtrl'
       })
-      .when('/mails', {
+      .when('/settings/mails', {
         templateUrl: '/app/mails/list.html',
         controller: 'mvMailListCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/mails/:id', {
+      .when('settings/mails/:id', {
         templateUrl: '/app/mails/view.html',
         controller: 'mvMailViewCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/users', {
+      .when('/settings/users', {
         templateUrl: '/app/users/list.html',
         controller: 'mvUserListCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/users/new', {
+      .when('/settings/users/new', {
         templateUrl: '/app/users/new.html',
         controller: 'mvUserNewCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/users/edit/:id', {
+      .when('/settings/users/edit/:id', {
         templateUrl: '/app/users/edit.html',
         controller: 'mvUserEditCtrl',
         resolve: routeRoleChecks.user
@@ -104,19 +87,9 @@ angular.module('compass',
         controller: 'mvResumeViewCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/companies', {
+      .when('/settings/companies', {
         templateUrl: '/app/companies/list.html',
         controller: 'mvCompanyListCtrl',
-        resolve: routeRoleChecks.user
-      })
-      .when('/companies/new', {
-        templateUrl: '/app/companies/new.html',
-        controller: 'mvCompanyNewCtrl',
-        resolve: routeRoleChecks.user
-      })
-      .when('/companies/edit/:id', {
-        templateUrl: '/app/companies/edit.html',
-        controller: 'mvCompanyEditCtrl',
         resolve: routeRoleChecks.user
       })
       .when('/events', {
@@ -124,7 +97,7 @@ angular.module('compass',
         controller: 'mvEventListCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/interviews/unprocessed',{
+      .when('/interviews/unprocessed', {
         templateUrl: '/app/interviews/unprocessed.html',
         controller: 'mvInterviewListCtrl'
       })
@@ -145,15 +118,12 @@ angular.module('compass',
         controller: 'mvApplicationViewCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/fuck', {
-        templateUrl: '/app/interviews/eventNew.html',
-        controller: 'mvEventNewCtrl'
+      .when('/', {
+        redirectTo: '/welcome'
       })
       .otherwise({
         redirectTo: '/'
       });
-
-    $locationProvider.html5Mode(true);
 
     $httpProvider.interceptors.push(['$q', '$location', function ($q, $location) {
       return {
@@ -191,6 +161,7 @@ angular.module('compass',
     });
 
     $rootScope.$on('$routeChangeError', function (evt, current, previous, rejection) {
+      console.log(rejection);
       if (rejection === 'authenticated already') {
         $location.path('/dashboard');
       }
@@ -228,4 +199,21 @@ angular.module('compass',
       week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
       day: 'yyyy年M月d日, dddd'
     }
+  })
+  .run(function ($rootScope) {
+    $rootScope.gridDefaults = {
+      multiSelect: false,
+      headerRowHeight: 40,
+      rowHeight: 40,
+      showFooter: true,
+      i18n: 'zh-cn'
+    };
+    $rootScope.tinymceOptions = {
+      language: 'zh_CN',
+      height: 300,
+      plugins: 'link image table',
+      statusbar: false,
+      menubar: 'tools table format view insert edit',
+      content_css: '/vendor/tinymce/tinymce-content.css'
+    };
   });
