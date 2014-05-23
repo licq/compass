@@ -6,7 +6,7 @@
           <strong>修改邮箱</strong>
         </div>
         <div class="panel-body">
-          <form name="emailForm" novalidate="">
+          <form name="emailForm" novalidate="" class="form-validation">
             <div class="well text-danger" ng-show="err">
               {{err.message | state}}
             </div>
@@ -19,7 +19,7 @@
               <div class="form-group">
                 <label>邮箱帐号</label>
                 <input type="text" ng-model="email.account" name="account"
-                       class="form-control placeholder"
+                       class="form-control"
                        placeholder="邮箱帐号" required=""/>
 
                 <p class="text-danger"
@@ -29,7 +29,7 @@
               </div>
               <div class="form-group">
                 <label>密码</label>
-                <input type="password" class="form-control placeholder" name="password"
+                <input type="password" class="form-control" name="password"
                        ng-model="email.password" placeholder="密码" required=""/>
 
                 <p class="text-danger"
@@ -39,7 +39,7 @@
               <div class="form-group">
                 <label>POP3邮件服务器地址</label>
                 <input type="text"
-                       class="form-control placeholder"
+                       class="form-control"
                        ng-model="email.server" placeholder="POP3邮件服务器地址"
                        name="server" required=""/>
 
@@ -50,7 +50,7 @@
               </div>
               <div class="form-group">
                 <label>服务器端号</label>
-                <input type="number" class="form-control placeholder"
+                <input type="number" class="form-control"
                        ng-model="email.port" placeholder="服务器端口"/>
               </div>
               <div class="row">

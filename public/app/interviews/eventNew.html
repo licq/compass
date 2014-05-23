@@ -5,7 +5,7 @@
 </div>
 <div class="modal-body">
 
-  <form name="eventForm" class="form-horizontal" novalidate="">
+  <form name="eventForm" class="form-horizontal form-validation" novalidate="">
     <div class="form-group">
       <span class="control-label col-md-2">姓名</span>
       <span class="control-label col-md-2">{{event.name}}</span>
@@ -37,7 +37,7 @@
     <div class="form-group">
       <lable class="control-label col-md-2">时长</lable>
       <div class="col-md-9">
-        <input type="text" class="form-control" ng-model="event.duration" name="duration"
+        <input type="number" class="form-control" ng-model="event.duration" name="duration"
                placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
 
         <p class="text-danger"
