@@ -4,7 +4,7 @@ var helper = require('../testHelper'),
     Factory = require('../factory'),
     expect = require('chai').expect;
 
-describe.only('interviews', function () {
+describe('interviews', function () {
 
     var user, resume, request, interview;
 

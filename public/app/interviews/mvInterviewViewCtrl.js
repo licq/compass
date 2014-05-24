@@ -63,7 +63,7 @@ angular.module('compass')
                 });
         };
 
-        $scope.writeReview = function () {
+        $scope.newReview = function () {
             $scope.isWriteReview = true;
         };
 
