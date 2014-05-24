@@ -7,11 +7,11 @@ angular.module('compass')
     $scope.interviews = mvInterview.unprocessed();
 
     $scope.view = function (interviewId) {
-      $location.path('/interviews/' + interviewId);
+      $location.path('/interviews/' + interviewId).search({isNewReview: false});
     };
 
     $scope.newReview = function (interviewId) {
-      $location.path('/interviews/' + interviewId).search({new: 'true'});
+      $location.path('/interviews/' + interviewId).search({isNewReview: true});
     };
 
     $scope.newEvent = function (interview) {

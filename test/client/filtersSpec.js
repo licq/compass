@@ -235,7 +235,16 @@ describe('filters', function () {
           name: '李四'
         }
       ];
-      expect(interviewersFilter(interviewers)).to.equal('面试官: 张三,李四');
+      expect(interviewersFilter(interviewers)).to.equal('张三, 李四');
     }));
   });
+
+  describe('qualifiedFilter', function(){
+    it('should return correctly', inject(function (qualifiedFilter) {
+      expect(qualifiedFilter(true)).to.equal('通过');
+      expect(qualifiedFilter(false)).to.equal('拒绝');
+      expect(qualifiedFilter()).to.equal('拒绝');
+    }));
+  });
+
 });

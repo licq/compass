@@ -1,67 +1,101 @@
-<breadcrumbs crumbs="crumbs"></breadcrumbs>
-<div class="matter">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="widget">
-                    <div class="widget-content">
-                        <div class="row">
-                            <h5>
-                                <div class="col-md-2">
-                                    {{interview.name}}
-                                </div>
-                                <div class="col-md-3">
-                                    {{interview.applyPosition}}
-                                </div>
-                            </h5>
-                        </div>
-                        <div ng-repeat="review in interview.reviews">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            面试官: {{review.interviewer.name}}
-                                        </div>
-                                        <div class="col-md-2">
-                                            评分: {{review.score}}
-                                        </div>
-                                        <div class="col-md-2">
-                                            合格: {{review.qualified}}
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <button class="btn btn-danger"
-                                                    ng-click="deleteReview(review._id)">删除评论
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    {{review.comment}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <form name="reviewForm" novalidate="" ng-show="isWriteReview">
-                <fieldset>
-                    <div class="form-group">
-                        <label>评价</label>
-                        <input type="text" ng-model="comment" name="comment"
-                               class="form-control placeholder"
-                               placeholder="请为面试者填写评价" required=""/>
-
-                        <p class="text-danger"
-                           ng-show="reviewForm.comment.$error.required && !reviewForm.comment.$pristine">
-                            请为面试者填写评价</p>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-        <button class="btn btn-primary" ng-show="isWriteReview" ng-click="saveReview()">保存</button>
-        <button class="btn btn-warning" ng-hide="isWriteReview" ng-click="writeReview()">写评论</button>
-        <button class="btn btn-default" ng-click="cancel()">取消</button>
-
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong class="pull-right">{{interview.applyPosition}}</strong>
+      <strong>{{interview.name}}</strong>
     </div>
+    <div class="panel-body">
+      <h5>面试安排</h5>
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tr>
+            <th class="col-md-3">开始时间</th>
+            <th>时长</th>
+            <th>面试官</th>
+          </tr>
+          <tr ng-repeat="event in interview.events | orderBy:startTime:false">
+            <td>{{event.startTime | longDate}}</td>
+            <td>{{event.duration}}分钟</td>
+            <td>{{event.interviewers | interviewers}}</td>
+          </tr>
+        </table>
+      </div>
+      <h5>评价</h5>
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>面试官</th>
+            <th ng-repeat="head in reviewHeader">{{head}}</th>
+            <th>总分</th>
+            <th>通过</th>
+            <th>时间</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="review in interview.reviews">
+            <td>{{review.interviewer.name}}</td>
+            <td ng-repeat="head in reviewHeader">
+              <rating class="ui-rating" ng-model="reviewData[review.interviewer._id][head]"
+                      state-on="'fa fa-star'" state-off="'fa fa-star-o'" readonly="true">
+              </rating>
+            </td>
+            <td>{{review.totalScore}}</td>
+            <td>
+              <status-span value="!review.qualified">{{review.qualified | qualified}}</status-span>
+            </td>
+            <td>{{review.createdAt | shortDate}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel panel-default" ng-show="isNewReview">
+      <div class="panel-heading">
+        <strong>新评价</strong>
+      </div>
+      <div class="panel-body">
+        <form name="reviewForm" novalidate="" class="form-horizontal col-md-offset-2 col-md-8">
+          <fieldset>
+            <div class="form-group" ng-repeat="item in review.items">
+              <label class="col-md-2">{{item.name}}</label>
+
+              <div class="col-md-10">
+                <rating class="ui-rating size-h4" ng-model="item.score" max="5"
+                        state-on="'fa fa-star'" state-off="'fa fa-star-o'"
+                        required>
+                </rating>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2">总分</label>
+
+              <div class="col-md-10">
+                {{review.totalScore}}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2">备注</label>
+
+              <div class="col-md-10">
+                <textarea ng-model="review.comment" name="comment"
+                          class="form-control" rows="5">
+                </textarea>
+              </div>
+            </div>
+            <input type="submit" class="btn btn-primary" ng-disabled="reviewForm.$invalid" ng-click="saveReview(true)"
+                   value="通过"/>
+            <input type="submit" class="btn btn-danger" ng-disabled="reviewForm.$invalid" ng-click="saveReview(false)"
+                   value="拒绝"/>
+            <input type="reset" class="btn btn-default" ng-click="cancel()" value="取消"/>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <button class="btn btn-warning btn-sm" ng-hide="isNewReview" ng-click="newReview()">写评论</button>
+    <button class="btn btn-default btn-sm" ng-hide="isNewReview" ng-click="backToList()">返回列表</button>
+  </section>
 </div>

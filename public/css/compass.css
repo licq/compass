@@ -31,36 +31,83 @@
 }
 
 .gridStyle {
-border: 1px solid rgb(212, 212, 212);
-width: 100%;
-height: auto;
+    border: 1px solid rgb(212, 212, 212);
+    width: 100%;
+    height: auto;
 }
 
 .ngViewport.ng-scope {
-height: auto !important;
-overflow-y: hidden;
+    height: auto !important;
+    overflow-y: hidden;
 }
 
 .ngTopPanel.ng-scope, .ngHeaderContainer {
-width: auto !important;
+    width: auto !important;
 }
 
 .ngCellText.ng-scope {
-padding: 8px;
+    padding: 8px;
 }
 
 .selectedItems {
-float: left;
+    float: left;
 }
 
 .ngCellText .btn {
-margin: 1px 3px 1px 0px;
+    margin: 1px 3px 1px 0px;
 }
 
-.fc-header-title h2{
+.fc-header-title h2 {
     font-size: 20px;
 }
 
-.fc-agenda-slots td div{
+.fc-agenda-slots td div {
     height: 30px;
+}
+
+.switch.switch-sm i {
+    padding-right: 20px;
+    border-radius: 20px;
+}
+
+.switch.switch-sm i:before {
+    width: 23px;
+    height: 23px;
+    border-radius: 23px;
+}
+
+.switch.switch-sm :checked + i {
+    padding-left: 20px;
+    padding-right: 0;
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 40px #31c0be;
+    -moz-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 40px #31c0be;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 40px #31c0be;
+}
+
+.switch.switch-success.switch-sm :checked + i {
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #60cd9b;
+    -moz-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #60cd9b;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #60cd9b;
+}
+
+.switch.switch-info.switch-sm :checked + i {
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #66b5d7;
+    -moz-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #66b5d7;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #66b5d7;
+}
+
+.switch.switch-warning.switch-sm :checked + i {
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #eec95a;
+    -moz-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #eec95a;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #eec95a;
+}
+
+.switch.switch-danger.switch-sm :checked + i {
+    -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #e87352;
+    -moz-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #e87352;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #e87352;
+}
+
+span.ui-rating.size-h4{
+    box-sizing: content-box;
 }

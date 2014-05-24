@@ -232,6 +232,14 @@ angular.module('compass')
   })
   .filter('interviewers', function () {
     return function (interviewers) {
-      return '面试官: ' + _.map(interviewers, 'name').join(',');
+      return _.map(interviewers, 'name').join(', ');
+    };
+  })
+  .filter('qualified', function () {
+    return function (qualified) {
+      if (qualified) {
+        return '通过';
+      }
+      return '拒绝';
     };
   });

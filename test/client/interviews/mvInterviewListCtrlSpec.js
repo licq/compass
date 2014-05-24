@@ -110,9 +110,11 @@ describe('mvInterviewListCtrl', function () {
 
   describe('view', function () {
     it('should go to interview view page', inject(function ($location) {
-      var spy = sinon.spy($location, 'path');
+      var spyPath = sinon.spy($location, 'path');
+      var spySearch = sinon.spy($location, 'search');
       $scope.view('1234');
-      expect(spy).have.been.calledWith('/interviews/1234');
+      expect(spyPath).have.been.calledWith('/interviews/1234');
+      expect(spySearch).have.been.calledWith({isNewReview: false});
     }));
   });
 
@@ -122,10 +124,8 @@ describe('mvInterviewListCtrl', function () {
         var spySearch = sinon.spy($location, 'search');
         $scope.newReview('1234');
         expect(spyLocation).to.have.been.calledWith('/interviews/1234');
-        expect(spySearch).to.have.been.calledWith({new: 'true'});
+        expect(spySearch).to.have.been.calledWith({isNewReview: true});
       })
     );
   });
-
-
 });

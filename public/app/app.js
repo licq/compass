@@ -104,7 +104,6 @@ angular.module('compass',
         templateUrl: '/app/interviews/view.html',
         controller: 'mvInterviewViewCtrl'
       })
-
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
         controller: 'mvEventSettingCtrl'

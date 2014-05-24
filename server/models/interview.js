@@ -47,9 +47,30 @@ var reviewSchema = mongoose.Schema({
     required: true,
     index: true
   },
-    score: Number,
-    qualified: Boolean,
-    comment: String
+  qualified: Boolean,
+  comment: String,
+  items: [
+    {
+      name: {
+        type: String,
+        required: true
+      },
+      rate: {
+        type: Number,
+        required: true
+      },
+      score: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  totalScore: {
+    type: Number
+  },
+  createdAt: {
+    type: Date
+  }
 });
 
 var interviewSchema = mongoose.Schema({

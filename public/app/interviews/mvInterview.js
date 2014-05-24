@@ -9,10 +9,10 @@ angular.module('compass')
           },
           isArray: true
         },
-          update: {
-              method: 'PUT',
-              isArray: false
-          }
+        update: {
+          method: 'PUT',
+          isArray: false
+        }
       }
     );
   });
