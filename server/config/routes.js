@@ -1,7 +1,6 @@
 'use strict';
 
-var fs = require('fs'),
-  express = require('express'),
+var express = require('express'),
   sessions = require('../controllers/sessions'),
   emails = require('../controllers/emails'),
   signups = require('../controllers/signups'),
@@ -94,10 +93,12 @@ module.exports = function (app) {
   apiRouter.route('/events/:id')
     .put(events.update)
     .delete(events.delete);
+
   apiRouter.route('/interviews')
     .get(interviews.list);
   apiRouter.route('/interviews/:id')
-    .get(interviews.get);
+    .get(interviews.get)
+    .put(interviews.update);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
@@ -129,4 +130,5 @@ module.exports = function (app) {
 
     res.type('txt').send('Not found');
   });
+
 };

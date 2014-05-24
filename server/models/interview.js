@@ -46,7 +46,10 @@ var reviewSchema = mongoose.Schema({
     ref: 'User',
     required: true,
     index: true
-  }
+  },
+    score: Number,
+    qualified: Boolean,
+    comment: String
 });
 
 var interviewSchema = mongoose.Schema({
@@ -143,7 +146,7 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
           startTime: {
             $gte: start,
             $lt: end
-          },
+          }
         }
       }
     }};

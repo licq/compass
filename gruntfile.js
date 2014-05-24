@@ -135,7 +135,7 @@ module.exports = function (grunt) {
     mochaTest: {
       options: {
         reporter: 'spec',
-        require: 'server.js',
+        require: 'server.js'
       },
       src: ['test/server/**/*.js']
     },
@@ -146,7 +146,7 @@ module.exports = function (grunt) {
     },
     karma: {
       unit: {
-        configFile: 'test/client/karma.conf.js',
+        configFile: 'test/client/karma.conf.js'
       }
     },
     sloc: {

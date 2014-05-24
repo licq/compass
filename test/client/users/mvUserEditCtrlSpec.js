@@ -44,6 +44,7 @@ describe('mvUserEditCtrl', function () {
       expect(spy).to.have.been.calledWith('/users');
       expect(notifySpy).to.have.been.calledWith('添加用户成功');
     }));
+
     it('should show error if update failed', inject(function ($location, mvNotifier) {
       var notifySpy = sinon.spy(mvNotifier, 'error');
       $httpBackend.expectPUT('/api/users/7788', userData).respond(500, {message: 'error'});

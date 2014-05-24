@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
   Interview = mongoose.model('Interview'),
   helper = require('../testHelper');
 
-describe('Interview', function () {
+describe('interview', function () {
   var user,
     resume;
 

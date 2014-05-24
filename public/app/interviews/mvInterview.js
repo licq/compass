@@ -8,7 +8,11 @@ angular.module('compass')
             status: 'unprocessed'
           },
           isArray: true
-        }
+        },
+          update: {
+              method: 'PUT',
+              isArray: false
+          }
       }
     );
   });

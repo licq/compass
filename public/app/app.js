@@ -8,7 +8,6 @@ angular.module('compass',
       user: { auth: function (mvAuth) {
         return mvAuth.authenticated();
       }},
-
       anonymous: {auth: function (mvAuth) {
         return mvAuth.notAuthenticated();
       }}
@@ -101,6 +100,11 @@ angular.module('compass',
         templateUrl: '/app/interviews/unprocessed.html',
         controller: 'mvInterviewListCtrl'
       })
+      .when('/interviews/:id', {
+        templateUrl: '/app/interviews/view.html',
+        controller: 'mvInterviewViewCtrl'
+      })
+
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
         controller: 'mvEventSettingCtrl'
@@ -170,7 +174,6 @@ angular.module('compass',
         $location.path('/login');
       }
     });
-
   })
   .value('applicationStatusMap', {
     new: '新应聘',
@@ -193,7 +196,7 @@ angular.module('compass',
       'day': '天'
     },
     allDaySlot: false,
-    timeFormat: 'H:mm{ - H:mm}',
+    timeFormat: 'H:mm{ -H:mm}',
     titleFormat: {
       month: 'yyyy年M月',
       week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
@@ -216,4 +219,32 @@ angular.module('compass',
       menubar: 'tools table format view insert edit',
       content_css: '/vendor/tinymce/tinymce-content.css'
     };
+  })
+  .value('applicationStatusMap', {
+    new: '新应聘',
+    archived: '归档',
+    pursued: '通过',
+    undetermined: '待定'
+  })
+  .value('mvMoment', moment)
+  .constant('uiCalendarConfig', {
+    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
+    monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
+    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    dayNamesShort: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+    allDayText: '全天',
+    axisFormat: 'HH:mm',
+    buttonText: {
+      today: '今日',
+      'week': '周',
+      'month': '月',
+      'day': '天'
+    },
+    allDaySlot: false,
+    timeFormat: 'H:mm{ -H:mm}',
+    titleFormat: {
+      month: 'yyyy年M月',
+      week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
+      day: 'yyyy年M月d日, dddd'
+    }
   });

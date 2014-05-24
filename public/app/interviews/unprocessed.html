@@ -39,9 +39,9 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="pull-right interview-action-buttons">
-                        <button class="btn btn-primary btn-sm">详细</button>
+                        <button ng-click='viewDetail(interview._id)' class="btn btn-primary btn-sm">详细</button>
                         <button class="btn btn-success btn-sm " ng-click="newEvent(interview)">预约面试</button>
-                        <button class="btn btn-warning btn-sm">写评价</button>
+                        <button ng-click='writeReview(interview._id)' class="btn btn-warning btn-sm">写评价</button>
                       </div>
                     </div>
                   </div>
