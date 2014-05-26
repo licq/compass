@@ -63,7 +63,8 @@
               <label class="col-md-2">{{item.name}}</label>
 
               <div class="col-md-10">
-                <rating class="ui-rating size-h4" ng-model="item.score" max="5"
+                <rating class="ui-rating size-h4" max="5"
+                        ng-model="item.score" ng-change="calTotalScore()"
                         state-on="'fa fa-star'" state-off="'fa fa-star-o'"
                         required>
                 </rating>

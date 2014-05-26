@@ -81,7 +81,7 @@ describe('mvInterviewViewCtrlSpec', function () {
               {name: '工作态度', rate: 1, score: 3},
               {name: '团队合作', rate: 1, score: 5}
             ],
-            totalScore: 0,
+            totalScore: 12,
             comment: 'This guy is awesome!!!',
             qualified: true
           }
@@ -91,7 +91,9 @@ describe('mvInterviewViewCtrlSpec', function () {
         $scope.review.items[0].score = 4;
         $scope.review.items[1].score = 3;
         $scope.review.items[2].score = 5;
+        $scope.calTotalScore();
         $scope.review.comment = 'This guy is awesome!!!';
+
         $scope.saveReview(true);
 
         $httpBackend.flush();

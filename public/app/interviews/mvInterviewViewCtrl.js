@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, $location, mvIdentity, mvInterview, mvNotifier, mvEvaluationCriterion,$http) {
+  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, $location, mvIdentity, mvInterview, mvNotifier, mvEvaluationCriterion, $http) {
     mvInterview.get({_id: $routeParams.id}, function (interview) {
       $scope.interview = interview;
       $scope.title = interview.name;
@@ -16,7 +16,8 @@ angular.module('compass')
       if (value) {
         mvEvaluationCriterion.get({}, function (res) {
           $scope.review = {
-            items: []
+            items: [],
+            totalScore: 0
           };
           angular.forEach(res.items, function (item) {
             $scope.review.items.push({
@@ -28,17 +29,15 @@ angular.module('compass')
       }
     });
 
-    $scope.$watch('review.items', function (items) {
-      if (items) {
-        $scope.review.totalScore = _.reduce(items, function (total, item) {
-          if (item.score) {
-            return total + item.score * item.rate;
-          } else {
-            return total;
-          }
-        }, 0);
-      }
-    }, true);
+    $scope.calTotalScore = function () {
+      $scope.review.totalScore = _.reduce($scope.review.items, function (total, item) {
+        if (item.score) {
+          return total + item.score * item.rate;
+        } else {
+          return total;
+        }
+      }, 0);
+    };
 
     function sync() {
       $scope.reviewHeader = [];
