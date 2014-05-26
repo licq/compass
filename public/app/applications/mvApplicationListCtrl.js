@@ -120,7 +120,7 @@ angular.module('compass')
 
     $scope.newEvent = function (application) {
       var newEventModal = $modal.open({
-        templateUrl: '/app/interviews/eventNew.html',
+        templateUrl: '/app/events/new.html',
         controller: 'mvEventNewCtrl',
         keyboard: false,
         resolve: {

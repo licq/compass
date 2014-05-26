@@ -92,7 +92,7 @@ angular.module('compass',
         resolve: routeRoleChecks.user
       })
       .when('/events', {
-        templateUrl: '/app/interviews/list.html',
+        templateUrl: '/app/events/list.html',
         controller: 'mvEventListCtrl',
         resolve: routeRoleChecks.user
       })

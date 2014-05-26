@@ -16,7 +16,7 @@ angular.module('compass')
 
     $scope.newEvent = function (interview) {
       var modalInstance = $modal.open({
-        templateUrl: '/app/interviews/eventNew.html',
+        templateUrl: '/app/events/new.html',
         controller: 'mvEventNewCtrl',
         resolve: {
           event: function () {
