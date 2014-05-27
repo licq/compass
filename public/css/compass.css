@@ -110,6 +110,7 @@
 
 span.ui-rating.size-h4{
     box-sizing: content-box;
+    background: #5130;
 }
 
 .search-form input, .search-form select, .search-form button{
