@@ -2,7 +2,7 @@
 
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-    'ui.select2', 'ui.datetimepicker','trNgGrid', 'textAngular'])
+    'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     var routeRoleChecks = {
       user: { auth: function (mvAuth) {
@@ -95,6 +95,10 @@ angular.module('compass',
         templateUrl: '/app/events/list.html',
         controller: 'mvEventListCtrl',
         resolve: routeRoleChecks.user
+      })
+      .when('/interviews/list', {
+        templateUrl: '/app/interviews/list.html',
+        controller: 'mvInterviewListCtrl'
       })
       .when('/interviews/reviews', {
         templateUrl: '/app/reviews/list.html',
@@ -246,26 +250,26 @@ angular.module('compass',
         taRegisterTool('insertName', {
           buttontext: '插入姓名',
           action: function () {
-            document.execCommand('insertText',false,'{{姓名}}');
+            document.execCommand('insertText', false, '{{姓名}}');
           }});
         taRegisterTool('applyPosition', {
           buttontext: '应聘职位',
           action: function () {
-            document.execCommand('insertText',false,'{{应聘职位}}');
+            document.execCommand('insertText', false, '{{应聘职位}}');
           }});
         taRegisterTool('startTime', {
           buttontext: '开始时间',
           action: function () {
-            document.execCommand('insertText',false,'{{开始时间}}');
+            document.execCommand('insertText', false, '{{开始时间}}');
           }});
         taRegisterTool('endTime', {
           buttontext: '结束时间',
           action: function () {
-            document.execCommand('insertText',false,'{{结束时间}}');
+            document.execCommand('insertText', false, '{{结束时间}}');
           }});
 
-        taOptions.toolbar.push(['insertName','applyPosition', 'startTime', 'endTime']);
-          //taOptions.toolbar[4].push('insertName','applyPosition', 'startTime', 'endTime');
+        taOptions.toolbar.push(['insertName', 'applyPosition', 'startTime', 'endTime']);
+        //taOptions.toolbar[4].push('insertName','applyPosition', 'startTime', 'endTime');
         return taOptions;
       }]);
   });

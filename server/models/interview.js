@@ -263,7 +263,7 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
 function constructQueryForReview(model, user, options) {
   var query;
   if (options.startDate) {
-    options.startDate = options.startDate.replace(/"/g,'');
+    options.startDate = options.startDate.replace(/"/g, '');
     var start = moment(options.startDate).startOf('day').toDate();
     var end = moment(options.startDate).endOf('day').toDate();
     query = model.where('events').elemMatch({startTime: {$lte: end, $gte: start}, interviewers: user._id});
@@ -309,7 +309,7 @@ interviewSchema.statics.forReview = function (user, options, cb) {
     .limit(options.pageSize).exec(cb);
 };
 
-interviewSchema.statics.applyPositionsFor = function (user, cb) {
+interviewSchema.statics.applyPositionsForUser = function (user, cb) {
   var query = this.distinct('applyPosition');
   query.where('events.interviewers', user._id);
   query.exec(cb);
@@ -323,5 +323,59 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
   var query = constructQueryForReview(this, user, options);
   query.count(cb);
 };
+
+function constructQueryForCompany(model, company, options) {
+  var query = model.find({company: company});
+  query.where('events.startTime').lte(new Date());
+  if (options.name) {
+    query.where('name').regex(new RegExp(options.name));
+  }
+  if (options.applyPosition) {
+    query.where('applyPosition').regex(new RegExp(options.applyPosition));
+  }
+  if (options.startDate) {
+    options.startDate = options.startDate.replace(/"/g, '');
+    var start = moment(options.startDate).startOf('day').toDate();
+    var end = moment(options.startDate).endOf('day').toDate();
+    query.where('events.startTime').lte(end).gte(start);
+  }
+  return query;
+}
+interviewSchema.statics.forCompany = function (company, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {
+      page: 1,
+      pageSize: 20
+    };
+  }
+  var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
+  var orderByReverse = options.orderByReverse ? -1 : 1;
+  var sortOptions = {};
+  sortOptions[orderBy] = orderByReverse;
+
+  var query = constructQueryForCompany(this, company, options);
+  query.populate('events.interviewers', 'name')
+    .populate('reviews.interviewer', 'name')
+    .skip(options.pageSize * (options.page - 1))
+    .limit(options.pageSize)
+    .exec(cb);
+};
+
+interviewSchema.statics.countForCompany = function (company, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
+  }
+  var query = constructQueryForCompany(this, company, options);
+  query.count(cb);
+};
+
+interviewSchema.statics.applyPositionsForCompany = function (company, cb) {
+  var query = this.distinct('applyPosition');
+  query.where('company', company);
+  query.exec(cb);
+};
+
 
 mongoose.model('Interview', interviewSchema);

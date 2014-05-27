@@ -38,16 +38,27 @@ describe('mvInterviewListCtrl', function () {
             {
               startTime: '2014-5-18 15:00',
               duration: 90,
-              interviewers: ['7788']
+              interviewers: [
+                {
+                  _id: '7788',
+                  name: 'zhangsan'
+                }
+              ]
             }
           ],
           reviews: [
             {
               qualified: true,
-              skill: 9,
-              knowledge: 8,
+              items: [
+                {name: 'skill', score: 9, rate: 1},
+                {name: 'knowledge', score: 8, rate: 1}
+              ],
               review: 'excellent software engineer',
-              interviewer: '7788'
+              interviewer: {
+                _id: '7788',
+                name: 'zhangsan'
+              },
+              totalScore: 17
             }
           ]
         }
@@ -57,13 +68,26 @@ describe('mvInterviewListCtrl', function () {
     $httpBackend.flush();
   }));
 
-  it('should show title correctly', function () {
-    expect($scope.title).to.equal('待评价');
-  });
-
-  describe('/interviews?status=unprocessed', function () {
+  describe('initialization', function () {
     it('should show a list of interviews correctly', function () {
       expect($scope.interviews).to.have.length(1);
+    });
+
+    it('should calculate the averageTotalScore', function () {
+      expect($scope.interviews[0]).to.have.property('averageTotalScore', 17);
+    });
+
+    it('should set the qualifiedSummaries of interview', function () {
+      expect($scope.interviews[0].qualifiedSummaries).to.deep.equal([
+        {name: 'zhangsan', qualified: true}
+      ]);
+    });
+
+    it('should set the averageFieldScores', function () {
+      expect($scope.interviews[0].averageFieldScores).to.deep.equal([
+        {name: 'skill', score: 9},
+        {name: 'knowledge', score: 8}
+      ]);
     });
   });
 
@@ -111,21 +135,8 @@ describe('mvInterviewListCtrl', function () {
   describe('view', function () {
     it('should go to interview view page', inject(function ($location) {
       var spyPath = sinon.spy($location, 'path');
-      var spySearch = sinon.spy($location, 'search');
       $scope.view('1234');
       expect(spyPath).have.been.calledWith('/interviews/1234');
-      expect(spySearch).have.been.calledWith({isNewReview: false});
     }));
-  });
-
-  describe('newReview', function () {
-    it('should go to interview view page with new = true', inject(function ($location) {
-        var spyLocation = sinon.spy($location, 'path');
-        var spySearch = sinon.spy($location, 'search');
-        $scope.newReview('1234');
-        expect(spyLocation).to.have.been.calledWith('/interviews/1234');
-        expect(spySearch).to.have.been.calledWith({isNewReview: true});
-      })
-    );
   });
 });

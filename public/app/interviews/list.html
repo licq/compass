@@ -1,0 +1,96 @@
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong>列表</strong>
+    </div>
+    <div class="panel-body">
+      <blockquote ng-show="interviews.length === 0" class="col-md-4 col-md-offset-4">
+        您没有面试记录
+      </blockquote>
+      <form class="form-horizontal search-form">
+        <div class="col-md-3">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">姓名</label>
+
+              <div class="col-md-8">
+                <input class="form-control" type="text" ng-model="queryOptions.name"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">应聘职位</label>
+
+              <div class="col-md-8">
+                <select ui-select2 class="form-control" ng-model="queryOptions.applyPosition">
+                  <option value="">全部</option>
+                  <option ng-repeat="position in applyPositions" value="{{position}}">{{position}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">面试日期</label>
+
+              <div class="col-md-8">
+                <div datetimepicker ng-model="queryOptions.startDate" use-seconds="false" max-date="today"
+                     pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
+                  <input type='text' class="form-control"/>
+                  <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-primary" ng-click="search()">搜索</button>
+          <button class="btn btn-default" ng-click="clearQueryOptions()">清空</button>
+        </div>
+      </form>
+
+      <div class="table-responsive" ng-repeat="interview in interviews">
+        <table class="table table-bordered info">
+          <tr class="info">
+            <td class="col-md-2">{{interview.name}}</td>
+            <td class="col-md-3">{{interview.applyPosition}}</td>
+            <td class="col-md-3">{{interview.events.length}}次面试</td>
+            <td class="col-md-4">最后面试时间:{{interview.events[interview.events.length - 1].startTime | longDate}}</td>
+          </tr>
+          <tr>
+            <td>面试官评价</td>
+            <td colspan="3" class="interview-list-review-summary">
+              <span ng-repeat="summary in interview.qualifiedSummaries">{{summary.name}}
+                <i class="glyphicon glyphicon-ok text-success" ng-show="summary.qualified===true"></i>
+                <i class="glyphicon glyphicon-remove text-danger" ng-show="summary.qualified===false"></i>
+                <i class="glyphicon glyphicon-time" ng-show="summary.qualified===undefined"></i>
+              </span>
+            </td>
+          </tr>
+          <tr ng-show="interview.reviews.length > 0">
+            <td>平均分
+              <span class="text-info">{{interview.averageTotalScore}}</span>
+            </td>
+            <td colspan="3">
+              <span ng-repeat="score in interview.averageFieldScores" ng-class="{'text-success': score.score > 3.5,
+              'text-warning': score.score >= 2.5 && score.score <= 3.5, 'text-danger': score.score < 2.5}">
+                {{score.name}}:{{score.score}}
+              </span>
+            </td>
+          </tr>
+        </table>
+        <div class="pull-right interview-list-buttons">
+          <button class="btn btn-success btn-sm " ng-click="newEvent(interview)">预约面试</button>
+          <button ng-click='view(interview._id)' class="btn btn-primary btn-sm">详细</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

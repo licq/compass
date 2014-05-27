@@ -67,6 +67,20 @@ describe('interviews', function () {
     });
   });
 
+  describe('get /api/interviews', function () {
+    it('should return interview list with one item', function (done) {
+      request.get('/api/interviews')
+        .expect(200)
+        .expect('content-type', /json/)
+        .end(function (err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.have.length(1);
+          expect(res.get('totalCount')).to.equal('1');
+          done();
+        });
+    });
+  });
+
   describe('get /api/applyPositions', function () {
     it('should return one applyPosition', function (done) {
       request.get('/api/applyPositions')

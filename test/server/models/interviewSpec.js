@@ -195,7 +195,7 @@ describe('interview', function () {
     });
   });
 
-  describe('retrieve interviews', function () {
+  describe('retrieve interviews for reviews', function () {
     var anotherUser;
 
     beforeEach(function (done) {
@@ -244,7 +244,7 @@ describe('interview', function () {
             createdBy: user._id
           }
         ]}, function () {
-        Interview.applyPositionsFor(user, function (err, positions) {
+        Interview.applyPositionsForUser(user, function (err, positions) {
           expect(err).to.not.exist;
           expect(positions).to.deep.equal(['销售总监']);
           done();
@@ -276,7 +276,7 @@ describe('interview', function () {
           }
         ]
       }, function () {
-        Interview.forReview(user, {page: 1,pageSize:50}, function (err, interviews) {
+        Interview.forReview(user, {page: 1, pageSize: 50}, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
           expect(interviews[0].events).to.have.length(1);
@@ -298,7 +298,7 @@ describe('interview', function () {
             ]
           },
           function () {
-            Interview.forReview(anotherUser, {page: 1,pageSize:50}, function (err, interviews) {
+            Interview.forReview(anotherUser, {page: 1, pageSize: 50}, function (err, interviews) {
               expect(err).to.not.exist;
               expect(interviews).to.have.length(0);
               done();
@@ -326,7 +326,7 @@ describe('interview', function () {
           ]
         },
         function () {
-          Interview.forReview(anotherUser, {page: 1,pageSize:50}, function (err, interviews) {
+          Interview.forReview(anotherUser, {page: 1, pageSize: 50}, function (err, interviews) {
             expect(err).to.not.exist;
             expect(interviews).to.have.length(1);
             expect(interviews[0].reviews).to.have.length(0);
@@ -347,9 +347,69 @@ describe('interview', function () {
           }
         ]
       }, function () {
-        Interview.forReview(user, {page: 1,pageSize:50} , function (err, interviews) {
+        Interview.forReview(user, {page: 1, pageSize: 50}, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(0);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('retrieve interviews for company', function () {
+    var anotherUser;
+
+    beforeEach(function (done) {
+      Factory.create('user', function (auser) {
+        anotherUser = auser;
+        done();
+      });
+    });
+
+    it('should return interviews', function (done) {
+      Factory.create('interview', {
+        company: user.company,
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]}, function () {
+        var options = {
+          page: 1,
+          pageSize: 50
+        };
+        Interview.forCompany(user.company, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
+          expect(interviews[0].reviews).to.have.length(0);
+          expect(interviews[0].events).to.have.length(1);
+          Interview.countForCompany(user.company, options, function (err, count) {
+            expect(err).to.not.exist;
+            expect(count).to.equal(1);
+            done();
+          });
+        });
+      });
+    });
+
+    it('should return applyPositions', function (done) {
+      Factory.create('interview', {
+        company: user.company,
+        applyPosition: '销售总监',
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]}, function () {
+        Interview.applyPositionsForCompany(user.company, function (err, positions) {
+          expect(err).to.not.exist;
+          expect(positions).to.deep.equal(['销售总监']);
           done();
         });
       });

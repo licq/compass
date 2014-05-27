@@ -120,3 +120,12 @@ span.ui-rating.size-h4{
 .tr-ng-grid button{
     width: 80px;
 }
+
+.interview-list-buttons{
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.interview-list-review-summary span i{
+    margin-right: 10px;
+}

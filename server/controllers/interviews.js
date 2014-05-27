@@ -12,6 +12,13 @@ exports.list = function (req, res, next) {
         res.header('totalCount', count).json(interviews);
       });
     });
+  } else {
+    Interview.countForCompany(req.user.company, req.query, function (err, count) {
+      Interview.forCompany(req.user.company, req.query, function (err, interviews) {
+        if (err) return next(err);
+        res.header('totalCount', count).json(interviews);
+      });
+    });
   }
 };
 
@@ -26,8 +33,8 @@ exports.get = function (req, res, next) {
     });
 };
 
-exports.applyPositionsFor = function (req, res, next) {
-  Interview.applyPositionsFor(req.user, function (err, positions) {
+exports.applyPositionsForUser = function (req, res, next) {
+  Interview.applyPositionsForUser(req.user, function (err, positions) {
     if (err) return next(err);
     res.json(positions);
   });

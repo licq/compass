@@ -101,7 +101,7 @@ module.exports = function (app) {
     .put(interviews.update);
 
   apiRouter.route('/applyPositions')
-    .get(interviews.applyPositionsFor);
+    .get(interviews.applyPositionsForUser);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
