@@ -2,7 +2,7 @@
 
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-    'ui.tinymce', 'ui.select2', 'ui.datetimepicker'])
+    'ui.select2', 'ui.datetimepicker', 'textAngular'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     var routeRoleChecks = {
       user: { auth: function (mvAuth) {
@@ -210,14 +210,6 @@ angular.module('compass',
       showFooter: true,
       i18n: 'zh-cn'
     };
-    $rootScope.tinymceOptions = {
-      language: 'zh_CN',
-      height: 300,
-      plugins: 'link image table',
-      statusbar: false,
-      menubar: 'tools table format view insert edit',
-      content_css: '/vendor/tinymce/tinymce-content.css'
-    };
   })
   .value('applicationStatusMap', {
     new: '新应聘',
@@ -246,4 +238,34 @@ angular.module('compass',
       week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
       day: 'yyyy年M月d日, dddd'
     }
+  })
+  .config(function ($provide) {
+    $provide.decorator('taOptions', ['taRegisterTool', '$delegate',
+      function (taRegisterTool, taOptions) {
+
+        taRegisterTool('insertName', {
+          buttontext: '插入姓名',
+          action: function () {
+            document.execCommand('insertText',false,'{{姓名}}');
+          }});
+        taRegisterTool('applyPosition', {
+          buttontext: '应聘职位',
+          action: function () {
+            document.execCommand('insertText',false,'{{应聘职位}}');
+          }});
+        taRegisterTool('startTime', {
+          buttontext: '开始时间',
+          action: function () {
+            document.execCommand('insertText',false,'{{开始时间}}');
+          }});
+        taRegisterTool('endTime', {
+          buttontext: '结束时间',
+          action: function () {
+            document.execCommand('insertText',false,'{{结束时间}}');
+          }});
+
+        taOptions.toolbar.push(['insertName','applyPosition', 'startTime', 'endTime']);
+          //taOptions.toolbar[4].push('insertName','applyPosition', 'startTime', 'endTime');
+        return taOptions;
+      }]);
   });

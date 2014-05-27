@@ -25,7 +25,6 @@
     "confirm": true,
     "_": true,
     "toastr": true,
-    "tinymce": true,
     "moment": true,
     "$": true
   },
