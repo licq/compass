@@ -24,8 +24,10 @@ function handleFetchEmail(job, done) {
       count: count,
       error: err,
       address: job.data.address
-    }, function (error) {
-      logger.error('handle Fetch Email from ', job.data, error);
+    }, function (err) {
+      if (err) {
+        logger.error('handle Fetch Email from ', job.data, err);
+      }
       done(err);
     });
   });
@@ -35,7 +37,6 @@ function handleSendEmail(job, done) {
   logger.info('handleSendEmail ', job.data.title);
   mailer.sendEmail(job.data, done);
 }
-
 
 function handleParseResume(job, done) {
   logger.info('handleParseResume ', job.data.title);
