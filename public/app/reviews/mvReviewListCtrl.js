@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvReviewListCtrl', function ($scope, mvInterview, $http, states) {
+  .controller('mvReviewListCtrl', function ($scope, mvInterview, $http, states, $location) {
     var defaultQueryOptions = {
       currentPage: 1,
       pageSize: 20,
@@ -18,7 +18,6 @@ angular.module('compass')
     });
 
     $scope.query = function () {
-      console.log('load data with', $scope.queryOptions);
       mvInterview.query(_.extend({review: true}, $scope.queryOptions),
         function (interviews, headers) {
           $scope.totalInterviewsCount = parseInt(headers('totalCount'), 10);
@@ -34,8 +33,16 @@ angular.module('compass')
       $scope.query();
     };
 
-    $scope.search = function(){
+    $scope.search = function () {
       $scope.queryOptions.currentPage = 1;
       $scope.query();
+    };
+
+    $scope.view = function (interview) {
+      $location.path('/interviews/' + interview._id);
+    };
+
+    $scope.newReview = function (interview) {
+      $location.path('/interviews/' + interview._id);
     };
   });

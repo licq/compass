@@ -88,5 +88,28 @@ describe('mvReviewListCtrl', function () {
       $httpBackend.flush();
     });
 
+    it('should set currentPage to 1 and query the reviews', function () {
+      $httpBackend.expectGET('/api/interviews?currentPage=1&name=beijing&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20&review=true').respond(resultFunction);
+      $scope.queryOptions.name = 'beijing';
+      $scope.search();
+      expect($scope.queryOptions.currentPage).to.equal(1);
+      $httpBackend.flush();
+    });
+  });
+
+  describe('view', function () {
+    it('should go to the view page', inject(function ($location) {
+      var spy = sinon.spy($location, 'path');
+      $scope.view({_id: '7788'});
+      expect(spy).to.have.been.calledWith('/interviews/7788');
+    }));
+  });
+
+  describe('newReview', function () {
+    it('should go to the new Review page', inject(function ($location) {
+      var spy = sinon.spy($location, 'path');
+      $scope.newReview({_id: '7788'});
+      expect(spy).to.have.been.calledWith('/interviews/7788');
+    }));
   });
 });

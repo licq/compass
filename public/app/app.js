@@ -2,7 +2,7 @@
 
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-    'ui.tinymce', 'ui.select2', 'ui.datetimepicker','trNgGrid'])
+    'ui.tinymce', 'ui.select2', 'ui.datetimepicker', 'trNgGrid'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     var routeRoleChecks = {
       user: { auth: function (mvAuth) {
