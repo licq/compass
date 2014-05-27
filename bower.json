@@ -12,6 +12,7 @@
     "fullcalendar": "latest",
     "angular-ui-calendar": "latest",
     "tinymce": "git://github.com/licq/tinymce.git#master",
+    "trNgGrid": "git://github.com/licq/trNgGrid.git#v2.1_zh_cn",
     "toastr": "latest",
     "angular-bootstrap": "latest",
     "moment": "latest",

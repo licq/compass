@@ -73,6 +73,7 @@ angular.module('compass')
     }, true);
 
     $scope.view = function (mail) {
+      console.log(mail._id);
       $location.path('/mails/' + mail._id);
     };
   })

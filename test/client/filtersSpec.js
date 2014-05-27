@@ -243,7 +243,7 @@ describe('filters', function () {
     it('should return correctly', inject(function (qualifiedFilter) {
       expect(qualifiedFilter(true)).to.equal('通过');
       expect(qualifiedFilter(false)).to.equal('拒绝');
-      expect(qualifiedFilter()).to.equal('拒绝');
+      expect(qualifiedFilter()).to.equal('');
     }));
   });
 

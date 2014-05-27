@@ -17,6 +17,7 @@ describe('interviews', function () {
           request = agent;
           Factory.create('interview', {
             company: user.company,
+            applyPosition: '销售总监',
             events: [
               {
                 startTime: new Date(),
@@ -34,15 +35,16 @@ describe('interviews', function () {
     });
   });
 
-  describe('GET /api/interviews?status=unprocess', function () {
+  describe('GET /api/interviews?review=true', function () {
     it('should get back a list of interviews', function (done) {
-      request.get('/api/interviews?status=unprocessed')
+      request.get('/api/interviews?review=true&page=1&pageSize=5')
         .expect('Content-type', /json/)
         .expect(200)
         .end(function (err, res) {
           if (err) {
             return done(err);
           }
+          expect(res.get('totalCount')).to.equal('1');
           expect(res.body).to.have.length(1);
           done();
         });
@@ -63,7 +65,18 @@ describe('interviews', function () {
           done();
         });
     });
+  });
 
+  describe('get /api/applyPositions', function () {
+    it('should return one applyPosition', function (done) {
+      request.get('/api/applyPositions')
+        .expect(200)
+        .expect('content-type', /json/)
+        .end(function (err, res) {
+          expect(res.body).to.deep.equal(['销售总监']);
+          done(err);
+        });
+    });
   });
 
   describe('put /api/interview/:id', function () {
@@ -89,4 +102,5 @@ describe('interviews', function () {
         });
     });
   });
-});
+})
+;

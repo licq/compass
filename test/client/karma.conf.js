@@ -32,6 +32,7 @@ module.exports = function (config) {
       'public/vendor/tinymce/tinymce.min.js',
       'public/vendor/toastr/toastr.min.js',
       'public/vendor/select2/select2.min.js',
+      'public/vendor/trNgGrid/src/js/trNgGrid.js',
       'public/vendor/angular-ui-select2/src/select2.js',
       'public/app/app.js',
       'public/app/directives.js',

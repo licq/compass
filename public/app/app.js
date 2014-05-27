@@ -2,7 +2,7 @@
 
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
-    'ui.tinymce', 'ui.select2', 'ui.datetimepicker'])
+    'ui.tinymce', 'ui.select2', 'ui.datetimepicker','trNgGrid'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     var routeRoleChecks = {
       user: { auth: function (mvAuth) {
@@ -56,7 +56,7 @@ angular.module('compass',
         controller: 'mvMailListCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('settings/mails/:id', {
+      .when('/settings/mails/:id', {
         templateUrl: '/app/mails/view.html',
         controller: 'mvMailViewCtrl',
         resolve: routeRoleChecks.user
@@ -96,9 +96,9 @@ angular.module('compass',
         controller: 'mvEventListCtrl',
         resolve: routeRoleChecks.user
       })
-      .when('/interviews/unprocessed', {
-        templateUrl: '/app/interviews/unprocessed.html',
-        controller: 'mvInterviewListCtrl'
+      .when('/interviews/reviews', {
+        templateUrl: '/app/reviews/list.html',
+        controller: 'mvReviewListCtrl'
       })
       .when('/interviews/:id', {
         templateUrl: '/app/interviews/view.html',
@@ -205,8 +205,8 @@ angular.module('compass',
   .run(function ($rootScope) {
     $rootScope.gridDefaults = {
       multiSelect: false,
-      headerRowHeight: 40,
-      rowHeight: 40,
+//      headerRowHeight: 40,
+//      rowHeight: 40,
       showFooter: true,
       i18n: 'zh-cn'
     };

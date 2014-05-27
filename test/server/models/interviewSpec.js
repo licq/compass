@@ -196,25 +196,16 @@ describe('interview', function () {
   });
 
   describe('retrieve interviews', function () {
-    it('should return unprocessed interviews', function (done) {
-      Factory.create('interview', {events: [
-        {
-          startTime: new Date(),
-          duration: 90,
-          interviewers: [user._id],
-          createdBy: user._id
-        }
-      ]}, function () {
-        Interview.unprocessedFor(user, function (err, interviews) {
-          expect(err).to.not.exist;
-          expect(interviews).to.have.length(1);
-          expect(interviews[0].events[0].interviewers[0]).to.have.property('name', user.name);
-          done();
-        });
+    var anotherUser;
+
+    beforeEach(function (done) {
+      Factory.create('user', function (auser) {
+        anotherUser = auser;
+        done();
       });
     });
 
-    it('should return no interviews when processed', function (done) {
+    it('should return interviews', function (done) {
       Factory.create('interview', {
         events: [
           {
@@ -223,7 +214,61 @@ describe('interview', function () {
             interviewers: [user._id],
             createdBy: user._id
           }
-        ], reviews: [
+        ]}, function () {
+        var options = {
+          page: 1,
+          pageSize: 50
+        };
+        Interview.forReview(user, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
+          expect(interviews[0].reviews).to.have.length(0);
+          expect(interviews[0].events).to.have.length(1);
+          Interview.countForReview(user, options, function (err, count) {
+            expect(err).to.not.exist;
+            expect(count).to.equal(1);
+            done();
+          });
+        });
+      });
+    });
+
+    it('should return applyPositions', function (done) {
+      Factory.create('interview', {
+        applyPosition: '销售总监',
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]}, function () {
+        Interview.applyPositionsFor(user, function (err, positions) {
+          expect(err).to.not.exist;
+          expect(positions).to.deep.equal(['销售总监']);
+          done();
+        });
+      });
+    });
+
+    it('should return only one events', function (done) {
+      Factory.create('interview', {
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          },
+          {
+            startTime: new Date(),
+            duration: 60,
+            interviewers: [anotherUser._id],
+            createdBy: user._id
+          }
+        ],
+        reviews: [
           {
             interviewer: user._id,
             comment: 'good cio',
@@ -231,15 +276,16 @@ describe('interview', function () {
           }
         ]
       }, function () {
-        Interview.unprocessedFor(user, function (err, interviews) {
+        Interview.forReview(user, {page: 1,pageSize:50}, function (err, interviews) {
           expect(err).to.not.exist;
-          expect(interviews).to.have.length(0);
+          expect(interviews).to.have.length(1);
+          expect(interviews[0].events).to.have.length(1);
           done();
         });
       });
     });
 
-    it('should return no interviews when interview has no reviews', function (done) {
+    it('should return no interviews when event interviewers not include the user', function (done) {
       Factory.create('user', function (anotherUser) {
         Factory.create('interview', {
             events: [
@@ -252,13 +298,41 @@ describe('interview', function () {
             ]
           },
           function () {
-            Interview.unprocessedFor(anotherUser, function (err, interviews) {
+            Interview.forReview(anotherUser, {page: 1,pageSize:50}, function (err, interviews) {
               expect(err).to.not.exist;
               expect(interviews).to.have.length(0);
               done();
             });
           });
       });
+    });
+
+    it('should return the review of the user', function (done) {
+      Factory.create('interview', {
+          events: [
+            {
+              startTime: new Date(),
+              duration: 90,
+              interviewers: [user._id, anotherUser._id],
+              createdBy: user._id
+            }
+          ],
+          reviews: [
+            {
+              interviewer: user._id,
+              totalScore: 15,
+              qualified: false
+            }
+          ]
+        },
+        function () {
+          Interview.forReview(anotherUser, {page: 1,pageSize:50}, function (err, interviews) {
+            expect(err).to.not.exist;
+            expect(interviews).to.have.length(1);
+            expect(interviews[0].reviews).to.have.length(0);
+            done();
+          });
+        });
     });
 
     it('should return no interviews when current time is before event start time', function (done) {
@@ -273,7 +347,7 @@ describe('interview', function () {
           }
         ]
       }, function () {
-        Interview.unprocessedFor(user, function (err, interviews) {
+        Interview.forReview(user, {page: 1,pageSize:50} , function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(0);
           done();
