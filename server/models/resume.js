@@ -309,7 +309,6 @@ resumeSchema.statics.query = function (params, callback) {
     delete queryConditions.query.filtered.filter.and;
   }
 
-//    console.log(JSON.stringify(queryConditions));
   this.search(queryConditions, function (err, results) {
     if (err) return callback(err);
 
