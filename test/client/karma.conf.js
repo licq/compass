@@ -31,6 +31,7 @@ module.exports = function (config) {
       'public/vendor/ng-grid/build/ng-grid.min.js',
       'public/vendor/toastr/toastr.min.js',
       'public/vendor/select2/select2.min.js',
+      'public/vendor/trNgGrid/src/js/trNgGrid.js',
       'public/vendor/angular-ui-select2/src/select2.js',
       'public/vendor/textAngular/dist/textAngular-sanitize.min.js',
       'public/vendor/textAngular/dist/textAngular.min.js',

@@ -260,17 +260,68 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
   });
 };
 
-interviewSchema.statics.unprocessedFor = function (user, cb) {
-  var now = new Date();
-  this.where('reviews.interviewer').ne(user)
-    .elemMatch('events', {
-      startTime: {$lte: now},
+function constructQueryForReview(model, user, options) {
+  var query;
+  if (options.startDate) {
+    options.startDate = options.startDate.replace(/"/g,'');
+    var start = moment(options.startDate).startOf('day').toDate();
+    var end = moment(options.startDate).endOf('day').toDate();
+    query = model.where('events').elemMatch({startTime: {$lte: end, $gte: start}, interviewers: user._id});
+  } else {
+    query = model.where('events').elemMatch({startTime: {$lte: new Date()}, interviewers: user._id});
+  }
+  if (options.name) {
+    query.where('name').regex(new RegExp(options.name));
+  }
+  if (options.applyPosition) {
+    query.where('applyPosition').regex(new RegExp(options.applyPosition));
+  }
+
+  return query;
+}
+
+interviewSchema.statics.forReview = function (user, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {
+      page: 1,
+      pageSize: 20
+    };
+  }
+
+  var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
+  var orderByReverse = options.orderByReverse ? -1 : 1;
+  var sortOptions = {};
+  sortOptions[orderBy] = orderByReverse;
+
+  var query = constructQueryForReview(this, user, options);
+  query.select({
+    name: 1,
+    applyPosition: 1,
+    events: {$elemMatch: {
       'interviewers': user._id
-    })
-    .populate('events.interviewers', 'name')
-    .populate('reviews.interviewer', 'name')
-    .sort({'events.startTime': -1})
-    .exec(cb);
+    }},
+    reviews: {$elemMatch: {
+      'interviewer': user._id
+    }}
+  }).sort(sortOptions)
+    .skip((options.page - 1) * options.pageSize)
+    .limit(options.pageSize).exec(cb);
+};
+
+interviewSchema.statics.applyPositionsFor = function (user, cb) {
+  var query = this.distinct('applyPosition');
+  query.where('events.interviewers', user._id);
+  query.exec(cb);
+};
+
+interviewSchema.statics.countForReview = function (user, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
+  }
+  var query = constructQueryForReview(this, user, options);
+  query.count(cb);
 };
 
 mongoose.model('Interview', interviewSchema);

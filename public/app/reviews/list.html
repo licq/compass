@@ -1,0 +1,98 @@
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong>评价</strong>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal search-form">
+        <div class="col-md-3">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">姓名</label>
+
+              <div class="col-md-8">
+                <input class="form-control" type="text" ng-model="queryOptions.name"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">应聘职位</label>
+
+              <div class="col-md-8">
+                <select ui-select2 class="form-control" ng-model="queryOptions.applyPosition">
+                  <option value="">全部</option>
+                  <option ng-repeat="position in applyPositions" value="{{position}}">{{position}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">面试日期</label>
+
+              <div class="col-md-8">
+                <div datetimepicker ng-model="queryOptions.startDate" use-seconds="false" max-date="today"
+                     pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
+                  <input type='text' class="form-control"/>
+                  <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-primary" ng-click="search()">搜索</button>
+          <button class="btn btn-default" ng-click="clearQueryOptions()">清空</button>
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped" items="interviews"
+               page-items="queryOptions.pageSize"
+               total-items="totalInterviewsCount" current-page="queryOptions.currentPage"
+               order-by="queryOptions.orderBy" order-by-reverse="queryOptions.orderByReverse"
+               enable-filtering="false" enable-selections="false"
+               on-data-required="query(page,filterBy,filterByField,orderBy,orderByReverse)">
+          <thead>
+          <tr>
+            <th field-name="events[0].startTime" display-name="面试时间" enable-filtering="false"
+                enable-sorting="true" display-format="longDate"></th>
+            <th field-name="name" display-name="应聘者" enable-filtering="false"
+                enable-sorting="true"></th>
+            <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
+                enable-sorting="true"></th>
+            <th field-name="reviews[0].totalScore" display-name="分数" enable-filtering="false"
+                enable-sorting="true"></th>
+            <th field-name="reviews[0].qualified" display-name="通过" enable-filtering="false"
+                enable-sorting="true" display-format="qualified" display-align="center"></th>
+            <th field-name="reviews[0].createdAt" display-name="评价时间" enable-filtering="false"
+                enable-sorting="true" display-format="longDate"></th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td field-name="reviews[0].qualified" ng-class="{'success': gridItem.reviews[0].qualified,
+            'danger': gridItem.reviews[0].qualified === false}"></td>
+            <td align="center">
+              <button ng-click="newReview(gridItem)" ng-show="gridItem.reviews.length === 0"
+                      class="btn btn-warning btn-sm">写评价
+              </button>
+              <button ng-click="view(gridItem)" ng-show="gridItem.reviews.length > 0"
+                      class="btn btn-primary btn-sm btn-grid-action">详细
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>

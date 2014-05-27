@@ -100,6 +100,9 @@ module.exports = function (app) {
     .get(interviews.get)
     .put(interviews.update);
 
+  apiRouter.route('/applyPositions')
+    .get(interviews.applyPositionsFor);
+
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
     logger.error(err.stack);
@@ -117,7 +120,7 @@ module.exports = function (app) {
   });
 
   app.use(function (req, res) {
-    logger.error('request unknown url /api' + req.url);
+    logger.error('request unknown url ' + req.url);
 
     res.status(404);
     if (req.accepts('html')) {

@@ -12,13 +12,15 @@
   <!--type='text/css'>-->
   <!-- needs images, font... therefore can not be part of ui.css -->
   <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
-   <link rel="stylesheet" href="/vendor/fullcalendar/fullcalendar.css">
+  <link rel="stylesheet" href="/vendor/fullcalendar/fullcalendar.css">
   <link rel="stylesheet" href="/vendor/select2/select2.css">
   <link rel="stylesheet" href="/vendor/select2/select2-bootstrap.css">
-  <link rel="stylesheet" href="/vendor/ng-grid/ng-grid.min.css"/>
+
   <link rel="stylesheet" href="/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"/>
   <!-- end needs images -->
 
+  <link rel="stylesheet" href="/vendor/ng-grid/ng-grid.min.css"/>
+  <link rel="stylesheet" href="/vendor/trNgGrid/release/trNgGrid.min.css"/>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/compass.css">
 
@@ -92,6 +94,7 @@
 
 <!-- build:js({.tmp,app}) scripts/app.js -->
 <script type="text/javascript" src="/vendor/ng-grid/build/ng-grid.js"></script>
+<script type="text/javascript" src="/vendor/trNgGrid/src/js/trNgGrid.js"></script>
 <script type="text/javascript" src="/vendor/jquery-ui/ui/jquery-ui.custom.js"></script>
 <script type="text/javascript" src="/vendor/fullcalendar/fullcalendar.js"></script>
 <script type="text/javascript" src="/vendor/angular-ui-calendar/src/calendar.js"></script>
@@ -147,11 +150,12 @@
 <script type="text/javascript" src="/app/applications/mvApplicationListCtrl.js"></script>
 <script type="text/javascript" src="/app/applications/mvApplicationViewCtrl.js"></script>
 
-<script type="text/javascript" src="/app/interviews/mvEvent.js"></script>
-<script type="text/javascript" src="/app/interviews/mvEventNewCtrl.js"></script>
-<script type="text/javascript" src="/app/interviews/mvEventListCtrl.js"></script>
+<script type="text/javascript" src="/app/events/mvEvent.js"></script>
+<script type="text/javascript" src="/app/events/mvEventNewCtrl.js"></script>
+<script type="text/javascript" src="/app/events/mvEventListCtrl.js"></script>
 
 <script type="text/javascript" src="/app/interviews/mvInterview.js"></script>
+<script type="text/javascript" src="/app/reviews/mvReviewListCtrl.js"></script>
 <script type="text/javascript" src="/app/interviews/mvInterviewListCtrl.js"></script>
 <script type="text/javascript" src="/app/interviews/mvInterviewViewCtrl.js"></script>
 

@@ -73,7 +73,7 @@ angular.module('compass')
     }, true);
 
     $scope.view = function (resume) {
-      $location.path('/settings/resumes/' + resume._id);
+      $location.path('/resumes/' + resume._id);
     };
 
     $scope.search = function () {

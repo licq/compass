@@ -239,7 +239,9 @@ angular.module('compass')
     return function (qualified) {
       if (qualified) {
         return '通过';
+      } else if (qualified === false) {
+        return '拒绝';
       }
-      return '拒绝';
+      return '';
     };
   });

@@ -45,17 +45,17 @@
     width: auto !important;
 }
 
-.ngCellText.ng-scope {
-    padding: 8px;
-}
+/*.ngCellText.ng-scope {*/
+    /*padding: 8px;*/
+/*}*/
 
-.selectedItems {
-    float: left;
-}
+/*.selectedItems {*/
+    /*float: left;*/
+/*}*/
 
-.ngCellText .btn {
-    margin: 1px 3px 1px 0px;
-}
+/*.ngCellText .btn {*/
+    /*margin: 1px 3px 1px 0px;*/
+/*}*/
 
 .fc-header-title h2 {
     font-size: 20px;
@@ -111,4 +111,12 @@
 span.ui-rating.size-h4{
     box-sizing: content-box;
     background: #5130;
+}
+
+.search-form input, .search-form select, .search-form button{
+    height: 30px;
+}
+
+.tr-ng-grid button{
+    width: 80px;
 }
