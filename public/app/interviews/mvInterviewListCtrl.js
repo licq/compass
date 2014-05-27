@@ -4,7 +4,7 @@ angular.module('compass')
   .controller('mvInterviewListCtrl', function ($scope, mvInterview, $modal, $location) {
     $scope.title = '待评价';
 
-    $scope.interviews = mvInterview.unprocessed();
+    $scope.interviews = mvInterview.query();
 
     $scope.view = function (interviewId) {
       $location.path('/interviews/' + interviewId).search({isNewReview: false});

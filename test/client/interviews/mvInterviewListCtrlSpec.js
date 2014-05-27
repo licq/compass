@@ -28,7 +28,7 @@ describe('mvInterviewListCtrl', function () {
     modalOpenStub = sinon.stub($modal, 'open');
     modalOpenStub.returns(fakeModal);
 
-    $httpBackend.expectGET('/api/interviews?status=unprocessed')
+    $httpBackend.expectGET('/api/interviews')
       .respond([
         {
           _id: '1122',
