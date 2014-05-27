@@ -1,43 +1,64 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, $location, mvIdentity, mvInterview, mvNotifier, mvEvaluationCriterion, $http) {
+  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, $location, mvIdentity, mvInterview, mvNotifier, mvEvaluationCriterion) {
     mvInterview.get({_id: $routeParams.id}, function (interview) {
       $scope.interview = interview;
-      $scope.title = interview.name;
-      sync();
-    });
-
-    $scope.review = {items: []};
-
-    $scope.isNewReview = $routeParams.isNewReview;
-
-    $scope.$watch('isNewReview', function (value) {
-      if (value) {
-        mvEvaluationCriterion.get({}, function (res) {
-          $scope.review = {
-            items: [],
-            totalScore: 0
-          };
-          angular.forEach(res.items, function (item) {
-            $scope.review.items.push({
-              name: item.name,
-              rate: item.rate
-            });
-          });
-        });
+      if (!reviewed($scope.interview)) {
+        setupNewReview();
+      } else {
+        $scope.isNewReview = false;
+        sync();
       }
     });
 
-    $scope.calTotalScore = function () {
-      $scope.review.totalScore = _.reduce($scope.review.items, function (total, item) {
-        if (item.score) {
-          return total + item.score * item.rate;
-        } else {
-          return total;
-        }
-      }, 0);
-    };
+    function reviewed(interview) {
+      return _.filter(interview.reviews, function (review) {
+        return review.interviewer._id === mvIdentity.currentUser._id;
+      }).length > 0;
+    }
+
+    function setupNewReview() {
+      $scope.isNewReview = true;
+      mvEvaluationCriterion.get({}, function (res) {
+        $scope.review = {
+          items: [],
+          totalScore: 0
+        };
+        angular.forEach(res.items, function (item) {
+          $scope.review.items.push({
+            name: item.name,
+            rate: item.rate
+          });
+        });
+      });
+
+      $scope.calculateTotalScore = function () {
+        $scope.review.totalScore = _.reduce($scope.review.items, function (total, item) {
+          if (item.score) {
+            return total + item.score * item.rate;
+          } else {
+            return total;
+          }
+        }, 0);
+      };
+
+      $scope.save = function (qualified) {
+        $scope.review.qualified = !!qualified;
+        mvInterview.update({_id: $scope.interview._id}, {review: $scope.review},
+          function () {
+            $scope.review.interviewer = mvIdentity.currentUser;
+            $scope.review.createdAt = new Date();
+            $scope.interview.reviews.push($scope.review);
+            $scope.isNewReview = false;
+            sync();
+            mvNotifier.notify('评价保存成功');
+          },
+          function () {
+            mvNotifier.error('评价保存失败');
+          });
+      };
+    }
 
     function sync() {
       $scope.reviewHeader = [];
@@ -53,41 +74,7 @@ angular.module('compass')
       });
     }
 
-    $scope.backToList = function () {
-      $location.path('/interviews/unprocessed');
-    };
-
-    $scope.newReview = function () {
-      $scope.isNewReview = true;
-    };
-
-    $scope.saveReview = function (qualified) {
-      $scope.review.qualified = !!qualified;
-      mvInterview.update({_id: $scope.interview._id}, {review: $scope.review},
-        function () {
-          $scope.review.interviewer = mvIdentity.currentUser;
-          $scope.review.createdAt = new Date();
-          $scope.interview.reviews.push($scope.review);
-          $scope.isNewReview = false;
-          sync();
-          mvNotifier.notify('评价保存成功');
-        },
-        function () {
-          mvNotifier.error('评价保存失败');
-        });
-    };
-
-    $scope.deleteReview = function (reviewId) {
-      $http.put('/api/interviews/' + $scope.interview._id, {reviewToDelete: reviewId})
-        .success(function () {
-          mvNotifier.notify('评价删除成功');
-        })
-        .error(function () {
-          mvNotifier.error('评价删除失败');
-        });
-    };
-
     $scope.cancel = function () {
-      $scope.isNewReview = false;
+      $location.path('/interviews/reviews');
     };
   });

@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvReviewListCtrl', function ($scope, mvInterview, $http, states) {
+  .controller('mvReviewListCtrl', function ($scope, mvInterview, $http, states, $location) {
     var defaultQueryOptions = {
       currentPage: 1,
       pageSize: 20,
@@ -36,5 +36,13 @@ angular.module('compass')
     $scope.search = function () {
       $scope.queryOptions.currentPage = 1;
       $scope.query();
+    };
+
+    $scope.view = function (interview) {
+      $location.path('/interviews/' + interview._id);
+    };
+
+    $scope.newReview = function (interview) {
+      $location.path('/interviews/' + interview._id);
     };
   });
