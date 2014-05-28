@@ -104,6 +104,10 @@ angular.module('compass',
         templateUrl: '/app/reviews/list.html',
         controller: 'mvReviewListCtrl'
       })
+      .when('/interviews/reviews/:id', {
+        templateUrl: '/app/reviews/new.html',
+        controller: 'mvReviewNewCtrl'
+      })
       .when('/interviews/:id', {
         templateUrl: '/app/interviews/view.html',
         controller: 'mvInterviewViewCtrl'

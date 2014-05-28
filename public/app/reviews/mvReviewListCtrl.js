@@ -39,10 +39,6 @@ angular.module('compass')
     };
 
     $scope.view = function (interview) {
-      $location.path('/interviews/' + interview._id);
-    };
-
-    $scope.newReview = function (interview) {
-      $location.path('/interviews/' + interview._id);
+      $location.path('/interviews/reviews/' + interview._id);
     };
   });

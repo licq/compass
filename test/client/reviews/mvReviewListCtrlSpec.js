@@ -101,15 +101,7 @@ describe('mvReviewListCtrl', function () {
     it('should go to the view page', inject(function ($location) {
       var spy = sinon.spy($location, 'path');
       $scope.view({_id: '7788'});
-      expect(spy).to.have.been.calledWith('/interviews/7788');
-    }));
-  });
-
-  describe('newReview', function () {
-    it('should go to the new Review page', inject(function ($location) {
-      var spy = sinon.spy($location, 'path');
-      $scope.newReview({_id: '7788'});
-      expect(spy).to.have.been.calledWith('/interviews/7788');
+      expect(spy).to.have.been.calledWith('/interviews/reviews/7788');
     }));
   });
 });

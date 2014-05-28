@@ -115,7 +115,7 @@ describe('mvInterviewListCtrl', function () {
   });
 
   describe('search', function () {
-    it('should retrive the interviewlist again', function () {
+    it('should retrieve the interviewlist again', function () {
       $httpBackend.expectGET('/api/interviews?name=zhangsan&page=1&pageSize=20').respond(200);
       $scope.queryOptions.page = 1;
       $scope.queryOptions.name = 'zhangsan';
@@ -125,7 +125,7 @@ describe('mvInterviewListCtrl', function () {
   });
 
   describe('clear queryOptions', function () {
-    it('should clear the query condition and retrive the intervew list', function () {
+    it('should clear the query condition and retrieve the intervew list', function () {
       $httpBackend.expectGET('').respond(200);
       $scope.queryOptions.page = 3;
       $scope.queryOptions.name = 'beijing';
@@ -134,7 +134,10 @@ describe('mvInterviewListCtrl', function () {
 
       expect($scope.queryOptions).to.deep.equal({
         page: 1,
-        pageSize: 20
+        pageSize: 20,
+        name: '',
+        applyPosition: '',
+        startDate: ''
       });
     });
   });
@@ -147,35 +150,11 @@ describe('mvInterviewListCtrl', function () {
 
     it('should update the page', function () {
       $scope.newEvent($scope.interviews[0]);
-      $httpBackend.expectGET('/api/interviews/' + $scope.interviews[0]._id).respond({
-        _id: $scope.interviews[0]._id,
-        events: [
-          {
-            startTime: new Date(),
-            interviewers: [
-              {
-                _id: '7788',
-                name: '7788'
-              }
-            ]
-          },
-          {
-            startTime: new Date(),
-            interviewers: [
-              {
-                _id: '8899',
-                name: '8899'
-              }
-            ]
-          }
-        ]
-      });
       fakeModal.close({
         name: 'user1',
         startTime: new Date(),
         interviewers: ['7788', '8899']
       });
-      $httpBackend.flush();
       expect($scope.interviews[0].events).to.have.length(2);
     });
   });

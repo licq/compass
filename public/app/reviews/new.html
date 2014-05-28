@@ -1,0 +1,61 @@
+<div class="page" ng-hide="isNewReview">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong class="pull-right">{{interview.applyPosition}}</strong>
+      <strong>{{interview.name}}</strong>
+    </div>
+    <div class="panel-body">
+      <div ng-include="'/app/interviews/detail.html'"></div>
+    </div>
+    <div class="panel-footer">
+      <button class="btn btn-primary btn-sm" ng-click="cancel()">返回列表</button>
+    </div>
+  </section>
+</div>
+
+<div class="panel panel-default" ng-show="isNewReview">
+  <div class="panel-heading">
+    <strong class="pull-right">{{interview.applyPosition}}</strong>
+    <strong>{{interview.name}}</strong>
+  </div>
+  <div class="panel-body">
+    <form name="reviewForm" novalidate="" class="form-horizontal col-md-offset-2 col-md-8">
+      <fieldset>
+        <div class="form-group" ng-repeat="item in review.items">
+          <label class="col-md-2">{{item.name}}</label>
+
+          <div class="col-md-10">
+            <rating class="ui-rating size-h4" max="5"
+                    ng-model="item.score" ng-change="calculateTotalScore()"
+                    state-on="'fa fa-star'" state-off="'fa fa-star-o'"
+                    required>
+            </rating>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2">总分</label>
+
+          <div class="col-md-10">
+            {{review.totalScore}}
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2">备注</label>
+
+          <div class="col-md-10">
+            <textarea ng-model="review.comment" name="comment"
+                      class="form-control" rows="5">
+            </textarea>
+          </div>
+        </div>
+        <div class="col-md-offset-2 col-md-4">
+          <input type="submit" class="btn btn-primary" ng-disabled="reviewForm.$invalid" ng-click="save(true)"
+                 value="通过"/>
+          <input type="submit" class="btn btn-danger" ng-disabled="reviewForm.$invalid" ng-click="save(false)"
+                 value="拒绝"/>
+        </div>
+        <input type="reset" class="btn btn-default pull-right" ng-click="cancel()" value="取消"/>
+      </fieldset>
+    </form>
+  </div>
+</div>

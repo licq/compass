@@ -21,7 +21,7 @@ describe.skip('emailFetcher', function () {
   });
 
   describe('#fetch', function () {
-    it('should retrive email successfully', function (done) {
+    it('should retrieve email successfully', function (done) {
       this.timeout(0);
 
       async.eachSeries(_.range(3), function (i, callback) {
