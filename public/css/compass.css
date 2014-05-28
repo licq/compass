@@ -143,3 +143,8 @@ table.table.tr-ng-grid td, table.table.tr-ng-grid th {
 .select2-choice .select2-arrow {
     z-index: 1;
 }
+
+.toast-top-right {
+    top: 58px;
+    right: 12px;
+}

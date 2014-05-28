@@ -1,8 +1,9 @@
 <div class="page" ng-hide="isNewReview">
   <section class="panel panel-default">
     <div class="panel-heading">
-      <strong class="pull-right">{{interview.applyPosition}}</strong>
       <strong>{{interview.name}}</strong>
+
+      <div class="pull-right">{{interview.applyPosition}}</div>
     </div>
     <div class="panel-body">
       <div ng-include="'/app/interviews/detail.html'"></div>
