@@ -44,7 +44,7 @@ describe('mvEmailEditCtrl', function () {
       $scope.update();
       $httpBackend.flush();
 
-      expect(spy).to.have.been.calledWith('/emails');
+      expect(spy).to.have.been.calledWith('/settings/emails');
       expect(notifySpy).to.have.been.calledWith('简历邮箱修改成功');
     }));
     it('should show error if failed', inject(function (mvNotifier) {

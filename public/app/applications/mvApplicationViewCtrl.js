@@ -14,10 +14,6 @@ angular.module('compass')
         if (result.hits && result.hits.hits && result.hits.hits.length === 1) {
           $scope.totalApplicationCount = result.hits.total;
           $scope.resume = result.hits.hits[0];
-          $scope.crumbs = [
-            {text: applicationStatusMap[$routeParams.status], url: 'applications/' + $routeParams.status},
-            {text: $scope.resume.name, url: $routeParams.index}
-          ];
           $scope.title = $scope.resume.name;
 
           $window.scrollTo(0, 0);

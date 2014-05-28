@@ -6,17 +6,6 @@ angular.module('compass')
       $scope.err = res.data;
     });
 
-    $scope.crumbs = [
-      {
-        text: '设置',
-        url: 'settings'
-      },
-      {
-        text: '面试评价',
-        url: 'evaluationCriterion'
-      }
-    ];
-
     $scope.gridOptions = angular.extend({
       data: 'evaluationCriterion.items',
       columnDefs: [
@@ -32,15 +21,26 @@ angular.module('compass')
       ]
     }, $scope.gridDefaults, {showFooter: false});
 
-    $scope.remove = function (row) {
-      $scope.evaluationCriterion.items.splice(row.rowIndex, 1);
+    $scope.remove = function (entity) {
+      angular.forEach($scope.evaluationCriterion.items, function (item, index) {
+        if (item.name === entity.name) {
+          $scope.evaluationCriterion.items.splice(index, 1);
+        }
+      });
     };
 
     $scope.add = function () {
-      $scope.evaluationCriterion.items.push({
-        name: '双击进行修改',
-        rate: 1
-      });
+      $scope.adding = true;
+    };
+
+    $scope.cancel = function () {
+      $scope.adding = false;
+    };
+
+    $scope.create = function () {
+      $scope.adding = false;
+      $scope.evaluationCriterion.items.push($scope.item);
+      $scope.item = {};
     };
 
     $scope.save = function () {

@@ -2,10 +2,6 @@
 
 angular.module('compass')
   .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
-    $scope.crumbs = [
-      {text: '面试日历', url: 'events'},
-    ];
-
     $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
 

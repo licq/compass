@@ -25,17 +25,6 @@ describe('mvEventSettingCtrlSpec', function () {
       $httpBackend.flush();
     }));
 
-    it('should set crumbs', function () {
-      expect($scope.crumbs[0]).to.deep.equal({
-        text: '设置',
-        url: 'settings'
-      });
-      expect($scope.crumbs[1]).to.deep.equal({
-        text: '面试设置',
-        url: 'eventSetting'
-      });
-    });
-
     it('should GET /api/eventSettings', function () {
       expect($scope.eventSetting).to.exist;
     });

@@ -2,10 +2,6 @@
 
 angular.module('compass')
   .controller('mvEmailNewCtrl', function ($scope, $location, mvEmail, mvNotifier) {
-    $scope.crumbs = [
-      {text: '简历邮箱', url: 'emails'},
-      {text: '新增', url: 'new'}
-    ];
     $scope.email = new mvEmail({
       port: 110
     });

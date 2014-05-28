@@ -1,17 +1,52 @@
-<div class="page">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>面试评价</strong>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="page">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>面试评价</strong>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table tr-ng-grid="" class="table table-bordered table-striped"
+                   items="evaluationCriterion.items" enable-filtering="false">
+              <thead>
+              <tr>
+                <th field-name="name" display-name="名称" enable-filtering="false" enable-sorting="false"></th>
+                <th field-name="rate" display-name="系数" enable-filtering="false" enable-sorting="false"></th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  <delete-button action="remove(gridItem)"></delete-button>
+                </td>
+              </tr>
+              </tbody>
+              <tfoot ng-hide="'true'">
+              <tr>
+                <td></td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
 
-      <div class="pull-right">
-        <a href="" class="btn btn-xs btn-success" ng-click="add()"><i class="fa fa-plus-circle"></i>添加</a>
+          <form class="form-inline" novalidate="" name="newForm" ng-show="adding">
+            <label>名称</label>
+            <input type="text" class="form-control" ng-model="item.name" required=""/>
+            <label>系数</label>
+            <input type="number" class="form-control" ng-pattern="/\d+/"
+                   ng-model="item.rate" required=""/>
+            <button class="btn btn-primary btn-sm" ng-disabled="newForm.$invalid" ng-click="create()">添加</button>
+            <button class="btn btn-default btn-sm" ng-click="cancel()">取消</button>
+          </form>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-warning" ng-click="add()">添加</button>
+          <button class="btn btn-primary" ng-click="save()">保存</button>
+        </div>
       </div>
     </div>
-    <div class="panel-body">
-      <div class="gridStyle" ng-grid="gridOptions"></div>
-    </div>
-    <div class="panel-footer">
-      <button class="btn btn-primary" ng-click="save()">保存</button>
-    </div>
+
   </div>
 </div>

@@ -118,7 +118,7 @@ span.ui-rating.size-h4{
 }
 
 .tr-ng-grid button{
-    width: 80px;
+    /*width: 80px;*/
 }
 
 .interview-list-buttons{
@@ -128,4 +128,14 @@ span.ui-rating.size-h4{
 
 .interview-list-review-summary span i{
     margin-right: 10px;
+}
+
+table.table.tr-ng-grid td, table.table.tr-ng-grid th{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+}
+
+.panel-heading .pull-right .btn{
+    margin-top: -4px;
 }

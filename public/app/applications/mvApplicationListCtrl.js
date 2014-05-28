@@ -1,13 +1,6 @@
 angular.module('compass')
   .controller('mvApplicationListCtrl',
   function ($scope, states, mvApplication, $http, $window, $location, $routeParams, applicationStatusMap, $modal) {
-    $scope.crumbs = [
-      {
-        text: applicationStatusMap[$routeParams.status],
-        url: 'applications/' + $routeParams.status
-      }
-    ];
-
     $scope.title = applicationStatusMap[$routeParams.status];
 
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {

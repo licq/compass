@@ -41,7 +41,7 @@ describe('mvUserEditCtrl', function () {
       var spy = sinon.spy($location, 'path');
       $scope.update();
       $httpBackend.flush();
-      expect(spy).to.have.been.calledWith('/users');
+      expect(spy).to.have.been.calledWith('/settings/users');
       expect(notifySpy).to.have.been.calledWith('添加用户成功');
     }));
 
