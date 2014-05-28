@@ -43,7 +43,7 @@ angular.module('ui.datetimepicker', [])
           useMinutes: _byDefault(scope.useMinutes, true),
           useSeconds: _byDefault(scope.useSeconds, false),
           minuteStepping: _byDefault(scope.minuteStepping, 5),
-          minDate: _byDefault(scope.minDate, '5/10/2014'),
+          minDate: _byDefault(scope.minDate, '1/1/1970'),
           maxDate: _byDefault(scope.maxDate),
           showToday: _byDefault(scope.showToday, true),
           language: _byDefault(scope.language, 'zh-cn'),

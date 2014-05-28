@@ -9,8 +9,8 @@ exports.list = function (req, res, next) {
   var query = Mail.find({company: req.user.company})
     .sort('-date')
     .select('fromName fromAddress subject date mailbox');
-  if (req.query.page && req.query.pageSize) {
-    query.skip((req.query.page - 1) * req.query.pageSize).limit(req.query.pageSize);
+  if (req.query.currentPage && req.query.pageSize) {
+    query.skip((req.query.currentPage - 1) * req.query.pageSize).limit(req.query.pageSize);
   }
   query.exec(function (err, mails) {
     if (err) return next(err);

@@ -4,7 +4,34 @@
       <strong>邮件</strong>
     </div>
     <div class="panel-body">
-      <div class="gridStyle" ng-grid="gridOptions"></div>
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped" items="mails"
+               page-items="queryOptions.pageSize"
+               total-items="totalMailsCount" current-page="queryOptions.currentPage"
+               order-by="queryOptions.orderBy" order-by-reverse="queryOptions.orderByReverse"
+               enable-filtering="false" enable-selections="false" on-data-required-delay="200"
+               on-data-required="query()">
+          <thead>
+          <tr>
+            <th field-name="mailbox" display-name="收件箱" enable-sorting="false"></th>
+            <th field-name="fromName" display-name="发件人" enable-sorting="false"></th>
+            <th field-name="fromAddress" display-name="发件箱" enable-sorting="false"></th>
+            <th field-name="subject" display-name="主题" enable-sorting="false"></th>
+            <th field-name="date" display-name="时间" enable-sorting="false" display-format="longDate"></th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td align="center">
+              <button ng-click="view(gridItem)"
+                      class="btn btn-primary btn-sm btn-grid-action">详细
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
