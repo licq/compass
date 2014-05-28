@@ -309,11 +309,6 @@ interviewSchema.statics.forReview = function (user, options, cb) {
     .limit(options.pageSize).exec(cb);
 };
 
-interviewSchema.statics.applyPositionsForUser = function (user, cb) {
-  var query = this.distinct('applyPosition');
-  query.where('events.interviewers', user._id);
-  query.exec(cb);
-};
 
 interviewSchema.statics.countForReview = function (user, options, cb) {
   if (typeof options === 'function') {
@@ -374,6 +369,12 @@ interviewSchema.statics.countForCompany = function (company, options, cb) {
 interviewSchema.statics.applyPositionsForCompany = function (company, cb) {
   var query = this.distinct('applyPosition');
   query.where('company', company);
+  query.exec(cb);
+};
+
+interviewSchema.statics.applyPositionsForUser = function (user, cb) {
+  var query = this.distinct('applyPosition');
+  query.where('events.interviewers', user._id);
   query.exec(cb);
 };
 

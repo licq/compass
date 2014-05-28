@@ -33,11 +33,18 @@ exports.get = function (req, res, next) {
     });
 };
 
-exports.applyPositionsForUser = function (req, res, next) {
-  Interview.applyPositionsForUser(req.user, function (err, positions) {
-    if (err) return next(err);
-    res.json(positions);
-  });
+exports.applyPositions = function (req, res, next) {
+  if (req.query.for === 'company') {
+    Interview.applyPositionsForCompany(req.user.company, function (err, positions) {
+      if (err) return next(err);
+      res.json(positions);
+    });
+  } else {
+    Interview.applyPositionsForUser(req.user, function (err, positions) {
+      if (err) return next(err);
+      res.json(positions);
+    });
+  }
 };
 
 exports.update = function (req, res, next) {

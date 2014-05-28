@@ -28,41 +28,46 @@ describe('mvInterviewListCtrl', function () {
     modalOpenStub = sinon.stub($modal, 'open');
     modalOpenStub.returns(fakeModal);
 
-    $httpBackend.expectGET('/api/interviews')
-      .respond([
-        {
-          _id: '1122',
-          name: 'user1',
-          applyPosition: 'cio',
-          events: [
-            {
-              startTime: '2014-5-18 15:00',
-              duration: 90,
-              interviewers: [
-                {
+    $httpBackend.expectGET('/api/applyPositions?for=company').respond([
+      'Java工程师', '销售总监', '前台'
+    ]);
+    $httpBackend.expectGET('/api/interviews?page=1&pageSize=20')
+      .respond(function () {
+        return [200, [
+          {
+            _id: '1122',
+            name: 'user1',
+            applyPosition: 'cio',
+            events: [
+              {
+                startTime: '2014-5-18 15:00',
+                duration: 90,
+                interviewers: [
+                  {
+                    _id: '7788',
+                    name: 'zhangsan'
+                  }
+                ]
+              }
+            ],
+            reviews: [
+              {
+                qualified: true,
+                items: [
+                  {name: 'skill', score: 9, rate: 1},
+                  {name: 'knowledge', score: 8, rate: 1}
+                ],
+                review: 'excellent software engineer',
+                interviewer: {
                   _id: '7788',
                   name: 'zhangsan'
-                }
-              ]
-            }
-          ],
-          reviews: [
-            {
-              qualified: true,
-              items: [
-                {name: 'skill', score: 9, rate: 1},
-                {name: 'knowledge', score: 8, rate: 1}
-              ],
-              review: 'excellent software engineer',
-              interviewer: {
-                _id: '7788',
-                name: 'zhangsan'
-              },
-              totalScore: 17
-            }
-          ]
-        }
-      ]);
+                },
+                totalScore: 17
+              }
+            ]
+          }
+        ], {'totalCount': '20'}];
+      });
 
     $controller('mvInterviewListCtrl', { $scope: $scope });
     $httpBackend.flush();
@@ -71,6 +76,10 @@ describe('mvInterviewListCtrl', function () {
   describe('initialization', function () {
     it('should show a list of interviews correctly', function () {
       expect($scope.interviews).to.have.length(1);
+    });
+
+    it('should set applyPositions', function () {
+      expect($scope.applyPositions).to.have.length(3);
     });
 
     it('should calculate the averageTotalScore', function () {
@@ -89,6 +98,48 @@ describe('mvInterviewListCtrl', function () {
         {name: 'knowledge', score: 8}
       ]);
     });
+
+    it('should set the totalInterviewsCount', function () {
+      expect($scope.totalInterviewsCount).to.equal(20);
+    });
+
+    it('should set the default queryoptions', inject(function (states) {
+      var queryOptions = states.get('mvInterviewListCtrl');
+      expect(queryOptions).to.deep.equal({
+        pageSize: 20,
+        page: 1
+      });
+
+      expect($scope.queryOptions).to.equal(queryOptions);
+    }));
+  });
+
+  describe('search', function () {
+    it('should retrieve the interviewlist again', function () {
+      $httpBackend.expectGET('/api/interviews?name=zhangsan&page=1&pageSize=20').respond(200);
+      $scope.queryOptions.page = 1;
+      $scope.queryOptions.name = 'zhangsan';
+      $scope.search();
+      $httpBackend.flush();
+    });
+  });
+
+  describe('clear queryOptions', function () {
+    it('should clear the query condition and retrieve the intervew list', function () {
+      $httpBackend.expectGET('').respond(200);
+      $scope.queryOptions.page = 3;
+      $scope.queryOptions.name = 'beijing';
+      $scope.clearQueryOptions();
+      $httpBackend.flush();
+
+      expect($scope.queryOptions).to.deep.equal({
+        page: 1,
+        pageSize: 20,
+        name: '',
+        applyPosition: '',
+        startDate: ''
+      });
+    });
   });
 
   describe('newEvent', function () {
@@ -99,35 +150,11 @@ describe('mvInterviewListCtrl', function () {
 
     it('should update the page', function () {
       $scope.newEvent($scope.interviews[0]);
-      $httpBackend.expectGET('/api/interviews/' + $scope.interviews[0]._id).respond({
-        _id: $scope.interviews[0]._id,
-        events: [
-          {
-            startTime: new Date(),
-            interviewers: [
-              {
-                _id: '7788',
-                name: '7788'
-              }
-            ]
-          },
-          {
-            startTime: new Date(),
-            interviewers: [
-              {
-                _id: '8899',
-                name: '8899'
-              }
-            ]
-          }
-        ]
-      });
       fakeModal.close({
         name: 'user1',
         startTime: new Date(),
         interviewers: ['7788', '8899']
       });
-      $httpBackend.flush();
       expect($scope.interviews[0].events).to.have.length(2);
     });
   });

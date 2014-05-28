@@ -4,7 +4,18 @@
       <strong>公司</strong>
     </div>
     <div class="panel-body">
-      <div class="gridStyle" ng-grid="gridOptions"></div>
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped"
+               items="companies" enable-filtering="true">
+          <thead>
+          <tr>
+            <th field-name="name" display-name="名称" enable-filtering="false"></th>
+            <th field-name="created_at" display-name="创建时间" enable-filtering="false"
+                display-format="longDate"></th>
+          </tr>
+          </thead>
+        </table>
+      </div>
     </div>
   </div>
 </div>

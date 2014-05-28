@@ -4,19 +4,9 @@ angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
     'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
-    var routeRoleChecks = {
-      user: { auth: function (mvAuth) {
-        return mvAuth.authenticated();
-      }},
-      anonymous: {auth: function (mvAuth) {
-        return mvAuth.notAuthenticated();
-      }}
-    };
-
     $routeProvider
       .when('/welcome', {
-        templateUrl: '/app/common/welcome.html',
-        resolve: routeRoleChecks.anonymous
+        templateUrl: '/app/common/welcome.html'
       })
       .when('/login', {
         templateUrl: '/app/auth/login.html',
@@ -36,115 +26,142 @@ angular.module('compass',
       })
       .when('/dashboard', {
         templateUrl: '/app/dashboard/dashboard.html',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .
       when('/settings/emails', {
         templateUrl: '/app/emails/list.html',
-        controller: 'mvEmailListCtrl'
+        controller: 'mvEmailListCtrl',
+        authenticate: true
       })
       .when('/settings/emails/new', {
         templateUrl: '/app/emails/new.html',
-        controller: 'mvEmailNewCtrl'
+        controller: 'mvEmailNewCtrl',
+        authenticate: true
       })
       .when('/settings/emails/edit/:id', {
         templateUrl: '/app/emails/edit.html',
-        controller: 'mvEmailEditCtrl'
+        controller: 'mvEmailEditCtrl',
+        authenticate: true
       })
       .when('/settings/mails', {
         templateUrl: '/app/mails/list.html',
         controller: 'mvMailListCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/settings/mails/:id', {
         templateUrl: '/app/mails/view.html',
         controller: 'mvMailViewCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/settings/users', {
         templateUrl: '/app/users/list.html',
         controller: 'mvUserListCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/settings/users/new', {
         templateUrl: '/app/users/new.html',
         controller: 'mvUserNewCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/settings/users/edit/:id', {
         templateUrl: '/app/users/edit.html',
         controller: 'mvUserEditCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/resumes', {
         templateUrl: '/app/resumes/list.html',
         controller: 'mvResumeListCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/resumes/:id', {
         templateUrl: '/app/resumes/view.html',
         controller: 'mvResumeViewCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/settings/companies', {
         templateUrl: '/app/companies/list.html',
         controller: 'mvCompanyListCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/events', {
         templateUrl: '/app/events/list.html',
         controller: 'mvEventListCtrl',
-        resolve: routeRoleChecks.user
+        authenticate: true
       })
       .when('/interviews/list', {
         templateUrl: '/app/interviews/list.html',
-        controller: 'mvInterviewListCtrl'
+        controller: 'mvInterviewListCtrl',
+        authenticate: true
       })
       .when('/interviews/reviews', {
         templateUrl: '/app/reviews/list.html',
-        controller: 'mvReviewListCtrl'
+        controller: 'mvReviewListCtrl',
+        authenticate: true
+      })
+      .when('/interviews/reviews/:id', {
+        templateUrl: '/app/reviews/new.html',
+        controller: 'mvReviewNewCtrl',
+        authenticate: true
       })
       .when('/interviews/:id', {
         templateUrl: '/app/interviews/view.html',
-        controller: 'mvInterviewViewCtrl'
+        controller: 'mvInterviewViewCtrl',
+        authenticate: true
       })
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
-        controller: 'mvEventSettingCtrl'
+        controller: 'mvEventSettingCtrl',
+        authenticate: true
       })
       .when('/settings/evaluationCriterions', {
         templateUrl: '/app/evaluationCriterions/edit.html',
-        controller: 'mvEvaluationCriterionEditCtrl'
+        controller: 'mvEvaluationCriterionEditCtrl',
+        authenticate: true
       })
       .when('/applications/:status', {
         templateUrl: '/app/applications/list.html',
-        controller: 'mvApplicationListCtrl'
+        controller: 'mvApplicationListCtrl',
+        authenticate: true
       })
       .when('/applications/:status/:index', {
         templateUrl: '/app/applications/view.html',
         controller: 'mvApplicationViewCtrl',
-        resolve: routeRoleChecks.user
-      })
-      .when('/', {
-        redirectTo: '/welcome'
+        authenticate: true
       })
       .otherwise({
-        redirectTo: '/'
+        resolve: {
+          load: function (mvIdentity, $location, $q) {
+            var defer = $q.defer();
+            if (mvIdentity.isAuthenticated()) {
+              $location.path('/dashboard');
+            } else {
+              $location.path('/welcome');
+            }
+            defer.reject();
+            return defer.promise;
+          }
+        }
       });
-
     $httpProvider.interceptors.push(['$q', '$location', function ($q, $location) {
       return {
         'responseError': function (response) {
           if (response.status === 401) {
             $location.path('/login');
             return $q.reject(response);
-          }
-          else {
+          } else {
             return $q.reject(response);
           }
         }
       };
     }]);
+  })
+  .run(function ($rootScope, $location, mvIdentity) {
+    $rootScope.$on('$routeChangeStart', function (event, next) {
+      if (next.authenticate && !mvIdentity.isAuthenticated()) {
+        $location.path('/login');
+      }
+    });
   })
   .factory('states', function () {
     var states = {};
@@ -159,24 +176,6 @@ angular.module('compass',
         return states[key] || {};
       }
     };
-  })
-  .run(function ($rootScope, $location, mvIdentity) {
-    $rootScope.$on('$routeChangeStart', function (event, next) {
-      if (next.authenticate && !mvIdentity.isAuthenticated()) {
-        $location.path('/login');
-      }
-    });
-
-    $rootScope.$on('$routeChangeError', function (evt, current, previous, rejection) {
-      console.log(rejection);
-      if (rejection === 'authenticated already') {
-        $location.path('/dashboard');
-      }
-
-      if (rejection === 'not authenticated') {
-        $location.path('/login');
-      }
-    });
   })
   .value('applicationStatusMap', {
     new: '新应聘',

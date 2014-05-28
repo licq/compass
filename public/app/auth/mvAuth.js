@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .factory('mvAuth', function (mvSession, mvIdentity, $q) {
+  .factory('mvAuth', function (mvSession, mvIdentity) {
     return {
       login: function (user, callback) {
         var cb = callback || angular.noop;
@@ -27,22 +27,6 @@ angular.module('compass')
         }, function (err) {
           return cb(err);
         }).$promise;
-      },
-
-      notAuthenticated: function () {
-        if (!mvIdentity.isAuthenticated()) {
-          return true;
-        } else {
-          return $q.reject('authenticated already');
-        }
-      },
-
-      authenticated: function () {
-        if (mvIdentity.isAuthenticated()) {
-          return true;
-        } else {
-          return $q.reject('not authenticated');
-        }
       }
     };
   });
