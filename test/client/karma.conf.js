@@ -28,7 +28,6 @@ module.exports = function (config) {
       'public/vendor/angular-ui-calendar/src/calendar.js',
       'public/vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'public/vendor/angular-bootstrap/ui-bootstrap.js',
-      'public/vendor/ng-grid/build/ng-grid.min.js',
       'public/vendor/toastr/toastr.min.js',
       'public/vendor/select2/select2.min.js',
       'public/vendor/trNgGrid/src/js/trNgGrid.js',

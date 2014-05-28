@@ -2,19 +2,14 @@
 
 angular.module('compass')
   .controller('mvMailListCtrl', function ($scope, mvMail, $location, states) {
-
-    $scope.states = states.get('mvMailListCtrl');
+    states.defaults('mvMailListCtrl', {
+      queryOptions: {
+        page: 1,
+        pageSize: 20
+      }
+    });
 
     $scope.totalMailsCount = 0;
-
-    var defaultQueryOptions = {
-      currentPage: 1,
-      pageSize: 10
-    };
-
-    states.defaults('mvMailListCtrl', {
-      queryOptions: defaultQueryOptions
-    });
 
     $scope.queryOptions = states.get('mvMailListCtrl').queryOptions;
 
@@ -29,5 +24,4 @@ angular.module('compass')
     $scope.view = function (mail) {
       $location.path('/settings/mails/' + mail._id);
     };
-
   });

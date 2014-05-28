@@ -1442,15 +1442,18 @@ describe('mvApplicationListCtrl', function () {
       }));
 
       it('should invoke the /api/applications', inject(function () {
-        $scope.states.searchOptions = {
+        $scope.queryOptions = {
           q: 'hello',
           age: 20,
           applyPosition: 'cio',
-          highestDegree: 'master'
+          highestDegree: 'master',
+          page: 1,
+          pageSize: 50,
+          status: status
         };
 
         $httpBackend.expectGET('/api/applications?age=20&applyPosition=cio&highestDegree=master&page=1&pageSize=50&q=hello&status=' + status).respond(result);
-        $scope.getApplications();
+        $scope.query();
         $httpBackend.flush();
         expect($scope.applications).to.have.length(10);
         expect($scope.totalApplicationCount).to.equal(20);
@@ -1466,63 +1469,63 @@ describe('mvApplicationListCtrl', function () {
 
       describe('setAge', function () {
         it('should set the query age parameter', function () {
-          var spy = sinon.spy($scope, 'getApplications');
+          var spy = sinon.spy($scope, 'query');
           $scope.setAge(20);
 
-          expect($scope.states.searchOptions).to.have.property('age', 20);
+          expect($scope.queryOptions).to.have.property('age', 20);
           expect(spy.called).to.be.true;
         });
 
         it('should clear the query age parameter', function () {
-          var spy = sinon.spy($scope, 'getApplications');
+          var spy = sinon.spy($scope, 'query');
           $scope.setAge();
-          expect($scope.states.searchOptions.age).to.not.exist;
+          expect($scope.queryOptions.age).to.not.exist;
           expect(spy.called).to.be.true;
         });
       });
 
       describe('setApplyPosition', function () {
         it('should set the query applyposition parameter', function () {
-          var spy = sinon.spy($scope, 'getApplications');
+          var spy = sinon.spy($scope, 'query');
           $scope.setApplyPosition('cio');
-          expect($scope.states.searchOptions).to.have.property('applyPosition', 'cio');
+          expect($scope.queryOptions).to.have.property('applyPosition', 'cio');
           expect(spy.called).to.be.true;
         });
 
         it('should clear the query applyposition parameter', function () {
-          var spy = sinon.spy($scope, 'getApplications');
+          var spy = sinon.spy($scope, 'query');
           $scope.setApplyPosition();
-          expect($scope.states.searchOptions.applyPosition).to.not.exist;
+          expect($scope.queryOptions.applyPosition).to.not.exist;
           expect(spy.called).to.be.true;
         });
       });
 
       describe('setHighestDegree', function () {
         it('should set the query highestDegree parameter', function () {
-          var spy = sinon.spy($scope, 'getApplications');
+          var spy = sinon.spy($scope, 'query');
           $scope.setHighestDegree('master');
 
-          expect($scope.states.searchOptions).to.have.property('highestDegree', 'master');
+          expect($scope.queryOptions).to.have.property('highestDegree', 'master');
           expect(spy.called).to.be.true;
         });
 
         it('should clear the query highestdegree parameter', function () {
-          var spy = sinon.spy($scope, 'getApplications');
+          var spy = sinon.spy($scope, 'query');
           $scope.setHighestDegree();
-          expect($scope.states.searchOptions.highestDegree).to.not.exist;
+          expect($scope.queryOptions.highestDegree).to.not.exist;
           expect(spy.called).to.be.true;
         });
       });
 
       describe('showPagination', function () {
         it('should show pagination bar when totalCount bigger than pageSize', function () {
-          $scope.states.pagingOptions.pageSize = 50;
+          $scope.queryOptions.pageSize = 50;
           $scope.totalApplicationCount = 51;
           expect($scope.showPagination()).to.be.true;
         });
 
         it('should show pagination bar when totalCount smaller than or equal to pageSize', function () {
-          $scope.states.pagingOptions.pageSize = 50;
+          $scope.queryOptions.pageSize = 50;
           $scope.totalApplicationCount = 49;
           expect($scope.showPagination()).to.be.false;
         });
@@ -1643,9 +1646,9 @@ describe('mvApplicationListCtrl', function () {
       describe('view', function () {
         it('should go to the correct url', inject(function ($location) {
           var spy = sinon.spy($location, 'path');
-          $scope.states.pagingOptions = {
+          $scope.queryOptions = {
             pageSize: 5,
-            currentPage: 20
+            page: 20
           };
           $scope.view(2);
           expect(spy).to.have.been.calledWith('/applications/' + status + '/98');
@@ -1664,7 +1667,7 @@ describe('mvApplicationListCtrl', function () {
             name: 'aabb',
             application: '5355c145b5f85ce10e5aa596'
           });
-          angular.forEach($scope.applications,function(app){
+          angular.forEach($scope.applications, function (app) {
             expect(app._id).to.not.equal('5355c145b5f85ce10e5aa596');
           });
         });

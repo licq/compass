@@ -23,7 +23,7 @@ describe('/api/mails', function () {
 
   describe('GET /api/mails', function () {
     it('should return 200 with json result', function (done) {
-      request.get('/api/mails?currentPage=1&pageSize=5')
+      request.get('/api/mails?page=1&pageSize=5')
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function (err, res) {

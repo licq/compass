@@ -7,7 +7,7 @@ describe('mvMailListCtrl', function () {
 
   beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/mails?currentPage=1&pageSize=10').respond(function () {
+    $httpBackend.expectGET('/api/mails?page=1&pageSize=20').respond(function () {
       return[200, [
         {address: 'compass@best.com'}
       ], {'totalCount': 20}];

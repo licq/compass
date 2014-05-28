@@ -15,11 +15,11 @@ describe('mvResumeViewCtrl', function () {
       $scope: $scope,
       $routeParams: {id: 7788}
     });
+
+    $httpBackend.flush();
   }));
 
   it('should get the resume', function (done) {
-    $httpBackend.flush();
-
     expect($scope.resume).to.exist;
     expect($scope.resume.address).to.equal('compass@best.com');
 
@@ -28,4 +28,11 @@ describe('mvResumeViewCtrl', function () {
     done();
   });
 
+  describe('back', function () {
+    it('should', inject(function ($location) {
+      var spy = sinon.spy($location, 'path');
+      $scope.back();
+      expect(spy).to.have.been.calledWith('/resumes');
+    }));
+  });
 });

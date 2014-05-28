@@ -7,8 +7,7 @@
       <div class="table-responsive">
         <table tr-ng-grid="" class="table table-bordered table-striped" items="mails"
                page-items="queryOptions.pageSize"
-               total-items="totalMailsCount" current-page="queryOptions.currentPage"
-               order-by="queryOptions.orderBy" order-by-reverse="queryOptions.orderByReverse"
+               total-items="totalMailsCount" current-page="queryOptions.page"
                enable-filtering="false" enable-selections="false" on-data-required-delay="200"
                on-data-required="query()">
           <thead>

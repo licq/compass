@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass',
-  ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ngGrid',
+  ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar',
     'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider

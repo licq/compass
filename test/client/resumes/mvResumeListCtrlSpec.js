@@ -1405,7 +1405,7 @@ describe('mvResumeListCtrl', function () {
       }
     };
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/resumes?page=1&pageSize=10').respond(result);
+    $httpBackend.expectGET('/api/resumes?page=1&pageSize=20').respond(result);
 
     $scope = $rootScope.$new();
     mvResumeListCtrl = $controller('mvResumeListCtrl', {
@@ -1423,108 +1423,112 @@ describe('mvResumeListCtrl', function () {
   });
 
   it('should invoke the /api/resumes?q=hello', inject(function (states) {
-    $scope.states.searchOptions.q = 'hello';
-    $httpBackend.expectGET('/api/resumes?page=1&pageSize=10&q=hello').respond(result);
+    $scope.queryOptions.q = 'hello';
+    $httpBackend.expectGET('/api/resumes?page=1&pageSize=20&q=hello').respond(result);
     $scope.search();
     $httpBackend.flush();
     expect($scope.resumes).to.have.length(10);
     expect($scope.totalResumesCount).to.equal(20);
     var state = states.get('mvResumeListCtrl');
-    expect(state.pagingOptions.currentPage).to.equal(1);
+    expect(state.queryOptions.page).to.equal(1);
   }));
 
   describe('change currentpage to 2', function () {
     beforeEach(function () {
-      $httpBackend.expectGET('/api/resumes?age=20&applyPosition=cio&highestDegree=master&page=2&pageSize=10').respond(result);
-      $scope.states.pagingOptions.currentPage = 2;
-      $scope.states.searchOptions = {
+      $httpBackend.expectGET('/api/resumes?age=20&applyPosition=cio&highestDegree=master&page=2&pageSize=20').respond(result);
+      $scope.queryOptions = {
+        page: 2,
+        pageSize: 20,
         age: 20,
         applyPosition: 'cio',
         highestDegree: 'master'
       };
+      $scope.query();
       $httpBackend.flush();
     });
 
     it('should change current page to 1 after change pagesize', function () {
-      $scope.states.pagingOptions.pageSize = 20;
+      $scope.queryOptions.pageSize = 20;
       setTimeout(function () {
-        expect($scope.states.pagingOptions.currentPage).to.equal(1);
+        expect($scope.queryOptions.page).to.equal(1);
       }, 100);
     });
 
     it('should clear the searchOptions and set currentPage to 1 when change q', function () {
-      $scope.states.searchOptions.q = 'hello';
+      $scope.queryOptions.q = 'hello';
       $scope.search();
-      expect($scope.states.pagingOptions.currentPage).to.equal(1);
-      expect($scope.states.searchOptions.age).to.not.exist;
-      expect($scope.states.searchOptions.applyPosition).to.not.exist;
-      expect($scope.states.searchOptions.highestDegree).to.not.exist;
+      expect($scope.queryOptions.page).to.equal(1);
+      expect($scope.queryOptions.age).to.not.exist;
+      expect($scope.queryOptions.applyPosition).to.not.exist;
+      expect($scope.queryOptions.highestDegree).to.not.exist;
 
     });
   });
 
   describe('query using facets', function () {
-    it('should invoke /api/resumes?page=1&pageSize=10&q=hello&age=20&highestDegree=master&applyPosition=cio',
+    it('should invoke /api/resumes?page=1&pageSize=20&q=hello&age=20&highestDegree=master&applyPosition=cio',
       function () {
-        $httpBackend.expectGET('/api/resumes?age=20&age=25&applyPosition=cio&highestDegree=master&page=1&pageSize=10&q=hello')
+        $httpBackend.expectGET('/api/resumes?age=20&age=25&applyPosition=cio&highestDegree=master&page=1&pageSize=20&q=hello')
           .respond(result);
-        $scope.states.searchOptions = {
+        $scope.queryOptions = {
+          page: 1,
+          pageSize: 20,
           q: 'hello',
           age: [20, 25],
           highestDegree: ['master'],
           applyPosition: ['cio']
         };
-        $scope.getResumes();
+        $scope.query();
         $httpBackend.flush();
       });
   });
 
   describe('setAge', function () {
     it('should set the query age parameter', function () {
-      var spy = sinon.spy($scope, 'getResumes');
+      var spy = sinon.spy($scope, 'query');
       $scope.setAge(20);
 
-      expect($scope.states.searchOptions).to.have.property('age', 20);
+      expect($scope.queryOptions).to.have.property('age', 20);
       expect(spy.called).to.be.true;
     });
 
     it('should clear the query age parameter', function () {
-      var spy = sinon.spy($scope, 'getResumes');
+      var spy = sinon.spy($scope, 'query');
       $scope.setAge();
-      expect($scope.states.searchOptions.age).to.not.exist;
+      expect($scope.queryOptions.age).to.not.exist;
       expect(spy.called).to.be.true;
     });
   });
 
   describe('setApplyPosition', function () {
     it('should set the query applyposition parameter', function () {
-      var spy = sinon.spy($scope, 'getResumes');
+      var spy = sinon.spy($scope, 'query');
       $scope.setApplyPosition('cio');
-      expect($scope.states.searchOptions).to.have.property('applyPosition', 'cio');
+      expect($scope.queryOptions).to.have.property('applyPosition', 'cio');
       expect(spy.called).to.be.true;
     });
 
     it('should clear the query applyposition parameter', function () {
-      var spy = sinon.spy($scope, 'getResumes');
+      var spy = sinon.spy($scope, 'query');
       $scope.setApplyPosition();
-      expect($scope.states.searchOptions.applyPosition).to.not.exist;
+      expect($scope.queryOptions.applyPosition).to.not.exist;
       expect(spy.called).to.be.true;
     });
   });
 
   describe('setHighestDegree', function () {
     it('should set the query highestDegree parameter', function () {
-      var spy = sinon.spy($scope, 'getResumes');
+      var spy = sinon.spy($scope, 'query');
       $scope.setHighestDegree('master');
 
-      expect($scope.states.searchOptions).to.have.property('highestDegree', 'master');
+      expect($scope.queryOptions).to.have.property('highestDegree', 'master');
       expect(spy.called).to.be.true;
     });
 
     it('should clear the query highestdegree parameter', function () {
-      var spy = sinon.spy($scope, 'getResumes');
+      var spy = sinon.spy($scope, 'query');
       $scope.setHighestDegree();
-      expect($scope.states.searchOptions.highestDegree).to.not.exist;
+      expect($scope.queryOptions.highestDegree).to.not.exist;
       expect(spy.called).to.be.true;
     });
   });

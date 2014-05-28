@@ -4,26 +4,20 @@ angular.module('compass')
     $scope.title = applicationStatusMap[$routeParams.status];
 
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
-      pagingOptions: {
-        pageSizes: [10, 20, 50],
+      queryOptions: {
         pageSize: 50,
-        currentPage: 1
-      },
-      searchOptions: {
+        page: 1
       }
     });
 
     $scope.initialized = false;
 
     $scope.totalApplicationCount = 999;
-    $scope.states = states.get('mvApplicationListCtrl' + $routeParams.status);
+    $scope.queryOptions = states.get('mvApplicationListCtrl' + $routeParams.status).queryOptions;
+    $scope.queryOptions.status = $routeParams.status;
 
-    $scope.getApplications = function () {
-      var query = angular.extend({pageSize: $scope.states.pagingOptions.pageSize,
-          page: $scope.states.pagingOptions.currentPage,
-          status: $routeParams.status},
-        $scope.states.searchOptions);
-      $http.get('/api/applications', {params: query}).success(function (result) {
+    $scope.query = function () {
+      $http.get('/api/applications', {params: $scope.queryOptions}).success(function (result) {
         $scope.totalApplicationCount = result.hits.total;
         $scope.applications = result.hits.hits;
         $scope.facets = result.facets;
@@ -31,14 +25,17 @@ angular.module('compass')
       });
     };
 
-    function getOneMoreApplication() {
-      if ($scope.totalApplicationCount > $scope.states.pagingOptions.currentPage * $scope.states.pagingOptions.pageSize) {
-        var query = angular.extend({pageSize: 1,
-            page: $scope.states.pagingOptions.currentPage * $scope.states.pagingOptions.pageSize,
-            status: $routeParams.status},
-          $scope.states.searchOptions);
+    function oneMore() {
+      if ($scope.totalApplicationCount > $scope.queryOptions.page * $scope.queryOptions.pageSize) {
+        var queryOption = angular.extend(
+          {},
+          $scope.queryOptions,
+          {
+            pageSize: 1,
+            page: $scope.queryOptions.page * $scope.queryOptions.pageSize
+          });
 
-        $http.get('/api/applications', {params: query}).success(function (result) {
+        $http.get('/api/applications', {params: queryOption}).success(function (result) {
           if (result.hits.hits && result.hits.hits.length > 0) {
             $scope.applications.push(result.hits.hits[0]);
           }
@@ -47,28 +44,28 @@ angular.module('compass')
     }
 
     $scope.setApplyPosition = function (applyPosition) {
-      $scope.states.searchOptions.applyPosition = applyPosition;
-      $scope.states.pagingOptions.currentPage = 1;
-      $scope.getApplications();
+      $scope.queryOptions.applyPosition = applyPosition;
+      $scope.queryOptions.page = 1;
+      $scope.query();
     };
 
     $scope.setAge = function (age) {
-      $scope.states.searchOptions.age = age;
-      $scope.states.pagingOptions.currentPage = 1;
-      $scope.getApplications();
+      $scope.queryOptions.age = age;
+      $scope.queryOptions.page = 1;
+      $scope.query();
     };
 
     $scope.setHighestDegree = function (highestDegree) {
-      $scope.states.searchOptions.highestDegree = highestDegree;
-      $scope.states.pagingOptions.currentPage = 1;
-      $scope.getApplications();
+      $scope.queryOptions.highestDegree = highestDegree;
+      $scope.queryOptions.page = 1;
+      $scope.query();
     };
 
     $scope.showPagination = function () {
-      return $scope.totalApplicationCount > $scope.states.pagingOptions.pageSize && $scope.initialized;
+      return $scope.totalApplicationCount > $scope.queryOptions.pageSize && $scope.initialized;
     };
 
-    function removeFromApplications(id) {
+    function removeLocal(id) {
       var index = -1;
       angular.forEach($scope.applications, function (application, i) {
         if (application._id === id) {
@@ -85,28 +82,28 @@ angular.module('compass')
     $scope.archive = function (id) {
       if ($window.confirm('确认将该应聘简历归档？归档后的简历可在人才库找到')) {
         mvApplication.archive({_id: id}, function () {
-          removeFromApplications(id);
-          getOneMoreApplication();
+          removeLocal(id);
+          oneMore();
         });
       }
     };
 
     $scope.pursue = function (id) {
       mvApplication.pursue({_id: id}, function () {
-        removeFromApplications(id);
-        getOneMoreApplication();
+        removeLocal(id);
+        oneMore();
       });
     };
 
     $scope.undetermine = function (id) {
       mvApplication.undetermine({_id: id}, function () {
-        removeFromApplications(id);
-        getOneMoreApplication();
+        removeLocal(id);
+        oneMore();
       });
     };
 
     $scope.view = function (index) {
-      index += $scope.states.pagingOptions.pageSize * ($scope.states.pagingOptions.currentPage - 1);
+      index += $scope.queryOptions.pageSize * ($scope.queryOptions.page - 1);
       index += 1;
       $location.path('/applications/' + $routeParams.status + '/' + index);
     };
@@ -131,12 +128,12 @@ angular.module('compass')
 
       newEventModal.result.then(function (event) {
         if (event) {
-          removeFromApplications(event.application);
-          getOneMoreApplication();
+          removeLocal(event.application);
+          oneMore();
         }
       });
     };
 
-    $scope.getApplications();
+    $scope.query();
 
   });

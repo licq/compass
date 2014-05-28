@@ -6,13 +6,13 @@
         <div class="form-group">
           <div class="col-md-5 col-md-offset-3">
             <input type="text" class="form-control" name="q"
-                   ng-model="states.searchOptions.q">
+                   ng-model="queryOptions.q">
           </div>
           <div class="col-md-4">
-            <button class="btn btn-primary" ng-click="getApplications()">搜索</button>
+            <button class="btn btn-primary" ng-click="query()">搜索</button>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-show="facets.applyPosition.terms.length > 0">
           <div class="col-md-1">
             应聘职位
           </div>
@@ -27,7 +27,7 @@
             </ul>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-show="facets.age.entries.length > 0">
           <div class="col-md-1">
             年龄
           </div>
@@ -42,7 +42,7 @@
             </ul>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-show="facets.highestDegree.terms.length > 0">
           <div class="col-md-1">
             学历
           </div>
@@ -61,7 +61,40 @@
     </div>
 
     <div class="panel-body">
-      <div class="gridStyle" ng-grid="gridOptions"></div>
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped" items="resumes"
+               page-items="queryOptions.pageSize" on-data-required-delay="100"
+               total-items="totalResumesCount" current-page="queryOptions.page"
+               enable-filtering="false" enable-selections="false"
+               on-data-required="query()">
+          <thead>
+          <tr>
+            <th field-name="name" display-name="姓名" enable-filtering="false"
+                enable-sorting="false"></th>
+            <th field-name="birthday" display-name="出生日期" enable-filtering="false"
+                enable-sorting="false" display-format="yearAndMonth"></th>
+            <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
+                enable-sorting="false"></th>
+            <th field-name="educationHistory[0].school" display-name="毕业学校" enable-filtering="false"
+                enable-sorting="false"></th>
+            <th field-name="workExperience[0].company" display-name="所在公司" enable-filtering="false"
+                enable-sorting="false"></th>
+            <th field-name="yearsOfExperience" display-name="工作年限" enable-filtering="false"
+                enable-sorting="false" display-format="yearsOfExperience"></th>
+            <th field-name="channel" display-name="招聘渠道" enable-filtering="false"
+                enable-sorting="false"></th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td align="center">
+              <view-button action="view(gridItem)"></view-button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 </div>

@@ -8,7 +8,6 @@
     "angular-mocks": "latest",
     "angular-route": "latest",
     "angular-sanitize": "latest",
-    "ng-grid": "latest",
     "fullcalendar": "latest",
     "angular-ui-calendar": "latest",
     "trNgGrid": "git://github.com/licq/trNgGrid.git#v2.1_zh_cn",
