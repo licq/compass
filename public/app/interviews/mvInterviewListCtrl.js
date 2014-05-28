@@ -42,29 +42,61 @@ function calculateQualifiedSummaries(interview) {
   return qualifiedSummaries;
 }
 angular.module('compass')
-  .controller('mvInterviewListCtrl', function ($scope, mvInterview, $modal, $location) {
-    mvInterview.query(function (interviews) {
-      $scope.interviews = interviews;
-      $scope.interviews.forEach(function (interview) {
-        if (interview.reviews.length > 0) {
-          interview.averageTotalScore = _.reduce(interview.reviews, function (sum, review) {
-            return sum + review.totalScore;
-          }, 0) / interview.reviews.length;
-        }
-        interview.qualifiedSummaries = calculateQualifiedSummaries(interview);
-        interview.averageFieldScores = _.sortBy(_.map(totalFieldScores(interview), function (score, name) {
-          return {
-            name: name,
-            score: score / interview.reviews.length
-          };
-        }), function (score) {
-          return -score.score;
+  .controller('mvInterviewListCtrl', function ($scope, mvInterview, $modal, $location, states, $http) {
+    function query() {
+      mvInterview.query($scope.queryOptions, function (interviews, headers) {
+        $scope.interviews = interviews;
+        $scope.totalInterviewsCount = parseInt(headers('totalCount'), 10);
+        $scope.interviews.forEach(function (interview) {
+          if (interview.reviews.length > 0) {
+            interview.averageTotalScore = _.reduce(interview.reviews, function (sum, review) {
+              return sum + review.totalScore;
+            }, 0) / interview.reviews.length;
+          }
+          interview.qualifiedSummaries = calculateQualifiedSummaries(interview);
+          interview.averageFieldScores = _.sortBy(_.map(totalFieldScores(interview), function (score, name) {
+            return {
+              name: name,
+              score: score / interview.reviews.length
+            };
+          }), function (score) {
+            return -score.score;
+          });
         });
       });
+    }
+
+    $http.get('/api/applyPositions?for=company').success(function (applyPositions) {
+      $scope.applyPositions = applyPositions;
     });
+
+    states.defaults('mvInterviewListCtrl', {
+      page: 1,
+      pageSize: 20
+    });
+
+    $scope.queryOptions = states.get('mvInterviewListCtrl');
+    query();
+
+    $scope.search = function () {
+      $scope.queryOptions.page = 1;
+      query();
+    };
+
+    $scope.clearQueryOptions = function () {
+      $scope.queryOptions = {
+        page: 1,
+        pageSize: 20
+      };
+      query();
+    };
 
     $scope.view = function (interviewId) {
       $location.path('/interviews/' + interviewId);
+    };
+
+    $scope.changed = function () {
+      console.log('changed');
     };
 
     $scope.newEvent = function (interview) {
