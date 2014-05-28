@@ -160,6 +160,8 @@ interviewSchema.statics.addEvent = function (event, cb) {
 };
 
 interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end, cb) {
+  interviewer = mongoose.Types.ObjectId(interviewer);
+
   var match = {
     $match: {
       events: {
@@ -167,23 +169,14 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
           startTime: {
             $gte: start,
             $lt: end
-          }
+          },
+          $or: [
+            { interviewers: interviewer },
+            { createdBy: interviewer }
+          ]
         }
       }
     }};
-  if (!!interviewer) {
-    if (typeof interviewer === 'string') {
-      interviewer = mongoose.Types.ObjectId(interviewer);
-    }
-    match.$match.events.$elemMatch.$or = [
-      {
-        interviewers: interviewer
-      },
-      {
-        createdBy: interviewer
-      }
-    ];
-  }
 
   this.aggregate(match)
     .unwind('events')
@@ -201,19 +194,38 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       interviewers: '$events.interviewers',
       application: 1
     })
-    .match({
-      $or: [
-        {
-          interviewers: interviewer
-        },
-        {
-          createdBy: interviewer
-        }
-      ],
-      startTime: {
+    .match({ $or: [
+      { interviewers: interviewer },
+      { createdBy: interviewer }
+    ], startTime: { $gte: start, $lt: end } })
+    .exec(cb);
+};
+
+interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
+  var match = {
+    $match: {
+      'events.startTime': {
         $gte: start,
         $lt: end
-      }
+      },
+      company: mongoose.Types.ObjectId(company)
+    }};
+
+  this.aggregate(match)
+    .unwind('events')
+    .project({
+      _id: '$events._id',
+      interview_id: '$_id',
+      name: 1,
+      email: 1,
+      applyPosition: 1,
+      mobile: 1,
+      company: 1,
+      createdBy: '$events.createdBy',
+      startTime: '$events.startTime',
+      duration: '$events.duration',
+      interviewers: '$events.interviewers',
+      application: 1
     })
     .exec(cb);
 };
@@ -308,7 +320,6 @@ interviewSchema.statics.forReview = function (user, options, cb) {
     .skip((options.page - 1) * options.pageSize)
     .limit(options.pageSize).exec(cb);
 };
-
 
 interviewSchema.statics.countForReview = function (user, options, cb) {
   if (typeof options === 'function') {

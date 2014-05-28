@@ -9,11 +9,19 @@ exports.list = function (req, res, next) {
   var startTime = moment(req.query.startTime).toDate() || moment().startOf('week').toDate();
   var endTime = moment(req.query.endTime).toDate() || moment().endOf('week').toDate();
 
-  Interview.eventsForInterviewer(req.query.user, startTime, endTime,
-    function (err, results) {
-      if (err) return next(err);
-      return res.json(results);
-    });
+  if (req.query.user) {
+    Interview.eventsForInterviewer(req.query.user, startTime, endTime,
+      function (err, results) {
+        if (err) return next(err);
+        return res.json(results);
+      });
+  } else {
+    Interview.eventsForCompany(req.user.company, startTime, endTime,
+      function (err, results) {
+        if (err) return next(err);
+        return res.json(results);
+      });
+  }
 };
 
 exports.update = function (req, res, next) {

@@ -150,6 +150,31 @@ describe('interview', function () {
       });
     });
 
+    it('should get all related events of company', function (done) {
+      var start = moment([2015, 5, 1, 7, 30, 0, 0]).toDate();
+      var end = moment([2015, 5, 1, 7, 31, 0, 0]).toDate();
+      Factory.create('user', function (anotherUser) {
+        Factory.create('interview', {
+          company: user.company,
+          events: [
+            {
+              startTime: moment([2015, 5, 1, 7, 30, 0, 0]).toDate(),
+              duration: 90,
+              interviewers: [anotherUser._id],
+              createdBy: anotherUser._id
+            }
+          ]}, function (createdInterview) {
+          Interview.eventsForCompany(user.company, start, end, function (err, events) {
+            expect(err).to.not.exist;
+            expect(events).to.have.length(1);
+            expect(events[0].company.toString()).to.equal(createdInterview.company.toString());
+            expect(events[0].application.toString()).to.equal(createdInterview.application.toString());
+            done();
+          });
+        });
+      });
+    });
+
     it('should update the event', function (done) {
       Factory.create('interview', {events: [
         {
