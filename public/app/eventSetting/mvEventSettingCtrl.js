@@ -1,16 +1,5 @@
 angular.module('compass')
   .controller('mvEventSettingCtrl', function ($scope, mvNotifier, mvEventSetting) {
-    $scope.crumbs = [
-      {
-        text: '设置',
-        url: 'settings'
-      },
-      {
-        text: '面试设置',
-        url: 'eventSetting'
-      }
-    ];
-
     $scope.eventSetting = mvEventSetting.get();
 
     $scope.save = function () {

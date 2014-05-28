@@ -6,13 +6,7 @@ describe('mvApplicationListCtrl', function () {
     $scope,
     result,
     fakeModal,
-    modalOpenStub,
-    titles = {
-      new: '新应聘',
-      archived: '归档',
-      pursued: '通过',
-      undetermined: '待定'
-    };
+    modalOpenStub;
 
   beforeEach(inject(function (_$httpBackend_, $rootScope, $modal) {
     result = {
@@ -1469,12 +1463,6 @@ describe('mvApplicationListCtrl', function () {
         expect($scope.facets.applyPosition.terms).to.have.length(4);
         expect($scope.facets.highestDegree.terms).to.have.length(4);
       });
-
-      it('should have correct crumbs', function () {
-        expect($scope.crumbs[0].text).to.equal(titles[status]);
-        expect($scope.crumbs[0].url).to.equal('applications/' + status);
-      });
-
 
       describe('setAge', function () {
         it('should set the query age parameter', function () {

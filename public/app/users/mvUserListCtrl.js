@@ -1,8 +1,5 @@
 angular.module('compass')
   .controller('mvUserListCtrl', function ($scope, mvUser, $location) {
-    $scope.crumbs = [
-      {text: '用户', url: 'users'}
-    ];
     $scope.users = mvUser.query();
 
     $scope.gridOptions = angular.extend({

@@ -31,15 +31,6 @@ describe('mvEventListCtrl', function () {
   }));
 
   describe('initialization', function () {
-    it('should set crumbs', function () {
-      expect($scope.crumbs).to.deep.equal([
-        {
-          text: '面试日历',
-          url: 'events'
-        }
-      ]);
-    });
-
     it('should set selectedUser', function () {
       expect($scope.selectedUserId).to.equal('7788');
     });

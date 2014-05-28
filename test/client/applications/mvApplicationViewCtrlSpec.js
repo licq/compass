@@ -58,18 +58,6 @@ describe('mvApplicationViewCtrl', function () {
         $httpBackend.flush();
       }));
 
-      it('should have crumbs', function () {
-        expect($scope.crumbs).to.have.length(2);
-        expect($scope.crumbs[0]).to.deep.equal({
-          text: titles[status],
-          url: 'applications/' + status
-        });
-        expect($scope.crumbs[1]).to.deep.equal({
-          text: '张三',
-          url: 4
-        });
-      });
-
       it('should get an application', function () {
         expect($scope.resume).to.have.property('_id', '7788');
       });
