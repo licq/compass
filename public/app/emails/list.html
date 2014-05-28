@@ -2,12 +2,39 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <strong>简历邮箱</strong>
+
       <div class="pull-right">
-        <a href="#/emails/new" class="btn btn-xs btn-success"><i class="fa fa-plus-circle"></i>添加</a>
+        <a href="#/emails/new" class="btn btn-sm btn-success"><i class="fa fa-plus-circle"></i>添加</a>
       </div>
     </div>
     <div class="panel-body">
-      <div class="gridStyle" ng-grid="gridOptions"></div>
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped"
+               items="emails" enable-filtering="false">
+          <thead>
+          <tr>
+            <th field-name="address" display-name="Email" enable-filtering="false" enable-sorting="false"></th>
+            <th field-name="totalRetrieveCount" display-name="共收取邮件数" enable-filtering="false"></th>
+            <th field-name="lastRetrieveCount" display-name="上次收取邮件数" enable-filtering="false"></th>
+            <th field-name="lastRetrieveTime" display-name="上次收取时间" enable-filtering="false"
+                display-format="longDate"></th>
+            <th field-name="lastError" display-name="状态" enable-filtering="false"></th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td field-name="lastError">
+              <status-span value="gridItem.lastError">{{gridItem.lastError | state}}</status-span>
+            </td>
+            <td>
+              <edit-button action="edit(gridItem)"></edit-button>
+              <delete-button action="remove(gridItem)"></delete-button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

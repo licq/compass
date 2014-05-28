@@ -11,70 +11,60 @@ describe('mvEvaluationCriterionEditCtrl', function () {
     mvEvaluationCriterionEditCtrl = $controller('mvEvaluationCriterionEditCtrl', {
       $scope: $scope
     });
+
+    $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
+      {
+        name: '主动性',
+        rate: 0.5
+      }
+    ]});
+    $httpBackend.flush();
   }));
 
   it('should get the evaluationCriterion', function () {
-    $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
-      {
-        name: '主动性',
-        rate: 0.5
-      }
-    ]});
-    $httpBackend.flush();
-
     expect($scope.evaluationCriterion.items).to.exist;
   });
 
-  it('should show error if returned 500', function () {
-    $httpBackend.expectGET('/api/evaluationCriterions').respond(500, {message: 'error message'});
-    $httpBackend.flush();
-
-    expect($scope.err).to.exist;
-  });
-
-  it('should set the crumbs to settings evaluationCriterions', function () {
-    expect($scope.crumbs).to.have.length(2);
-    expect($scope.crumbs[1]).to.have.property('text', '面试评价');
-  });
-
-  it('should remove the corresponding item', function () {
-    $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
-      {
+  describe('remove', function () {
+    it('should remove the corresponding item', function () {
+      $scope.remove({
         name: '主动性',
         rate: 0.5
-      }
-    ]});
-    $httpBackend.flush();
-
-    $scope.remove({rowIndex: 0});
-    expect($scope.evaluationCriterion.items).to.have.length(0);
+      });
+      expect($scope.evaluationCriterion.items).to.have.length(0);
+    });
   });
 
-  it('should add one row to items', function () {
-    $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
-      {
-        name: '主动性',
+  describe('add', function () {
+    it('should add set adding to true', function () {
+      $scope.add();
+      expect($scope.adding).to.equal(true);
+    });
+  });
+
+  describe('create', function () {
+    it('should add one row to items', function () {
+      $scope.item = {
+        name: '学习能力',
         rate: 0.5
-      }
-    ]});
+      };
+      $scope.create();
+      expect($scope.adding).to.equal(false);
+      expect($scope.item).to.be.empty;
+      expect($scope.evaluationCriterion.items).to.have.length(2);
+    });
+  });
 
-    $httpBackend.flush();
-
-    $scope.add();
-    expect($scope.evaluationCriterion.items).to.have.length(2);
-    expect($scope.evaluationCriterion.items[1].name).to.equal('双击进行修改');
-    expect($scope.evaluationCriterion.items[1].rate).to.equal(1);
+  describe('cancel', function () {
+    it('should change adding to false', function () {
+      $scope.adding = true;
+      $scope.cancel();
+      expect($scope.adding).to.false;
+      expect($scope.evaluationCriterion.items).to.have.length(1);
+    });
   });
 
   it('should PUT /api/evaluationCriterions', inject(function (mvNotifier) {
-    $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
-      {
-        name: '主动性',
-        rate: 0.5
-      }
-    ]});
-    $httpBackend.flush();
-
     var items = [
       {
         name: '主动性',
@@ -91,14 +81,6 @@ describe('mvEvaluationCriterionEditCtrl', function () {
   }));
 
   it('should show error if put /api/evaluationCriterions failed', inject(function (mvNotifier) {
-    $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
-      {
-        name: '主动性',
-        rate: 0.5
-      }
-    ]});
-    $httpBackend.flush();
-
     var items = [
       {
         name: '主动性',

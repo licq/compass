@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
-  var fields = req.query.fields || ['name', 'email', 'company', 'title', 'deleted'];
+  var fields = req.query.fields || ['name', 'email', 'company', 'title', 'deleted', 'created_at'];
   if (!Array.isArray(fields)) {
     fields = [fields];
   }
