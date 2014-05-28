@@ -290,7 +290,7 @@ interviewSchema.statics.forReview = function (user, options, cb) {
   }
 
   var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
-  var orderByReverse = options.orderByReverse ? -1 : 1;
+  var orderByReverse = options.orderByReverse === 'true' ? -1 : 1;
   var sortOptions = {};
   sortOptions[orderBy] = orderByReverse;
 
@@ -345,7 +345,7 @@ interviewSchema.statics.forCompany = function (company, options, cb) {
     };
   }
   var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
-  var orderByReverse = options.orderByReverse ? -1 : 1;
+  var orderByReverse = options.orderByReverse === 'true' ? -1 : 1;
   var sortOptions = {};
   sortOptions[orderBy] = orderByReverse;
 

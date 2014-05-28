@@ -46,15 +46,15 @@
 }
 
 /*.ngCellText.ng-scope {*/
-    /*padding: 8px;*/
+/*padding: 8px;*/
 /*}*/
 
 /*.selectedItems {*/
-    /*float: left;*/
+/*float: left;*/
 /*}*/
 
 /*.ngCellText .btn {*/
-    /*margin: 1px 3px 1px 0px;*/
+/*margin: 1px 3px 1px 0px;*/
 /*}*/
 
 .fc-header-title h2 {
@@ -108,34 +108,38 @@
     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 30px #e87352;
 }
 
-span.ui-rating.size-h4{
+span.ui-rating.size-h4 {
     box-sizing: content-box;
     background: #5130;
 }
 
-.search-form input, .search-form select, .search-form button{
+.search-form input, .search-form select, .search-form button {
     height: 30px;
 }
 
-.tr-ng-grid button{
+.tr-ng-grid button {
     /*width: 80px;*/
 }
 
-.interview-list-buttons{
+.interview-list-buttons {
     margin-top: -10px;
     margin-bottom: 10px;
 }
 
-.interview-list-review-summary span i{
+.interview-list-review-summary span i {
     margin-right: 10px;
 }
 
-table.table.tr-ng-grid td, table.table.tr-ng-grid th{
+table.table.tr-ng-grid td, table.table.tr-ng-grid th {
     padding-top: 5px;
     padding-bottom: 5px;
     vertical-align: middle;
 }
 
-.panel-heading .pull-right .btn{
+.panel-heading .pull-right .btn {
     margin-top: -4px;
+}
+
+.select2-choice .select2-arrow {
+    z-index: 1;
 }
