@@ -89,7 +89,16 @@ var interviewSchema = mongoose.Schema({
   name: String,
   email: String,
   mobile: String,
-  applyPosition: String
+  applyPosition: String,
+  status: {
+    type: 'String',
+    enum: ['new', 'offered', 'rejected'],
+    default: 'new'
+  },
+  statusBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 interviewSchema.index({company: 1, application: 1}, {unique: true});
@@ -369,7 +378,8 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
 
 function constructQueryForCompany(model, company, options) {
   var query = model.find({company: company});
-  query.where('events.startTime').lte(new Date());
+  query.where('events.startTime').lte(new Date())
+    .where('status').equals('new');
   if (options.name) {
     query.where('name').regex(new RegExp(options.name));
   }

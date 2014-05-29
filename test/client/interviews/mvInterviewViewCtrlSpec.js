@@ -63,4 +63,30 @@ describe('mvInterviewViewCtrl', function () {
     $scope.cancel();
     expect(spy).to.have.been.calledWith('/interviews/list');
   }));
+
+  describe('offer', function () {
+    it('should put to /api/interviews/1234?status=offered', inject(function ($location, mvNotifier) {
+      var spyLocation = sinon.spy($location, 'path');
+      var spyNotifier = sinon.spy(mvNotifier, 'notify');
+      $httpBackend.expectPUT('/api/interviews/7788?status=offered').respond(200);
+      $scope.offer();
+      $httpBackend.flush();
+      expect($scope.interview.status).to.equal('offered');
+      expect(spyLocation).to.have.been.calledWith('/interviews/list');
+      expect(spyNotifier).to.have.been.called;
+    }));
+  });
+
+  describe('reject', function () {
+    it('should put to /api/interviews/1234?status=rejected', inject(function ($location, mvNotifier) {
+      var spyLocation = sinon.spy($location, 'path');
+      var spyNotifier = sinon.spy(mvNotifier, 'notify');
+      $httpBackend.expectPUT('/api/interviews/7788?status=rejected').respond(200);
+      $scope.reject();
+      $httpBackend.flush();
+      expect($scope.interview.status).to.equal('rejected');
+      expect(spyLocation).to.have.been.calledWith('/interviews/list');
+      expect(spyNotifier).to.have.been.called;
+    }));
+  });
 });
