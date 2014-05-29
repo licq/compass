@@ -177,8 +177,8 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
         }
       }
     }};
-
-  this.aggregate(match)
+  console.log('interviewer', interviewer);
+  var query = this.aggregate(match)
     .unwind('events')
     .project({
       _id: '$events._id',
@@ -197,8 +197,45 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
     .match({ $or: [
       { interviewers: interviewer },
       { createdBy: interviewer }
+    ], startTime: { $gte: start, $lt: end } });
+  if (cb) query.exec(cb);
+  else return query.exec();
+};
+
+interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start, end, cb) {
+  interviewer = mongoose.Types.ObjectId(interviewer);
+
+  var match = {
+    $match: {
+      events: {
+        $elemMatch: {
+          startTime: {
+            $gte: start,
+            $lt: end
+          },
+          $or: [
+            { interviewers: interviewer },
+            { createdBy: interviewer }
+          ]
+        }
+      }
+    }};
+
+  var query = this.aggregate(match)
+    .unwind('events')
+    .project({
+      createdBy: '$events.createdBy',
+      startTime: '$events.startTime',
+      interviewers: '$events.interviewers'
+    })
+    .match({ $or: [
+      { interviewers: interviewer },
+      { createdBy: interviewer }
     ], startTime: { $gte: start, $lt: end } })
-    .exec(cb);
+    .group({_id: '$startTime', total: {$sum: 1}});
+
+  if (cb) query.exec(cb);
+  else return query.exec();
 };
 
 interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
@@ -288,7 +325,6 @@ function constructQueryForReview(model, user, options) {
   if (options.applyPosition) {
     query.where('applyPosition').regex(new RegExp(options.applyPosition));
   }
-
   return query;
 }
 
@@ -326,8 +362,9 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
     cb = options;
     options = {};
   }
-  var query = constructQueryForReview(this, user, options);
-  query.count(cb);
+  var query = constructQueryForReview(this, user, options).count();
+  if (cb) query.exec(cb);
+  else return query.exec();
 };
 
 function constructQueryForCompany(model, company, options) {
@@ -373,8 +410,9 @@ interviewSchema.statics.countForCompany = function (company, options, cb) {
     cb = options;
     options = {};
   }
-  var query = constructQueryForCompany(this, company, options);
-  query.count(cb);
+  var query = constructQueryForCompany(this, company, options).count();
+  if (cb) query.exec(cb);
+  else return query.exec();
 };
 
 interviewSchema.statics.applyPositionsForCompany = function (company, cb) {

@@ -13,7 +13,8 @@ var express = require('express'),
   companies = require('../controllers/companies'),
   events = require('../controllers/events'),
   interviews = require('../controllers/interviews'),
-  eventSettings = require('../controllers/eventSettings');
+  eventSettings = require('../controllers/eventSettings'),
+  counts = require('../controllers/counts');
 
 module.exports = function (app) {
   var apiRouter = express.Router();
@@ -70,7 +71,6 @@ module.exports = function (app) {
     .all(resumes.load)
     .get(resumes.get);
 
-
   apiRouter.route('/eventSettings')
     .get(eventSettings.get);
   apiRouter.route('/eventSettings')
@@ -102,6 +102,9 @@ module.exports = function (app) {
 
   apiRouter.route('/applyPositions')
     .get(interviews.applyPositions);
+
+  apiRouter.route('/counts')
+    .get(counts.get);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
