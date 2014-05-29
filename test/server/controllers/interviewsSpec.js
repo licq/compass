@@ -116,5 +116,16 @@ describe('interviews', function () {
         });
     });
   });
-})
-;
+  describe('put /api/interview/:id?status=offered', function () {
+    it('should change the status', function (done) {
+      request.put('/api/interviews/' + interview._id + '?status=offered')
+        .expect(200, function () {
+          Interview.findById(interview._id, function (err, newInterview) {
+            expect(newInterview.status).to.equal('offered');
+            expect(newInterview.statusBy.toString()).to.equal(user.id);
+            done();
+          });
+        });
+    });
+  });
+}) ;

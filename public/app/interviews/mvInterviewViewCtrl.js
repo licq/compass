@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, mvInterview, $location) {
+  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, mvInterview, $location, mvNotifier) {
     mvInterview.get({_id: $routeParams.id}, function (interview) {
       $scope.interview = interview;
       sync();
@@ -21,5 +21,20 @@ angular.module('compass')
 
     $scope.cancel = function () {
       $location.path('/interviews/list');
+    };
+
+    $scope.offer = function () {
+      mvInterview.offer({_id: $scope.interview._id}, function () {
+        $scope.interview.status = 'offered';
+        mvNotifier.notify('已将' + $scope.interview.name + '放入Offer列表中');
+        $location.path('/interviews/list');
+      });
+    };
+    $scope.reject = function () {
+      mvInterview.reject({_id: $scope.interview._id}, function () {
+        $scope.interview.status = 'rejected';
+        mvNotifier.notify('已将' + $scope.interview.name + '放入人才库');
+        $location.path('/interviews/list');
+      });
     };
   });

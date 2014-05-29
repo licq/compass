@@ -52,13 +52,22 @@ exports.update = function (req, res, next) {
     .exec(function (err, interview) {
       if (err) return next(err);
       if (!interview) return res.json(404, {message: 'not found'});
-      var review = req.body.review;
-      review.interviewer = req.user;
-      review.createdAt = new Date();
-      interview.reviews.push(review);
-      interview.save(function (err) {
-        if (err) return next(err);
-        res.send(200);
-      });
+      if (req.query.status) {
+        interview.status = req.query.status;
+        interview.statusBy = req.user;
+        interview.save(function (err) {
+          if (err) return next(err);
+          res.json(200);
+        });
+      } else {
+        var review = req.body.review;
+        review.interviewer = req.user;
+        review.createdAt = new Date();
+        interview.reviews.push(review);
+        interview.save(function (err) {
+          if (err) return next(err);
+          res.send(200);
+        });
+      }
     });
 };
