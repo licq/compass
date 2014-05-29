@@ -3,7 +3,8 @@
 var helper = require('../testHelper'),
   Factory = require('../factory'),
   expect = require('chai').expect,
-  Interview = require('mongoose').model('Interview');
+  Interview = require('mongoose').model('Interview'),
+  Resume = require('mongoose').model('Resume');
 
 describe('interviews', function () {
   var user, resume, request, interview;
@@ -16,6 +17,7 @@ describe('interviews', function () {
           user = createdUser;
           request = agent;
           Factory.create('interview', {
+            application: resume._id,
             company: user.company,
             applyPosition: '销售总监',
             events: [
@@ -128,4 +130,19 @@ describe('interviews', function () {
         });
     });
   });
-}) ;
+  describe('put /api/interview/:id?status=rejected', function () {
+    it('should change the status of the interview and the status of the resume', function (done) {
+      request.put('/api/interviews/' + interview._id + '?status=rejected')
+        .expect(200, function () {
+          Interview.findById(interview._id, function (err, newInterview) {
+            expect(newInterview.status).to.equal('rejected');
+            expect(newInterview.statusBy.toString()).to.equal(user.id);
+            Resume.findById(resume._id, function (err, newResume) {
+              expect(newResume.status).to.equal('archived');
+              done(err);
+            });
+          });
+        });
+    });
+  });
+});

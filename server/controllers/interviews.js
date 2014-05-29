@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
   _ = require('lodash'),
-  Interview = mongoose.model('Interview');
+  Interview = mongoose.model('Interview'),
+  Resume = mongoose.model('Resume');
 
 exports.list = function (req, res, next) {
   if (!!req.query.review) {
@@ -57,7 +58,18 @@ exports.update = function (req, res, next) {
         interview.statusBy = req.user;
         interview.save(function (err) {
           if (err) return next(err);
-          res.json(200);
+          if (interview.status === 'rejected') {
+            Resume.findById(interview.application, function(err,resume){
+              if(err) return next(err);
+              resume.status = 'archived';
+              resume.saveAndIndexSync(function(err){
+                if(err) return next(err);
+                res.send(200);
+              });
+            });
+          } else {
+            res.json(200);
+          }
         });
       } else {
         var review = req.body.review;
