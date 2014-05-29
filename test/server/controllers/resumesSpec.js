@@ -12,7 +12,7 @@ describe('#resumes', function () {
       Resume.clearAll(true, function () {
         helper.login(function (agent, user) {
           request = agent;
-          Factory.build('resume', {company: user.company}, function (resume) {
+          Factory.build('resume', {company: user.company, status: 'archived'}, function (resume) {
             resume.saveAndIndexSync(done);
           });
         });
@@ -20,7 +20,7 @@ describe('#resumes', function () {
     });
   });
 
-  it('should return all resumes', function (done) {
+  it('should return all archived resumes', function (done) {
     request.get('/api/resumes')
       .expect(200)
       .expect('content-type', /json/)
