@@ -1,16 +1,18 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvNavCtrl', function ($scope, $interval, mvIdentity, mvAuth, $location) {
+  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvAuth, $location) {
     $scope.identity = mvIdentity;
-    var updateNavNumber = function(){
-      var placeholder = 0;
+
+    $scope.updateNavCounts = function () {
+      $scope.counts = mvNav.get();
     };
 
-    var numberUpdater = $interval(updateNavNumber, 1000);
+    $scope.updateNavCounts();
+    var countUpdater = $interval($scope.updateNavCounts, 3000000);
 
-    $scope.$on('$destroy', function(){
-      $interval.cancel(numberUpdater);
+    $scope.$on('$destroy', function () {
+      $interval.cancel(countUpdater);
     });
 
     $scope.logout = function () {
