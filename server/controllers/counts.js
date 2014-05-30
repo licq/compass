@@ -5,9 +5,9 @@ var mongoose = require('mongoose'),
   Interview = mongoose.model('Interview'),
   moment = require('moment');
 
-
 exports.get = function (req, res, next) {
-  var counts = {};
+  var counts = {new: 0, undetermined: 0, pursued: 0,
+    eventsOfToday: 0, interviews: 0, reviews: 0};
 
   Resume.count({status: 'new'}).exec()
     .then(function (count) {
@@ -31,8 +31,10 @@ exports.get = function (req, res, next) {
       var startTime = moment().startOf('day').toDate(),
         endTime = moment().endOf('day').toDate();
       return Interview.eventsCountForInterviewer(req.user._id, startTime, endTime);
-    }).then(function (group) {
-      counts.eventsOfToday = group[0].total;
+    })
+    .then(function (group) {
+      if (group.length > 0)
+        counts.eventsOfToday = group[0].total;
       res.json(counts);
     })
     .then(null, function (err) {

@@ -186,7 +186,6 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
         }
       }
     }};
-  console.log('interviewer', interviewer);
   var query = this.aggregate(match)
     .unwind('events')
     .project({
@@ -207,8 +206,8 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       { interviewers: interviewer },
       { createdBy: interviewer }
     ], startTime: { $gte: start, $lt: end } });
-  if (cb) query.exec(cb);
-  else return query.exec();
+
+  return query.exec(cb);
 };
 
 interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start, end, cb) {
@@ -235,16 +234,16 @@ interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start
     .project({
       createdBy: '$events.createdBy',
       startTime: '$events.startTime',
-      interviewers: '$events.interviewers'
+      interviewers: '$events.interviewers',
+      company: 1
     })
     .match({ $or: [
       { interviewers: interviewer },
       { createdBy: interviewer }
     ], startTime: { $gte: start, $lt: end } })
-    .group({_id: '$startTime', total: {$sum: 1}});
+    .group({_id: '$company', total: {$sum: 1}});
 
-  if (cb) query.exec(cb);
-  else return query.exec();
+  return query.exec(cb);
 };
 
 interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
@@ -372,8 +371,7 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
     options = {};
   }
   var query = constructQueryForReview(this, user, options).count();
-  if (cb) query.exec(cb);
-  else return query.exec();
+  return query.exec(cb);
 };
 
 function constructQueryForCompany(model, company, options) {
@@ -421,8 +419,7 @@ interviewSchema.statics.countForCompany = function (company, options, cb) {
     options = {};
   }
   var query = constructQueryForCompany(this, company, options).count();
-  if (cb) query.exec(cb);
-  else return query.exec();
+  return query.exec(cb);
 };
 
 interviewSchema.statics.applyPositionsForCompany = function (company, cb) {

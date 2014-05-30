@@ -12,16 +12,14 @@ describe('mvNavCtrl', function () {
       $scope: $scope
     });
 
-  }));
-
-  it('should get count correctly', function () {
-
     $httpBackend.expectGET('/api/counts')
       .respond({new: 1, undetermined: 2, pursued: 3,
         eventsOfToday: 4, interviews: 5, reviews: 6});
-
-    $scope.updateNavCounts();
     $httpBackend.flush();
+
+  }));
+
+  it('should get count correctly', function () {
     expect($scope.counts.new).to.equal(1);
     expect($scope.counts.undetermined).to.equal(2);
     expect($scope.counts.pursued).to.equal(3);
@@ -32,18 +30,15 @@ describe('mvNavCtrl', function () {
 
   it('should run tasks repeatedly', inject(function ($interval) {
     var spy = sinon.spy($scope, 'updateNavCounts');
-    //$interval($scope.updateNavCounts, 1000);
 
     $httpBackend.expectGET('/api/counts').respond();
-    $interval.flush(1000);
+    $interval.flush(3000000);
     $httpBackend.flush();
     expect(spy.called).to.be.true;
 
     $httpBackend.expectGET('/api/counts').respond();
-    $interval.flush(1000);
+    $interval.flush(3000000);
     $httpBackend.flush();
     expect(spy.called).to.be.true;
-    //expect(spy).to.have.been.called();
-
   }));
 });

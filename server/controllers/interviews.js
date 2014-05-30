@@ -59,11 +59,11 @@ exports.update = function (req, res, next) {
         interview.save(function (err) {
           if (err) return next(err);
           if (interview.status === 'rejected') {
-            Resume.findById(interview.application, function(err,resume){
-              if(err) return next(err);
+            Resume.findById(interview.application, function (err, resume) {
+              if (err) return next(err);
               resume.status = 'archived';
-              resume.saveAndIndexSync(function(err){
-                if(err) return next(err);
+              resume.saveAndIndexSync(function (err) {
+                if (err) return next(err);
                 res.send(200);
               });
             });

@@ -9,10 +9,11 @@ angular.module('compass')
     };
 
     $scope.updateNavCounts();
-    var countUpdater = $interval($scope.updateNavCounts, 3000000);
+
+    $interval($scope.updateNavCounts, 3000000);
 
     $scope.$on('$destroy', function () {
-      $interval.cancel(countUpdater);
+      $interval.cancel($scope.updateNavCounts);
     });
 
     $scope.logout = function () {
