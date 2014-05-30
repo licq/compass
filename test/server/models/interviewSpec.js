@@ -404,7 +404,8 @@ describe('interview', function () {
         ]}, function () {
         var options = {
           page: 1,
-          pageSize: 50
+          pageSize: 50,
+          status: 'new'
         };
         Interview.forCompany(user.company, options, function (err, interviews) {
           expect(err).to.not.exist;

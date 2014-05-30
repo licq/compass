@@ -99,6 +99,11 @@ angular.module('compass',
         controller: 'mvReviewListCtrl',
         authenticate: true
       })
+      .when('/interviews/offers', {
+        templateUrl: '/app/offers/list.html',
+        controller: 'mvOfferListCtrl',
+        authenticate: true
+      })
       .when('/interviews/reviews/:id', {
         templateUrl: '/app/reviews/new.html',
         controller: 'mvReviewNewCtrl',

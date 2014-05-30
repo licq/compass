@@ -13,7 +13,8 @@ var express = require('express'),
   companies = require('../controllers/companies'),
   events = require('../controllers/events'),
   interviews = require('../controllers/interviews'),
-  eventSettings = require('../controllers/eventSettings');
+  eventSettings = require('../controllers/eventSettings'),
+  applierRejectReasons = require('../controllers/applierRejectReasons');
 
 module.exports = function (app) {
   var apiRouter = express.Router();
@@ -102,6 +103,9 @@ module.exports = function (app) {
 
   apiRouter.route('/applyPositions')
     .get(interviews.applyPositions);
+
+  apiRouter.route('/applierRejectReasons')
+    .get(applierRejectReasons.list);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

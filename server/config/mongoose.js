@@ -23,4 +23,5 @@ module.exports = function (config) {
   require('../models/eventSetting');
   require('../models/interview');
   require('../models/evaluationCriterion');
+  require('../models/applierRejectReason');
 };

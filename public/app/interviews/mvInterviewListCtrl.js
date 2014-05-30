@@ -52,7 +52,8 @@ angular.module('compass')
 
     states.defaults('mvInterviewListCtrl', {
       page: 1,
-      pageSize: 20
+      pageSize: 20,
+      status: 'new'
     });
 
     $scope.queryOptions = states.get('mvInterviewListCtrl');

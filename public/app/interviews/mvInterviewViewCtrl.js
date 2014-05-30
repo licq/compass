@@ -24,14 +24,14 @@ angular.module('compass')
     };
 
     $scope.offer = function () {
-      mvInterview.offer({_id: $scope.interview._id}, function () {
+      mvInterview.update({_id: $scope.interview._id}, {status: 'offered'},function () {
         $scope.interview.status = 'offered';
         mvNotifier.notify('已将' + $scope.interview.name + '放入Offer列表中');
         $location.path('/interviews/list');
       });
     };
     $scope.reject = function () {
-      mvInterview.reject({_id: $scope.interview._id}, function () {
+      mvInterview.update({_id: $scope.interview._id}, {status: 'rejected'},function () {
         $scope.interview.status = 'rejected';
         mvNotifier.notify('已将' + $scope.interview.name + '放入人才库');
         $location.path('/interviews/list');

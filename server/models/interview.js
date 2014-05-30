@@ -92,8 +92,14 @@ var interviewSchema = mongoose.Schema({
   applyPosition: String,
   status: {
     type: 'String',
-    enum: ['new', 'offered', 'rejected'],
+    enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted'],
     default: 'new'
+  },
+  onBoardDate: {
+    type: Date
+  },
+  applierRejectReason: {
+    type: String
   },
   statusBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -342,7 +348,7 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
 function constructQueryForCompany(model, company, options) {
   var query = model.find({company: company});
   query.where('events.startTime').lte(new Date())
-    .where('status').equals('new');
+    .where('status').equals(options.status);
   if (options.name) {
     query.where('name').regex(new RegExp(options.name));
   }

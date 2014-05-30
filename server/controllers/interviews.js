@@ -53,17 +53,29 @@ exports.update = function (req, res, next) {
     .exec(function (err, interview) {
       if (err) return next(err);
       if (!interview) return res.json(404, {message: 'not found'});
-      if (req.query.status) {
-        interview.status = req.query.status;
+      console.log(req.body);
+      if (req.body.status) {
+        interview.status = req.body.status;
         interview.statusBy = req.user;
+        interview.applierRejectReason = req.body.applierRejectReason;
+        interview.onBoardDate = req.body.onBoardDate;
         interview.save(function (err) {
           if (err) return next(err);
-          if (interview.status === 'rejected') {
-            Resume.findById(interview.application, function(err,resume){
-              if(err) return next(err);
+          if (interview.status === 'rejected' || interview.status === 'offer rejected') {
+            Resume.findById(interview.application, function (err, resume) {
+              if (err) return next(err);
               resume.status = 'archived';
-              resume.saveAndIndexSync(function(err){
-                if(err) return next(err);
+              resume.saveAndIndexSync(function (err) {
+                if (err) return next(err);
+                res.send(200);
+              });
+            });
+          } else if (interview.status === 'offer accepted') {
+            Resume.findById(interview.application, function (err, resume) {
+              if (err) return next(err);
+              resume.status = 'enrolled';
+              resume.saveAndIndexSync(function (err) {
+                if (err) return next(err);
                 res.send(200);
               });
             });

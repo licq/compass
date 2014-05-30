@@ -148,3 +148,25 @@ table.table.tr-ng-grid td, table.table.tr-ng-grid th {
     top: 58px;
     right: 12px;
 }
+
+.table tbody>tr>td.vert-align
+{
+    vertical-align: middle;
+}
+
+.table tbody>tr>td.vert-align form .form-group{
+    margin-bottom: 0;
+}
+
+.vert-align .form-control{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.vert-align label{
+    margin-top: 5px;
+}
+
+.vert-align button{
+    margin-top: 3px;
+}
