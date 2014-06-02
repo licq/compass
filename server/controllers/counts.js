@@ -20,7 +20,7 @@ exports.get = function (req, res, next) {
     })
     .then(function (count) {
       counts.undetermined = count;
-      return Interview.countForReview(req.user, {});
+      return Interview.countForUnReviewed(req.user, {});
     })
     .then(function (count) {
       counts.reviews = count;

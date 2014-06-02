@@ -4,20 +4,25 @@ describe('mvNavCtrl', function () {
 
   var $httpBackend, $scope;
 
-  beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
-    $httpBackend = _$httpBackend_;
-    $scope = $rootScope.$new();
+  beforeEach(inject(function (_$httpBackend_, $rootScope, mvIdentity, $controller) {
+      $httpBackend = _$httpBackend_;
+      $scope = $rootScope.$new();
 
-    $controller('mvNavCtrl', {
-      $scope: $scope
-    });
+      $httpBackend.expectGET('/api/counts')
+        .respond({new: 1, undetermined: 2, pursued: 3,
+          eventsOfToday: 4, interviews: 5, reviews: 6});
 
-    $httpBackend.expectGET('/api/counts')
-      .respond({new: 1, undetermined: 2, pursued: 3,
-        eventsOfToday: 4, interviews: 5, reviews: 6});
-    $httpBackend.flush();
+      mvIdentity.currentUser = {
+        _id: '7788'
+      };
 
-  }));
+      $controller('mvNavCtrl', {
+        $scope: $scope
+      });
+
+      $httpBackend.flush();
+    })
+  );
 
   it('should get count correctly', function () {
     expect($scope.counts.new).to.equal(1);
@@ -30,15 +35,11 @@ describe('mvNavCtrl', function () {
 
   it('should run tasks repeatedly', inject(function ($interval) {
     var spy = sinon.spy($scope, 'updateNavCounts');
-
-    $httpBackend.expectGET('/api/counts').respond();
-    $interval.flush(3000000);
+    $httpBackend.expectGET('/api/counts').respond({});
+    $interval.flush(300000);
+    //$scope.updateNavCounts();
     $httpBackend.flush();
-    expect(spy.called).to.be.true;
-
-    $httpBackend.expectGET('/api/counts').respond();
-    $interval.flush(3000000);
-    $httpBackend.flush();
-    expect(spy.called).to.be.true;
+    expect(spy).to.have.been.calledOnce;
   }));
-});
+})
+;

@@ -374,6 +374,17 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
   return query.exec(cb);
 };
 
+interviewSchema.statics.countForUnReviewed = function (user, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
+  }
+  var query = constructQueryForReview(this, user, options)
+    .where('reviews', [])
+    .count();
+  return query.exec(cb);
+};
+
 function constructQueryForCompany(model, company, options) {
   var query = model.find({company: company});
   query.where('events.startTime').lte(new Date())

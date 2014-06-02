@@ -1,6 +1,6 @@
 angular.module('compass')
   .controller('mvApplicationListCtrl',
-  function ($scope, states, mvApplication, $http, $window, $location, $routeParams, applicationStatusMap, $modal) {
+  function ($scope, states, $rootScope, mvApplication, $http, $window, $location, $routeParams, applicationStatusMap, $modal) {
     $scope.title = applicationStatusMap[$routeParams.status];
 
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
@@ -82,6 +82,18 @@ angular.module('compass')
     $scope.archive = function (id) {
       if ($window.confirm('确认将该应聘简历归档？归档后的简历可在人才库找到')) {
         mvApplication.archive({_id: id}, function () {
+
+          if ($routeParams.status === 'new') {
+            $rootScope.$broadcast('new_archive');
+          }
+
+          if ($routeParams.status === 'pursued') {
+            $rootScope.$broadcast('pursued_archive');
+          }
+          if ($routeParams.status === 'undetermined') {
+            $rootScope.$broadcast('undetermined_archive');
+          }
+
           removeLocal(id);
           oneMore();
         });
@@ -90,6 +102,14 @@ angular.module('compass')
 
     $scope.pursue = function (id) {
       mvApplication.pursue({_id: id}, function () {
+
+        if ($routeParams.status === 'new') {
+          $rootScope.$broadcast('new_pursue');
+        }
+        if ($routeParams.status === 'undetermined') {
+          $rootScope.$broadcast('undetermined_pursue');
+        }
+
         removeLocal(id);
         oneMore();
       });
@@ -97,8 +117,10 @@ angular.module('compass')
 
     $scope.undetermine = function (id) {
       mvApplication.undetermine({_id: id}, function () {
+        $rootScope.$broadcast('undetermine');
         removeLocal(id);
         oneMore();
+
       });
     };
 
@@ -128,6 +150,9 @@ angular.module('compass')
 
       newEventModal.result.then(function (event) {
         if (event) {
+          $rootScope.$broadcast('pursued_interview');
+
+          // TODO update counts of eventsOfToday if(event.startDate)
           removeLocal(event.application);
           oneMore();
         }
