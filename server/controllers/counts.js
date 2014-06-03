@@ -9,14 +9,14 @@ exports.get = function (req, res, next) {
   var counts = {new: 0, undetermined: 0, pursued: 0,
     eventsOfToday: 0, interviews: 0, reviews: 0};
 
-  Resume.count({status: 'new'}).exec()
+  Resume.count({company: req.user.company, status: 'new'}).exec()
     .then(function (count) {
       counts.new = count;
-      return Resume.count({status: 'pursued'}).exec();
+      return Resume.count({company: req.user.company, status: 'pursued'}).exec();
     })
     .then(function (count) {
       counts.pursued = count;
-      return Resume.count({status: 'undetermined'}).exec();
+      return Resume.count({company: req.user.company, status: 'undetermined'}).exec();
     })
     .then(function (count) {
       counts.undetermined = count;
