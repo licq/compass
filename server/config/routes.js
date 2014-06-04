@@ -15,6 +15,7 @@ var express = require('express'),
   interviews = require('../controllers/interviews'),
   reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
+  counts = require('../controllers/counts'),
   applierRejectReasons = require('../controllers/applierRejectReasons');
 
 module.exports = function (app) {
@@ -72,7 +73,6 @@ module.exports = function (app) {
     .all(resumes.load)
     .get(resumes.get);
 
-
   apiRouter.route('/eventSettings')
     .get(eventSettings.get);
   apiRouter.route('/eventSettings')
@@ -112,6 +112,9 @@ module.exports = function (app) {
 
   apiRouter.route('/applierRejectReasons')
     .get(applierRejectReasons.list);
+
+  apiRouter.route('/counts')
+    .get(counts.get);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

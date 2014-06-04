@@ -1,6 +1,6 @@
 angular.module('compass')
   .controller('mvApplicationListCtrl',
-  function ($scope, states, mvApplication, $http, $window, $location, $routeParams, applicationStatusMap, $modal) {
+  function ($scope, states, $rootScope, mvApplication, $http, $window, $location, $routeParams, applicationStatusMap, $modal) {
     $scope.title = applicationStatusMap[$routeParams.status];
 
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
@@ -82,14 +82,21 @@ angular.module('compass')
     $scope.archive = function (id) {
       if ($window.confirm('确认将该应聘简历归档？归档后的简历可在人才库找到')) {
         mvApplication.archive({_id: id}, function () {
-          removeLocal(id);
-          oneMore();
-        });
+            var from = $routeParams.status, to = 'archived';
+            $rootScope.$broadcast('applicationStatusUpdated', from, to);
+
+            removeLocal(id);
+            oneMore();
+          }
+        );
       }
     };
 
     $scope.pursue = function (id) {
       mvApplication.pursue({_id: id}, function () {
+        var from = $routeParams.status, to = 'pursued';
+        $rootScope.$broadcast('applicationStatusUpdated', from, to);
+
         removeLocal(id);
         oneMore();
       });
@@ -97,8 +104,12 @@ angular.module('compass')
 
     $scope.undetermine = function (id) {
       mvApplication.undetermine({_id: id}, function () {
+        var from = $routeParams.status, to = 'undetermined';
+        $rootScope.$broadcast('applicationStatusUpdated', from, to);
+
         removeLocal(id);
         oneMore();
+
       });
     };
 
@@ -128,6 +139,8 @@ angular.module('compass')
 
       newEventModal.result.then(function (event) {
         if (event) {
+          $rootScope.$broadcast('applicationStatusUpdated', 'pursued', 'interview');
+
           removeLocal(event.application);
           oneMore();
         }
@@ -136,4 +149,5 @@ angular.module('compass')
 
     $scope.query();
 
-  });
+  })
+;
