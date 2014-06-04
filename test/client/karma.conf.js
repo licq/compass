@@ -31,7 +31,7 @@ module.exports = function (config) {
       'public/vendor/toastr/toastr.min.js',
       'public/vendor/select2/select2.min.js',
       'public/vendor/bootstrap-daterangepicker/daterangepicker.js',
-      'public/vendor/ng-bs-daterangepicker/dist/ng-bs-daterangepicker.min.js',
+      'public/app/components/daterangepicker.js',
       'public/vendor/trNgGrid/src/js/trNgGrid.js',
       'public/vendor/angular-ui-select2/src/select2.js',
       'public/vendor/textAngular/dist/textAngular-sanitize.min.js',
