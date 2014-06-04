@@ -17,48 +17,88 @@ angular.module('compass')
     $scope.$on('loggedin', function () {
       $scope.updateNavCounts();
     });
+    $scope.$on('applicationStatusUpdated', function (from, to) {
 
-    $scope.$on('create_eventOfToday', function () {
-      $scope.counts.eventsOfToday++;
+      switch (to) {
+        case 'undetermined':
+          $scope.counts.undetermined++;
+          $scope.counts.new--;
+          break;
+
+        case 'interview':
+          $scope.counts.pursued--;
+          break;
+
+        case 'pursued':
+          switch (from) {
+            case 'new':
+              $scope.counts.pursued++;
+              $scope.counts.new--;
+              break;
+
+            case 'undetermined':
+              $scope.counts.pursued++;
+              $scope.counts.undetermined--;
+              break;
+          }
+          break;
+
+        case 'archived':
+          switch (from) {
+            case 'new':
+              $scope.counts.new--;
+              break;
+
+            case 'undetermined':
+              $scope.counts.undetermined--;
+              break;
+
+            case 'pursued':
+              $scope.counts.pursued--;
+              break;
+          }
+          break;
+      }
     });
 
-    $scope.$on('delete_eventOfToday', function () {
-      $scope.counts.eventsOfToday--;
+    $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime) {
+      var today = new Date(), endOfToday = new Date();
+      today.setHours(0, 0, 0, 0);
+      endOfToday.setHours(23, 59, 59, 999);
+      switch (operation) {
+        case 'delete':
+          if (oldStartTime >= today && oldStartTime <= endOfToday) {
+            $scope.counts.eventsOfToday--;
+          }
+          break;
+
+        case 'create':
+          if (newStartTime >= today && newStartTime <= endOfToday) {
+            $scope.counts.eventsOfToday++;
+          }
+          break;
+
+        case 'update':
+          if (newStartTime >= today &&
+            newStartTime <= endOfToday &&
+            (oldStartTime < today || oldStartTime > endOfToday)) {
+            $scope.counts.eventsOfToday++;
+          }
+
+          if ((newStartTime < today ||
+            newStartTime > endOfToday) &&
+            oldStartTime >= today && oldStartTime <= endOfToday) {
+            $scope.counts.eventsOfToday--;
+          }
+      }
     });
 
-    $scope.$on('undetermine', function () {
-      $scope.counts.undetermined++;
-      $scope.counts.new--;
-    });
-
-    $scope.$on('new_pursue', function () {
-      $scope.counts.pursued++;
-      $scope.counts.new--;
-    });
-
-    $scope.$on('undetermined_pursue', function () {
-      $scope.counts.pursued++;
-      $scope.counts.undetermined--;
-    });
-
-    $scope.$on('new_archive', function () {
-      $scope.counts.new--;
-    });
-
-    $scope.$on('undetermined_archive', function () {
-      $scope.counts.undetermined--;
-    });
-
-    $scope.$on('pursued_archive', function () {
-      $scope.counts.pursued--;
-    });
-
-    $scope.$on('pursued_interview', function () {
-      $scope.counts.pursued--;
-    });
-
-    $scope.$on('reviewed', function () {
+    $scope.$on('reviewAdded', function () {
       $scope.counts.reviews--;
+    });
+
+    $scope.$on('interviewAdded', function () {
+      $scope.counts.interview++;
     });
 
     $scope.$on('$destroy', function () {

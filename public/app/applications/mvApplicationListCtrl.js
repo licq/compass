@@ -82,33 +82,20 @@ angular.module('compass')
     $scope.archive = function (id) {
       if ($window.confirm('确认将该应聘简历归档？归档后的简历可在人才库找到')) {
         mvApplication.archive({_id: id}, function () {
+            var from = $routeParams.status, to = 'archived';
+            $rootScope.$broadcast('applicationStatusUpdated', from, to);
 
-          if ($routeParams.status === 'new') {
-            $rootScope.$broadcast('new_archive');
+            removeLocal(id);
+            oneMore();
           }
-
-          if ($routeParams.status === 'pursued') {
-            $rootScope.$broadcast('pursued_archive');
-          }
-          if ($routeParams.status === 'undetermined') {
-            $rootScope.$broadcast('undetermined_archive');
-          }
-
-          removeLocal(id);
-          oneMore();
-        });
+        );
       }
     };
 
     $scope.pursue = function (id) {
       mvApplication.pursue({_id: id}, function () {
-
-        if ($routeParams.status === 'new') {
-          $rootScope.$broadcast('new_pursue');
-        }
-        if ($routeParams.status === 'undetermined') {
-          $rootScope.$broadcast('undetermined_pursue');
-        }
+        var from = $routeParams.status, to = 'pursued';
+        $rootScope.$broadcast('applicationStatusUpdated', from, to);
 
         removeLocal(id);
         oneMore();
@@ -117,7 +104,9 @@ angular.module('compass')
 
     $scope.undetermine = function (id) {
       mvApplication.undetermine({_id: id}, function () {
-        $rootScope.$broadcast('undetermine');
+        var from = $routeParams.status, to = 'undetermined';
+        $rootScope.$broadcast('applicationStatusUpdated', from, to);
+
         removeLocal(id);
         oneMore();
 
@@ -150,9 +139,8 @@ angular.module('compass')
 
       newEventModal.result.then(function (event) {
         if (event) {
-          $rootScope.$broadcast('pursued_interview');
+          $rootScope.$broadcast('applicationStatusUpdated', 'pursued', 'interview');
 
-          // TODO update counts of eventsOfToday if(event.startDate)
           removeLocal(event.application);
           oneMore();
         }
@@ -161,4 +149,5 @@ angular.module('compass')
 
     $scope.query();
 
-  });
+  })
+;

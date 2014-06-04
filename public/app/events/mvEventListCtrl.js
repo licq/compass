@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
+  .controller('mvEventListCtrl', function ($scope, $rootScope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
     $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
 
@@ -78,9 +78,11 @@ angular.module('compass')
           return false;
         }
       });
+      var oldStartTime = new Date(event.startTime), newStartTime = new Date(calendarEvent.start);
       event.startTime = calendarEvent.start;
       event.duration = mvMoment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
       mvEvent.update(event, function () {
+        $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime);
         $scope.eventsForCalendar[index] = convertCalendarEvent(event);
       });
     };

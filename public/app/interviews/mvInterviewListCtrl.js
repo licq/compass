@@ -114,7 +114,8 @@ angular.module('compass')
               applyPosition: interview.applyPosition,
               mobile: interview.mobile,
               email: interview.email,
-              application: interview.application
+              application: interview.application,
+              countsOfEvents: interview.events.length
             };
           }
         }});

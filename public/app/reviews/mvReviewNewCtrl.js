@@ -47,7 +47,7 @@ angular.module('compass')
         $scope.review.qualified = !!qualified;
         mvInterview.update({_id: $scope.interview._id}, {review: $scope.review},
           function () {
-            $rootScope.$broadcast('reviewed');
+            $rootScope.$broadcast('reviewAdded');
             $scope.review.interviewer = mvIdentity.currentUser;
             $scope.review.createdAt = new Date();
             $scope.interview.reviews.push($scope.review);

@@ -67,7 +67,7 @@ describe('counts', function () {
       .expect(200)
       .expect('content-type', /json/)
       .end(function (err, res) {
-        expect(res.body.new).to.equal(2);
+        expect(res.body.new).to.equal(1);
         expect(res.body.pursued).to.equal(1);
         expect(res.body.undetermined).to.equal(1);
         expect(res.body.reviews).to.equal(0);
