@@ -63,7 +63,6 @@ describe('interviews', function () {
         .end(function (err, res) {
           expect(err).to.not.exist;
           expect(res.body).to.have.length(1);
-          console.log(res);
           expect(res.get('totalCount')).to.equal('1');
           done();
         });

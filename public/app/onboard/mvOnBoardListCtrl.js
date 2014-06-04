@@ -5,15 +5,6 @@ angular.module('compass')
       endDate: mvMoment().add('months', 1).endOf('day')
     };
 
-    $scope.dateRangePickerLocale = {  applyLabel: 'aaaa',
-      cancelLabel: 'Cancel',
-      fromLabel: 'From',
-      toLabel: 'To',
-      weekLabel: 'W',
-      customRangeLabel: 'Custom Range'
-    };
-
-
     $scope.query = function () {
       mvInterview.query({
           status: 'offer accepted',
