@@ -23,7 +23,7 @@ exports.get = function (req, res, next) {
       return Interview.countForUnReviewed(req.user, {});
     })
     .then(function (count) {
-      counts.reviews = count;
+      counts.toBeReviewed = count;
       return Interview.countForCompany(req.user.company, {});
     })
     .then(function (count) {

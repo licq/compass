@@ -3,7 +3,7 @@ angular.module('compass')
     var today = new Date(), oldStartTime, newStartTime;
     today.setHours(0, 0, 0, 0);
     $scope.today = today;
-
+    console.log('evnet new ', event);
     $scope.cancel = function () {
       $modalInstance.dismiss();
     };
@@ -21,16 +21,15 @@ angular.module('compass')
     $scope.create = function () {
       mvEvent.save($scope.event, function () {
         newStartTime = new Date($scope.event.startTime);
-        $rootScope.$broadcast('changeOfEvent', 'create', newStartTime, null);
+        $rootScope.$broadcast('changeOfEvent', 'create', newStartTime);
         $modalInstance.close($scope.event);
         mvNotifier.notify('创建面试邀请成功!');
       });
     };
 
     $scope.delete = function () {
-     $scope.event;
       mvEvent.delete({_id: $scope.event._id}, function () {
-        $rootScope.$broadcast('changeOfEvent', 'delete', null, oldStartTime);
+        $rootScope.$broadcast('changeOfEvent', 'delete', null, oldStartTime, $scope.event.countOfEvents);
         $modalInstance.close();
         mvNotifier.notify('已删除面试邀请!');
       });

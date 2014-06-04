@@ -4,6 +4,7 @@ angular.module('compass')
   .controller('mvEventListCtrl', function ($scope, $rootScope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
     $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
+    $scope.selectedUserId = mvIdentity.currentUser._id;
 
     mvUser.query({fields: 'name'}, function (users) {
       $scope.users = users;
@@ -60,9 +61,15 @@ angular.module('compass')
 
       modalInstance.result.then(function (newEvent) {
         if (newEvent) {
+          newEvent.countsOfEvents = $scope.events[index].countsOfEvents + 1;
           $scope.events[index] = newEvent;
           $scope.eventsForCalendar[index] = convertCalendarEvent(newEvent);
         } else {
+          angular.forEach($scope.events, function (e) {
+            if (e.application === newEvent.application) {
+              e.countsOfEvents--;
+            }
+          });
           $scope.events.splice(index, 1);
           $scope.eventsForCalendar.splice(index, 1);
         }
@@ -81,8 +88,10 @@ angular.module('compass')
       var oldStartTime = new Date(event.startTime), newStartTime = new Date(calendarEvent.start);
       event.startTime = calendarEvent.start;
       event.duration = mvMoment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
+      var countOfEvents = event.countOfEvents;
+      console.log(countOfEvents);
       mvEvent.update(event, function () {
-        $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime);
+        $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime, countOfEvents);
         $scope.eventsForCalendar[index] = convertCalendarEvent(event);
       });
     };

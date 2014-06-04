@@ -187,6 +187,16 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       }
     }};
   var query = this.aggregate(match)
+    .project({
+      name: 1,
+      email: 1,
+      applyPosition: 1,
+      mobile: 1,
+      company: 1,
+      events: 1,
+      application: 1,
+      countOfEvents: {$size: '$events'}
+    })
     .unwind('events')
     .project({
       _id: '$events._id',
@@ -200,7 +210,8 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       startTime: '$events.startTime',
       duration: '$events.duration',
       interviewers: '$events.interviewers',
-      application: 1
+      application: 1,
+      countOfEvents: 1
     })
     .match({ $or: [
       { interviewers: interviewer },
@@ -208,7 +219,8 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
     ], startTime: { $gte: start, $lt: end } });
 
   return query.exec(cb);
-};
+}
+;
 
 interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start, end, cb) {
   interviewer = mongoose.Types.ObjectId(interviewer);

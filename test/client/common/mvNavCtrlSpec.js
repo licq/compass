@@ -30,7 +30,7 @@ describe('mvNavCtrl', function () {
     expect($scope.counts.pursued).to.equal(3);
     expect($scope.counts.eventsOfToday).to.equal(4);
     expect($scope.counts.interviews).to.equal(5);
-    expect($scope.counts.reviews).to.equal(6);
+    expect($scope.counts.toBeReviewed).to.equal(6);
   });
 
   it('should run tasks repeatedly', inject(function ($interval) {
