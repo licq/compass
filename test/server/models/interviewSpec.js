@@ -244,7 +244,7 @@ describe('interview', function () {
           page: 1,
           pageSize: 50
         };
-        Interview.forReview(user, options, function (err, interviews) {
+        Interview.queryForReview(user, options, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
           expect(interviews[0].reviews).to.have.length(0);
@@ -301,7 +301,7 @@ describe('interview', function () {
           }
         ]
       }, function () {
-        Interview.forReview(user, {page: 1, pageSize: 50}, function (err, interviews) {
+        Interview.queryForReview(user, {page: 1, pageSize: 50}, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
           expect(interviews[0].events).to.have.length(1);
@@ -323,7 +323,7 @@ describe('interview', function () {
             ]
           },
           function () {
-            Interview.forReview(anotherUser, {page: 1, pageSize: 50}, function (err, interviews) {
+            Interview.queryForReview(anotherUser, {page: 1, pageSize: 50}, function (err, interviews) {
               expect(err).to.not.exist;
               expect(interviews).to.have.length(0);
               done();
@@ -351,7 +351,7 @@ describe('interview', function () {
           ]
         },
         function () {
-          Interview.forReview(anotherUser, {page: 1, pageSize: 50}, function (err, interviews) {
+          Interview.queryForReview(anotherUser, {page: 1, pageSize: 50}, function (err, interviews) {
             expect(err).to.not.exist;
             expect(interviews).to.have.length(1);
             expect(interviews[0].reviews).to.have.length(0);
@@ -372,7 +372,7 @@ describe('interview', function () {
           }
         ]
       }, function () {
-        Interview.forReview(user, {page: 1, pageSize: 50}, function (err, interviews) {
+        Interview.queryForReview(user, {page: 1, pageSize: 50}, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(0);
           done();
@@ -407,12 +407,12 @@ describe('interview', function () {
           pageSize: 50,
           status: 'new'
         };
-        Interview.forCompany(user.company, options, function (err, interviews) {
+        Interview.queryNew(user.company, options, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
           expect(interviews[0].reviews).to.have.length(0);
           expect(interviews[0].events).to.have.length(1);
-          Interview.countForCompany(user.company, options, function (err, count) {
+          Interview.countNew(user.company, options, function (err, count) {
             expect(err).to.not.exist;
             expect(count).to.equal(1);
             done();

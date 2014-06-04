@@ -4,6 +4,7 @@ angular.module('compass')
   .controller('mvEventListCtrl', function ($scope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
     $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
+    $scope.selectedUserId = mvIdentity.currentUser._id;
 
     mvUser.query({fields: 'name'}, function (users) {
       $scope.users = users;

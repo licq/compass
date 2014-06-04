@@ -9,7 +9,7 @@ describe('mvOfferListCtrl', function () {
     oneInterview = {
       _id: '7788',
       name: 'zhangsan',
-      status: 'new',
+      status: 'offered',
       events: [
         {
           startTime: new Date(),
@@ -33,12 +33,8 @@ describe('mvOfferListCtrl', function () {
     };
     $scope = $rootScope.$new();
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/applierRejectReasons').respond(['已接受其他offer','待遇太差']);
-    $httpBackend.expectGET('/api/interviews?status=offered').respond(function () {
-      return [200, [
-        oneInterview
-      ], {'totalCount': 20}];
-    });
+    $httpBackend.expectGET('/api/applierRejectReasons').respond(['已接受其他offer', '待遇太差']);
+    $httpBackend.expectGET('/api/interviews?status=offered').respond([ oneInterview]);
 
     $controller('mvOfferListCtrl', {
       $scope: $scope
@@ -49,7 +45,6 @@ describe('mvOfferListCtrl', function () {
 
   it('should get offered list', function () {
     expect($scope.offers).to.have.length(1);
-    expect($scope.totalOffersCount).to.equal(20);
   });
 
   it('should set today', function () {
@@ -97,5 +92,4 @@ describe('mvOfferListCtrl', function () {
       expect($scope.offers.length).to.equal(0);
     }));
   });
-
 });

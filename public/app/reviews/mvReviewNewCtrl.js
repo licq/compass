@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvReviewNewCtrl', function ($scope, $routeParams, $location, mvIdentity, mvInterview, mvNotifier, mvEvaluationCriterion) {
+  .controller('mvReviewNewCtrl', function ($scope, $routeParams, $location, mvIdentity, mvInterview, mvReview, mvNotifier, mvEvaluationCriterion) {
     mvInterview.get({_id: $routeParams.id}, function (interview) {
       $scope.interview = interview;
       if (!reviewed($scope.interview)) {
@@ -23,7 +23,8 @@ angular.module('compass')
       mvEvaluationCriterion.get({}, function (res) {
         $scope.review = {
           items: [],
-          totalScore: 0
+          totalScore: 0,
+          interview: $scope.interview._id
         };
         angular.forEach(res.items, function (item) {
           $scope.review.items.push({
@@ -45,7 +46,7 @@ angular.module('compass')
 
       $scope.save = function (qualified) {
         $scope.review.qualified = !!qualified;
-        mvInterview.update({_id: $scope.interview._id}, {review: $scope.review},
+        mvReview.save({review: $scope.review},
           function () {
             $scope.review.interviewer = mvIdentity.currentUser;
             $scope.review.createdAt = new Date();

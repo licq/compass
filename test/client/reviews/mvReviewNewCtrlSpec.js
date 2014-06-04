@@ -20,7 +20,7 @@ describe('mvReviewNewCtrl', function () {
         }
       });
 
-      $httpBackend.expectGET('/api/interviews/7788').respond({   _id: '7788',
+      $httpBackend.expectGET('/api/interviews/7788').respond({_id: '7788',
         name: '张三',
         applyPosition: 'cio',
         reviews: [
@@ -116,17 +116,15 @@ describe('mvReviewNewCtrl', function () {
 
     it('should set isNewReview to true', function () {
       expect($scope.isNewReview).to.equal(true);
-      expect($scope.review).to.deep.equal({
-        items: [
+      expect($scope.review.items).to.deep.equal([
           {name: '学习能力', rate: 1},
           {name: '工作态度', rate: 1},
           {name: '团队合作', rate: 1},
-        ],
-        totalScore: 0});
+        ]);
     });
 
     it('should create review correctly', inject(function (mvNotifier) {
-      $httpBackend.expectPUT('/api/interviews/7788', {
+      $httpBackend.expectPOST('/api/reviews', {
         review: {
           items: [
             { name: '学习能力', rate: 1, score: 4 },
@@ -135,7 +133,8 @@ describe('mvReviewNewCtrl', function () {
           ],
           totalScore: 12,
           comment: 'This guy is awesome!!!',
-          qualified: true
+          qualified: true,
+          interview: '7788'
         }
       }).respond(200);
       var spy = sinon.spy(mvNotifier, 'notify');

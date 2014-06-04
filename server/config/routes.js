@@ -13,6 +13,7 @@ var express = require('express'),
   companies = require('../controllers/companies'),
   events = require('../controllers/events'),
   interviews = require('../controllers/interviews'),
+  reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
   applierRejectReasons = require('../controllers/applierRejectReasons');
 
@@ -100,6 +101,11 @@ module.exports = function (app) {
   apiRouter.route('/interviews/:id')
     .get(interviews.get)
     .put(interviews.update);
+
+
+  apiRouter.route('/reviews')
+    .get(reviews.list)
+    .post(reviews.create);
 
   apiRouter.route('/applyPositions')
     .get(interviews.applyPositions);

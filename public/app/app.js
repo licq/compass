@@ -2,7 +2,7 @@
 
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar',
-    'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular'])
+    'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular', 'ngBootstrap'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
       .when('/welcome', {
@@ -102,6 +102,11 @@ angular.module('compass',
       .when('/interviews/offers', {
         templateUrl: '/app/offers/list.html',
         controller: 'mvOfferListCtrl',
+        authenticate: true
+      })
+      .when('/interviews/onboards', {
+        templateUrl: '/app/onboard/list.html',
+        controller: 'mvOnboardListCtrl',
         authenticate: true
       })
       .when('/interviews/reviews/:id', {

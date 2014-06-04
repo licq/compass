@@ -10,6 +10,7 @@ exports.list = function (req, res, next) {
   var endTime = moment(req.query.endTime).toDate() || moment().endOf('week').toDate();
 
   if (req.query.user) {
+    console.log('events list');
     Interview.eventsForInterviewer(req.query.user, startTime, endTime,
       function (err, results) {
         if (err) return next(err);

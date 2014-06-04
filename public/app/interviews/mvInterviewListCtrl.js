@@ -76,6 +76,9 @@ angular.module('compass')
     }
 
     $scope.query = function () {
+      if ($scope.queryOptions.startDate) {
+        $scope.queryOptions.startDate = $scope.queryOptions.startDate.toISOString();
+      }
       mvInterview.query($scope.queryOptions, function (interviews, headers) {
         $scope.interviews = interviews;
         $scope.totalInterviewsCount = parseInt(headers('totalCount'), 10);

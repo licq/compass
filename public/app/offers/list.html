@@ -11,7 +11,7 @@
               <label class="control-label col-md-4">姓名</label>
 
               <div class="col-md-8">
-                <input class="form-control" type="text" ng-model="queryOptions.name"/>
+                <input class="form-control" type="text" ng-model="name"/>
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
           <tbody>
           <tr>
             <td class="vert-align">
-              <div ng-show="gridItem.status==='offered'">
+              <div ng-show="!gridItem.status">
                 <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者接受</button>
                 <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者拒绝</button>
               </div>
@@ -62,7 +62,7 @@
                   <label class="col-md-4">选择入职日期</label>
 
                   <div class="col-md-8">
-                    <div datetimepicker ng-model="gridItem.onBoardDate" use-seconds="false" min-date="today"
+                    <div datetimepicker ng-model="gridItem.onboardDate" use-seconds="false" min-date="today"
                          pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
                       <input type='text' class="form-control"/>
                       <span class="input-group-addon"><span class="fa fa-calendar"></span></span>

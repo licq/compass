@@ -40,7 +40,7 @@ describe('mvReviewListCtrl', function () {
         }
       ], {totalCount: 20}];
     };
-    $httpBackend.expectGET('/api/interviews?currentPage=1&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20&review=true').respond(resultFunction);
+    $httpBackend.expectGET('/api/reviews?currentPage=1&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20').respond(resultFunction);
 
     $controller('mvReviewListCtrl', {
       $scope: $scope
@@ -80,7 +80,7 @@ describe('mvReviewListCtrl', function () {
     }));
 
     it('should clear revert to the default options and query the reviews', function () {
-      $httpBackend.expectGET('/api/interviews?applyPosition=&currentPage=1&name=&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20&review=true&startDate=').respond(resultFunction);
+      $httpBackend.expectGET('/api/reviews?applyPosition=&currentPage=1&name=&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20&startDate=').respond(resultFunction);
       $scope.queryOptions.name = 'beijing';
       $scope.clearQueryOptions();
       expect($scope.queryOptions.currentPage).to.equal(1);
@@ -89,7 +89,7 @@ describe('mvReviewListCtrl', function () {
     });
 
     it('should set currentPage to 1 and query the reviews', function () {
-      $httpBackend.expectGET('/api/interviews?currentPage=1&name=beijing&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20&review=true').respond(resultFunction);
+      $httpBackend.expectGET('/api/reviews?currentPage=1&name=beijing&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20').respond(resultFunction);
       $scope.queryOptions.name = 'beijing';
       $scope.search();
       expect($scope.queryOptions.currentPage).to.equal(1);

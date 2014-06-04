@@ -1,0 +1,54 @@
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong>入职列表</strong>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal">
+        <div class="col-md-3 col-md-offset-2">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">姓名</label>
+
+              <div class="col-md-8">
+                <input class="form-control" type="text" ng-model="name"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-4">入职时间</label>
+
+              <div class="col-md-8">
+                <input type="daterange" class="form-control" ng-model="dateRange"
+                       locale="dateRangePickerLocale">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-primary" ng-click="query()">搜索</button>
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped" items="onboards"
+               enable-filtering="false" enable-selections="false">
+          <thead>
+          <tr>
+            <th field-name="name" display-name="应聘者" enable-filtering="false"
+                enable-sorting="false"></th>
+            <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
+                enable-sorting="true"></th>
+            <th field-name="onboardDate" display-name="入职时间" enable-filtering="false"
+                enable-sorting="true" display-format="shortDate"></th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>

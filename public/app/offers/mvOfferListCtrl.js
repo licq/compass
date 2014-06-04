@@ -7,9 +7,8 @@ angular.module('compass')
     });
 
     $scope.query = function () {
-      mvInterview.query({status: 'offered', name: $scope.name}, function (offers, headers) {
+      mvInterview.query({status: 'offered', name: $scope.name}, function (offers) {
         $scope.offers = offers;
-        $scope.totalOffersCount = parseInt(headers('totalCount'), 10);
       });
     };
 
@@ -32,10 +31,9 @@ angular.module('compass')
       mvInterview.update({ _id: offer._id },
         {status: offer.status,
           applierRejectReason: offer.applierRejectReason,
-          onBoardDate: offer.onBoardDate
+          onboardDate: offer.onboardDate
         },
         function () {
-          console.log('hello');
           mvNotifier.notify('保存成功');
           angular.forEach($scope.offers, function (inOffer, index) {
             if (inOffer._id === offer._id) {

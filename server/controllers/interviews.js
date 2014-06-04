@@ -6,19 +6,26 @@ var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume');
 
 exports.list = function (req, res, next) {
-  if (!!req.query.review) {
-    Interview.countForReview(req.user, req.query, function (err, count) {
-      Interview.forReview(req.user, req.query, function (err, interviews) {
-        if (err) return next(err);
-        res.header('totalCount', count).json(interviews);
-      });
+  if (req.query.status === 'offer accepted') {
+    Interview.queryOfferAccepted(req.user.company, req.query, function (err, interviews) {
+      if (err) return next(err);
+      res.json(interviews);
+    });
+  } else if (req.query.status === 'offered') {
+    Interview.queryOffered(req.user.company, req.query, function (err, interviews) {
+      if (err) return next(err);
+      res.json(interviews);
     });
   } else {
-    Interview.countForCompany(req.user.company, req.query, function (err, count) {
-      Interview.forCompany(req.user.company, req.query, function (err, interviews) {
-        if (err) return next(err);
-        res.header('totalCount', count).json(interviews);
-      });
+    Interview.queryNew(req.user.company, req.query, function (err, interviews) {
+      if (err) return next(err);
+      if (req.query.pageSize) {
+        Interview.countNew(req.user.company, req.query, function (err, count) {
+          res.header('totalCount', count).json(interviews);
+        });
+      } else {
+        res.json(interviews);
+      }
     });
   }
 };
@@ -53,45 +60,29 @@ exports.update = function (req, res, next) {
     .exec(function (err, interview) {
       if (err) return next(err);
       if (!interview) return res.json(404, {message: 'not found'});
-      console.log(req.body);
-      if (req.body.status) {
-        interview.status = req.body.status;
-        interview.statusBy = req.user;
-        interview.applierRejectReason = req.body.applierRejectReason;
-        interview.onBoardDate = req.body.onBoardDate;
-        interview.save(function (err) {
-          if (err) return next(err);
-          if (interview.status === 'rejected' || interview.status === 'offer rejected') {
-            Resume.findById(interview.application, function (err, resume) {
+      interview.status = req.body.status;
+      interview.statusBy = req.user;
+      interview.applierRejectReason = req.body.applierRejectReason;
+      interview.onboardDate = req.body.onboardDate;
+      interview.save(function (err) {
+        if (err) return next(err);
+        var interviewStatusToApplicationStatusMap = {
+          'rejected': 'archived',
+          'offer rejected': 'archived',
+          'offer accepted': 'enrolled'
+        };
+        if (_.has(interviewStatusToApplicationStatusMap, interview.status)) {
+          Resume.findById(interview.application, function (err, resume) {
+            if (err) return next(err);
+            resume.status = interviewStatusToApplicationStatusMap[interview.status];
+            resume.saveAndIndex(function (err) {
               if (err) return next(err);
-              resume.status = 'archived';
-              resume.saveAndIndexSync(function (err) {
-                if (err) return next(err);
-                res.send(200);
-              });
+              res.send(200);
             });
-          } else if (interview.status === 'offer accepted') {
-            Resume.findById(interview.application, function (err, resume) {
-              if (err) return next(err);
-              resume.status = 'enrolled';
-              resume.saveAndIndexSync(function (err) {
-                if (err) return next(err);
-                res.send(200);
-              });
-            });
-          } else {
-            res.json(200);
-          }
-        });
-      } else {
-        var review = req.body.review;
-        review.interviewer = req.user;
-        review.createdAt = new Date();
-        interview.reviews.push(review);
-        interview.save(function (err) {
-          if (err) return next(err);
+          });
+        } else {
           res.send(200);
-        });
-      }
+        }
+      });
     });
 };
