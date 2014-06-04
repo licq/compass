@@ -116,4 +116,10 @@ Factory.define('interview', mongoose.model('Interview'), {
   reviews: []
 });
 
+var applierRejectReasonCounter = 1;
+
+Factory.define('applierRejectReason', mongoose.model('ApplierRejectReason'),{
+  reason: 'reason' + applierRejectReasonCounter ++
+});
+
 module.exports = Factory;

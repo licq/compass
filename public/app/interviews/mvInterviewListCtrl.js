@@ -52,7 +52,8 @@ angular.module('compass')
 
     states.defaults('mvInterviewListCtrl', {
       page: 1,
-      pageSize: 20
+      pageSize: 20,
+      status: 'new'
     });
 
     $scope.queryOptions = states.get('mvInterviewListCtrl');
@@ -75,6 +76,9 @@ angular.module('compass')
     }
 
     $scope.query = function () {
+      if ($scope.queryOptions.startDate) {
+        $scope.queryOptions.startDate = $scope.queryOptions.startDate.toISOString();
+      }
       mvInterview.query($scope.queryOptions, function (interviews, headers) {
         $scope.interviews = interviews;
         $scope.totalInterviewsCount = parseInt(headers('totalCount'), 10);

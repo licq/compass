@@ -31,7 +31,7 @@ describe('mvInterviewListCtrl', function () {
     $httpBackend.expectGET('/api/applyPositions?for=company').respond([
       'Java工程师', '销售总监', '前台'
     ]);
-    $httpBackend.expectGET('/api/interviews?page=1&pageSize=20')
+    $httpBackend.expectGET('/api/interviews?page=1&pageSize=20&status=new')
       .respond(function () {
         return [200, [
           {
@@ -107,7 +107,8 @@ describe('mvInterviewListCtrl', function () {
       var queryOptions = states.get('mvInterviewListCtrl');
       expect(queryOptions).to.deep.equal({
         pageSize: 20,
-        page: 1
+        page: 1,
+        status: 'new'
       });
 
       expect($scope.queryOptions).to.equal(queryOptions);
@@ -116,7 +117,7 @@ describe('mvInterviewListCtrl', function () {
 
   describe('search', function () {
     it('should retrieve the interviewlist again', function () {
-      $httpBackend.expectGET('/api/interviews?name=zhangsan&page=1&pageSize=20').respond(200);
+      $httpBackend.expectGET('/api/interviews?name=zhangsan&page=1&pageSize=20&status=new').respond(200);
       $scope.queryOptions.page = 1;
       $scope.queryOptions.name = 'zhangsan';
       $scope.search();
@@ -125,8 +126,8 @@ describe('mvInterviewListCtrl', function () {
   });
 
   describe('clear queryOptions', function () {
-    it('should clear the query condition and retrieve the intervew list', function () {
-      $httpBackend.expectGET('').respond(200);
+    it('should clear the query condition and retrieve the interview list', function () {
+      $httpBackend.expectGET('/api/interviews?applyPosition=&name=&page=1&pageSize=20&startDate=&status=new').respond(200);
       $scope.queryOptions.page = 3;
       $scope.queryOptions.name = 'beijing';
       $scope.clearQueryOptions();
@@ -137,7 +138,8 @@ describe('mvInterviewListCtrl', function () {
         pageSize: 20,
         name: '',
         applyPosition: '',
-        startDate: ''
+        startDate: '',
+        status: 'new'
       });
     });
   });

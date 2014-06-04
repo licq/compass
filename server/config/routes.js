@@ -13,8 +13,10 @@ var express = require('express'),
   companies = require('../controllers/companies'),
   events = require('../controllers/events'),
   interviews = require('../controllers/interviews'),
+  reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
-  counts = require('../controllers/counts');
+  counts = require('../controllers/counts'),
+  applierRejectReasons = require('../controllers/applierRejectReasons');
 
 module.exports = function (app) {
   var apiRouter = express.Router();
@@ -100,8 +102,16 @@ module.exports = function (app) {
     .get(interviews.get)
     .put(interviews.update);
 
+
+  apiRouter.route('/reviews')
+    .get(reviews.list)
+    .post(reviews.create);
+
   apiRouter.route('/applyPositions')
     .get(interviews.applyPositions);
+
+  apiRouter.route('/applierRejectReasons')
+    .get(applierRejectReasons.list);
 
   apiRouter.route('/counts')
     .get(counts.get);

@@ -65,10 +65,10 @@ describe('mvInterviewViewCtrl', function () {
   }));
 
   describe('offer', function () {
-    it('should put to /api/interviews/1234?status=offered', inject(function ($location, mvNotifier) {
+    it('should put to /api/interviews/1234?status offered', inject(function ($location, mvNotifier) {
       var spyLocation = sinon.spy($location, 'path');
       var spyNotifier = sinon.spy(mvNotifier, 'notify');
-      $httpBackend.expectPUT('/api/interviews/7788?status=offered').respond(200);
+      $httpBackend.expectPUT('/api/interviews/7788', {status: 'offered'}).respond(200);
       $scope.offer();
       $httpBackend.flush();
       expect($scope.interview.status).to.equal('offered');
@@ -78,10 +78,10 @@ describe('mvInterviewViewCtrl', function () {
   });
 
   describe('reject', function () {
-    it('should put to /api/interviews/1234?status=rejected', inject(function ($location, mvNotifier) {
+    it('should put to /api/interviews/1234 with status rejected', inject(function ($location, mvNotifier) {
       var spyLocation = sinon.spy($location, 'path');
       var spyNotifier = sinon.spy(mvNotifier, 'notify');
-      $httpBackend.expectPUT('/api/interviews/7788?status=rejected').respond(200);
+      $httpBackend.expectPUT('/api/interviews/7788', {status: 'rejected'}).respond(200);
       $scope.reject();
       $httpBackend.flush();
       expect($scope.interview.status).to.equal('rejected');

@@ -66,7 +66,7 @@ angular.module('compass')
           $scope.eventsForCalendar[index] = convertCalendarEvent(newEvent);
         } else {
           angular.forEach($scope.events, function (e) {
-            if (e.application === newEvent.application) {
+            if (e.application === $scope.events[index].application) {
               e.countsOfEvents--;
             }
           });
@@ -88,10 +88,8 @@ angular.module('compass')
       var oldStartTime = new Date(event.startTime), newStartTime = new Date(calendarEvent.start);
       event.startTime = calendarEvent.start;
       event.duration = mvMoment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
-      var countOfEvents = event.countOfEvents;
-      console.log(countOfEvents);
       mvEvent.update(event, function () {
-        $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime, countOfEvents);
+        $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime);
         $scope.eventsForCalendar[index] = convertCalendarEvent(event);
       });
     };

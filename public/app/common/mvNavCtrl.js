@@ -4,21 +4,31 @@ angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvAuth, $location) {
     $scope.identity = mvIdentity;
 
-    $scope.updateNavCounts = function () {
-      mvNav.get(function (counts) {
+    $scope.updateNavCounts = function (query) {
+      mvNav.get(query,function (counts) {
         $scope.counts = counts;
       });
     };
 
-    if (mvIdentity.isAuthenticated()) {
-      $scope.updateNavCounts();
-    }
+    $scope.currentUser = mvIdentity.currentUser;
 
-    var updater = $interval($scope.updateNavCounts, 300000);
-
-    $scope.$on('loggedin', function () {
-      $scope.updateNavCounts();
+    $scope.$watch('currentUser', function () {
+      if ($scope.currentUser) {
+        $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined', 'toBeReviewed', 'interviews', 'eventsOfToday']});
+        $scope.interval = $interval($scope.updateNavCounts, 300000);
+      } else {
+        if ($scope.interval) {
+          $interval.cancel($scope.interval);
+        }
+      }
     });
+
+    $scope.$on('$destroy', function () {
+      if ($scope.interval) {
+        $interval.cancel($scope.interval);
+      }
+    });
+
     $scope.$on('applicationStatusUpdated', function (event, from, to) {
 
       switch (to) {
@@ -94,28 +104,11 @@ angular.module('compass')
             oldStartTime >= today && oldStartTime <= endOfToday) {
             $scope.counts.eventsOfToday--;
           }
-
-          var now = new Date();
-          if (countOfEvents === 1) {
-            if (newStartTime <= now && oldStartTime > now) {
-              $scope.counts.interviews++;
-            } else if (newStartTime > now && oldStartTime <= now) {
-              $scope.counts.interviews--;
-            }
-          }
       }
     });
 
-    $scope.$on('reviewAdded', function (event) {
+    $scope.$on('reviewAdded', function () {
       $scope.counts.toBeReviewed--;
-    });
-
-//    $scope.$on('interviewAdded', function () {
-//      $scope.counts.interviews++;
-//    });
-
-    $scope.$on('$destroy', function () {
-      $interval.cancel(updater);
     });
 
     $scope.logout = function () {

@@ -5,21 +5,6 @@ angular.module('compass')
         update: {
           method: 'PUT',
           isArray: false
-        },
-
-        offer: {
-          method: 'PUT',
-          isArray: false,
-          params: {
-            status: 'offered'
-          }
-        },
-        reject: {
-          method: 'PUT',
-          isArray: false,
-          params: {
-            status: 'rejected'
-          }
         }
       }
     );

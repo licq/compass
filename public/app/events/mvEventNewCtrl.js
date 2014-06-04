@@ -3,7 +3,7 @@ angular.module('compass')
     var today = new Date(), oldStartTime, newStartTime;
     today.setHours(0, 0, 0, 0);
     $scope.today = today;
-    console.log('evnet new ', event);
+
     $scope.cancel = function () {
       $modalInstance.dismiss();
     };

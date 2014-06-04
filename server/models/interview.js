@@ -69,7 +69,8 @@ var reviewSchema = mongoose.Schema({
     type: Number
   },
   createdAt: {
-    type: Date
+    type: Date,
+    default: new Date()
   }
 });
 
@@ -92,8 +93,14 @@ var interviewSchema = mongoose.Schema({
   applyPosition: String,
   status: {
     type: 'String',
-    enum: ['new', 'offered', 'rejected'],
+    enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted'],
     default: 'new'
+  },
+  onboardDate: {
+    type: Date
+  },
+  applierRejectReason: {
+    type: String
   },
   statusBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -337,7 +344,7 @@ function constructQueryForReview(model, user, options) {
     var end = moment(options.startDate).endOf('day').toDate();
     query = model.where('events').elemMatch({startTime: {$lte: end, $gte: start}, interviewers: user._id});
   } else {
-    query = model.where('events').elemMatch({startTime: {$lte: new Date()}, interviewers: user._id});
+    query = model.where('events').elemMatch({startTime: {$lte: moment().endOf('day').toDate()}, interviewers: user._id});
   }
   if (options.name) {
     query.where('name').regex(new RegExp(options.name));
@@ -348,7 +355,7 @@ function constructQueryForReview(model, user, options) {
   return query;
 }
 
-interviewSchema.statics.forReview = function (user, options, cb) {
+interviewSchema.statics.queryForReview = function (user, options, cb) {
   if (typeof options === 'function') {
     cb = options;
     options = {
@@ -397,10 +404,8 @@ interviewSchema.statics.countForUnReviewed = function (user, options, cb) {
   return query.exec(cb);
 };
 
-function constructQueryForCompany(model, company, options) {
-  var query = model.find({company: company});
-  query.where('events.startTime').lte(new Date())
-    .where('status').equals('new');
+function constructQueryNew(model, company, options) {
+  var query = model.find({company: company, status: 'new'}).where('events.startTime').lte(moment().endOf('day').toDate());
   if (options.name) {
     query.where('name').regex(new RegExp(options.name));
   }
@@ -415,34 +420,46 @@ function constructQueryForCompany(model, company, options) {
   }
   return query;
 }
-interviewSchema.statics.forCompany = function (company, options, cb) {
-  if (typeof options === 'function') {
-    cb = options;
-    options = {
-      page: 1,
-      pageSize: 20
-    };
-  }
+interviewSchema.statics.queryNew = function (company, options, cb) {
   var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
   var orderByReverse = options.orderByReverse === 'true' ? -1 : 1;
   var sortOptions = {};
   sortOptions[orderBy] = orderByReverse;
 
-  var query = constructQueryForCompany(this, company, options);
+  var query = constructQueryNew(this, company, options);
   query.populate('events.interviewers', 'name')
-    .populate('reviews.interviewer', 'name')
-    .skip(options.pageSize * (options.page - 1))
-    .limit(options.pageSize)
-    .exec(cb);
+    .populate('reviews.interviewer', 'name');
+  if (options.pageSize && options.page) {
+    query.skip(options.pageSize * (options.page - 1))
+      .limit(options.pageSize);
+  }
+  query.exec(cb);
 };
 
-interviewSchema.statics.countForCompany = function (company, options, cb) {
+interviewSchema.statics.countNew = function (company, options, cb) {
   if (typeof options === 'function') {
     cb = options;
     options = {};
   }
-  var query = constructQueryForCompany(this, company, options).count();
+  var query = constructQueryNew(this, company, options).count();
   return query.exec(cb);
+};
+
+interviewSchema.statics.queryOffered = function (company, options, cb) {
+  var query = this.find({company: company, status: 'offered'});
+  if (options.name)
+    query.where('name').regex(new RegExp(options.name));
+  query.select('name applyPosition').sort('updated_at').exec(cb);
+};
+
+interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
+  var query = this.find({company: company, status: 'offer accepted'});
+  if (options.name)
+    query.where('name').regex(new RegExp(options.name));
+  if (options.startDate && options.endDate) {
+    query.where('onboardDate').lte(options.endDate).gte(options.startDate);
+  }
+  query.select('name applyPosition onboardDate').sort('onboardDate').exec(cb);
 };
 
 interviewSchema.statics.applyPositionsForCompany = function (company, cb) {

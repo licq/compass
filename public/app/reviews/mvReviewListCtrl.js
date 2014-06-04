@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvReviewListCtrl', function ($scope, mvInterview, $http, states, $location) {
+  .controller('mvReviewListCtrl', function ($scope, mvReview, $http, states, $location) {
     var defaultQueryOptions = {
       currentPage: 1,
       pageSize: 20,
@@ -18,7 +18,7 @@ angular.module('compass')
     });
 
     $scope.query = function () {
-      mvInterview.query(_.extend({review: true}, $scope.queryOptions),
+      mvReview.query($scope.queryOptions,
         function (interviews, headers) {
           $scope.totalInterviewsCount = parseInt(headers('totalCount'), 10);
           $scope.interviews = interviews;
