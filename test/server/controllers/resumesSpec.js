@@ -5,14 +5,16 @@ var
   expect = require('chai').expect;
 
 describe('#resumes', function () {
-  var request;
+  var request, resume, user;
 
   beforeEach(function (done) {
     helper.clearCollections('User', 'Company', 'Resume', function () {
       Resume.clearAll(true, function () {
-        helper.login(function (agent, user) {
+        helper.login(function (agent, newUser) {
+          user = newUser;
           request = agent;
-          Factory.build('resume', {company: user.company, status: 'archived'}, function (resume) {
+          Factory.build('resume', {company: newUser.company, status: 'archived'}, function (newResume) {
+            resume = newResume;
             resume.saveAndIndexSync(done);
           });
         });
@@ -37,5 +39,41 @@ describe('#resumes', function () {
         expect(res.body.facets.age.entries[0].count).to.equal(1);
         done(err);
       });
+  });
+
+  describe('get /api/resumes/:id', function () {
+    var interview;
+
+    beforeEach(function (done) {
+      Factory.create('interview', {
+        application: resume._id,
+        company: user.company,
+        applyPosition: '销售总监',
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ],
+        status: 'new'
+      }, function (createdInterview) {
+        interview = createdInterview;
+        done();
+      });
+    });
+
+    it('should get resume with the interview', function (done) {
+      request.get('/api/resumes/' + resume.id)
+        .expect(200)
+        .end(function (err, res) {
+          expect(err).to.not.exist;
+          var data = res.body;
+          expect(data).to.have.property('name', resume.name);
+          expect(data.interview).to.have.property('applyPosition', '销售总监');
+          done();
+        });
+    });
   });
 });

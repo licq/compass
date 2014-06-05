@@ -8,7 +8,6 @@ exports.authenticate = function (req, res, next) {
   passport.authenticate('local',
     { badRequestMessage: '用户名或密码不正确' },
     function (err, user, info) {
-      console.log('authenticate');
       var error = err || info;
       if (error) return res.json(401, error);
 

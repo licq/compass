@@ -14,7 +14,15 @@ exports.list = function (req, res, next) {
 };
 
 exports.get = function (req, res) {
-  res.json(req.resume);
+  mongoose.model('Interview').findOne({application: req.resume._id})
+    .populate('events.interviewers').populate('reviews.interviewer')
+    .exec(function (err, interview) {
+      if (interview) {
+        req.resume = req.resume.toObject();
+        req.resume.interview = interview;
+      }
+      return res.json(req.resume);
+    });
 };
 
 exports.load = function (req, res, next) {
@@ -26,4 +34,3 @@ exports.load = function (req, res, next) {
       next();
     });
 };
-
