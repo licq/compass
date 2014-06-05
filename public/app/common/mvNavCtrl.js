@@ -8,18 +8,20 @@ angular.module('compass')
       $scope.counts = mvNav.get();
     };
 
-    $scope.currentUser = mvIdentity.currentUser;
-
-    $scope.$watch('currentUser', function () {
-      if ($scope.currentUser) {
-        $scope.updateNavCounts();
-        $scope.interval = $interval($scope.updateNavCounts, 300000);
-      } else {
-        if ($scope.interval) {
-          $interval.cancel($scope.interval);
-        }
+    $scope.$on('loggedIn', function () {
+      $scope.updateNavCounts();
+      $scope.interval = $interval($scope.updateNavCounts, 300000);
+    });
+    $scope.$on('loggedOut', function () {
+      if ($scope.interval) {
+        $interval.cancel($scope.interval);
       }
     });
+
+    if (mvIdentity.isAuthenticated()) {
+      $scope.updateNavCounts();
+      $scope.interval = $interval($scope.updateNavCounts, 300000);
+    }
 
     $scope.$on('$destroy', function () {
       if ($scope.interval) {
