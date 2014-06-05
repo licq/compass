@@ -3,17 +3,27 @@
 angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvAuth, $location) {
     $scope.identity = mvIdentity;
-
+    $scope.counts = {};
     $scope.updateNavCounts = function (query) {
-      mvNav.get(query,function (counts) {
-        $scope.counts = counts;
+      mvNav.get(query, function (counts) {
+        angular.extend($scope.counts, counts);
       });
     };
 
+    if (mvIdentity.isAuthenticated()) {
+      $scope.updateNavCounts();
+      $scope.interval = $interval(function () {
+        $scope.updateNavCounts();
+      }, 300000);
+    }
+
     $scope.$on('loggedIn', function () {
-      $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined', 'toBeReviewed', 'interviews', 'eventsOfToday']});
-      $scope.interval = $interval($scope.updateNavCounts, 300000);
+      $scope.updateNavCounts();
+      $scope.interval = $interval(function () {
+        $scope.updateNavCounts();
+      }, 300000);
     });
+
     $scope.$on('loggedOut', function () {
       if ($scope.interval) {
         $interval.cancel($scope.interval);
@@ -25,11 +35,6 @@ angular.module('compass')
         $interval.cancel($scope.interval);
       }
     });
-
-    if (mvIdentity.isAuthenticated()) {
-      $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined', 'toBeReviewed', 'interviews', 'eventsOfToday']});
-      $scope.interval = $interval($scope.updateNavCounts, 300000);
-    }
 
     $scope.$on('applicationStatusUpdated', function (event, from, to) {
 

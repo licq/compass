@@ -4,12 +4,12 @@
       data-collapse-nav
       data-highlight-active>
     <li><a href="#/dashboard"> <i class="fa fa-dashboard"></i><span>仪表盘</span> </a></li>
-    <li><a href="#/events"><i class="fa fa-calendar" ></i><span>日历</span>
+    <li><a href="#/events" ng-click="updateNavCounts({counts:'eventsOfToday'})"><i class="fa fa-calendar" ></i><span>日历</span>
       <span class="badge badge-success">{{counts.eventsOfToday}}</span></a></li>
     <li>
       <a href="#/applications"><i class="fa fa-user"></i><span>应聘</span></a>
       <ul>
-        <li><a href="#/applications/new" ng-click="updateNavCounts({counts: 'new'})"><i class="fa fa-caret-right"></i><span>新应聘</span>
+        <li><a href="#/applications/new" ng-click="updateNavCounts({counts:'new'})"><i class="fa fa-caret-right"></i><span>新应聘</span>
           <span class="badge badge-success">{{counts.new}}</span></a></li>
         <li><a href="#/applications/undetermined"><i class="fa fa-caret-right"></i><span>待定</span>
           <span class="badge badge-success">{{counts.undetermined}}</span></a></li>
@@ -20,9 +20,9 @@
     <li>
       <a href="#/interviews"><i class="fa fa-road"></i><span>面试</span></a>
       <ul>
-        <li><a href="#/interviews/reviews/" ng-click="updateNavCounts({counts: 'toBeReviewed'})"><i class="fa fa-caret-right"></i><span>评价</span>
+        <li><a href="#/interviews/reviews/" ng-click="updateNavCounts({counts:'toBeReviewed'})"><i class="fa fa-caret-right"></i><span>评价</span>
           <span class="badge badge-success">{{counts.toBeReviewed}}</span></a></li>
-        <li><a href="#/interviews/list" ng-click="updateNavCounts({counts: 'interview'})"><i class="fa fa-caret-right"></i><span>列表</span>
+        <li><a href="#/interviews/list" ng-click="updateNavCounts({counts:'interviews'})"><i class="fa fa-caret-right"></i><span>列表</span>
           <span class="badge badge-success">{{counts.interviews}}</span></a></li>
         <li><a href="#/interviews/offers"><i class="fa fa-caret-right"></i><span>通过</span></a></li>
         <li><a href="#/interviews/onboards"><i class="fa fa-caret-right"></i><span>入职</span></a></li>
