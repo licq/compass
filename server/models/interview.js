@@ -180,19 +180,18 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
 
   var match = {
     $match: {
+      status: 'new',
       events: {
         $elemMatch: {
           startTime: {
             $gte: start,
             $lt: end
           },
-          $or: [
-            { interviewers: interviewer },
-            { createdBy: interviewer }
-          ]
+          interviewers: interviewer
         }
       }
     }};
+  console.log(JSON.stringify(match));
   var query = this.aggregate(match)
     .project({
       name: 1,
@@ -220,11 +219,7 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       application: 1,
       countOfEvents: 1
     })
-    .match({ $or: [
-      { interviewers: interviewer },
-      { createdBy: interviewer }
-    ], startTime: { $gte: start, $lt: end } });
-
+    .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } });
   return query.exec(cb);
 }
 ;
@@ -240,12 +235,10 @@ interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start
             $gte: start,
             $lt: end
           },
-          $or: [
-            { interviewers: interviewer },
-            { createdBy: interviewer }
-          ]
+          interviewers: interviewer
         }
-      }
+      },
+      status: 'new'
     }};
 
   var query = this.aggregate(match)
@@ -256,10 +249,7 @@ interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start
       interviewers: '$events.interviewers',
       company: 1
     })
-    .match({ $or: [
-      { interviewers: interviewer },
-      { createdBy: interviewer }
-    ], startTime: { $gte: start, $lt: end } })
+    .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } })
     .group({_id: '$company', total: {$sum: 1}});
 
   return query.exec(cb);
@@ -272,7 +262,8 @@ interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
         $gte: start,
         $lt: end
       },
-      company: mongoose.Types.ObjectId(company)
+      company: mongoose.Types.ObjectId(company),
+      status: 'new'
     }};
 
   this.aggregate(match)
@@ -316,23 +307,43 @@ interviewSchema.statics.updateEvent = function (id, data, cb) {
   });
 };
 
+function sendDeleteEventEmail(interview, event, cb) {
+  mongoose.model('EventSetting').generateEmails('delete', createEmailContext(interview, event), function (err, emails) {
+    if (err) {
+      logger.error('create alert email failed ' + err);
+    } else {
+      createSendEmailJob(emails);
+    }
+    cb(null, interview);
+  });
+}
 interviewSchema.statics.deleteEvent = function (id, cb) {
   this.findOne({'events._id': id}).exec(function (err, interview) {
     if (err) return cb(err);
     if (!interview) return cb('interview not found for event with id ' + id);
     var event = interview.events.id(id);
     event.remove();
-    interview.save(function (err) {
-      if (err) return cb(err);
-      mongoose.model('EventSetting').generateEmails('delete', createEmailContext(interview, event), function (err, emails) {
-        if (err) {
-          logger.error('create alert email failed ' + err);
-        } else {
-          createSendEmailJob(emails);
-        }
-        cb(null, interview);
+    if (interview.events.length === 0) {
+      interview.remove(function (err) {
+        if (err) return cb(err);
+        sendDeleteEventEmail(interview, event, function (err, interview) {
+          mongoose.model('Resume').findOne({_id: interview.application}).exec(function (err, resume) {
+            if (err) return cb(err);
+            if (!resume) return cb();
+            resume.status = 'pursued';
+            resume.save(function (err) {
+              if (err) return cb(err);
+              return cb();
+            });
+          });
+        });
       });
-    });
+    } else {
+      interview.save(function (err) {
+        if (err) return cb(err);
+        sendDeleteEventEmail(interview, event, cb);
+      });
+    }
   });
 };
 
