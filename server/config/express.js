@@ -7,6 +7,7 @@ var express = require('express'),
   kue = require('kue'),
   session = require('express-session'),
   mongoStore = require('connect-mongo')(session),
+  Token = mongoose.model('Token'),
   winston = require('./winston'),
   expressWinston = require('express-winston');
 
@@ -51,7 +52,22 @@ module.exports = function (app, config) {
 
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(passport.authenticate('remember-me'));
+  app.use(function (req, res, next) {
+    if (req.isAuthenticated()) return next();
+    if (req.cookies.remember_me) {
+      Token.findById(req.cookies.remember_me).populate('user').exec(function (err, token) {
+        if (!err && token && token.user) {
+          req.logIn(token.user, function () {
+            return next();
+          });
+        } else {
+          return next();
+        }
+      });
+    } else {
+      return next();
+    }
+  });
 
   require('./routes')(app);
 

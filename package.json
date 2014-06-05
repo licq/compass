@@ -42,7 +42,6 @@
     "nodemailer": "^0.6.1",
     "passport": "^0.2.0",
     "passport-local": "^1.0.0",
-    "passport-remember-me": "0.0.1",
     "poplib": "0.1.7",
     "redis": "^0.10.1",
     "request": "^2.34.0",

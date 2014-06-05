@@ -23,8 +23,8 @@ module.exports = function (app) {
   var publicApiRouter = express.Router();
 
   publicApiRouter.route('/sessions')
-    .post(sessions.authenticate, sessions.rememberMe)
-    .delete(sessions.clearRememberMe, sessions.logout);
+    .post(sessions.authenticate)
+    .delete(sessions.logout);
 
   publicApiRouter.route('/signups').post(signups.create);
   publicApiRouter.route('/signups/:code').put(signups.activate);
