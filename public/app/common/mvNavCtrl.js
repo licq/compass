@@ -4,26 +4,29 @@ angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvAuth, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
-
     $scope.updateNavCounts = function (query) {
       mvNav.get(query, function (counts) {
         angular.extend($scope.counts, counts);
       });
     };
 
-    $scope.currentUser = mvIdentity.currentUser;
-
-    $scope.$watch('currentUser', function () {
-      if ($scope.currentUser) {
+    if (mvIdentity.isAuthenticated()) {
+      $scope.updateNavCounts();
+      $scope.interval = $interval(function () {
         $scope.updateNavCounts();
+      }, 300000);
+    }
 
-        $scope.interval = $interval(function () {
-          $scope.updateNavCounts();
-        }, 300000);
-      } else {
-        if ($scope.interval) {
-          $interval.cancel($scope.interval);
-        }
+    $scope.$on('loggedIn', function () {
+      $scope.updateNavCounts();
+      $scope.interval = $interval(function () {
+        $scope.updateNavCounts();
+      }, 300000);
+    });
+
+    $scope.$on('loggedOut', function () {
+      if ($scope.interval) {
+        $interval.cancel($scope.interval);
       }
     });
 
