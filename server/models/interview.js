@@ -191,7 +191,6 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
         }
       }
     }};
-  console.log(JSON.stringify(match));
   var query = this.aggregate(match)
     .project({
       name: 1,
