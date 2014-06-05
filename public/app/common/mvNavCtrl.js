@@ -4,12 +4,14 @@ angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvAuth, $location) {
     $scope.identity = mvIdentity;
 
-    $scope.updateNavCounts = function () {
-      $scope.counts = mvNav.get();
+    $scope.updateNavCounts = function (query) {
+      mvNav.get(query,function (counts) {
+        $scope.counts = counts;
+      });
     };
 
     $scope.$on('loggedIn', function () {
-      $scope.updateNavCounts();
+      $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined', 'toBeReviewed', 'interviews', 'eventsOfToday']});
       $scope.interval = $interval($scope.updateNavCounts, 300000);
     });
     $scope.$on('loggedOut', function () {
@@ -18,18 +20,18 @@ angular.module('compass')
       }
     });
 
-    if (mvIdentity.isAuthenticated()) {
-      $scope.updateNavCounts();
-      $scope.interval = $interval($scope.updateNavCounts, 300000);
-    }
-
     $scope.$on('$destroy', function () {
       if ($scope.interval) {
         $interval.cancel($scope.interval);
       }
     });
 
-    $scope.$on('applicationStatusUpdated', function (from, to) {
+    if (mvIdentity.isAuthenticated()) {
+      $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined', 'toBeReviewed', 'interviews', 'eventsOfToday']});
+      $scope.interval = $interval($scope.updateNavCounts, 300000);
+    }
+
+    $scope.$on('applicationStatusUpdated', function (event, from, to) {
 
       switch (to) {
         case 'undetermined':
@@ -73,7 +75,7 @@ angular.module('compass')
       }
     });
 
-    $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime) {
+    $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime, countOfEvents) {
       var today = new Date(), endOfToday = new Date();
       today.setHours(0, 0, 0, 0);
       endOfToday.setHours(23, 59, 59, 999);
@@ -81,6 +83,10 @@ angular.module('compass')
         case 'delete':
           if (oldStartTime >= today && oldStartTime <= endOfToday) {
             $scope.counts.eventsOfToday--;
+          }
+
+          if (countOfEvents === 1) {
+            $scope.counts.interviews--;
           }
           break;
 
@@ -95,9 +101,7 @@ angular.module('compass')
             newStartTime <= endOfToday &&
             (oldStartTime < today || oldStartTime > endOfToday)) {
             $scope.counts.eventsOfToday++;
-          }
-
-          if ((newStartTime < today ||
+          } else if ((newStartTime < today ||
             newStartTime > endOfToday) &&
             oldStartTime >= today && oldStartTime <= endOfToday) {
             $scope.counts.eventsOfToday--;
@@ -106,11 +110,7 @@ angular.module('compass')
     });
 
     $scope.$on('reviewAdded', function () {
-      $scope.counts.reviews--;
-    });
-
-    $scope.$on('interviewAdded', function () {
-      $scope.counts.interview++;
+      $scope.counts.toBeReviewed--;
     });
 
     $scope.logout = function () {

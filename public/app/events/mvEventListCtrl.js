@@ -61,9 +61,15 @@ angular.module('compass')
 
       modalInstance.result.then(function (newEvent) {
         if (newEvent) {
+          newEvent.countsOfEvents = $scope.events[index].countsOfEvents + 1;
           $scope.events[index] = newEvent;
           $scope.eventsForCalendar[index] = convertCalendarEvent(newEvent);
         } else {
+          angular.forEach($scope.events, function (e) {
+            if (e.application === $scope.events[index].application) {
+              e.countsOfEvents--;
+            }
+          });
           $scope.events.splice(index, 1);
           $scope.eventsForCalendar.splice(index, 1);
         }

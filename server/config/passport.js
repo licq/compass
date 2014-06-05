@@ -9,12 +9,14 @@ var mongoose = require('mongoose'),
 
 module.exports = function () {
   passport.serializeUser(function (user, done) {
+    console.log('serializeUser', user.id);
     if (user) {
       done(null, user._id);
     }
   });
 
   passport.deserializeUser(function (id, done) {
+    console.log('deserializeUser',id);
     User.findOne({ _id: id }).exec(function (err, user) {
       if (user) {
         return done(null, user);
@@ -26,6 +28,7 @@ module.exports = function () {
 
   passport.use(new LocalStrategy({ usernameField: 'email' },
     function (email, password, done) {
+      console.log('local strategy');
       User.findOne({ email: email }).exec(function (err, user) {
         if (err) return done(err);
         if (!user || !user.authenticate(password)) {
@@ -38,6 +41,7 @@ module.exports = function () {
 
   passport.use(new RememberMeStrategy(
     function (tokenId, done) {
+      console.log('remember me strategy');
       Token.findByIdAndRemove(tokenId, function (err, token) {
         if (err) return done(err);
         if (!token) return done(null, false);
@@ -51,6 +55,7 @@ module.exports = function () {
       });
     },
     function (user, done) {
+      console.log('create token');
       Token.create({user: user.id}, function (err, token) {
         if (err) return done(err);
         return done(null, token._id);

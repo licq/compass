@@ -9,16 +9,16 @@ describe('mvNavCtrl', function () {
       $scope = $rootScope.$new();
       $interval = _$interval_;
 
-      $httpBackend.expectGET('/api/counts')
+      $httpBackend.expectGET('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=toBeReviewed&counts=interviews&counts=eventsOfToday')
         .respond({new: 1, undetermined: 2, pursued: 3,
-          eventsOfToday: 4, interviews: 5, reviews: 6});
+          eventsOfToday: 4, interviews: 5, toBeReviewed: 6});
 
       mvIdentity.currentUser = {
         _id: '7788'
       };
 
       $controller('mvNavCtrl', {
-        $scope: $scope,
+        $scope: $scope
       });
 
       $httpBackend.flush();
@@ -31,7 +31,7 @@ describe('mvNavCtrl', function () {
     expect($scope.counts.pursued).to.equal(3);
     expect($scope.counts.eventsOfToday).to.equal(4);
     expect($scope.counts.interviews).to.equal(5);
-    expect($scope.counts.reviews).to.equal(6);
+    expect($scope.counts.toBeReviewed).to.equal(6);
   });
 
   it('should run tasks repeatedly', function () {
