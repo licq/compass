@@ -9,7 +9,7 @@ describe('mvNavCtrl', function () {
       $scope = $rootScope.$new();
       $interval = _$interval_;
 
-      $httpBackend.expectGET('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=toBeReviewed&counts=interviews&counts=eventsOfToday')
+      $httpBackend.expectGET('/api/counts')
         .respond({new: 1, undetermined: 2, pursued: 3,
           eventsOfToday: 4, interviews: 5, toBeReviewed: 6});
 

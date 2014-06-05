@@ -3,10 +3,11 @@
 angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvAuth, $location) {
     $scope.identity = mvIdentity;
+    $scope.counts = {};
 
     $scope.updateNavCounts = function (query) {
-      mvNav.get(query,function (counts) {
-        $scope.counts = counts;
+      mvNav.get(query, function (counts) {
+        angular.extend($scope.counts, counts);
       });
     };
 
@@ -14,8 +15,11 @@ angular.module('compass')
 
     $scope.$watch('currentUser', function () {
       if ($scope.currentUser) {
-        $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined', 'toBeReviewed', 'interviews', 'eventsOfToday']});
-        $scope.interval = $interval($scope.updateNavCounts, 300000);
+        $scope.updateNavCounts();
+
+        $scope.interval = $interval(function () {
+          $scope.updateNavCounts();
+        }, 300000);
       } else {
         if ($scope.interval) {
           $interval.cancel($scope.interval);
