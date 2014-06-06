@@ -13,6 +13,13 @@ exports.list = function (req, res, next) {
     });
 };
 
+exports.count = function (req, res, next) {
+  Email.count(function (err, count) {
+    if (err) return next(err);
+    res.json({emailCount: count});
+  });
+};
+
 exports.create = function (req, res) {
   var email = new Email(req.body);
   email.company = req.user.company;

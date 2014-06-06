@@ -1,0 +1,58 @@
+<div class="page">
+  <div class="row">
+    <div class="col-md-6">
+      <section class="panel panel-success">
+        <div class="panel-heading">
+          <strong>任务统计</strong>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <tr ng-repeat="(key,value) in taskStats">
+                <td>{{key}}</td>
+                <td>{{value}}</td>
+              </tr>
+              <tr>
+                <td>系统中Email数量</td>
+                <td>{{emailCount}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-warning">删除所有并重建</button>
+          <button class="btn btn-danger">删除Fetch Email并重建</button>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6">
+      <section class="panel panel-warning">
+        <div class="panel-heading">
+          <strong>简历数据</strong>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <tr>
+                <td>数据库中Mail数量</td>
+                <td>{{mailCount}}</td>
+              </tr>
+              <tr>
+                <td>数据库中简历数量</td>
+                <td>{{resumeCountInDb}}</td>
+              </tr>
+              <tr>
+                <td>ES中简历数量</td>
+                <td>{{resumeCountInEs}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-warning">重建解析简历</button>
+          <button class="btn btn-danger">重建ES</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

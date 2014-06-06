@@ -139,6 +139,11 @@ angular.module('compass',
         controller: 'mvApplicationViewCtrl',
         authenticate: true
       })
+      .when('/systemSettings/systemOperations', {
+        templateUrl: '/app/systemOperations/view.html',
+        controller: 'mvSystemOperationsCtrl',
+        authenticate: true
+      })
       .otherwise({
         resolve: {
           load: function (mvIdentity, $location, $q) {

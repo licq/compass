@@ -25,6 +25,23 @@ exports.get = function (req, res) {
     });
 };
 
+exports.counts = function (req, res, next) {
+  mongoose.model('Mail').count(function (err, mailCount) {
+    if (err) return next(err);
+    Resume.count(function (err, countInDb) {
+      if (err) return next(err);
+      Resume.esCount(function (err, countInEs) {
+        if (err) return next(err);
+        res.json({
+          resumeCountInEs: countInEs,
+          resumeCountInDb: countInDb,
+          mailCount: mailCount
+        });
+      });
+    });
+  });
+};
+
 exports.load = function (req, res, next) {
   Resume.findOne({_id: req.params.id, company: req.user.company})
     .exec(function (err, resume) {

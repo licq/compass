@@ -40,6 +40,9 @@ module.exports = function (app) {
     .delete(emails.delete)
     .put(emails.update);
 
+  apiRouter.route('/emailCount')
+    .get(emails.count);
+
   apiRouter.route('/mails')
     .get(mails.list);
 
@@ -72,6 +75,9 @@ module.exports = function (app) {
   apiRouter.route('/resumes/:id')
     .all(resumes.load)
     .get(resumes.get);
+
+  apiRouter.route('/resumeCounts')
+    .get(resumes.counts);
 
   apiRouter.route('/eventSettings')
     .get(eventSettings.get);

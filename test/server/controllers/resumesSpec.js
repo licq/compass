@@ -8,7 +8,7 @@ describe('#resumes', function () {
   var request, resume, user;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Resume', function () {
+    helper.clearCollections('User', 'Company', 'Resume', 'Mail', function () {
       Resume.clearAll(true, function () {
         helper.login(function (agent, newUser) {
           user = newUser;
@@ -39,6 +39,20 @@ describe('#resumes', function () {
         expect(res.body.facets.age.entries[0].count).to.equal(1);
         done(err);
       });
+  });
+
+  describe('get /api/resumeCounts', function () {
+    it('should return resumeCountInDb and resumeCountInEs', function (done) {
+      request.get('/api/resumeCounts')
+        .expect(200)
+        .end(function (err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.have.property('resumeCountInDb', 1);
+          expect(res.body).to.have.property('resumeCountInEs', 1);
+          expect(res.body).to.have.property('mailCount', 1);
+          done();
+        });
+    });
   });
 
   describe('get /api/resumes/:id', function () {
