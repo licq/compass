@@ -129,6 +129,8 @@ module.exports = function (app) {
     .post(systemOperations.recreateFetchEmailJobs);
   apiRouter.route('/systemOperations/synchronizeEsToDb')
     .post(systemOperations.synchronizeEsToDb);
+  apiRouter.route('/systemOperations/reparseMails')
+    .post(systemOperations.reparseMails);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

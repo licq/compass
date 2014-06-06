@@ -79,7 +79,7 @@ angular.module('compass',
         controller: 'mvResumeViewCtrl',
         authenticate: true
       })
-      .when('/settings/companies', {
+      .when('/systemSettings/companies', {
         templateUrl: '/app/companies/list.html',
         controller: 'mvCompanyListCtrl',
         authenticate: true
