@@ -4,6 +4,7 @@ var kue = require('kue'),
   mongoose = require('mongoose'),
   Email = mongoose.model('Email'),
   _ = require('lodash'),
+  async = require('async'),
   Job = kue.Job,
   logger = require('../config/winston').logger();
 
@@ -49,7 +50,7 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
     });
 
     job.save(function (err) {
-      if (err) logger.error('job save failed because of',err);
+      if (err) logger.error('job save failed because of', err);
       if (callback) callback(err);
     });
   };
@@ -65,6 +66,45 @@ exports.findFetchEmailJob = function findFetchEmailJob(email, cb) {
   Job.get(email.id, cb);
 };
 
+exports.recreateFetchEmailJobs = function (done) {
+  kue.Job.rangeByType('fetch email', 'active', 0, 1000, 'asc', function (err, activeJobs) {
+    if (err) return done(err);
+    async.eachSeries(activeJobs, function (job, cb) {
+      job.remove(cb);
+    }, function (err) {
+      if (err) return done(err);
+      kue.Job.rangeByType('fetch email', 'delayed', 0, 1000, 'asc', function (err, delayed) {
+        async.eachSeries(delayed, function (job, cb) {
+          job.remove(cb);
+        }, function (err) {
+          if (err) return done(err);
+          Email.find(function (err, emails) {
+            if (err) return done(err);
+            async.eachSeries(emails, function (email, cb) {
+              exports.addFetchEmailJob(email, cb);
+            }, function (err) {
+              done && done(err);
+            });
+          });
+        });
+      });
+    });
+  });
+};
+
+exports.recreateAllJobs = function (done) {
+  kue.redis.client().flushdb(function (err) {
+    if (err) return done(err);
+    Email.find(function (err, emails) {
+      async.eachSeries(emails, function (email, cb) {
+        exports.addFetchEmailJob(email, cb);
+      }, function (err) {
+        done && done(err);
+      });
+    });
+  });
+};
+
 exports.addParseResumeJob = function (mail, cb) {
   logger.info('addParseResumeJob:', mail.subject);
   var data = {
@@ -76,5 +116,9 @@ exports.addParseResumeJob = function (mail, cb) {
     fromAddress: mail.fromAddress
   };
   jobs.create('parse resume', data).attempts(3).save();
-  cb();
+  cb && cb();
+};
+
+exports.start = function () {
+  exports.recreateFetchEmailJobs();
 };

@@ -202,6 +202,8 @@ var resumeSchema = mongoose.Schema({
   }
 });
 
+resumeSchema.index({company: 1, name: 1, mobile: 1}, {unique: true});
+
 resumeSchema.virtual('highestDegree').get(function () {
   if (this.educationHistory && this.educationHistory.length > 0) {
     return this.educationHistory[0].degree;

@@ -1,50 +1,22 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  Email = mongoose.model('Email'),
   Resume = mongoose.model('Resume'),
-  kue = require('kue'),
+  Mail = mongoose.model('Mail'),
   jobs = require('../tasks/jobs'),
-  _ = require('lodash'),
-  logger = require('../config/winston').logger(),
-  async = require('async');
+  logger = require('../config/winston').logger();
 
 exports.recreateAllJobs = function (req, res, next) {
-  kue.redis.client().flushdb(function (err) {
+  jobs.recreateAllJobs(function (err) {
     if (err) return next(err);
-    Email.find(function (err, emails) {
-      async.eachSeries(emails, function (email, cb) {
-        jobs.addFetchEmailJob(email, cb);
-      }, function () {
-        res.send(200);
-      });
-    });
+    res.send(200);
   });
 };
 
 exports.recreateFetchEmailJobs = function (req, res, next) {
-  kue.Job.rangeByType('fetch email', 'active', 0, 1000, 'asc', function (err, activeJobs) {
+  jobs.recreateFetchEmailJobs(function (err) {
     if (err) return next(err);
-    async.eachSeries(activeJobs, function (job, cb) {
-      job.remove(cb);
-    }, function (err) {
-      if (err) return next(err);
-      kue.Job.rangeByType('fetch email', 'active', 0, 1000, 'asc', function (err, activeJobs) {
-        async.eachSeries(activeJobs, function (job, cb) {
-          job.remove(cb);
-        }, function (err) {
-          if (err) return next(err);
-          Email.find(function (err, emails) {
-            if (err) return next(err);
-            async.eachSeries(emails, function (email, cb) {
-              jobs.addFetchEmailJob(email, cb);
-            }, function () {
-              res.send(200);
-            });
-          });
-        });
-      });
-    });
+    res.send(200);
   });
 };
 
@@ -58,5 +30,14 @@ exports.synchronizeEsToDb = function (req, res) {
       logger.info('synchronize elasticsearch using ', results, 'ms');
       res.send(200);
     });
+  });
+};
+
+exports.reparseMails = function (req, res, next) {
+  var stream = Mail.find().select('html subject company fromAddress').stream();
+  stream.on('data', function (mail) {
+    jobs.addParseResumeJob(mail);
+  }).on('close', function () {
+    res.send(200);
   });
 };

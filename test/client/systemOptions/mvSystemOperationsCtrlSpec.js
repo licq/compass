@@ -48,6 +48,7 @@ describe('mvSystemOperationsCtrl', function () {
     it('should post /api/systemOperations/recreateAllJobs', function () {
       $httpBackend.expectPOST('/api/systemOperations/recreateAllJobs').respond(200);
       $httpBackend.expectGET('/tasks/stats').respond({});
+      $httpBackend.expectGET('/api/emailCount').respond({});
       $scope.recreateAllJobs();
       $httpBackend.flush();
       expect($scope.taskStats).to.deep.equal({});
@@ -58,6 +59,7 @@ describe('mvSystemOperationsCtrl', function () {
     it('should post /api/systemOperations/recreateFetchEmailJobs', function () {
       $httpBackend.expectPOST('/api/systemOperations/recreateFetchEmailJobs').respond(200);
       $httpBackend.expectGET('/tasks/stats').respond({});
+      $httpBackend.expectGET('/api/emailCount').respond({});
       $scope.recreateFetchEmailJobs();
       $httpBackend.flush();
       expect($scope.taskStats).to.deep.equal({});
@@ -69,6 +71,16 @@ describe('mvSystemOperationsCtrl', function () {
       $httpBackend.expectPOST('/api/systemOperations/synchronizeEsToDb').respond(200);
       $httpBackend.expectGET('/api/resumeCounts').respond({mailCount: 200});
       $scope.synchronizeEsToDb();
+      $httpBackend.flush();
+      expect($scope.mailCount).to.equal(200);
+    });
+  });
+
+  describe('reparseMails', function () {
+    it('should post /api/systemOperations/reparseMails', function () {
+      $httpBackend.expectPOST('/api/systemOperations/reparseMails').respond(200);
+      $httpBackend.expectGET('/api/resumeCounts').respond({mailCount: 200});
+      $scope.reparseMails();
       $httpBackend.flush();
       expect($scope.mailCount).to.equal(200);
     });

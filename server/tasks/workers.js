@@ -41,11 +41,14 @@ function handleSendEmail(job, done) {
 function handleParseResume(job, done) {
   logger.info('handleParseResume ', job.data.title);
   try {
-    Resume.createOrUpdateAndIndex(parser.parse(job.data), function (err) {
+    var data = parser.parse(job.data);
+    Resume.createOrUpdateAndIndex(data, function (err) {
+      if (err && (err.code === 11000 || err.code === 11001))
+        logger.error('resume duplication of ', data.name);
       done(err);
     });
   } catch (err) {
-    job.error('error:', err.stack);
+    logger.warn('error:', err.message);
     done(err);
   }
 }
