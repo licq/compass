@@ -38,6 +38,11 @@ describe('mvEventNewCtrl', function () {
           email: 'aa@aa.com',
           mobile: '137838383838',
           application: '9900'
+        },
+        mvIdentity: {
+          currentUser: {
+            _id: 'zzz'
+          }
         }
       });
       $httpBackend.flush();
@@ -45,6 +50,11 @@ describe('mvEventNewCtrl', function () {
 
     it('should set $scope.isNew to be true', function () {
       expect($scope.isNew).to.be.true;
+    });
+
+    it('should set currentUser to interviewers', function () {
+      expect($scope.event.interviewers).to.have.length(1);
+      expect($scope.event.interviewers[0]).to.equal('zzz');
     });
     it('should set $scope.eventSetting', function () {
       expect($scope.eventSetting).to.have.property('duration', 90);

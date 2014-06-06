@@ -72,3 +72,13 @@
     </div>
   </div>
 </div>
+
+<div class="row callout callout-info" ng-show="interview.status !== 'new'">
+  <div class="col-md-2">
+    面试结果
+  </div>
+  <div class="col-md-4">
+    {{interview | interviewStatus}}
+  </div>
+
+</div>

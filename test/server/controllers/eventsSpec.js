@@ -58,7 +58,8 @@ describe('events', function () {
           startTime: new Date(),
           duration: 90,
           company: user.company,
-          createdBy: user
+          createdBy: user,
+          status: 'new'
         }, function () {
           request
             .get('/api/events?startTime=' + startTime + '&endTime=' + endTime + '&user=' + user.id)
@@ -125,7 +126,7 @@ describe('events', function () {
                 return done(err);
               }
               Interview.findById(interview.id, function (err, interview) {
-                expect(interview.events).to.have.length(0);
+                expect(interview).to.not.exist;
                 done(err);
               });
             });
