@@ -1,7 +1,7 @@
 angular.module('compass')
   .controller('mvReviewListCtrl', function ($scope, mvReview, $http, states, $location) {
     var defaultQueryOptions = {
-      currentPage: 1,
+      page: 1,
       pageSize: 20,
       orderBy: 'events[0].startTime',
       orderByReverse: true
@@ -29,12 +29,12 @@ angular.module('compass')
       $scope.queryOptions.name = '';
       $scope.queryOptions.applyPosition = '';
       $scope.queryOptions.startDate = '';
-      $scope.queryOptions.currentPage = 1;
+      $scope.queryOptions.page = 1;
       $scope.query();
     };
 
     $scope.search = function () {
-      $scope.queryOptions.currentPage = 1;
+      $scope.queryOptions.page = 1;
       $scope.query();
     };
 

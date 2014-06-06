@@ -40,7 +40,7 @@ describe('mvReviewListCtrl', function () {
         }
       ], {totalCount: 20}];
     };
-    $httpBackend.expectGET('/api/reviews?currentPage=1&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20').respond(resultFunction);
+    $httpBackend.expectGET('/api/reviews?orderBy=events%5B0%5D.startTime&orderByReverse=true&page=1&pageSize=20').respond(resultFunction);
 
     $controller('mvReviewListCtrl', {
       $scope: $scope
@@ -63,7 +63,7 @@ describe('mvReviewListCtrl', function () {
 
     it('should set default options', inject(function (states) {
       expect(states.get('mvReviewListCtrl').queryOptions).to.deep.equal({
-        currentPage: 1,
+        page: 1,
         orderBy: 'events[0].startTime',
         orderByReverse: true,
         pageSize: 20
@@ -71,7 +71,7 @@ describe('mvReviewListCtrl', function () {
 
       $scope.queryOptions.name = 'hello';
       expect($scope.queryOptions).to.deep.equal({
-        currentPage: 1,
+        page: 1,
         orderBy: 'events[0].startTime',
         orderByReverse: true,
         name: 'hello',
@@ -80,19 +80,19 @@ describe('mvReviewListCtrl', function () {
     }));
 
     it('should clear revert to the default options and query the reviews', function () {
-      $httpBackend.expectGET('/api/reviews?applyPosition=&currentPage=1&name=&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20&startDate=').respond(resultFunction);
+      $httpBackend.expectGET('/api/reviews?applyPosition=&name=&orderBy=events%5B0%5D.startTime&orderByReverse=true&page=1&pageSize=20&startDate=').respond(resultFunction);
       $scope.queryOptions.name = 'beijing';
       $scope.clearQueryOptions();
-      expect($scope.queryOptions.currentPage).to.equal(1);
+      expect($scope.queryOptions.page).to.equal(1);
       expect($scope.queryOptions.name).to.equal('');
       $httpBackend.flush();
     });
 
-    it('should set currentPage to 1 and query the reviews', function () {
-      $httpBackend.expectGET('/api/reviews?currentPage=1&name=beijing&orderBy=events%5B0%5D.startTime&orderByReverse=true&pageSize=20').respond(resultFunction);
+    it('should set page to 1 and query the reviews', function () {
+      $httpBackend.expectGET('/api/reviews?name=beijing&orderBy=events%5B0%5D.startTime&orderByReverse=true&page=1&pageSize=20').respond(resultFunction);
       $scope.queryOptions.name = 'beijing';
       $scope.search();
-      expect($scope.queryOptions.currentPage).to.equal(1);
+      expect($scope.queryOptions.page).to.equal(1);
       $httpBackend.flush();
     });
   });

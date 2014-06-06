@@ -23,14 +23,17 @@ exports.get = function (req, res, next) {
       Interview.countNew(req.user.company, {}, cb);
     },
     toBeReviewed: function (cb) {
-      Interview.countForUnReviewed(req.user, {}, cb);
+      Interview.countForReview(req.user, {unreviewed: true}, cb);
     },
     eventsOfToday: function (cb) {
       var startTime = moment().startOf('day').toDate(),
         endTime = moment().endOf('day').toDate();
       Interview.eventsCountForInterviewer(req.user._id, startTime, endTime, function (err, group) {
-        group.push({total: 0 });
-        cb(null, group[0].total);
+        var result = 0;
+        if(group && group.length > 0){
+          result = group[0].total;
+        }
+        cb(null, result);
       });
     }
   };

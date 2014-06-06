@@ -1433,7 +1433,7 @@ describe('mvResumeListCtrl', function () {
     expect(state.queryOptions.page).to.equal(1);
   }));
 
-  describe('change currentpage to 2', function () {
+  describe('change page to 2', function () {
     beforeEach(function () {
       $httpBackend.expectGET('/api/resumes?age=20&applyPosition=cio&highestDegree=master&page=2&pageSize=20').respond(result);
       $scope.queryOptions = {
@@ -1454,7 +1454,7 @@ describe('mvResumeListCtrl', function () {
       }, 100);
     });
 
-    it('should clear the searchOptions and set currentPage to 1 when change q', function () {
+    it('should clear the searchOptions and set page to 1 when change q', function () {
       $scope.queryOptions.q = 'hello';
       $scope.search();
       expect($scope.queryOptions.page).to.equal(1);
