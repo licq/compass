@@ -37,12 +37,6 @@
           </a>
         </li>
         <li>
-          <a href="#/tasks">
-            <i class="fa fa-check"></i>
-            <span data-i18n="My Tasks">我的任务</span>
-          </a>
-        </li>
-        <li>
           <a ng-click="logout()">
             <i class="fa fa-sign-out"></i>
             <span>注销</span>
@@ -56,7 +50,7 @@
     <li class="dropdown">
       <a href="javascript:;" class="dropdown-toggle bg-orange" data-toggle="dropdown"
         ng-click="retrieveEventsForHeader()">
-        <i class="fa fa-comment-o"></i>
+        <i class="fa fa-user"></i>
         <span class="badge badge-info">{{counts.eventsOfToday}}</span>
       </a>
 
@@ -68,7 +62,7 @@
           <li class="list-group-item" ng-repeat="event in eventsForHeader">
             <a href="" class="media">
                                 <span class="pull-left media-icon">
-                                    <span class="square-icon sm bg-info"><i class="fa fa-comment-o"></i></span>
+                                    <span class="square-icon sm bg-orange"><i class="fa fa-user"></i></span>
                                 </span>
 
               <div class="media-body">
