@@ -175,7 +175,7 @@ interviewSchema.statics.addEvent = function (event, cb) {
     });
 };
 
-interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end, cb) {
+interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end, limit, cb) {
   interviewer = mongoose.Types.ObjectId(interviewer);
 
   var match = {
@@ -225,9 +225,18 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       { createdBy: interviewer }
     ], startTime: { $gte: start, $lt: end } });
 
+  if (typeof limit === 'function') {
+    cb = limit;
+    return query.exec(cb);
+  }
+
+  if (limit) {
+    limit = parseInt(limit);
+    return query.sort('startTime').limit(limit).exec(cb);
+  }
+
   return query.exec(cb);
-}
-;
+};
 
 interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start, end, cb) {
   interviewer = mongoose.Types.ObjectId(interviewer);
@@ -352,6 +361,11 @@ function constructQueryForReview(model, user, options) {
   if (options.applyPosition) {
     query.where('applyPosition').regex(new RegExp(options.applyPosition));
   }
+
+  if (options.unreviewed) {
+    query.where('reviews', []);
+  }
+
   return query;
 }
 
@@ -379,9 +393,17 @@ interviewSchema.statics.queryForReview = function (user, options, cb) {
     reviews: {$elemMatch: {
       'interviewer': user._id
     }}
-  }).sort(sortOptions)
-    .skip((options.page - 1) * options.pageSize)
-    .limit(options.pageSize).exec(cb);
+  }).sort(sortOptions);
+//  .skip((options.page - 1) * options.pageSize)
+//  .limit(options.pageSize).exec(cb);
+  if (options.limit) {
+    query.limit(parseInt(options.limit)).exec(cb);
+  }
+
+  if (options.pageSize) {
+    query.skip((options.page - 1) * options.pageSize)
+      .limit(options.pageSize).exec(cb);
+  }
 };
 
 interviewSchema.statics.countForReview = function (user, options, cb) {
@@ -393,16 +415,16 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
   return query.exec(cb);
 };
 
-interviewSchema.statics.countForUnReviewed = function (user, options, cb) {
-  if (typeof options === 'function') {
-    cb = options;
-    options = {};
-  }
-  var query = constructQueryForReview(this, user, options)
-    .where('reviews', [])
-    .count();
-  return query.exec(cb);
-};
+//interviewSchema.statics.countForUnReviewed = function (user, options, cb) {
+//  if (typeof options === 'function') {
+//    cb = options;
+//    options = {};
+//  }
+//  var query = constructQueryForReview(this, user, options)
+//    .where('reviews', [])
+//    .count();
+//  return query.exec(cb);
+//};
 
 function constructQueryNew(model, company, options) {
   var query = model.find({company: company, status: 'new'}).where('events.startTime').lte(moment().endOf('day').toDate());
