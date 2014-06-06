@@ -253,4 +253,9 @@ angular.module('compass')
       if (interview.status === 'offer accepted') return '应聘者接受,入职日期:' + shortDateFilter(interview.onboardDate);
       return 'unknown';
     };
+  })
+  .filter('zeroToLiteral', function () {
+    return function (input) {
+      return input > 0 ? ('有' + input + '个') : '没有';
+    };
   });
