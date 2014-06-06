@@ -2,7 +2,7 @@ var Factory = require('../factory'),
   expect = require('chai').expect,
   helper = require('../testHelper');
 
-describe.only('emails', function () {
+describe('emails', function () {
   var request;
 
   beforeEach(function (done) {

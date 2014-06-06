@@ -16,6 +16,7 @@ var express = require('express'),
   reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
   counts = require('../controllers/counts'),
+  systemOperations = require('../controllers/systemOperations'),
   applierRejectReasons = require('../controllers/applierRejectReasons');
 
 module.exports = function (app) {
@@ -121,6 +122,13 @@ module.exports = function (app) {
 
   apiRouter.route('/counts')
     .get(counts.get);
+
+  apiRouter.route('/systemOperations/recreateAllJobs')
+    .post(systemOperations.recreateAllJobs);
+  apiRouter.route('/systemOperations/recreateFetchEmailJobs')
+    .post(systemOperations.recreateFetchEmailJobs);
+  apiRouter.route('/systemOperations/synchronizeEsToDb')
+    .post(systemOperations.synchronizeEsToDb);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

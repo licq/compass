@@ -732,20 +732,4 @@ resumeSchema.plugin(mongoosastic, {
   }
 });
 
-var Resume = mongoose.model('Resume', resumeSchema);
-Resume.createMapping(function (err, mapping) {
-  if (err) {
-    logger.error('error creating mapping (you can safely ignore this)', err);
-  }
-  var stream = Resume.synchronize() , count = 0;
-
-  stream.on('data', function (err, doc) {
-    count++;
-  });
-  stream.on('close', function () {
-    console.log('indexed ' + count + ' documents!');
-  });
-  stream.on('error', function (err) {
-    console.log(err);
-  });
-});
+mongoose.model('Resume', resumeSchema);

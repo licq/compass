@@ -26,7 +26,7 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
     port: email.port,
     title: 'fetch email from ' + email.address,
     ssl: email.ssl,
-    id: email._id
+    id: email.id
   };
 
   var fetchEmailAfter = function (minutes, callback) {
@@ -58,11 +58,11 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
 };
 
 exports.removeFetchEmailJob = function removeFetchEmailJob(email, cb) {
-  Job.remove(email._id, cb);
+  Job.remove(email.id, cb);
 };
 
 exports.findFetchEmailJob = function findFetchEmailJob(email, cb) {
-  Job.get(email._id, cb);
+  Job.get(email.id, cb);
 };
 
 exports.addParseResumeJob = function (mail, cb) {
@@ -77,14 +77,4 @@ exports.addParseResumeJob = function (mail, cb) {
   };
   jobs.create('parse resume', data).attempts(3).save();
   cb();
-};
-
-exports.start = function start() {
-  Email.find(function (err, emails) {
-    _.forEach(emails, function (email) {
-      exports.removeFetchEmailJob(email, function () {
-        exports.addFetchEmailJob(email);
-      });
-    });
-  });
 };

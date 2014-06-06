@@ -20,8 +20,8 @@
           </div>
         </div>
         <div class="panel-footer">
-          <button class="btn btn-warning">删除所有并重建</button>
-          <button class="btn btn-danger">删除Fetch Email并重建</button>
+          <button class="btn btn-warning" ng-click="recreateAllJobs()">删除所有并重建</button>
+          <button class="btn btn-danger" ng-click="recreateFetchEmailJobs()">删除Fetch Email并重建</button>
         </div>
       </section>
     </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="panel-footer">
           <button class="btn btn-warning">重建解析简历</button>
-          <button class="btn btn-danger">重建ES</button>
+          <button class="btn btn-danger" ng-click="synchronizeEsToDb()">重建ES</button>
         </div>
       </section>
     </div>

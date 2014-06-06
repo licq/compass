@@ -43,4 +43,34 @@ describe('mvSystemOperationsCtrl', function () {
       expect($scope.mailCount).to.equal(800);
     });
   });
+
+  describe('recreateAllJobs', function () {
+    it('should post /api/systemOperations/recreateAllJobs', function () {
+      $httpBackend.expectPOST('/api/systemOperations/recreateAllJobs').respond(200);
+      $httpBackend.expectGET('/tasks/stats').respond({});
+      $scope.recreateAllJobs();
+      $httpBackend.flush();
+      expect($scope.taskStats).to.deep.equal({});
+    });
+  });
+
+  describe('recreateFetchEmailJobs', function () {
+    it('should post /api/systemOperations/recreateFetchEmailJobs', function () {
+      $httpBackend.expectPOST('/api/systemOperations/recreateFetchEmailJobs').respond(200);
+      $httpBackend.expectGET('/tasks/stats').respond({});
+      $scope.recreateFetchEmailJobs();
+      $httpBackend.flush();
+      expect($scope.taskStats).to.deep.equal({});
+    });
+  });
+
+  describe('synchronizeEsToDb', function () {
+    it('should post /api/systemOperations/synchronizeEsToDb', function () {
+      $httpBackend.expectPOST('/api/systemOperations/synchronizeEsToDb').respond(200);
+      $httpBackend.expectGET('/api/resumeCounts').respond({mailCount: 200});
+      $scope.synchronizeEsToDb();
+      $httpBackend.flush();
+      expect($scope.mailCount).to.equal(200);
+    });
+  });
 });
