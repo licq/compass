@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvEventNewCtrl', function ($scope, $rootScope, $modalInstance, mvUser, mvEvent, mvNotifier, mvEventSetting, event) {
+  .controller('mvEventNewCtrl', function ($scope, $rootScope, $modalInstance, mvUser, mvEvent, mvNotifier, mvEventSetting, mvIdentity, event) {
     var today = new Date(), oldStartTime, newStartTime;
     today.setHours(0, 0, 0, 0);
     $scope.today = today;
@@ -44,6 +44,7 @@ angular.module('compass')
         oldStartTime = new Date(event.startTime);
         if ($scope.isNew) {
           $scope.event.duration = $scope.eventSetting.duration;
+          $scope.event.interviewers = [mvIdentity.currentUser._id];
         }
       });
     });
