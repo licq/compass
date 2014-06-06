@@ -219,7 +219,7 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       countOfEvents: 1
     })
     .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } });
- 
+
   if (typeof limit === 'function') {
     cb = limit;
     return query.exec(cb);
@@ -229,7 +229,7 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
     limit = parseInt(limit);
     return query.sort('startTime').limit(limit).exec(cb);
   }
- 
+
   return query.exec(cb);
 };
 
@@ -404,17 +404,15 @@ interviewSchema.statics.queryForReview = function (user, options, cb) {
     reviews: {$elemMatch: {
       'interviewer': user._id
     }}
-  }).sort(sortOptions)
-  .skip((options.page - 1) * options.pageSize)
-  .limit(options.pageSize).exec(cb);
-//  if (options.limit) {
-//    query.limit(parseInt(options.limit)).exec(cb);
-//  }
-//
-//  if (options.pageSize) {
-//    query.skip((options.page - 1) * options.pageSize)
-//      .limit(options.pageSize).exec(cb);
-//  }
+  }).sort(sortOptions);
+  //.skip((options.page - 1) * options.pageSize)
+  //.limit(options.pageSize).exec(cb);
+  if (options.limit) {
+    query.limit(parseInt(options.limit)).exec(cb);
+  }else if (options.pageSize) {
+    query.skip((options.page - 1) * options.pageSize)
+      .limit(options.pageSize).exec(cb);
+  }
 };
 
 interviewSchema.statics.countForReview = function (user, options, cb) {
