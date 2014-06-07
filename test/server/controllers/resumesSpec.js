@@ -9,7 +9,7 @@ describe('#resumes', function () {
 
   beforeEach(function (done) {
     helper.clearCollections('User', 'Company', 'Resume', 'Mail', function () {
-      Resume.clearAll(true, function () {
+      Resume.recreateIndex(function () {
         helper.login(function (agent, newUser) {
           user = newUser;
           request = agent;
