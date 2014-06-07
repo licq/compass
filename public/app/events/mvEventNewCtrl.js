@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvEventNewCtrl', function ($scope, $rootScope, $modalInstance, mvUser, mvEvent, mvNotifier, mvEventSetting, mvIdentity, event) {
+  .controller('mvEventNewCtrl', function ($scope, $rootScope, $modalInstance, $location, mvUser, mvEvent, mvNotifier, mvEventSetting, mvIdentity, event) {
     var today = new Date(), oldStartTime, newStartTime;
     today.setHours(0, 0, 0, 0);
     $scope.today = today;
@@ -33,6 +33,10 @@ angular.module('compass')
         $modalInstance.close();
         mvNotifier.notify('已删除面试邀请!');
       });
+    };
+
+    $scope.viewResume = function (application) {
+      $location.path('/resumes/' + application);
     };
 
     mvEventSetting.get(function (res) {
