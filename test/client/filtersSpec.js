@@ -255,5 +255,11 @@ describe('filters', function () {
       expect(interviewStatusFilter({status: 'offer accepted', onboardDate: new Date(2013, 1, 5)})).to.equal('应聘者接受,入职日期:2013年2月5日');
     }));
   });
-
+  describe('resumeStatusFilter', function () {
+    it('should return correctly', inject(function (resumeStatusFilter) {
+      expect(resumeStatusFilter('archived')).to.equal('初审拒绝');
+      expect(resumeStatusFilter('rejected')).to.equal('面试拒绝');
+      expect(resumeStatusFilter('offer rejected')).to.equal('应聘者拒绝');
+    }));
+  });
 });

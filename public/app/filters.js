@@ -253,4 +253,12 @@ angular.module('compass')
       if (interview.status === 'offer accepted') return '应聘者接受,入职日期:' + shortDateFilter(interview.onboardDate);
       return 'unknown';
     };
+  })
+  .filter('resumeStatus', function () {
+    return function (status) {
+      if (status === 'archived') return '初审拒绝';
+      if (status === 'rejected') return '面试拒绝';
+      if (status === 'offer rejected') return '应聘者拒绝';
+      return 'unknown';
+    };
   });
