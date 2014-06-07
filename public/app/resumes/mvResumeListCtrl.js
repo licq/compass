@@ -5,7 +5,7 @@ angular.module('compass')
     states.defaults('mvResumeListCtrl', {
       queryOptions: {
         pageSize: 20,
-        page:1
+        page: 1
       }
     });
 
@@ -31,6 +31,7 @@ angular.module('compass')
       delete $scope.queryOptions.applyPosition;
       delete $scope.queryOptions.age;
       delete $scope.queryOptions.highestDegree;
+      delete $scope.queryOptions.status;
 
       $scope.query();
     };
@@ -49,6 +50,11 @@ angular.module('compass')
 
     $scope.setHighestDegree = function (highestDegree) {
       $scope.queryOptions.highestDegree = highestDegree;
+      $scope.queryOptions.page = 1;
+      $scope.query();
+    };
+    $scope.setStatus = function (status) {
+      $scope.queryOptions.status = status;
       $scope.queryOptions.page = 1;
       $scope.query();
     };

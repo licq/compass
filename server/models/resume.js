@@ -198,7 +198,8 @@ var resumeSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    default: 'new'
+    default: 'new',
+    enum: ['new', 'undetermined', 'pursued', 'archived', 'enrolled', 'interview', 'rejected', 'offer rejected']
   }
 });
 
@@ -235,6 +236,11 @@ resumeSchema.statics.query = function (params, callback) {
           key_script: "DateTime.now().year - doc['birthday'].date.year",
           value_script: 1,
           interval: 5
+        }
+      },
+      status: {
+        terms: {
+          field: 'status'
         }
       }
     }
@@ -281,11 +287,20 @@ resumeSchema.statics.query = function (params, callback) {
   }
 
   if (params.status) {
-    filters.push({
-      term: {
-        status: params.status
-      }
-    });
+    if (Array.isArray(params.status)) {
+      filters.push({
+        terms: {
+          status: params.status
+        }
+      });
+
+    } else {
+      filters.push({
+        term: {
+          status: params.status
+        }
+      });
+    }
   }
 
   if (params.age) {
@@ -311,6 +326,7 @@ resumeSchema.statics.query = function (params, callback) {
     delete queryConditions.query.filtered.filter.and;
   }
 
+//  console.log(JSON.stringify(queryConditions));
   this.search(queryConditions, function (err, results) {
     if (err) return callback(err);
 

@@ -10,17 +10,8 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     watch: {
       client: {
-        files: ['public/app/**'],
-        tasks: ['jshint:client', 'test:client'],
-        options: {
-          livereload: true
-        }
-      },
-      serverHtmls: {
-        files: ['server/**/*.html'],
-        options: {
-          livereload: true
-        }
+        files: ['public/app/**/*.js'],
+        tasks: ['jshint:client', 'test:client']
       },
       server: {
         files: ['server.js', 'server/**/*.js'],
@@ -31,22 +22,16 @@ module.exports = function (grunt) {
         tasks: ['jshint:gruntfile']
       },
       testClient: {
-        files: ['test/client/**'],
+        files: ['test/client/**/*.js'],
         tasks: ['jshint:testClient', 'test:client'],
       },
       testServer: {
-        files: ['test/server/**'],
+        files: ['test/server/**/*.js'],
         tasks: ['jshint:testServer'],
       },
-      styles: {
-        files: ['public/**/*.css'],
-        options: {
-          livereload: true
-        }
-      },
 
-      rebooted: {
-        files: ['.rebooted'],
+      livereload: {
+        files: ['.rebooted','server/**/*.html', 'public/app/**'],
         options: {
           livereload: true
         }

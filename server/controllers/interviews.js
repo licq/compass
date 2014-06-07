@@ -67,8 +67,8 @@ exports.update = function (req, res, next) {
       interview.save(function (err) {
         if (err) return next(err);
         var interviewStatusToApplicationStatusMap = {
-          'rejected': 'archived',
-          'offer rejected': 'archived',
+          'rejected': 'rejected',
+          'offer rejected': 'offer rejected',
           'offer accepted': 'enrolled'
         };
         if (_.has(interviewStatusToApplicationStatusMap, interview.status)) {

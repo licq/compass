@@ -1361,6 +1361,26 @@ describe('mvResumeListCtrl', function () {
             }
           ]
         },
+        status: {
+          _type: 'terms',
+          missing: 0,
+          total: 10,
+          other: 0,
+          terms: [
+            {
+              term: 'archived',
+              count: 5
+            },
+            {
+              term: 'rejected',
+              count: 2
+            },
+            {
+              term: 'offer rejected',
+              count: 2
+            }
+          ]
+        },
         age: {
           _type: 'histogram',
           entries: [
@@ -1420,6 +1440,7 @@ describe('mvResumeListCtrl', function () {
     expect($scope.facets.age.entries).to.have.length(4);
     expect($scope.facets.applyPosition.terms).to.have.length(4);
     expect($scope.facets.highestDegree.terms).to.have.length(4);
+    expect($scope.facets.status.terms).to.have.length(3);
   });
 
   it('should invoke the /api/resumes?q=hello', inject(function (states) {
@@ -1435,13 +1456,14 @@ describe('mvResumeListCtrl', function () {
 
   describe('change page to 2', function () {
     beforeEach(function () {
-      $httpBackend.expectGET('/api/resumes?age=20&applyPosition=cio&highestDegree=master&page=2&pageSize=20').respond(result);
+      $httpBackend.expectGET('/api/resumes?age=20&applyPosition=cio&highestDegree=master&page=2&pageSize=20&status=archived').respond(result);
       $scope.queryOptions = {
         page: 2,
         pageSize: 20,
         age: 20,
         applyPosition: 'cio',
-        highestDegree: 'master'
+        highestDegree: 'master',
+        status: 'archived'
       };
       $scope.query();
       $httpBackend.flush();
@@ -1461,14 +1483,14 @@ describe('mvResumeListCtrl', function () {
       expect($scope.queryOptions.age).to.not.exist;
       expect($scope.queryOptions.applyPosition).to.not.exist;
       expect($scope.queryOptions.highestDegree).to.not.exist;
-
+      expect($scope.queryOptions.status).to.not.exist;
     });
   });
 
   describe('query using facets', function () {
     it('should invoke /api/resumes?page=1&pageSize=20&q=hello&age=20&highestDegree=master&applyPosition=cio',
       function () {
-        $httpBackend.expectGET('/api/resumes?age=20&age=25&applyPosition=cio&highestDegree=master&page=1&pageSize=20&q=hello')
+        $httpBackend.expectGET('/api/resumes?age=20&age=25&applyPosition=cio&highestDegree=master&page=1&pageSize=20&q=hello&status=archived')
           .respond(result);
         $scope.queryOptions = {
           page: 1,
@@ -1476,7 +1498,8 @@ describe('mvResumeListCtrl', function () {
           q: 'hello',
           age: [20, 25],
           highestDegree: ['master'],
-          applyPosition: ['cio']
+          applyPosition: ['cio'],
+          status: 'archived'
         };
         $scope.query();
         $httpBackend.flush();
@@ -1529,6 +1552,23 @@ describe('mvResumeListCtrl', function () {
       var spy = sinon.spy($scope, 'query');
       $scope.setHighestDegree();
       expect($scope.queryOptions.highestDegree).to.not.exist;
+      expect(spy.called).to.be.true;
+    });
+  });
+
+  describe('setStatus', function () {
+    it('should set the query status parameter', function () {
+      var spy = sinon.spy($scope, 'query');
+      $scope.setStatus('archived');
+
+      expect($scope.queryOptions).to.have.property('status', 'archived');
+      expect(spy.called).to.be.true;
+    });
+
+    it('should clear the query status parameter', function () {
+      var spy = sinon.spy($scope, 'query');
+      $scope.setStatus();
+      expect($scope.queryOptions.status).to.not.exist;
       expect(spy.called).to.be.true;
     });
   });

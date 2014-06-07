@@ -254,6 +254,14 @@ angular.module('compass')
       return 'unknown';
     };
   })
+  .filter('resumeStatus', function () {
+    return function (status) {
+      if (status === 'archived') return '初审拒绝';
+      if (status === 'rejected') return '面试拒绝';
+      if (status === 'offer rejected') return '应聘者拒绝';
+      return 'unknown';
+    };
+  })
   .filter('zeroToLiteral', function () {
     return function (input) {
       return input > 0 ? ('有' + input + '个') : '没有';

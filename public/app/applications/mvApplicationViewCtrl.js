@@ -73,4 +73,8 @@ angular.module('compass')
         }
       });
     };
+
+    $scope.cancel = function () {
+      $location.path('/applications/' + $routeParams.status);
+    };
   });

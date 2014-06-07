@@ -262,9 +262,18 @@ describe('filters', function () {
       expect(zeroToLiteralFilter(3)).to.equal('有3个');
     }));
   });
+  
   describe('eventTimeRangeFilter', function () {
     it('should return correctly', inject(function (eventTimeRangeFilter) {
       expect(eventTimeRangeFilter({startTime: '2014-06-06T12:05:00.000Z', duration: 90})).to.equal('20:05-21:35');
+    }));
+  });
+  
+  describe('resumeStatusFilter', function () {
+    it('should return correctly', inject(function (resumeStatusFilter) {
+      expect(resumeStatusFilter('archived')).to.equal('初审拒绝');
+      expect(resumeStatusFilter('rejected')).to.equal('面试拒绝');
+      expect(resumeStatusFilter('offer rejected')).to.equal('应聘者拒绝');
     }));
   });
 });

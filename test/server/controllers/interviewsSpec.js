@@ -129,7 +129,7 @@ describe('interviews', function () {
             expect(newInterview.status).to.equal('rejected');
             expect(newInterview.statusBy.toString()).to.equal(user.id);
             Resume.findById(resume._id, function (err, newResume) {
-              expect(newResume.status).to.equal('archived');
+              expect(newResume.status).to.equal('rejected');
               done(err);
             });
           });
@@ -146,7 +146,7 @@ describe('interviews', function () {
             expect(newInterview.status).to.equal('offer rejected');
             expect(newInterview.statusBy.toString()).to.equal(user.id);
             Resume.findById(resume._id, function (err, newResume) {
-              expect(newResume.status).to.equal('archived');
+              expect(newResume.status).to.equal('offer rejected');
               done(err);
             });
           });

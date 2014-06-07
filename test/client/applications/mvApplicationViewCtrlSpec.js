@@ -159,6 +159,14 @@ describe('mvApplicationViewCtrl', function () {
           $httpBackend.flush();
         });
       });
+
+      describe('cancel', function () {
+        it('should go back to /applications/' + status, inject(function ($location) {
+          var spy = sinon.spy($location, 'path');
+          $scope.cancel();
+          expect(spy).to.have.been.calledWith('/applications/' + status);
+        }));
+      });
     });
   });
 });
