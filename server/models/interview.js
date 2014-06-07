@@ -175,7 +175,7 @@ interviewSchema.statics.addEvent = function (event, cb) {
     });
 };
 
-interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end, limit, cb) {
+interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end, pageSize, cb) {
   interviewer = mongoose.Types.ObjectId(interviewer);
 
   var match = {
@@ -220,14 +220,13 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
     })
     .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } });
 
-  if (typeof limit === 'function') {
-    cb = limit;
+  if (typeof pageSize === 'function') {
+    cb = pageSize;
     return query.exec(cb);
   }
 
-  if (limit) {
-    limit = parseInt(limit);
-    return query.sort('startTime').limit(limit).exec(cb);
+  if (pageSize) {
+    return query.sort('startTime').pageSize(pageSize).exec(cb);
   }
 
   return query.exec(cb);
@@ -236,32 +235,15 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
 interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start, end, cb) {
   interviewer = mongoose.Types.ObjectId(interviewer);
 
-  var match = {
-    $match: {
-      events: {
-        $elemMatch: {
-          startTime: {
-            $gte: start,
-            $lt: end
-          },
-          interviewers: interviewer
-        }
+  return this.find({status: 'new'}).
+    where('events').elemMatch({
+      startTime: {
+        $gte: start,
+        $lt: end
       },
-      status: 'new'
-    }};
-
-  var query = this.aggregate(match)
-    .unwind('events')
-    .project({
-      createdBy: '$events.createdBy',
-      startTime: '$events.startTime',
-      interviewers: '$events.interviewers',
-      company: 1
-    })
-    .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } })
-    .group({_id: '$company', total: {$sum: 1}});
-
-  return query.exec(cb);
+      interviewers: interviewer
+    }
+  ).count().exec(cb);
 };
 
 interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
@@ -373,10 +355,6 @@ function constructQueryForReview(model, user, options) {
     query.where('applyPosition').regex(new RegExp(options.applyPosition));
   }
 
-  if (options.unreviewed) {
-    query.where('reviews', []);
-  }
-
   return query;
 }
 
@@ -393,7 +371,6 @@ interviewSchema.statics.queryForReview = function (user, options, cb) {
   var orderByReverse = options.orderByReverse === 'true' ? -1 : 1;
   var sortOptions = {};
   sortOptions[orderBy] = orderByReverse;
-
   var query = constructQueryForReview(this, user, options);
   query.select({
     name: 1,
@@ -404,15 +381,29 @@ interviewSchema.statics.queryForReview = function (user, options, cb) {
     reviews: {$elemMatch: {
       'interviewer': user._id
     }}
-  }).sort(sortOptions);
-  //.skip((options.page - 1) * options.pageSize)
-  //.limit(options.pageSize).exec(cb);
-  if (options.limit) {
-    query.limit(parseInt(options.limit)).exec(cb);
-  }else if (options.pageSize) {
-    query.skip((options.page - 1) * options.pageSize)
-      .limit(options.pageSize).exec(cb);
+  }).sort(sortOptions)
+    .skip((options.page - 1) * options.pageSize)
+    .limit(options.pageSize).exec(cb);
+};
+
+interviewSchema.statics.queryForUnreviewed = function (user, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {
+      page: 1,
+      pageSize: 20
+    };
   }
+
+  var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
+  var orderByReverse = options.orderByReverse === 'true' ? -1 : 1;
+  var sortOptions = {};
+  sortOptions[orderBy] = orderByReverse;
+  var query = constructQueryForReview(this, user, options);
+  query.where('reviews.interviewer').ne(user._id)
+    .sort(sortOptions)
+    .skip((options.page - 1) * options.pageSize)
+    .limit(options.pageSize).exec(cb);
 };
 
 interviewSchema.statics.countForReview = function (user, options, cb) {
@@ -421,6 +412,17 @@ interviewSchema.statics.countForReview = function (user, options, cb) {
     options = {};
   }
   var query = constructQueryForReview(this, user, options).count();
+  return query.exec(cb);
+};
+
+interviewSchema.statics.countForUnreviewed = function (user, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
+  }
+  var query = constructQueryForReview(this, user, options)
+    .where('reviews.interviewer').ne(user._id)
+    .count();
   return query.exec(cb);
 };
 
@@ -440,6 +442,7 @@ function constructQueryNew(model, company, options) {
   }
   return query;
 }
+
 interviewSchema.statics.queryNew = function (company, options, cb) {
   var orderBy = options.orderBy ? options.orderBy.replace(/\[\d+\]/, '') : 'events.startTime';
   var orderByReverse = options.orderByReverse === 'true' ? -1 : 1;
@@ -479,7 +482,13 @@ interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
   if (options.startDate && options.endDate) {
     query.where('onboardDate').lte(options.endDate).gte(options.startDate);
   }
-  query.select('name applyPosition onboardDate').sort('onboardDate').exec(cb);
+
+  query.select('name applyPosition onboardDate application');
+  if (options.pageSize) {
+    query.limit(options.pageSize).exec(cb);
+  } else {
+    query.sort('onboardDate').exec(cb);
+  }
 };
 
 interviewSchema.statics.applyPositionsForCompany = function (company, cb) {

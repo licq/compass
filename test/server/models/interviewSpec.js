@@ -363,6 +363,35 @@ describe('interview', function () {
         });
     });
 
+    it('should no review of the user', function (done) {
+      Factory.create('interview', {
+          events: [
+            {
+              startTime: new Date(),
+              duration: 90,
+              interviewers: [user._id, anotherUser._id],
+              createdBy: user._id
+            }
+          ],
+          reviews: [
+            {
+              interviewer: user._id,
+              totalScore: 15,
+              qualified: false
+            }
+          ]
+        },
+        function () {
+          Interview.queryForUnreviewed(anotherUser, {orderBy: 'events[0].startTime',
+            orderByReverse: false, unreviewed: true, pageSize: 3}, function (err, interviews) {
+            expect(err).to.not.exist;
+            expect(interviews).to.have.length(1);
+            expect(interviews[0].reviews).to.have.length(1);
+            done();
+          });
+        });
+    });
+
     it('should return no interviews when current time is before event start time', function (done) {
       var start = moment().add('days', 1).toDate();
       Factory.create('interview', {

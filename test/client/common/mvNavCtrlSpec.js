@@ -8,19 +8,29 @@ describe('mvNavCtrl', function () {
       $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
       $interval = _$interval_;
+
+      $httpBackend.expectGET('/api/counts?counts=onboard').respond({onboard: 7});
+
       $httpBackend.expectGET('/api/counts')
         .respond({new: 1, undetermined: 2, pursued: 3,
           eventsOfToday: 4, interviews: 5, toBeReviewed: 6});
-      $httpBackend.expectGET(/^\/api\/events\?endTime=\d.{22}Z&limit=3&startTime=\d.{22}Z&user=7788/)
+
+      $httpBackend.expectGET(/^\/api\/events\?endTime=\d.{22}Z&pageSize=3&startTime=\d.{22}Z&user=7788/)
         .respond([
-          {'name': '张三', 'applyPosition': 'Java软件工程师-上海', 'createdBy': '7788', 'startTime': '2014-06-04T21:00:00.000Z', 'duration': 60, 'interviewers': ['7788']}
+          {'name': '张三', 'applyPosition': 'Java软件工程师-上海', 'application': '5566', 'createdBy': '7788', 'startTime': '2014-06-04T21:00:00.000Z', 'duration': 60, 'interviewers': ['7788']}
         ]);
-      $httpBackend.expectGET('/api/reviews?limit=3&orderBy=events%5B0%5D.startTime&orderByReverse=false&unreviewed=true')
+
+      $httpBackend.expectGET('/api/reviews?orderBy=events%5B0%5D.startTime&orderByReverse=false&pageSize=3&unreviewed=true')
         .respond([
           {'_id': '1122', 'name': '张三', 'applyPosition': 'Java软件工程师-上海', 'reviews': [],
             'events': [
               {'duration': 60, 'startTime': '2014-06-06T15:55:00.000Z', 'createdBy': '7788', 'interviewers': ['7788']}
             ]}
+        ]);
+
+      $httpBackend.expectGET(/^\/api\/interviews\?endDate=\d.{22}Z&pageSize=3&startDate=\d.{22}Z&status=offer\+accepted/)
+        .respond([
+          {'name': '张三', 'applyPosition': 'Java软件工程师-上海'}
         ]);
 
       mvIdentity.currentUser = {
@@ -43,12 +53,14 @@ describe('mvNavCtrl', function () {
       expect($scope.counts.eventsOfToday).to.equal(4);
       expect($scope.counts.interviews).to.equal(5);
       expect($scope.counts.toBeReviewed).to.equal(6);
+      expect($scope.counts.onboard).to.equal(7);
     });
 
     it('should run tasks repeatedly', function () {
       $httpBackend.expectGET('/api/counts').respond({});
-      $httpBackend.expectGET(/^\/api\/events\?endTime=\d.{22}Z&limit=3&startTime=\d.{22}Z&user=7788/).respond([]);
-      $httpBackend.expectGET('/api/reviews?limit=3&orderBy=events%5B0%5D.startTime&orderByReverse=false&unreviewed=true').respond([]);
+      $httpBackend.expectGET(/^\/api\/events\?endTime=\d.{22}Z&pageSize=3&startTime=\d.{22}Z&user=7788/).respond([]);
+      $httpBackend.expectGET('/api/reviews?orderBy=events%5B0%5D.startTime&orderByReverse=false&pageSize=3&unreviewed=true').respond([]);
+      $httpBackend.expectGET(/^\/api\/interviews\?endDate=\d.{22}Z&pageSize=3&startDate=\d.{22}Z&status=offer\+accepted/).respond([]);
       $interval.flush(310000);
       $httpBackend.flush();
     });
@@ -57,15 +69,21 @@ describe('mvNavCtrl', function () {
   describe('header menu', function () {
     it('should get back events of today', function () {
       expect($scope.eventsForHeader).to.have.length(1);
-      expect($scope.eventsForHeader[0].title).to.equal('张三面试(Java软件工程师-上海)');
+      expect($scope.eventsForHeader[0].application).to.equal('5566');
     });
 
-    it('should get back unreviewed list', function () {
+    it('should get back unreviewed list for today', function () {
       expect($scope.unreviewedForHeader).to.have.length(1);
       expect($scope.unreviewedForHeader[0].name).to.equal('张三');
-      expect($scope.unreviewedForHeader[0].interviewId).to.equal('1122');
+      expect($scope.unreviewedForHeader[0]._id).to.equal('1122');
       expect($scope.unreviewedForHeader[0].applyPosition).to.equal('Java软件工程师-上海');
-      expect($scope.unreviewedForHeader[0].startTime).to.equal('2014-06-06T15:55:00.000Z');
+      expect($scope.unreviewedForHeader[0].events[0].startTime).to.equal('2014-06-06T15:55:00.000Z');
+    });
+
+    it('should get back onboards list for today', function () {
+      expect($scope.onboardsForHeader).to.have.length(1);
+      expect($scope.onboardsForHeader[0].name).to.equal('张三');
+      expect($scope.onboardsForHeader[0].applyPosition).to.equal('Java软件工程师-上海');
     });
   });
 });

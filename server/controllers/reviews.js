@@ -3,12 +3,21 @@
 var Interview = require('mongoose').model('Interview');
 
 exports.list = function (req, res, next) {
-  Interview.countForReview(req.user, req.query, function (err, count) {
-    Interview.queryForReview(req.user, req.query, function (err, interviews) {
-      if (err) return next(err);
-      res.header('totalCount', count).json(interviews);
+  if (req.query.unreviewed) {
+    Interview.countForUnreviewed(req.user, req.query, function (err, count) {
+      Interview.queryForUnreviewed(req.user, req.query, function (err, interviews) {
+        if (err) return next(err);
+        res.header('totalCount', count).json(interviews);
+      });
     });
-  });
+  } else {
+    Interview.countForReview(req.user, req.query, function (err, count) {
+      Interview.queryForReview(req.user, req.query, function (err, interviews) {
+        if (err) return next(err);
+        res.header('totalCount', count).json(interviews);
+      });
+    });
+  }
 };
 
 exports.create = function (req, res, next) {

@@ -48,8 +48,8 @@
 
   <ul class="nav-right pull-right list-unstyled">
     <li class="dropdown">
-      <a href="javascript:;" class="dropdown-toggle bg-orange" data-toggle="dropdown"
-        ng-click="retrieveEventsForHeader()">
+      <a href="" class="dropdown-toggle bg-orange" data-toggle="dropdown"
+        ng-click="retrieveEvents()">
         <i class="fa fa-user"></i>
         <span class="badge badge-info">{{counts.eventsOfToday}}</span>
       </a>
@@ -60,14 +60,14 @@
         </div>
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="event in eventsForHeader">
-            <a href="" class="media">
+            <a href="#/resumes/{{event.application}}" class="media">
                                 <span class="pull-left media-icon">
                                     <span class="square-icon sm bg-orange"><i class="fa fa-user"></i></span>
                                 </span>
 
               <div class="media-body">
-                <span class="text-muted block">{{event.from}}-{{event.to}}</span>
-                <span class="block">{{event.title}}</span>
+                <span class="text-muted block">{{event | eventTimeRange}}</span>
+                <span class="block">{{event.name}}面试({{event.applyPosition}})</span>
               </div>
             </a>
           </li>
@@ -78,8 +78,8 @@
       </div>
     </li>
     <li class="dropdown">
-      <a href="javascript:;" class="dropdown-toggle bg-warning" data-toggle="dropdown"
-        ng-click="retrieveReviewsForHeader()">
+      <a href="" class="dropdown-toggle bg-warning" data-toggle="dropdown"
+        ng-click="retrieveReviews()">
         <i class="fa fa-pencil"></i>
         <span class="badge badge-info">{{counts.toBeReviewed}}</span>
       </a>
@@ -90,82 +90,58 @@
         </div>
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="unreviewed in unreviewedForHeader">
-            <a href="#/interviews/reviews/{{unreviewed.interviewId}}" class="media">
+            <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">
                                 <span class="pull-left media-icon">
                                     <span class="square-icon sm bg-warning"><i class="fa fa-pencil"></i></span>
                                 </span>
 
               <div class="media-body">
-                <span class="text-muted block">{{unreviewed.startTime|shortDate}}</span>
+                <span class="text-muted block">{{unreviewed.events[0].startTime|shortDate}}</span>
                 <span class="block">{{unreviewed.name}}应聘{{unreviewed.applyPosition}}</span>
               </div>
             </a>
           </li>
 
         </ul>
-        <div class="panel-footer">
+        <div class="panel-footer" ng-show="counts.toBeReviewed">
           <a href="#/interviews/reviews">查看所有待评价面试</a>
         </div>
       </div>
     </li>
     <li class="dropdown">
-      <a href="javascript:;" class="dropdown-toggle bg-success" data-toggle="dropdown">
-        <i class="fa fa-bell-o nav-icon"></i>
-        <span class="badge badge-info">3</span>
+      <a href="" class="dropdown-toggle bg-success" data-toggle="dropdown">
+        <i class="fa fa-child fa-lg"></i>
+        <span class="badge badge-info">{{counts.onboard}}</span>
       </a>
 
       <div class="dropdown-menu pull-right with-arrow panel panel-default">
         <div class="panel-heading">
-          You have 3 notifications.
+          今天{{counts.onboard | zeroToLiteral}}新员工入职
         </div>
         <ul class="list-group">
-          <li class="list-group-item">
-            <a href="javascript:;" class="media">
+          <li class="list-group-item" ng-repeat="onboard in onboardsForHeader">
+            <a href="#/resumes/{{onboard.application}}" class="media">
                                 <span class="pull-left media-icon">
-                                    <span class="square-icon sm bg-success"><i class="fa fa-bell-o"></i></span>
+                                    <span class="square-icon sm bg-success"><i class="fa fa-child fa-lg"></i></span>
                                 </span>
-
               <div class="media-body">
-                <span class="block">New tasks needs to be done</span>
-                <span class="text-muted block">2min ago</span>
-              </div>
-            </a>
-          </li>
-          <li class="list-group-item">
-            <a href="javascript:;" class="media">
-                                <span class="pull-left media-icon">
-                                    <span class="square-icon sm bg-info"><i class="fa fa-bell-o"></i></span>
-                                </span>
-
-              <div class="media-body">
-                <span class="block">Change your password</span>
-                <span class="text-muted">3 hours ago</span>
-              </div>
-            </a>
-          </li>
-          <li class="list-group-item">
-            <a href="javascript:;" class="media">
-                                <span class="pull-left media-icon">
-                                    <span class="square-icon sm bg-danger"><i class="fa fa-bell-o"></i></span>
-                                </span>
-
-              <div class="media-body">
-                <span class="block">New feature added</span>
-                <span class="text-muted">9 hours ago</span>
+                <span class="text-muted block">{{onboard.name}}</span>
+                <span class="block">{{onboard.applyPosition}}</span>
               </div>
             </a>
           </li>
         </ul>
         <div class="panel-footer">
-          <a href="javascript:;">Show all notifications.</a>
+          <a href="#/interviews/onboards">查看所有待入职员工</a>
         </div>
       </div>
     </li>
-    <li>
-      <a href="#/tasks" class="bg-info">
-        <i class="fa fa-tasks"></i>
-      </a>
-    </li>
+    <!--<li>-->
+      <!--<a href="#/tasks" class="bg-info">-->
+        <!--<i class="fa fa-child fa-lg"></i>-->
+        <!--<span class="badge badge-info">6</span>-->
+      <!--</a>-->
+    <!--</li>-->
   </ul>
 </div>
 

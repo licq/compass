@@ -256,10 +256,15 @@ describe('filters', function () {
     }));
   });
 
-  describe('zeroToLiteral', function () {
+  describe('zeroToLiteralFilter', function () {
     it('should return correctly', inject(function (zeroToLiteralFilter) {
       expect(zeroToLiteralFilter(0)).to.equal('没有');
       expect(zeroToLiteralFilter(3)).to.equal('有3个');
+    }));
+  });
+  describe('eventTimeRangeFilter', function () {
+    it('should return correctly', inject(function (eventTimeRangeFilter) {
+      expect(eventTimeRangeFilter({startTime: '2014-06-06T12:05:00.000Z', duration: 90})).to.equal('20:05-21:35');
     }));
   });
 });

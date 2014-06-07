@@ -107,7 +107,7 @@ module.exports = function (grunt) {
         script: 'server.js',
         options: {
           nodeArgs: ['--debug'],
-          ignore: ['public/**', 'test/**'],
+          ignore: ['public/**', 'test/**','compass.log','compass-test.log'],
           callback: function (nodemon) {
             nodemon.on('restart', function () {
               setTimeout(function () {

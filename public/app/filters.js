@@ -258,4 +258,11 @@ angular.module('compass')
     return function (input) {
       return input > 0 ? ('有' + input + '个') : '没有';
     };
+  })
+  .filter('eventTimeRange', function (mvMoment) {
+    return function (event) {
+      var start = mvMoment(event.startTime).format('H:mm'),
+        end = mvMoment(event.startTime).add('minutes', event.duration).format('H:mm');
+      return start + '-' + end;
+    };
   });

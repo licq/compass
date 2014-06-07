@@ -44,9 +44,9 @@ describe('counts', function () {
                         ],
                         'events': [
                           {'duration': 60, 'startTime': new Date(),
-                            'createdBy': user._id, 'interviewers': [user]},
+                            'createdBy': user._id, 'interviewers': [user._id]},
                           {'duration': 60, 'startTime': new Date(),
-                            'createdBy': user._id, 'interviewers': [user]}
+                            'createdBy': user._id, 'interviewers': [user._id]}
                         ]}, function () {
                         done();
                       });
@@ -72,7 +72,7 @@ describe('counts', function () {
         expect(res.body.undetermined).to.equal(1);
         expect(res.body.toBeReviewed).to.equal(0);
         expect(res.body.interviews).to.equal(1);
-        expect(res.body.eventsOfToday).to.equal(2);
+        expect(res.body.eventsOfToday).to.equal(1);
         done(err);
       });
   });

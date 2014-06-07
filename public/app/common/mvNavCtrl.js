@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvMoment, mvReview, mvAuth, mvEvent, $location) {
+  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
 
@@ -11,131 +11,87 @@ angular.module('compass')
       });
     };
 
-    $scope.retrieveEventsForHeader = function () {
+    $scope.onboardCount = function () {
+      mvNav.get({counts: 'onboard'}, function (counts) {
+        angular.extend($scope.counts, counts);
+      });
+    };
 
-      var now = mvMoment().toISOString(),
-        endOfToday = mvMoment().endOf('day').toISOString();
-      //today.setHours(0, 0, 0, 0);
-      //  $scope.endOfToday.setHours(23, 59, 59, 999);
-
+    $scope.retrieveEvents = function () {
       mvEvent.query(
-        {user: mvIdentity.currentUser._id,
-          startTime: now,
-          endTime: endOfToday,
-          limit: 3
+        {
+          user: mvIdentity.currentUser._id,
+          startTime: mvMoment().toISOString(),
+          endTime: mvMoment().endOf('day').toISOString(),
+          pageSize: 3
         }, function (events) {
           $scope.eventsForHeader = events;
-          angular.forEach($scope.eventsForHeader, function (evt) {
-            var start = mvMoment(evt.startTime).toDate(),
-              end = mvMoment(evt.startTime).add('minutes', evt.duration).toDate();
-              var startMinutes = start.getMinutes(),
-                endMinutes = end.getMinutes();
-            evt.from = start.getHours() + ':' + (startMinutes >= 10? startMinutes : ('0'+startMinutes));
-            evt.to = end.getHours() + ':' + (endMinutes >= 10? endMinutes : ('0'+endMinutes));
-            evt.title = evt.name + '面试(' + evt.applyPosition + ')';
-          });
         });
     };
 
-    $scope.retrieveReviewsForHeader = function () {
+
+    $scope.retrieveReviews = function () {
       mvReview.query({orderBy: 'events[0].startTime',
-          orderByReverse: false, unreviewed: true, limit: 3},
+          orderByReverse: false, unreviewed: true, pageSize: 3},
         function (interviews) {
-          $scope.unreviewedForHeader = [];
-          angular.forEach(interviews, function (interview) {
-            var unreviewed ={};
-            unreviewed.name = interview.name;
-            unreviewed.startTime = interview.events[0].startTime;
-            unreviewed.applyPosition = interview.applyPosition;
-            unreviewed.interviewId = interview._id;
-            $scope.unreviewedForHeader.push(unreviewed);
-          });
+          $scope.unreviewedForHeader = interviews;
         });
     };
+
+    $scope.retrieveOnboards = function () {
+      mvInterview.query({
+        status: 'offer accepted',
+        startDate: mvMoment().startOf('day').toISOString(),
+        endDate: mvMoment().endOf('day').toISOString(),
+        pageSize: 3
+      }, function (onboards) {
+        $scope.onboardsForHeader = onboards;
+      });
+    };
+
+    function refreshAll() {
+      $scope.updateNavCounts();
+      $scope.retrieveEvents();
+      $scope.retrieveReviews();
+      $scope.retrieveOnboards();
+    }
 
     if (mvIdentity.isAuthenticated()) {
-      $scope.updateNavCounts();
-      $scope.retrieveEventsForHeader();
-      $scope.retrieveReviewsForHeader();
+      $scope.onboardCount();
+      refreshAll();
       $scope.interval = $interval(function () {
-        $scope.updateNavCounts();
-        $scope.retrieveEventsForHeader();
-        $scope.retrieveReviewsForHeader();
+        refreshAll();
       }, 300000);
     }
 
-
     $scope.$on('loggedIn', function () {
-      $scope.updateNavCounts();
-      $scope.retrieveEventsForHeader();
-      $scope.retrieveReviewsForHeader();
+      $scope.onboardCount();
+      refreshAll();
       $scope.interval = $interval(function () {
-        $scope.updateNavCounts();
-        $scope.retrieveEventsForHeader();
-        $scope.retrieveReviewsForHeader();
+        refreshAll();
       }, 300000);
     });
 
-    $scope.$on('loggedOut', function () {
+    function cancelInterval() {
       if ($scope.interval) {
         $interval.cancel($scope.interval);
       }
-    });
+    }
 
-    $scope.$on('$destroy', function () {
-      if ($scope.interval) {
-        $interval.cancel($scope.interval);
-      }
-    });
+    $scope.$on('loggedOut', cancelInterval);
+
+    $scope.$on('$destroy', cancelInterval);
 
     $scope.$on('applicationStatusUpdated', function (event, from, to) {
 
-      switch (to) {
-        case 'undetermined':
-          $scope.counts.undetermined++;
-          $scope.counts.new--;
-          break;
-
-        case 'interview':
-          $scope.counts.pursued--;
-          break;
-
-        case 'pursued':
-          switch (from) {
-            case 'new':
-              $scope.counts.pursued++;
-              $scope.counts.new--;
-              break;
-
-            case 'undetermined':
-              $scope.counts.pursued++;
-              $scope.counts.undetermined--;
-              break;
-          }
-          break;
-
-        case 'archived':
-          switch (from) {
-            case 'new':
-              $scope.counts.new--;
-              break;
-
-            case 'undetermined':
-              $scope.counts.undetermined--;
-              break;
-
-            case 'pursued':
-              $scope.counts.pursued--;
-              break;
-          }
-          break;
-      }
+      if ($scope.counts[to]) $scope.counts[to]++;
+      if ($scope.counts[from]) $scope.counts[from]--;
     });
 
     $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime, countOfEvents) {
-      var today = new Date(), endOfToday = new Date();
-      today.setHours(0, 0, 0, 0);
-      endOfToday.setHours(23, 59, 59, 999);
+      var today = mvMoment().startOf('day').toDate(),
+        endOfToday = mvMoment().endOf('day').toDate();
+
       switch (operation) {
         case 'delete':
           if (oldStartTime >= today && oldStartTime <= endOfToday) {

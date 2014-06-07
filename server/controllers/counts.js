@@ -8,6 +8,8 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 exports.get = function (req, res, next) {
+  var start = moment().startOf('day').toDate(),
+    end = moment().endOf('day').toDate();
 
   var countFunctions = {
     new: function (cb) {
@@ -19,36 +21,27 @@ exports.get = function (req, res, next) {
     pursued: function (cb) {
       Resume.count({company: req.user.company, status: 'pursued'}).exec(cb);
     },
+    onboard: function (cb) {
+      Interview.count({company: req.user.company, status: 'offer accepted'})
+        .where('onboardDate').gte(start).lte(end).exec(cb);
+    },
     interviews: function (cb) {
       Interview.countNew(req.user.company, {}, cb);
     },
     toBeReviewed: function (cb) {
-      Interview.countForReview(req.user, {unreviewed: true}, cb);
+      Interview.countForUnreviewed(req.user, cb);
     },
     eventsOfToday: function (cb) {
-      var startTime = moment().startOf('day').toDate(),
-        endTime = moment().endOf('day').toDate();
-      Interview.eventsCountForInterviewer(req.user._id, startTime, endTime, function (err, group) {
-        var result = 0;
-        if(group && group.length > 0){
-          result = group[0].total;
-        }
-        cb(null, result);
-      });
+      Interview.eventsCountForInterviewer(req.user._id, start, end, cb);
     }
   };
 
-  var queries = ['new', 'pursued', 'undetermined', 'eventsOfToday', 'toBeReviewed', 'interviews', ];
+  var queries = req.query.counts || ['new', 'pursued', 'undetermined', 'eventsOfToday', 'toBeReviewed', 'interviews'];
 
-  if (req.query.counts) {
-    if (Array.isArray(req.query.counts)) {
-      queries = req.query.counts;
-    }
-    else {
-      queries = [];
-      queries.push(req.query.counts);
-    }
+  if (!Array.isArray(queries)) {
+    queries = [queries];
   }
+
   async.map(queries, function (query, cb) {
       if (countFunctions[query]) {
         countFunctions[query](cb);
