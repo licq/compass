@@ -218,7 +218,8 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       application: 1,
       countOfEvents: 1
     })
-    .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } });
+    .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } })
+    .sort('startTime');
 
   if (typeof pageSize === 'function') {
     cb = pageSize;
@@ -226,7 +227,7 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
   }
 
   if (pageSize) {
-    return query.sort('startTime').pageSize(pageSize).exec(cb);
+    query.limit(parseInt(pageSize));
   }
 
   return query.exec(cb);
