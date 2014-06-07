@@ -3,20 +3,25 @@
     <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>{{title}}</strong></div>
     <div class="panel-body">
       <div ng-include="'/app/common/resumeView.html'"></div>
-      <div>
-        <button class="btn btn-success" ng-click="newEvent()"
-                ng-show="resume | showInterviewButton">预约面试
-        </button>
-        <button class="btn btn-success" ng-click="pursue()"
-                ng-show="resume | showPursueButton">通过
-        </button>
-        <button class="btn btn-danger" ng-click="archive()"
-                ng-show="resume | showArchiveButton">归档
-        </button>
-        <button class="btn btn-warning" ng-click="undetermine()"
-                ng-show="resume | showUndetermineButton">待定
-        </button>
+      <div class="col-md-12">
+        <div align="center">
+          <button class="btn btn-success" ng-click="newEvent()"
+                  ng-show="resume | showInterviewButton">预约面试
+          </button>
+          <button class="btn btn-success" ng-click="pursue()"
+                  ng-show="resume | showPursueButton">通过
+          </button>
+          <button class="btn btn-danger" ng-click="archive()"
+                  ng-show="resume | showArchiveButton">归档
+          </button>
+          <button class="btn btn-warning" ng-click="undetermine()"
+                  ng-show="resume | showUndetermineButton">待定
+          </button>
+        </div>
       </div>
+    </div>
+    <div class="panel-footer">
+      <button class="btn btn-primary" ng-click="cancel()">返回</button>
     </div>
   </section>
 </div>
