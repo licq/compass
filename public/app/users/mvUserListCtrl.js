@@ -8,7 +8,7 @@ angular.module('compass')
         {field: 'name', displayName: '姓名'},
         {field: 'email', displayName: '邮箱'},
         {field: 'title', displayName: '职位'},
-        {field: 'created_at', displayName: '创建时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"'},
+        {field: 'createdAt', displayName: '创建时间', cellFilter: 'date:"yyyy/MM/dd HH:mm:ss"'},
         {field: 'deleted',
           displayName: '状态',
           cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"> ' +

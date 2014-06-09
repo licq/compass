@@ -16,7 +16,7 @@ describe('EventSetting', function () {
       Factory.build('eventSetting', function (eventSetting) {
         eventSetting.save(function (err, saved) {
           expect(err).to.not.exist;
-          expect(saved.created_at).to.exist;
+          expect(saved.createdAt).to.exist;
           done();
         });
       });

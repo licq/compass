@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
   logger = require('../config/winston').logger(),
   kue = require('kue'),
   _ = require('lodash'),
-  jobs = kue.createQueue();
+  jobs = kue.createQueue(),
+  timestamps = require('mongoose-timestamp');
 
 function interviewersValidator(interviewers) {
   return !!interviewers && interviewers.length > 0;
@@ -108,6 +109,7 @@ var interviewSchema = mongoose.Schema({
   }
 });
 
+interviewSchema.plugin(timestamps);
 interviewSchema.index({company: 1, application: 1}, {unique: true});
 
 function createSendEmailJob(emails) {
@@ -473,7 +475,7 @@ interviewSchema.statics.queryOffered = function (company, options, cb) {
   var query = this.find({company: company, status: 'offered'});
   if (options.name)
     query.where('name').regex(new RegExp(options.name));
-  query.select('name applyPosition').sort('updated_at').exec(cb);
+  query.select('name applyPosition').sort('updatedAt').exec(cb);
 };
 
 interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {

@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  timestamps = require('mongoose-timestamps'),
+  timestamps = require('mongoose-timestamp'),
   crypto = require('crypto'),
   validator = require('validator');
 

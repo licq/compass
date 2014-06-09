@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   validator = require('validator'),
   uuid = require('node-uuid'),
-  timestamps = require('mongoose-timestamps'),
+  timestamps = require('mongoose-timestamp'),
   _ = require('lodash');
 
 var signupSchema = new Schema({

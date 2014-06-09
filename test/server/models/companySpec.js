@@ -23,8 +23,8 @@ describe('Company', function () {
   describe('#attributes', function () {
     it('should have createdat and updatedat timestamp', function (done) {
       Factory.create('company', function (company) {
-        expect(company.created_at).to.exist;
-        expect(company.updated_at).to.exist;
+        expect(company.createdAt).to.exist;
+        expect(company.updatedAt).to.exist;
         done();
       });
     });

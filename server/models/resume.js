@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
   config = require('../config/config'),
   _ = require('lodash'),
   merge = require('mongoose-merge-plugin'),
-  timestamps = require('mongoose-timestamps');
+  timestamps = require('mongoose-timestamp');
 
 function makeTermFilter(queryValue, termKey) {
   if (queryValue) {
@@ -466,7 +466,7 @@ resumeSchema.plugin(mongoosastic, {
         include_in_all: false,
         type: 'string'
       },
-      created_at: {
+      createdAt: {
         type: 'date',
         format: 'dateOptionalTime',
         include_in_all: false,
@@ -689,7 +689,7 @@ resumeSchema.plugin(mongoosastic, {
         type: 'string',
         index: 'no'
       },
-      updated_at: {
+      updatedAt: {
         type: 'date',
         format: 'dateOptionalTime',
         index: 'no'

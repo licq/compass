@@ -30,8 +30,8 @@ describe('Mail', function () {
           expect(saved.mailbox).to.exist;
           expect(saved.html).to.exist;
           expect(saved.date).to.exist;
-          expect(saved.created_at).to.exist;
-          expect(saved.updated_at).to.exist;
+          expect(saved.createdAt).to.exist;
+          expect(saved.updatedAt).to.exist;
           done();
         });
       });

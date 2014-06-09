@@ -7,7 +7,7 @@ exports.list = function (req, res, next) {
   req.query.company = req.user.company;
   req.query.sort = [
     {
-      created_at: {order: 'desc'}
+      createdAt: {order: 'desc'}
     }
   ];
   Resume.query(req.query, function (err, results) {

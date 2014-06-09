@@ -37,7 +37,7 @@
     "mongoosastic": "licq/mongoosastic",
     "mongoose": "~3.8.12",
     "mongoose-merge-plugin": "0.0.4",
-    "mongoose-timestamps": "0.0.1",
+    "mongoose-timestamp": "^0.2.1",
     "node-uuid": "^1.4.1",
     "nodemailer": "^0.6.1",
     "passport": "^0.2.0",

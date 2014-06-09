@@ -64,8 +64,8 @@ describe('User', function () {
   describe('#attributes', function () {
     it('should have createdat and updatedat timestamp', function (done) {
       Factory.create('user', function (user) {
-        expect(user.created_at).to.exist;
-        expect(user.updated_at).to.exist;
+        expect(user.createdAt).to.exist;
+        expect(user.updatedAt).to.exist;
         done();
       });
     });

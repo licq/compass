@@ -39,7 +39,7 @@ describe('mvResumeListCtrl', function () {
               channel: '智联招聘',
               civilState: 'single',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-14T13:33:06.117Z',
+              createdAt: '2014-04-14T13:33:06.117Z',
               highestDegree: 'bachelor',
               educationHistory: [
                 {
@@ -72,7 +72,7 @@ describe('mvResumeListCtrl', function () {
               politicalStatus: 'citizen',
               projectExperience: [],
               residency: '上海-宝山区',
-              updated_at: '2014-04-28T10:18:00.131Z',
+              updatedAt: '2014-04-28T10:18:00.131Z',
               workExperience: [
                 {
                   _id: '534be3927839a79790bc9129',
@@ -141,7 +141,7 @@ describe('mvResumeListCtrl', function () {
               ],
               channel: '智联招聘',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-03T03:50:28.611Z',
+              createdAt: '2014-04-03T03:50:28.611Z',
               highestDegree: 'mba',
               educationHistory: [
                 {
@@ -195,7 +195,7 @@ describe('mvResumeListCtrl', function () {
               politicalStatus: 'league member',
               projectExperience: [],
               residency: '上海-浦东新区',
-              updated_at: '2014-04-28T10:17:59.424Z',
+              updatedAt: '2014-04-28T10:17:59.424Z',
               workExperience: [
                 {
                   _id: '533cda84217c260000b1acd0',
@@ -266,7 +266,7 @@ describe('mvResumeListCtrl', function () {
               ],
               channel: '智联招聘',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-28T08:28:23.212Z',
+              createdAt: '2014-04-28T08:28:23.212Z',
               highestDegree: 'mba',
               educationHistory: [
                 {
@@ -319,7 +319,7 @@ describe('mvResumeListCtrl', function () {
               politicalStatus: 'citizen',
               projectExperience: [],
               residency: '上海-浦东新区',
-              updated_at: '2014-04-28T10:18:00.247Z',
+              updatedAt: '2014-04-28T10:18:00.247Z',
               workExperience: [
                 {
                   _id: '535e11272c1b1d95031ffdc2',
@@ -365,7 +365,7 @@ describe('mvResumeListCtrl', function () {
               certifications: [],
               channel: '智联招聘',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-14T07:53:40.049Z',
+              createdAt: '2014-04-14T07:53:40.049Z',
               highestDegree: 'bachelor',
               educationHistory: [
                 {
@@ -416,7 +416,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '上海-虹口区',
-              updated_at: '2014-04-28T10:18:00.123Z',
+              updatedAt: '2014-04-28T10:18:00.123Z',
               workExperience: [],
               yearsOfExperience: 1
             }
@@ -449,7 +449,7 @@ describe('mvResumeListCtrl', function () {
               channel: '智联招聘',
               civilState: 'single',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-11T00:55:08.729Z',
+              createdAt: '2014-04-11T00:55:08.729Z',
               highestDegree: 'associate',
               educationHistory: [
                 {
@@ -535,7 +535,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '上海-浦东新区',
-              updated_at: '2014-04-28T10:17:59.496Z',
+              updatedAt: '2014-04-28T10:17:59.496Z',
               workExperience: [
                 {
                   _id: '53473d6c59c0af82035e8b99',
@@ -590,7 +590,7 @@ describe('mvResumeListCtrl', function () {
               ],
               channel: '前程无忧',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-22T08:25:34.328Z',
+              createdAt: '2014-04-22T08:25:34.328Z',
               highestDegree: 'master',
               educationHistory: [
                 {
@@ -676,7 +676,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '上海-杨浦区',
-              updated_at: '2014-04-28T10:18:00.197Z',
+              updatedAt: '2014-04-28T10:18:00.197Z',
               workExperience: [],
               yearsOfExperience: -1
             }
@@ -701,7 +701,7 @@ describe('mvResumeListCtrl', function () {
               certifications: [],
               channel: '智联招聘',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-14T10:40:37.765Z',
+              createdAt: '2014-04-14T10:40:37.765Z',
               highestDegree: 'bachelor',
               educationHistory: [
                 {
@@ -769,7 +769,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '上海-黄浦区',
-              updated_at: '2014-04-28T10:18:00.128Z',
+              updatedAt: '2014-04-28T10:18:00.128Z',
               workExperience: [
                 {
                   _id: '534bbb25462ea5768de17fc7',
@@ -813,7 +813,7 @@ describe('mvResumeListCtrl', function () {
               channel: '智联招聘',
               civilState: 'single',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-22T01:09:30.675Z',
+              createdAt: '2014-04-22T01:09:30.675Z',
               highestDegree: 'bachelor',
               educationHistory: [
                 {
@@ -937,7 +937,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '江苏昆山',
-              updated_at: '2014-04-28T10:18:00.178Z',
+              updatedAt: '2014-04-28T10:18:00.178Z',
               workExperience: [
                 {
                   _id: '5355c14ab5f85ce10e5aa742',
@@ -984,7 +984,7 @@ describe('mvResumeListCtrl', function () {
               channel: '智联招聘',
               civilState: 'single',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-14T02:09:08.437Z',
+              createdAt: '2014-04-14T02:09:08.437Z',
               highestDegree: 'bachelor',
               educationHistory: [
                 {
@@ -1083,7 +1083,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '上海-闸北区',
-              updated_at: '2014-04-28T10:17:59.548Z',
+              updatedAt: '2014-04-28T10:17:59.548Z',
               workExperience: [
                 {
                   _id: '534b4344cc247b9a02ea3c36',
@@ -1120,7 +1120,7 @@ describe('mvResumeListCtrl', function () {
               channel: '智联招聘',
               civilState: 'married',
               company: '532fc0eab889c118246c6d59',
-              created_at: '2014-04-22T01:09:25.997Z',
+              createdAt: '2014-04-22T01:09:25.997Z',
               highestDegree: 'associate',
               educationHistory: [
                 {
@@ -1294,7 +1294,7 @@ describe('mvResumeListCtrl', function () {
                 }
               ],
               residency: '上海-闵行区',
-              updated_at: '2014-04-28T10:18:00.159Z',
+              updatedAt: '2014-04-28T10:18:00.159Z',
               workExperience: [
                 {
                   _id: '5355c145b5f85ce10e5aa5ac',

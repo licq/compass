@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  timestamps = require('mongoose-timestamps'),
+  timestamps = require('mongoose-timestamp'),
   validator = require('validator'),
   emailChecker = require('../tasks/emailChecker');
 

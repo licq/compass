@@ -77,8 +77,8 @@ describe('Email', function () {
     it('should have createdat and updatedat timestamp', function (done) {
       Factory.build('email', function (email) {
         email.save(function () {
-          expect(email.created_at).to.exist;
-          expect(email.updated_at).to.exist;
+          expect(email.createdAt).to.exist;
+          expect(email.updatedAt).to.exist;
           expect(email.totalRetrieveCount).to.equal(0);
           done();
         });

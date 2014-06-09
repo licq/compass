@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
   Email = mongoose.model('Email'),
-  timestamps = require('mongoose-timestamps');
+  timestamps = require('mongoose-timestamp');
 
 var nameAndAddressSchema = mongoose.Schema({
   address: String,
