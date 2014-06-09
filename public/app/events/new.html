@@ -73,9 +73,10 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-warning pull-left" ng-hide="isNew" ng-click="delete()">删除</button>
+  <button class="btn btn-info pull-left" ng-hide="isNew" ng-click="viewResume(event.application)">简历</button>
   <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-show="isNew" ng-click="create()">创建</button>
   <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-hide="isNew" ng-click="update()">修改</button>
+  <button class="btn btn-warning"  ng-hide="isNew" ng-click="delete()">删除</button>
   <button class="btn btn-default" ng-click="cancel()">取消</button>
 </div>
 

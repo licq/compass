@@ -173,5 +173,13 @@ describe('mvEventNewCtrl', function () {
       modalInstanceMock.verify();
       expect(spy).to.have.been.called;
     }));
+
+    it('should go to resume view page', inject(function ($location) {
+        var spy = sinon.spy($location, 'path');
+        $scope.viewResume('7788');
+        expect(spy).to.be.calledWith('/resumes/7788');
+      })
+    );
+
   });
 });
