@@ -12,7 +12,7 @@ angular.module('compass')
     };
 
     $scope.onboardCount = function () {
-      mvNav.get({counts: 'onboard'}, function (counts) {
+      mvNav.get({counts: 'onboards'}, function (counts) {
         angular.extend($scope.counts, counts);
       });
     };
@@ -28,7 +28,6 @@ angular.module('compass')
           $scope.eventsForHeader = events;
         });
     };
-
 
     $scope.retrieveReviews = function () {
       mvReview.query({orderBy: 'events[0].startTime',
@@ -83,7 +82,6 @@ angular.module('compass')
     $scope.$on('$destroy', cancelInterval);
 
     $scope.$on('applicationStatusUpdated', function (event, from, to) {
-
       if ($scope.counts.hasOwnProperty(to)) $scope.counts[to]++;
       if ($scope.counts.hasOwnProperty(from)) $scope.counts[from]--;
     });
@@ -123,7 +121,7 @@ angular.module('compass')
     });
 
     $scope.$on('reviewAdded', function () {
-      $scope.counts.toBeReviewed--;
+      $scope.counts.unreviewed--;
     });
 
     $scope.logout = function () {
@@ -131,5 +129,4 @@ angular.module('compass')
         $location.path('/login');
       });
     };
-  })
-;
+  });

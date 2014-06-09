@@ -81,18 +81,18 @@
       <a href="" class="dropdown-toggle bg-warning" data-toggle="dropdown"
         ng-click="retrieveReviews()">
         <i class="fa fa-pencil"></i>
-        <span class="badge badge-info">{{counts.toBeReviewed}}</span>
+        <span class="badge badge-info">{{counts.unreviewed}}</span>
       </a>
 
       <div class="dropdown-menu pull-right with-arrow panel panel-default">
         <div class="panel-heading">
-          您{{counts.toBeReviewed | zeroToLiteral}}面试待评价.
+          您{{counts.unreviewed | zeroToLiteral}}面试待评价.
         </div>
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="unreviewed in unreviewedForHeader">
             <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">
                                 <span class="pull-left media-icon">
-                                    <span class="square-icon sm bg-warning"><i class="fa fa-pencil"></i></span>
+                                    <span class="square-icon sm bg-warning">z<i class="fa fa-pencil"></i></span>
                                 </span>
 
               <div class="media-body">
@@ -103,7 +103,7 @@
           </li>
 
         </ul>
-        <div class="panel-footer" ng-show="counts.toBeReviewed">
+        <div class="panel-footer" ng-show="counts.unreviewed">
           <a href="#/interviews/reviews">查看所有待评价面试</a>
         </div>
       </div>
@@ -111,12 +111,12 @@
     <li class="dropdown">
       <a href="" class="dropdown-toggle bg-success" data-toggle="dropdown">
         <i class="fa fa-child fa-lg"></i>
-        <span class="badge badge-info">{{counts.onboard}}</span>
+        <span class="badge badge-info">{{counts.onboards}}</span>
       </a>
 
       <div class="dropdown-menu pull-right with-arrow panel panel-default">
         <div class="panel-heading">
-          今天{{counts.onboard | zeroToLiteral}}新员工入职
+          今天{{counts.onboards | zeroToLiteral}}新员工入职
         </div>
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="onboard in onboardsForHeader">

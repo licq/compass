@@ -63,16 +63,17 @@ describe('counts', function () {
 
 
   it('should get counts correctly', function (done) {
-    request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=toBeReviewed&counts=interviews&counts=eventsOfToday')
+    request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
       .expect(200)
       .expect('content-type', /json/)
       .end(function (err, res) {
         expect(res.body.new).to.equal(1);
         expect(res.body.pursued).to.equal(1);
         expect(res.body.undetermined).to.equal(1);
-        expect(res.body.toBeReviewed).to.equal(0);
+        expect(res.body.unreviewed).to.equal(0);
         expect(res.body.interviews).to.equal(1);
         expect(res.body.eventsOfToday).to.equal(1);
+        expect(res.body.onboards).to.equal(0);
         done(err);
       });
   });
