@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
   mongoosastic = require('mongoosastic'),
   config = require('../config/config'),
   _ = require('lodash'),
+  moment = require('moment'),
   merge = require('mongoose-merge-plugin'),
   timestamps = require('mongoose-timestamp');
 
@@ -200,7 +201,9 @@ var resumeSchema = mongoose.Schema({
     type: String,
     default: 'new',
     enum: ['new', 'undetermined', 'pursued', 'archived', 'enrolled', 'interview', 'rejected', 'offer rejected']
-  }
+  },
+  createdAtLocaltime: Date,
+  updatedAtLocaltime: Date
 });
 
 resumeSchema.index({company: 1, name: 1, mobile: 1}, {unique: true});
@@ -326,7 +329,7 @@ resumeSchema.statics.query = function (params, callback) {
     delete queryConditions.query.filtered.filter.and;
   }
 
-//  console.log(JSON.stringify(queryConditions));
+  logger.debug(JSON.stringify(queryConditions));
   this.search(queryConditions, function (err, results) {
     if (err) return callback(err);
 
@@ -356,6 +359,14 @@ resumeSchema.post('remove', function () {
 });
 
 resumeSchema.plugin(timestamps);
+resumeSchema.pre('save', function (next) {
+  if (this.isNew) {
+    this.createdAtLocaltime = moment(this.createdAt).add('hours', 8).toDate();
+  }
+  this.updatedAtLocaltime = moment(this.updatedAt).add('hours', 8).toDate();
+  next();
+});
+
 resumeSchema.plugin(merge);
 resumeSchema.plugin(mongoosastic, {
   index: config.elastic_index,

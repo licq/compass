@@ -84,8 +84,8 @@ angular.module('compass')
 
     $scope.$on('applicationStatusUpdated', function (event, from, to) {
 
-      if ($scope.counts[to]) $scope.counts[to]++;
-      if ($scope.counts[from]) $scope.counts[from]--;
+      if ($scope.counts.hasOwnProperty(to)) $scope.counts[to]++;
+      if ($scope.counts.hasOwnProperty(from)) $scope.counts[from]--;
     });
 
     $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime, countOfEvents) {

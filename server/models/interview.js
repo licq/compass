@@ -106,11 +106,24 @@ var interviewSchema = mongoose.Schema({
   statusBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
+  },
+  createdAtLocaltime: {
+    type: Date
+  },
+  updatedAtLocaltime: {
+    type: Date
   }
 });
 
 interviewSchema.plugin(timestamps);
 interviewSchema.index({company: 1, application: 1}, {unique: true});
+interviewSchema.pre('save', function (next) {
+  if (this.isNew) {
+    this.createdAtLocaltime = moment(this.createdAt).add('hours', 8).toDate();
+  }
+  this.updatedAtLocaltime = moment(this.updatedAt).add('hours', 8).toDate();
+  next();
+});
 
 function createSendEmailJob(emails) {
   emails.forEach(function (email) {
