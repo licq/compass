@@ -21,14 +21,14 @@ exports.get = function (req, res, next) {
     pursued: function (cb) {
       Resume.count({company: req.user.company, status: 'pursued'}).exec(cb);
     },
-    onboard: function (cb) {
+    onboards: function (cb) {
       Interview.count({company: req.user.company, status: 'offer accepted'})
         .where('onboardDate').gte(start).lte(end).exec(cb);
     },
     interviews: function (cb) {
       Interview.countNew(req.user.company, {}, cb);
     },
-    toBeReviewed: function (cb) {
+    unreviewed: function (cb) {
       Interview.countForUnreviewed(req.user, cb);
     },
     eventsOfToday: function (cb) {
@@ -36,7 +36,7 @@ exports.get = function (req, res, next) {
     }
   };
 
-  var queries = req.query.counts || ['new', 'pursued', 'undetermined', 'eventsOfToday', 'toBeReviewed', 'interviews'];
+  var queries = req.query.counts || ['new', 'pursued', 'undetermined', 'eventsOfToday', 'unreviewed', 'interviews'];
 
   if (!Array.isArray(queries)) {
     queries = [queries];

@@ -9,11 +9,11 @@ describe('mvNavCtrl', function () {
       $scope = $rootScope.$new();
       $interval = _$interval_;
 
-      $httpBackend.expectGET('/api/counts?counts=onboard').respond({onboard: 7});
+      $httpBackend.expectGET('/api/counts?counts=onboards').respond({onboard: 7});
 
       $httpBackend.expectGET('/api/counts')
         .respond({new: 1, undetermined: 2, pursued: 3,
-          eventsOfToday: 4, interviews: 5, toBeReviewed: 6});
+          eventsOfToday: 4, interviews: 5, unreviewed: 6});
 
       $httpBackend.expectGET(/^\/api\/events\?endTime=\d.{22}Z&pageSize=3&startTime=\d.{22}Z&user=7788/)
         .respond([
@@ -52,7 +52,7 @@ describe('mvNavCtrl', function () {
       expect($scope.counts.pursued).to.equal(3);
       expect($scope.counts.eventsOfToday).to.equal(4);
       expect($scope.counts.interviews).to.equal(5);
-      expect($scope.counts.toBeReviewed).to.equal(6);
+      expect($scope.counts.unreviewed).to.equal(6);
       expect($scope.counts.onboard).to.equal(7);
     });
 
@@ -70,6 +70,7 @@ describe('mvNavCtrl', function () {
     it('should get back events of today', function () {
       expect($scope.eventsForHeader).to.have.length(1);
       expect($scope.eventsForHeader[0].application).to.equal('5566');
+      expect($scope.eventsForHeader[0].name).to.equal('张三');
     });
 
     it('should get back unreviewed list for today', function () {

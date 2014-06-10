@@ -28,6 +28,11 @@ angular.module('compass',
         templateUrl: '/app/dashboard/dashboard.html',
         authenticate: true
       })
+      .when('/today', {
+        templateUrl: '/app/today/today.html',
+        controller: 'mvTodayCtrl',
+        authenticate: true
+      })
       .
       when('/settings/emails', {
         templateUrl: '/app/emails/list.html',
@@ -163,6 +168,7 @@ angular.module('compass',
           }
         }
       });
+
     $httpProvider.interceptors.push(['$q', '$location', function ($q, $location) {
       return {
         'responseError': function (response) {
