@@ -2,7 +2,7 @@
 
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar',
-    'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular', 'ui.daterangepicker'])
+    'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular', 'ui.daterangepicker', 'nvd3ChartDirectives'])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
       .when('/welcome', {
@@ -142,6 +142,11 @@ angular.module('compass',
       .when('/systemSettings/systemOperations', {
         templateUrl: '/app/systemOperations/view.html',
         controller: 'mvSystemOperationsCtrl',
+        authenticate: true
+      })
+      .when('/reports/resumes', {
+        templateUrl: '/app/resumeReports/view.html',
+        controller: 'mvResumeReportViewCtrl',
         authenticate: true
       })
       .otherwise({

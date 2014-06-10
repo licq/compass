@@ -18,6 +18,8 @@ module.exports = function (config) {
     files: [
       'public/vendor/jquery/dist/jquery.min.js',
       'public/vendor/moment/moment.js',
+      'public/vendor/d3/d3.min.js',
+      'public/vendor/nvd3/nv.d3.min.js',
       'public/vendor/lodash/dist/lodash.min.js',
       'public/vendor/angular/angular.js',
       'public/vendor/angular-mocks/angular-mocks.js',
@@ -32,6 +34,7 @@ module.exports = function (config) {
       'public/vendor/select2/select2.min.js',
       'public/vendor/bootstrap-daterangepicker/daterangepicker.js',
       'public/app/components/daterangepicker.js',
+      'public/vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.min.js',
       'public/vendor/trNgGrid/src/js/trNgGrid.js',
       'public/vendor/angular-ui-select2/src/select2.js',
       'public/vendor/textAngular/dist/textAngular-sanitize.min.js',

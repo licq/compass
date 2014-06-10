@@ -1,0 +1,49 @@
+<div class="page">
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel panel-success">
+        <div class="panel-heading">
+          <strong>应聘趋势</strong>
+        </div>
+        <div class="panel-body">
+
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-primary" ng-click="refreshTaskStats()">刷新</button>
+          <button class="btn btn-warning" ng-click="recreateAllJobs()">删除所有并重建</button>
+          <button class="btn btn-danger" ng-click="recreateFetchEmailJobs()">删除Fetch Email并重建</button>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6">
+      <section class="panel panel-warning">
+        <div class="panel-heading">
+          <strong>比例</strong>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <tr>
+                <td>数据库中Mail数量</td>
+                <td>{{mailCount}}</td>
+              </tr>
+              <tr>
+                <td>数据库中简历数量</td>
+                <td>{{resumeCountInDb}}</td>
+              </tr>
+              <tr>
+                <td>ES中简历数量</td>
+                <td>{{resumeCountInEs}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-primary" ng-click="refreshResumeCounts()">刷新</button>
+          <button class="btn btn-warning" ng-click="reparseMails()">重建解析简历</button>
+          <button class="btn btn-danger" ng-click="synchronizeEsToDb()">重建ES</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

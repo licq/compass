@@ -17,6 +17,7 @@ var express = require('express'),
   eventSettings = require('../controllers/eventSettings'),
   counts = require('../controllers/counts'),
   systemOperations = require('../controllers/systemOperations'),
+  resumeReports = require('../controllers/resumeReports'),
   applierRejectReasons = require('../controllers/applierRejectReasons');
 
 module.exports = function (app) {
@@ -131,6 +132,9 @@ module.exports = function (app) {
     .post(systemOperations.synchronizeEsToDb);
   apiRouter.route('/systemOperations/reparseMails')
     .post(systemOperations.reparseMails);
+
+  apiRouter.route('/resumeReports/counts')
+    .get(resumeReports.counts);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
