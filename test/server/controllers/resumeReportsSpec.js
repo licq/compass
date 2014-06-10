@@ -1,9 +1,8 @@
 var helper = require('../testHelper'),
   Factory = require('../factory'),
-  expect = require('chai').expect,
-  mongoose = require('mongoose');
+  expect = require('chai').expect;
 
-describe.only('resumeReports', function () {
+describe('resumeReports', function () {
   var request;
 
   beforeEach(function (done) {

@@ -42,6 +42,7 @@ function handleParseResume(job, done) {
   logger.info('handleParseResume ', job.data.title);
   try {
     var data = parser.parse(job.data);
+    data.createdAt = job.data.createdAt;
     Resume.createOrUpdateAndIndex(data, function (err) {
       if (err && (err.code === 11000 || err.code === 11001))
         logger.error('resume duplication of ', data.name);
@@ -64,7 +65,7 @@ exports.start = function () {
 
   jobs.process('fetch email', 20, handleFetchEmail);
 
-  jobs.process('parse resume', 20, handleParseResume);
+  jobs.process('parse resume', 10, handleParseResume);
 
   jobs.promote(60000, 200);
 };

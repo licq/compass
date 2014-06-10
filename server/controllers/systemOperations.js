@@ -34,7 +34,7 @@ exports.synchronizeEsToDb = function (req, res) {
 };
 
 exports.reparseMails = function (req, res, next) {
-  var stream = Mail.find().select('html subject company fromAddress').stream();
+  var stream = Mail.find().select('html subject company fromAddress createdAt').stream();
   stream.on('data', function (mail) {
     jobs.addParseResumeJob(mail);
   }).on('close', function () {

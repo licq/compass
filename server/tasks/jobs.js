@@ -113,7 +113,8 @@ exports.addParseResumeJob = function (mail, cb) {
     subject: mail.subject,
     company: mail.company,
     mailId: mail._id,
-    fromAddress: mail.fromAddress
+    fromAddress: mail.fromAddress,
+    createdAt: mail.createdAt
   };
   jobs.create('parse resume', data).attempts(3).save();
   cb && cb();

@@ -6,7 +6,12 @@
           <strong>应聘趋势</strong>
         </div>
         <div class="panel-body">
-
+          <nvd3-multi-bar-chart data="resumeCounts" id="counts" xAxisTickFormat="xAxisTickFormatFunction()"
+                                height="300" showXAxis="true" showYAxis="true" interactive="true" tooltips="true"
+                                tooltipcontent="toolTipContentFunction()" reduceXTicks="true"
+                                rotateLabels="90" showControls="true">
+            <svg></svg>
+          </nvd3-multi-bar-chart>
         </div>
         <div class="panel-footer">
           <button class="btn btn-primary" ng-click="refreshTaskStats()">刷新</button>

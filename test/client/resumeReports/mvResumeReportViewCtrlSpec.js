@@ -8,17 +8,20 @@ describe('mvResumeReportViewCtrl', function () {
     $scope = $rootScope.$new();
     $httpBackend = _$httpBackend_;
 
-    $httpBackend.expectGET('/api/resumeReports/counts').respond([{
-      year: 2014,
-      month: 5,
-      day: 6,
-      count: 10
-    },{
-      year: 2014,
-      month: 6,
-      day: 5,
-      count: 20
-    }]);
+    $httpBackend.expectGET('/api/resumeReports/counts').respond([
+      {
+        year: 2014,
+        month: 5,
+        day: 6,
+        count: 10
+      },
+      {
+        year: 2014,
+        month: 5,
+        day: 8,
+        count: 20
+      }
+    ]);
 
     $controller('mvResumeReportViewCtrl', {
       $scope: $scope
@@ -28,7 +31,8 @@ describe('mvResumeReportViewCtrl', function () {
 
   describe('initialization', function () {
     it('should retrive the resume count list', function () {
-      expect($scope.resumeCounts).to.have.length(2);
+      console.log($scope.resumeCounts[0].values);
+      expect($scope.resumeCounts[0].values).to.have.length(3);
     });
   });
 });
