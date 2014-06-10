@@ -1,52 +1,37 @@
 <div class="page">
   <div class="row">
     <div class="col-md-12">
-      <section class="panel panel-success">
+      <section class="panel panel-default">
         <div class="panel-heading">
           <strong>应聘趋势</strong>
         </div>
         <div class="panel-body">
-          <nvd3-multi-bar-chart data="resumeCounts" id="counts" xAxisTickFormat="xAxisTickFormatFunction()"
-                                height="300" showXAxis="true" showYAxis="true" interactive="true" tooltips="true"
-                                tooltipcontent="toolTipContentFunction()" reduceXTicks="true"
-                                rotateLabels="90" showControls="true">
-            <svg></svg>
-          </nvd3-multi-bar-chart>
-        </div>
-        <div class="panel-footer">
-          <button class="btn btn-primary" ng-click="refreshTaskStats()">刷新</button>
-          <button class="btn btn-warning" ng-click="recreateAllJobs()">删除所有并重建</button>
-          <button class="btn btn-danger" ng-click="recreateFetchEmailJobs()">删除Fetch Email并重建</button>
-        </div>
-      </section>
-    </div>
-    <div class="col-md-6">
-      <section class="panel panel-warning">
-        <div class="panel-heading">
-          <strong>比例</strong>
-        </div>
-        <div class="panel-body">
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-              <tr>
-                <td>数据库中Mail数量</td>
-                <td>{{mailCount}}</td>
-              </tr>
-              <tr>
-                <td>数据库中简历数量</td>
-                <td>{{resumeCountInDb}}</td>
-              </tr>
-              <tr>
-                <td>ES中简历数量</td>
-                <td>{{resumeCountInEs}}</td>
-              </tr>
-            </table>
+          <div class="col-md-10">
+            <nvd3-multi-bar-chart data="resumeCounts" id="counts" xAxisTickFormat="xAxisTickFormatFunction()"
+                                  yAxisTickFormat="yAxisTickFormatFunction()"
+                                  height="300" showXAxis="true" showYAxis="true" interactive="true" tooltips="true"
+                                  tooltipcontent="toolTipContentFunction()" reduceXTicks="true">
+              <svg></svg>
+            </nvd3-multi-bar-chart>
           </div>
-        </div>
-        <div class="panel-footer">
-          <button class="btn btn-primary" ng-click="refreshResumeCounts()">刷新</button>
-          <button class="btn btn-warning" ng-click="reparseMails()">重建解析简历</button>
-          <button class="btn btn-danger" ng-click="synchronizeEsToDb()">重建ES</button>
+          <div class="col-md-2">
+            <form class="form">
+              <div class="form-grup">
+                <label class="control-label">招聘渠道</label>
+                <select ui-select2 class="form-control" ng-model="queryOptions.channel">
+                  <option value="">全部</option>
+                  <option ng-repeat="channel in channels" value="{{channel}}">{{channel}}</option>
+                </select>
+              </div>
+              <div>
+                <label class="control-label">应聘职位</label>
+                <select ui-select2 class="form-control" ng-model="queryOptions.applyPosition">
+                  <option value="">全部</option>
+                  <option ng-repeat="position in applyPositions" value="{{position}}">{{position}}</option>
+                </select>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
     </div>

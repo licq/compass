@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvResumeReportViewCtrl', function ($scope, $http, mvMoment) {
+  .controller('mvResumeReportViewCtrl', function ($scope, $http, mvMoment, $filter) {
     function convert(data) {
       if (data.length === 0) {
         return [];
@@ -38,9 +38,15 @@ angular.module('compass')
       };
     };
 
+    $scope.yAxisTickFormatFunction = function () {
+      return function (n) {
+        return $filter('number')(n, 0);
+      };
+    };
+
     $scope.toolTipContentFunction = function () {
       return function (key, x, y) {
-        return '<p>' + y + ' ' + x + '</p>';
+        return '<strong class="text-success">' + y + '</strong> <small>' + x + '</small>';
       };
     };
   });
