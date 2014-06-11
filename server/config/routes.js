@@ -135,6 +135,10 @@ module.exports = function (app) {
 
   apiRouter.route('/resumeReports/counts')
     .get(resumeReports.counts);
+  apiRouter.route('/resumeReports/applyPositions')
+    .get(resumeReports.applyPositions);
+  apiRouter.route('/resumeReports/channels')
+    .get(resumeReports.channels);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
