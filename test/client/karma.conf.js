@@ -19,7 +19,7 @@ module.exports = function (config) {
       'public/vendor/jquery/dist/jquery.min.js',
       'public/vendor/moment/moment.js',
       'public/vendor/d3/d3.min.js',
-      'public/vendor/nvd3/nv.d3.min.js',
+      'public/scripts/vendors/nv.d3.js',
       'public/vendor/lodash/dist/lodash.min.js',
       'public/vendor/angular/angular.js',
       'public/vendor/angular-mocks/angular-mocks.js',
