@@ -97,21 +97,25 @@ angular.module('compass')
         return s.name === 'male' ? {name: '男', count: s.count} : {name: '女', count: s.count};
       });
 
-      $scope.summaries.age = _.map(_.groupBy(data.age, function(d){
+      $scope.summaries.age = _.map(_.groupBy(data.age, function (d) {
         return Math.floor(d.name / 5);
-      }), function(value,key){
+      }), function (value, key) {
         return {
-          name : '' + key * 5 + '-' + (key * 5 + 4),
-          count: _.reduce(value, function(s,d){
+          name: '' + key * 5 + '-' + (key * 5 + 4),
+          count: _.reduce(value, function (s, d) {
             return s + d.count;
-          },0)
+          }, 0)
         };
       });
     });
 
     $scope.yAxisTickFormatFunction = function () {
       return function (n) {
-        return $filter('number')(n, 0);
+        if (n === Math.floor(n)) {
+          return $filter('number')(n, 0);
+        } else {
+          return '';
+        }
       };
     };
 
@@ -121,9 +125,9 @@ angular.module('compass')
       };
     };
 
-    $scope.pieToolTipContentFunction = function(){
-      return function(key,x){
-        return key + ' <strong>' + $filter('number')(x,0) + '</strong>';
+    $scope.pieToolTipContentFunction = function () {
+      return function (key, x) {
+        return key + ' <strong>' + $filter('number')(x, 0) + '</strong>';
       };
     };
 
@@ -142,6 +146,19 @@ angular.module('compass')
     $scope.pieDescription = function () {
       return function (d) {
         return d.count;
+      };
+    };
+
+    $scope.colorFunction = function () {
+      var colorArray = ['#FF6600', '#FCD202', '#B0DE09', '#0D8ECF', '#2A0CD0', '#CD0D74', '#CC0000', '#00CC00', '#0000CC', '#DDDDDD', '#999999', '#333333', '#990000'];
+      return function (d, i) {
+        return colorArray[i];
+      };
+    };
+
+    $scope.barColorFunction = function () {
+      return function () {
+        return '#0D8ECF';
       };
     };
   });
