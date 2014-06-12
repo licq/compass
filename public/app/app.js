@@ -231,43 +231,6 @@ angular.module('compass',
       day: 'yyyy年M月d日, dddd'
     }
   })
-  .run(function ($rootScope) {
-    $rootScope.gridDefaults = {
-      multiSelect: false,
-//      headerRowHeight: 40,
-//      rowHeight: 40,
-      showFooter: true,
-      i18n: 'zh-cn'
-    };
-  })
-  .value('applicationStatusMap', {
-    new: '新应聘',
-    archived: '归档',
-    pursued: '通过',
-    undetermined: '待定'
-  })
-  .value('mvMoment', moment)
-  .constant('uiCalendarConfig', {
-    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
-    monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
-    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-    dayNamesShort: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-    allDayText: '全天',
-    axisFormat: 'HH:mm',
-    buttonText: {
-      today: '今日',
-      'week': '周',
-      'month': '月',
-      'day': '天'
-    },
-    allDaySlot: false,
-    timeFormat: 'H:mm{ -H:mm}',
-    titleFormat: {
-      month: 'yyyy年M月',
-      week: 'yyyy年M月d日 { \'&#8212;\' [yyyy年][M月]d日}, 第W周',
-      day: 'yyyy年M月d日, dddd'
-    }
-  })
   .config(function ($provide) {
     $provide.decorator('taOptions', ['taRegisterTool', '$delegate',
       function (taRegisterTool, taOptions) {
@@ -294,7 +257,6 @@ angular.module('compass',
           }});
 
         taOptions.toolbar.push(['insertName', 'applyPosition', 'startTime', 'endTime']);
-        //taOptions.toolbar[4].push('insertName','applyPosition', 'startTime', 'endTime');
         return taOptions;
       }]);
   });
