@@ -1,6 +1,7 @@
 'use strict';
 var Resume = require('mongoose').model('Resume'),
   _ = require('lodash'),
+  async = require('async'),
   moment = require('moment');
 
 exports.counts = function (req, res, next) {
@@ -83,4 +84,31 @@ exports.channels = function (req, res, next) {
       if (err) return next(err);
       res.json(channels);
     });
+};
+
+exports.summaries = function (req, res, next) {
+  var groupBys = req.query.groupBy;
+  if (!Array.isArray(groupBys)) groupBys = [groupBys];
+  async.mapSeries(groupBys, function (groupBy, cb) {
+    var aggregate = Resume.aggregate()
+      .match({company: req.user.company, createdAt: {$gte: moment().add('months', -1).startOf('day').toDate()}});
+    if (groupBy === 'age') {
+      aggregate.match({birthday: {$exists: true}})
+        .group({_id: {$year: '$birthday'}, count: {$sum: 1}})
+        .project({
+          name: {$subtract: [moment().year(), '$_id']},
+          _id: 0,
+          count: 1
+        });
+    } else {
+      var g = {};
+      g[groupBy] = {$exists: true};
+      aggregate.match(g)
+        .group({_id: '$' + groupBy, count: {$sum: 1}}).project({name: '$_id', _id: 0, count: 1});
+    }
+    aggregate.exec(cb);
+  }, function (err, results) {
+    if (err) return next(err);
+    res.json(_.zipObject(groupBys, results));
+  });
 };

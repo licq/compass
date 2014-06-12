@@ -10,7 +10,11 @@ describe('resumeReports', function () {
     helper.clearCollections('User', 'Company', 'Mail', 'Resume', function () {
       helper.login(function (agent, user) {
         request = agent;
-        Factory.create('resume', {company: user.company, applyPosition: '市场总监', channel: '智联招聘'}, function () {
+        Factory.create('resume', {company: user.company,
+          applyPosition: '市场总监',
+          channel: '智联招聘',
+          gender: 'male',
+          birthday: moment().add('years', -20).toDate()}, function () {
           done();
         });
       });
@@ -84,6 +88,30 @@ describe('resumeReports', function () {
         .end(function (err, res) {
           expect(err).to.not.exist;
           expect(res.body).to.deep.equal(['智联招聘']);
+          done();
+        });
+    });
+  });
+  describe('get /api/resumeReports/summaries', function () {
+    it('should return array of channel', function (done) {
+      request.get('/api/resumeReports/summaries?groupBy=applyPosition&groupBy=channel&groupBy=age&groupBy=gender')
+        .expect(200)
+        .end(function (err, res) {
+          expect(err).to.not.exist;
+          console.log(res.body);
+          expect(res.body).to.deep.equal({
+            channel: [
+              {name: '智联招聘', count: 1}
+            ],
+            applyPosition: [
+              {name: '市场总监', count: 1}
+            ],
+            gender: [
+              {name: 'male', count: 1}
+            ],
+            age: [
+              {name: 20, count: 1}
+            ]});
           done();
         });
     });

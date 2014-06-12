@@ -25,6 +25,25 @@ describe('mvResumeReportViewCtrl', function () {
       }
     ]);
 
+    $httpBackend.expectGET('/api/resumeReports/summaries?groupBy=channel&groupBy=applyPosition&groupBy=gender&groupBy=age').respond({
+      channel: [
+        {name: '智联', count: 5},
+        {name: '前程', count: 8}
+      ],
+      applyPosition: [
+        {name: 'Java工程师', count: 5},
+        {name: '市场总监', count: 8}
+      ],
+      gender: [
+        {name: 'male', count: 5},
+        {name: 'female', count: 8}
+      ],
+      age: [
+        {name: 20, count: 5},
+        {name: 21, count: 8}
+      ]
+    });
+
     $controller('mvResumeReportViewCtrl', {
       $scope: $scope
     });
@@ -51,6 +70,32 @@ describe('mvResumeReportViewCtrl', function () {
     it('should retrieve the resume count list', inject(function (mvMoment) {
       expect($scope.resumeCounts[0].values).to.have.length(mvMoment().add('months', -1).endOf('month').date());
     }));
+
+    it('should retrieve the channelSummary', function () {
+      expect($scope.summaries.channel).to.deep.equal([
+        {name: '智联', count: 5},
+        {name: '前程', count: 8}
+      ]);
+    });
+    it('should retrieve the applyPositionSummary', function () {
+      expect($scope.summaries.applyPosition).to.deep.equal([
+        {name: 'Java工程师', count: 5},
+        {name: '市场总监', count: 8}
+      ]);
+    });
+    it('should retrieve the genderSummary', function () {
+      expect($scope.summaries.gender).to.deep.equal([
+        {name: '男', count: 5},
+        {name: '女', count: 8}
+      ]);
+    });
+    it('should retrieve the ageSummary', function () {
+      expect($scope.summaries.age).to.deep.equal([
+        {name: '20-24', count: 13}
+      ]);
+    });
+
+
   });
 
   describe('change reportType', function () {

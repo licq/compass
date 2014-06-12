@@ -47,39 +47,67 @@
           </div>
         </div>
       </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
       <section class="panel panel-default">
         <div class="panel-heading">
-          <strong>最近一个月占比</strong>
+          <strong>招聘渠道</strong>
         </div>
         <div class="panel-body">
-          <div class="col-md-3">
-            <nvd3-pie-chart data="channelSummary" id="channelPie" showLabels="true"
-                            height="250" interactive="true" tooltips="true"
-                            tooltipcontent="toolTipContentFunction()" margin="{left:0,top:0,bottom:0,right:0}">
-              <svg></svg>
-            </nvd3-pie-chart>
-          </div>
-          <!--<div class="col-md-3">-->
-            <!--<nvd3-pie-chart data="applyPositionSummary" id="applyPositionPie"-->
-                            <!--height="300" interactive="true" tooltips="true"-->
-                            <!--tooltipcontent="toolTipContentFunction()" margin="{left:20,top:10,bottom:20,right:0}">-->
-              <!--<svg></svg>-->
-            <!--</nvd3-pie-chart>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-            <!--<nvd3-pie-chart data="genderSummary" id="genderPie"-->
-                            <!--height="300" interactive="true" tooltips="true"-->
-                            <!--tooltipcontent="toolTipContentFunction()" margin="{left:20,top:10,bottom:20,right:0}">-->
-              <!--<svg></svg>-->
-            <!--</nvd3-pie-chart>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-            <!--<nvd3-pie-chart data="ageSummary" id="agePie"-->
-                            <!--height="300" interactive="true" tooltips="true"-->
-                            <!--tooltipcontent="toolTipContentFunction()" margin="{left:20,top:10,bottom:20,right:0}">-->
-              <!--<svg></svg>-->
-            <!--</nvd3-pie-chart>-->
-          <!--</div>-->
+          <nvd3-pie-chart data="summaries.channel" id="channelPie" showLabels="true" showLegend="true"
+                          height="450" x="pieX()" y="pieY()" interactive="true" tooltips="true"
+                          noData="没有可以显示的数据" labelType="percent" tooltipcontent="pieToolTipContentFunction()"
+                          margin="{left:0,top:0,bottom:0,right:0}">
+            <svg></svg>
+          </nvd3-pie-chart>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <div class="panel-heading">
+          <strong>应聘职位</strong>
+        </div>
+        <div class="panel-body">
+          <nvd3-pie-chart data="summaries.applyPosition" id="applyPositionPie" showLabels="true" showLegend="true"
+                          height="450" interactive="true" tooltips="true" x="pieX()" y="pieY()"
+                          noData="没有可以显示的数据" labelType="percent" tooltipcontent="pieToolTipContentFunction()"
+                          margin="{left:0,top:0,bottom:0,right:0}">
+            <svg></svg>
+          </nvd3-pie-chart>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <div class="panel-heading">
+          <strong>性别</strong>
+        </div>
+        <div class="panel-body">
+          <nvd3-pie-chart data="summaries.gender" id="genderPie" showLabels="true" showLegend="true"
+                          height="450" interactive="true" tooltips="true" x="pieX()" y="pieY()"
+                          noData="没有可以显示的数据" labelType="percent" tooltipcontent="pieToolTipContentFunction()"
+                          margin="{left:0,top:0,bottom:0,right:0}">
+            <svg></svg>
+          </nvd3-pie-chart>
+        </div>
+      </section>
+    </div>
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <div class="panel-heading">年龄</div>
+        <div class="panel-body">
+          <nvd3-pie-chart data="summaries.age" id="agePie" showLabels="true" showLegend="true"
+                          height="450" interactive="true" tooltips="true" x="pieX()" y="pieY()"
+                          noData="没有可以显示的数据" labelType="percent" tooltipcontent="pieToolTipContentFunction()"
+                          margin="{left:0,top:0,bottom:0,right:0}">
+            <svg></svg>
+          </nvd3-pie-chart>
         </div>
       </section>
     </div>

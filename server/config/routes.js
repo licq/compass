@@ -139,6 +139,8 @@ module.exports = function (app) {
     .get(resumeReports.applyPositions);
   apiRouter.route('/resumeReports/channels')
     .get(resumeReports.channels);
+  apiRouter.route('/resumeReports/summaries')
+    .get(resumeReports.summaries);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();

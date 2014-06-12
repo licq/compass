@@ -176,3 +176,8 @@ table.table.tr-ng-grid td, table.table.tr-ng-grid th {
 .page-chart .panel .panel-body .col-md-3{
     padding: 0 0 0 0;
 }
+
+g.nv-series{
+    margin-right: 20px;
+    width: 80px;
+}

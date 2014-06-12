@@ -64,14 +64,6 @@ angular.module('compass')
       channel: ''
     };
 
-    $http.get('/api/resumeReports/channels').success(function (data) {
-      $scope.channels = data;
-    });
-
-    $http.get('/api/resumeReports/applyPositions').success(function (data) {
-      $scope.applyPositions = data;
-    });
-
     $scope.query = function () {
       $http.get('/api/resumeReports/counts', {params: $scope.queryOptions}).success(function (data) {
         $scope.resumeCounts = [
@@ -89,12 +81,33 @@ angular.module('compass')
       }
     });
 
-    $scope.channelSummary = [
-      ['智联招聘', 5],
-      ['51job', 8]
-    ];
+    $http.get('/api/resumeReports/channels').success(function (data) {
+      $scope.channels = data;
+    });
+
+    $http.get('/api/resumeReports/applyPositions').success(function (data) {
+      $scope.applyPositions = data;
+    });
 
     $scope.query();
+
+    $http.get('/api/resumeReports/summaries', {params: {groupBy: ['channel', 'applyPosition', 'gender', 'age']}}).success(function (data) {
+      $scope.summaries = data;
+      $scope.summaries.gender = _.map(data.gender, function (s) {
+        return s.name === 'male' ? {name: '男', count: s.count} : {name: '女', count: s.count};
+      });
+
+      $scope.summaries.age = _.map(_.groupBy(data.age, function(d){
+        return Math.floor(d.name / 5);
+      }), function(value,key){
+        return {
+          name : '' + key * 5 + '-' + (key * 5 + 4),
+          count: _.reduce(value, function(s,d){
+            return s + d.count;
+          },0)
+        };
+      });
+    });
 
     $scope.yAxisTickFormatFunction = function () {
       return function (n) {
@@ -105,6 +118,30 @@ angular.module('compass')
     $scope.toolTipContentFunction = function () {
       return function (key, x, y) {
         return '<strong class="text-success">' + y + '</strong>';
+      };
+    };
+
+    $scope.pieToolTipContentFunction = function(){
+      return function(key,x){
+        return key + ' <strong>' + $filter('number')(x,0) + '</strong>';
+      };
+    };
+
+    $scope.pieX = function () {
+      return function (d) {
+        return d.name;
+      };
+    };
+
+    $scope.pieY = function () {
+      return function (d) {
+        return d.count;
+      };
+    };
+
+    $scope.pieDescription = function () {
+      return function (d) {
+        return d.count;
       };
     };
   });
