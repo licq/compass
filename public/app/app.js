@@ -69,6 +69,16 @@ angular.module('compass',
         controller: 'mvUserNewCtrl',
         authenticate: true
       })
+      .when('/settings/roles', {
+        templateUrl: '/app/roles/list.html',
+        controller: 'mvRoleListCtrl',
+        authenticate: true
+      })
+      .when('/settings/roles/new', {
+        templateUrl: '/app/roles/new.html',
+        controller: 'mvRoleNewCtrl',
+        authenticate: true
+      })
       .when('/settings/users/edit/:id', {
         templateUrl: '/app/users/edit.html',
         controller: 'mvUserEditCtrl',
@@ -194,10 +204,7 @@ angular.module('compass',
       }
 
       var permissions = next.permissions;
-      console.log(next);
-      console.log( permissions);
       if(permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)){
-        console.log('no permission');
         $location.path('/');
      }
     });

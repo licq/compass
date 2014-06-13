@@ -21,7 +21,8 @@ describe('mvUserNewCtrl', function () {
           name: 'test user',
           email: 'test@test.com',
           password: 'password',
-          title: 'ceo'
+          title: 'ceo',
+          role:'admin'
         };
       });
       it('should go to success page when create success', inject(function ($location, mvNotifier) {

@@ -30,7 +30,6 @@ describe('/api/companies', function () {
         .expect('content-type', /json/)
         .end(function (err, res) {
           company = res.body[0];
-          console.log(res.body);
           expect(res.body).to.have.length(1);
           done(err);
         });

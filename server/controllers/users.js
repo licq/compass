@@ -12,7 +12,8 @@ exports.list = function (req, res, next) {
   User.find({
     company: req.user.company,
     deleted: false
-  }).select(fields.join(' '))
+  }).populate('role', 'name')
+    .select(fields.join(' '))
     .exec(function (err, users) {
       if (err) return next(err);
       return res.json(users);
