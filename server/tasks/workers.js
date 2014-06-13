@@ -17,18 +17,22 @@ function handleSendSignupEmail(job, done) {
 }
 
 function handleFetchEmail(job, done) {
-  logger.info('handleFetchEmail ', job.data);
-  emailFetcher.fetch(job.data, function (err, count) {
-    Email.setActivity({
-      time: Date.now(),
-      count: count,
-      error: err,
-      address: job.data.address
-    }, function (err) {
-      if (err) {
-        logger.error('handle Fetch Email from ', job.data, err);
+  logger.info(job.data.title, ' start');
+  Email.findById(job.data.id, function (err, email) {
+    if (err) return done(err);
+    if (!email) return done('email ' + job.data.id + ' not found');
+
+    emailFetcher.fetch(email, function (err, count) {
+      email.lastRetrieveCount = count;
+      email.lastRetrieveTime = new Date();
+      email.lastError = err;
+      if (!err) {
+        email.totalRetrieveCount += count;
       }
-      done(err);
+      email.save(function (err) {
+        if (err) logger.error('save email failed ', email.address, ' because ', err);
+        done();
+      });
     });
   });
 }

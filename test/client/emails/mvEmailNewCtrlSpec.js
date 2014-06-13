@@ -30,7 +30,7 @@ describe('mvEmailNewCtrl', function () {
       };
     });
 
-    it('should redirect to /emails when success', inject(function ($location, mvNotifier) {
+    it('should redirect to /settings/emails when success', inject(function ($location, mvNotifier) {
       var notifySpy = sinon.spy(mvNotifier, 'notify');
       $httpBackend.expectPOST('/api/emails', emailData).respond(200);
       var spy = sinon.spy($location, 'path');
@@ -39,7 +39,7 @@ describe('mvEmailNewCtrl', function () {
       $scope.create();
       $httpBackend.flush();
 
-      expect(spy).to.have.been.calledWith('/emails');
+      expect(spy).to.have.been.calledWith('/settings/emails');
       expect(notifySpy).to.have.been.calledWith('添加简历邮箱成功');
     }));
 

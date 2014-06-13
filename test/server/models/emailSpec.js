@@ -85,28 +85,4 @@ describe('Email', function () {
       });
     });
   });
-
-  describe('#setActivity', function () {
-    it('should set activity to the same email account', function (done) {
-      Factory.create('email', function (email) {
-        Email.setActivity({
-          address: email.address,
-          count: 10,
-          time: Date.now()
-        }, function (err) {
-          expect(err).to.not.exist;
-          Email.setActivity({
-            address: email.address,
-            count: 10,
-            time: Date.now()
-          }, function (err, saved) {
-            expect(err).to.not.exist;
-            expect(saved.lastRetrieveCount).to.equal(10);
-            expect(saved.totalRetrieveCount).to.equal(20);
-            done();
-          });
-        });
-      });
-    });
-  });
 });

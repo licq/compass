@@ -18,8 +18,6 @@ require('./server/tasks/mailer').init(config);
 
 var workers = require('./server/tasks/workers');
 
-require('./server/tasks/jobs').start();
-
 workers.start();
 
 app.listen(config.port);

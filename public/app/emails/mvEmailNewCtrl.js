@@ -9,7 +9,7 @@ angular.module('compass')
     $scope.create = function () {
       $scope.saving = true;
       $scope.email.$save(function () {
-        $location.path('/emails');
+        $location.path('/settings/emails');
         mvNotifier.notify('添加简历邮箱成功');
       }, function (err) {
         $scope.saving = false;
@@ -19,7 +19,7 @@ angular.module('compass')
     };
 
     $scope.cancel = function () {
-      $location.path('/emails');
+      $location.path('/settings/emails');
     };
   });
 
