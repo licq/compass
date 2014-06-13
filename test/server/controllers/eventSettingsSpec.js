@@ -8,7 +8,7 @@ describe('eventSettings', function () {
     user;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'EventSetting', function () {
+    helper.clearCollections('Company', 'User','Role', 'EventSetting', function () {
       helper.login(function (agent, newUser) {
         request = agent;
         user = newUser;

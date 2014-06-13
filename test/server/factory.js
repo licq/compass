@@ -2,8 +2,9 @@
 
 var Factory = require('factory-lady'),
   mongoose = require('mongoose'),
-  User = mongoose.model('User'),
   Company = mongoose.model('Company'),
+  Role = mongoose.model('Role'),
+  User = mongoose.model('User'),
   Signup = mongoose.model('Signup'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
@@ -16,6 +17,15 @@ Factory.define('company', Company, {
   name: function (cb) {
     cb('company' + companyCounter++);
   }
+});
+var roleCounter = 1;
+
+Factory.define('role', Role, {
+  name: function (cb) {
+    cb('role' + roleCounter++);
+  },
+  permissions:['testpermission'],
+  company: Factory.assoc('company', 'id')
 });
 
 var userCounter = 1;
@@ -30,8 +40,10 @@ Factory.define('user', User, {
   },
   password: 'password',
   title: 'title',
-  company: Factory.assoc('company', 'id')
+  company: Factory.assoc('company', 'id'),
+  role: Factory.assoc('role', 'id')
 });
+
 
 var emailAddressCounter = 1;
 Factory.define('email', Email, {

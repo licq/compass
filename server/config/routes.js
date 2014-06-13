@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express'),
+  roles = require('../controllers/roles'),
   sessions = require('../controllers/sessions'),
   emails = require('../controllers/emails'),
   signups = require('../controllers/signups'),
@@ -60,11 +61,22 @@ module.exports = function (app) {
   apiRouter.route('/users')
     .post(users.create)
     .get(users.list);
+  
   apiRouter.route('/users/:id')
     .all(users.load)
     .get(users.get)
     .put(users.update)
     .delete(users.delete);
+
+  apiRouter.route('/roles')
+    .post(roles.create)
+    .get(roles.list);
+  
+  apiRouter.route('/roles/:id')
+    .all(roles.load)
+    .get(roles.get)
+    .put(roles.update)
+    .delete(roles.delete);
 
   apiRouter.route('/companies')
     .get(companies.list);

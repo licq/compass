@@ -6,7 +6,7 @@ describe('emails', function () {
   var request;
 
   beforeEach(function (done) {
-    helper.clearCollections('Email', 'User', 'Company', function () {
+    helper.clearCollections('Email', 'User', 'Role','Company', function () {
       helper.login(function (agent) {
         request = agent;
         Factory.create('email', function () {

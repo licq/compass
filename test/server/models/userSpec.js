@@ -8,7 +8,7 @@ var
 
 describe('User', function () {
   beforeEach(function (done) {
-    helper.clearCollections('Company', User, done);
+    helper.clearCollections('Company', User, 'Role',done);
   });
 
   describe('#validate', function () {
@@ -46,6 +46,7 @@ describe('User', function () {
         expect(err.errors).to.have.property('email');
         expect(err.errors).to.have.property('name');
         expect(err.errors).to.have.property('company');
+        expect(err.errors).to.have.property('role');
         done();
       });
     });

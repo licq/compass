@@ -14,8 +14,10 @@ exports.list = function (req, res, next) {
 };
 
 exports.get = function (req, res) {
-  mongoose.model('Interview').findOne({application: req.resume._id})
-    .populate('events.interviewers').populate('reviews.interviewer')
+  mongoose.model('Interview')
+    .findOne({application: req.resume._id})
+    .populate('events.interviewers')
+    .populate('reviews.interviewer')
     .exec(function (err, interview) {
       if (interview) {
         req.resume = req.resume.toObject();

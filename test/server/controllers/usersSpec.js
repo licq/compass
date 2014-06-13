@@ -9,7 +9,7 @@ describe('users', function () {
   var request, existUser;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', function () {
+    helper.clearCollections('User', 'Company', 'Role',function () {
       helper.login(function (agent, user) {
         existUser = user;
         request = agent;
@@ -20,13 +20,17 @@ describe('users', function () {
 
   describe('POST /api/users', function () {
     it('should return 200 with json result', function (done) {
-      request.post('/api/users')
-        .send({
-          name: 'for test create',
-          email: 'fortest@create.com',
-          password: 'password',
-          title: 'ceo'
-        }).expect(200, done);
+      Factory.build('role', {company: existUser.company}, function(createdRole){
+        request.post('/api/users')
+          .send({
+            name: 'for test create',
+            email: 'fortest@create.com',
+            password: 'password',
+            title: 'ceo',
+            role: createdRole._id
+          }).expect(200, done);
+
+      });
     });
   });
 
@@ -40,6 +44,7 @@ describe('users', function () {
           var u = res.body[0];
           expect(u).to.have.property('company');
           expect(u).to.have.property('title');
+          expect(u).to.have.property('role');
           expect(u).to.not.have.property('hashed_password');
           expect(u).to.not.have.property('salt');
           expect(u).to.not.have.property('provider');

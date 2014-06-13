@@ -10,7 +10,7 @@ describe('events', function () {
   var user, request;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'Resume', 'Interview', 'EventSetting', function () {
+    helper.clearCollections('Company', 'User', 'Role','Resume', 'Interview', 'EventSetting', function () {
       helper.login(function (agent, createdUser) {
         request = agent;
         user = createdUser;

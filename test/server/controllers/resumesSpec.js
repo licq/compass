@@ -8,7 +8,7 @@ describe('#resumes', function () {
   var request, resume, user;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Resume', 'Mail', function () {
+    helper.clearCollections('User', 'Company','Role', 'Resume', 'Mail', function () {
       Resume.recreateIndex(function () {
         helper.login(function (agent, newUser) {
           user = newUser;

@@ -10,7 +10,7 @@ describe('evaluationCriterion', function () {
     evaluationCriterion;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'EvaluationCriterion', function () {
+    helper.clearCollections('User', 'Company', 'Role','EvaluationCriterion', function () {
       helper.login(function (agent, createdUser) {
         user = createdUser;
         request = agent;

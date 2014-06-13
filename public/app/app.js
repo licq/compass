@@ -3,7 +3,7 @@
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar',
     'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular', 'ui.daterangepicker', 'nvd3ChartDirectives'])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
+  .config(function ($routeProvider, $locationProvider, $httpProvider ) {
     $routeProvider
       .when('/welcome', {
         templateUrl: '/app/common/welcome.html'
@@ -172,7 +172,7 @@ angular.module('compass',
     $httpProvider.interceptors.push(['$q', '$location', function ($q, $location) {
       return {
         'responseError': function (response) {
-          if (response.status === 401) {
+          if (response.status === 401 || response.status === 403) {
             $location.path('/login');
             return $q.reject(response);
           } else {
@@ -182,11 +182,19 @@ angular.module('compass',
       };
     }]);
   })
-  .run(function ($rootScope, $location, mvIdentity) {
+  .run(function ($rootScope, $location, mvIdentity, mvPermission) {
     $rootScope.$on('$routeChangeStart', function (event, next) {
       if (next.authenticate && !mvIdentity.isAuthenticated()) {
         $location.path('/login');
       }
+
+      var permissions = next.permissions;
+      console.log(next);
+      console.log( permissions);
+      if(permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)){
+        console.log('no permission');
+        $location.path('/');
+     }
     });
   })
   .factory('states', function () {

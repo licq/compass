@@ -10,7 +10,7 @@ describe('/api/mails', function () {
   var request, mail;
 
   before(function (done) {
-    helper.clearCollections('User', 'Company', function () {
+    helper.clearCollections('User', 'Role','Company', function () {
       helper.login(function (agent, user) {
         request = agent;
         Factory.create('mail', {company: user.company}, function (newMail) {

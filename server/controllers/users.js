@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
-  var fields = req.query.fields || ['name', 'email', 'company', 'title', 'deleted', 'createdAt'];
+  var fields = req.query.fields || ['name', 'email', 'company', 'title', 'deleted', 'createdAt', 'role'];
   if (!Array.isArray(fields)) {
     fields = [fields];
   }
@@ -23,7 +23,7 @@ exports.create = function (req, res) {
   var user = new User(req.body);
   user.company = req.user.company;
   user.createdBy = req.user._id;
-
+  user.role = req.user.role;
   user.save(function (err) {
     if (err) {
       if (err.code === 11000 || err.code === 11001) {
@@ -58,7 +58,7 @@ exports.update = function (req, res, next) {
 
 exports.load = function (req, res, next) {
   User.findOne({_id: req.params.id, company: req.user.company})
-    .select('name email title')
+    .select('name email title role')
     .exec(function (err, loadedUser) {
       if (err) return next(err);
       if (!loadedUser) return res.send(404, {message: 'not found'});
