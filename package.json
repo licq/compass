@@ -28,7 +28,7 @@
     "express": "~4.4.3",
     "express-session": "^1.0.4",
     "express-winston": "^0.2.6",
-    "kue": "~0.8.0",
+    "kue": "0.7.9",
     "lodash": "~2.4.1",
     "mailparser": "^0.4.4",
     "method-override": "^2.0.2",
