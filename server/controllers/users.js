@@ -59,6 +59,7 @@ exports.update = function (req, res, next) {
 
 exports.load = function (req, res, next) {
   User.findOne({_id: req.params.id, company: req.user.company})
+    .populate('role', 'name')
     .select('name email title role')
     .exec(function (err, loadedUser) {
       if (err) return next(err);

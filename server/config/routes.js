@@ -171,13 +171,19 @@ module.exports = function (app) {
   app.use('/publicApi', publicApiRouter);
 
   app.get('/', function (req, res) {
-      Role.findOne({_id: req.user.role}).exec(function (err, role) {
-        role = role || {};
-        req.user.permissions = role.permissions;
-        res.render('index', {
-          bootstrappedUser: req.user
+      if (req.user) {
+        Role.findOne({_id: req.user.role}).exec(function (err, role) {
+          role = role || {};
+          req.user.permissions = role.permissions;
+          res.render('index', {
+            bootstrappedUser: req.user
+          });
         });
-      });
+      } else{
+        res.render('index', {
+          bootstrappedUser: null
+        });
+      }
     }
   );
 

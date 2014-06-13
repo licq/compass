@@ -21,7 +21,6 @@ angular.module('compass')
 
       logout: function (callback) {
         var cb = callback || angular.noop;
-
         return mvSession.delete(function () {
           mvIdentity.currentUser = undefined;
           $rootScope.$broadcast('loggedOut');

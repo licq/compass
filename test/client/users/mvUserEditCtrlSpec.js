@@ -11,7 +11,8 @@ describe('mvUserEditCtrl', function () {
     password: 'aa',
     title: 'ceo',
     port: 110,
-    _id: 7788
+    _id: 7788,
+    role:'8833'
   };
 
   beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
@@ -23,15 +24,23 @@ describe('mvUserEditCtrl', function () {
     });
   }));
 
-  it('should get user object', function () {
+  it('should get user  and roles', function () {
+    $httpBackend.expectGET('/api/roles').respond([
+      {'_id': '4466', 'name': 'admin', 'permissions': ['*']},
+      {'_id': '7799', 'name': 'IAmARoleForTestingPurpose', 'permissions': ['viewUser', 'viewResume']}
+    ]);
     $httpBackend.expectGET('/api/users/7788').respond(userData);
     $httpBackend.flush();
-
+    expect($scope.roles).to.have.length(2);
     expect($scope.user).to.exist;
   });
 
   describe('update user', function () {
     beforeEach(function () {
+      $httpBackend.expectGET('/api/roles').respond([
+        {'_id': '4466', 'name': 'admin', 'permissions': ['*']},
+        {'_id': '7799', 'name': 'IAmARoleForTestingPurpose', 'permissions': ['viewUser', 'viewResume']}
+      ]);
       $httpBackend.expectGET('/api/users/7788').respond(userData);
       $httpBackend.flush();
     });

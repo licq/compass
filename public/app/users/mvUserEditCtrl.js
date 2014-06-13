@@ -1,9 +1,14 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvUserEditCtrl', function ($scope, mvUser, $routeParams, $location, mvNotifier) {
-    mvUser.get({_id: $routeParams.id}, function (user) {
-      $scope.user = user;
+  .controller('mvUserEditCtrl', function ($scope, mvUser, mvRole, $routeParams, $location, mvNotifier) {
+
+    mvRole.query(function (roles) {
+      $scope.roles = roles;
+      mvUser.get({_id: $routeParams.id}, function (user) {
+        $scope.user = user;
+        $scope.selectedRoleId = $scope.user.role._id;
+      });
     });
 
     $scope.update = function () {
@@ -19,4 +24,5 @@ angular.module('compass')
     $scope.cancel = function () {
       $location.path('/settings/users');
     };
+
   });
