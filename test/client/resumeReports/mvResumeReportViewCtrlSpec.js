@@ -94,8 +94,6 @@ describe('mvResumeReportViewCtrl', function () {
         {name: '20-24', count: 13}
       ]);
     });
-
-
   });
 
   describe('change reportType', function () {

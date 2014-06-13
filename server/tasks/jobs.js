@@ -18,52 +18,33 @@ exports.sendSignupEmail = function sendSignupEmail(to, code) {
   }).priority('high').attempts(3).save();
 };
 
-exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
-  var data = {
-    server: email.server,
-    address: email.address,
-    account: email.account,
-    password: email.password,
-    port: email.port,
-    title: 'fetch email from ' + email.address,
-    ssl: email.ssl,
-    id: email.id
-  };
-
-  var fetchEmailAfter = function (minutes, callback) {
-    var job = jobs.create('fetch email', data);
-    if (minutes) {
-      job.delay(1000 * 60 * minutes);
+jobs.on('job complete', function (id) {
+  Job.get(id, function (err, job) {
+    if (err) return;
+    logger.info(job.data.title, 'complete');
+    if (job.type === 'fetch email') {
+      jobs.create('fetch email', job.data).delay(1000 * 60 * 30).save(function (err) {
+        if (err) logger.error('job create failed because of ', err);
+      });
     }
+  });
+});
 
-    job.on('complete', function () {
-      logger.info('Fetch ' + email.address + ' complete');
-      job.remove(function () {
-        fetchEmailAfter(30);
-      });
-    });
-    job.on('failed', function () {
-      logger.info('Fetch ' + email.address + ' failed');
-      job.remove(function () {
-        fetchEmailAfter(30);
-      });
-    });
+jobs.on('job failed', function (id) {
+  Job.get(id, function (err, job) {
+    if(err) return;
+    logger.error(job.data.title, 'failed ');
+  });
+});
 
-    job.save(function (err) {
-      if (err) logger.error('job save failed because of', err);
-      if (callback) callback(err);
-    });
-  };
-
-  fetchEmailAfter(0, done);
-};
-
-exports.removeFetchEmailJob = function removeFetchEmailJob(email, cb) {
-  Job.remove(email.id, cb);
-};
-
-exports.findFetchEmailJob = function findFetchEmailJob(email, cb) {
-  Job.get(email.id, cb);
+exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
+  jobs.create('fetch email', {
+    id: email.id,
+    title: 'fetch email from ' + email.address
+  }).save(function (err) {
+    if (err) logger.error('job save failed because of', err);
+    done && done(err);
+  });
 };
 
 exports.recreateFetchEmailJobs = function (done) {
@@ -118,8 +99,4 @@ exports.addParseResumeJob = function (mail, cb) {
   };
   jobs.create('parse resume', data).attempts(3).save();
   cb && cb();
-};
-
-exports.start = function () {
-  exports.recreateFetchEmailJobs();
 };

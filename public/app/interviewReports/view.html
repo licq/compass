@@ -1,0 +1,84 @@
+<div class="page page-chart">
+  <div class="row">
+    <div class="col-md-12">
+      <section class="panel panel-default">
+        <div class="panel-heading">
+          <strong>面试</strong>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-10">
+            <nvd3-multi-bar-chart data="interviewCounts" id="counts"
+                                  yAxisTickFormat="chartFunction.yAxisTickFormatFunction()"
+                                  color="chartFunction.barColorFunction()"
+                                  height="300" showXAxis="true" showYAxis="true" interactive="true" tooltips="true"
+                                  tooltipcontent="chartFunction.toolTipContentFunction()"
+                                  margin="{left:20,top:10,bottom:20,right:0}">
+              <svg></svg>
+            </nvd3-multi-bar-chart>
+          </div>
+          <div class="col-md-2">
+            <form class="form">
+              <div class="form-group">
+                <div class="btn-group btn-group-justified">
+                  <div class="btn-group">
+                    <label class="btn btn-default" ng-model="queryOptions.reportType" btn-radio="'day'"> 日 </label>
+                  </div>
+                  <div class="btn-group">
+                    <label class="btn btn-default" ng-model="queryOptions.reportType" btn-radio="'week'"> 周 </label>
+                  </div>
+                  <div class="btn-group">
+                    <label class="btn btn-default" ng-model="queryOptions.reportType" btn-radio="'month'">月 </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">应聘职位</label>
+                <select ui-select2 class="form-control" ng-model="queryOptions.applyPosition" ng-change="query()">
+                  <option value="">全部</option>
+                  <option ng-repeat="position in applyPositions" value="{{position}}">{{position}}</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <div class="panel-heading">
+          <strong>状态</strong>
+        </div>
+        <div class="panel-body">
+          <nvd3-pie-chart data="summaries.status" id="channelPie" showLabels="true" showLegend="true"
+                          height="450" x="chartFunction.pieX()" y="chartFunction.pieY()" interactive="true"
+                          tooltips="true"
+                          noData="没有可以显示的数据" labelType="percent"
+                          tooltipcontent="chartFunction.pieToolTipContentFunction()"
+                          margin="{left:0,top:0,bottom:0,right:0}" color="chartFunction.colorFunction()">
+            <svg></svg>
+          </nvd3-pie-chart>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-6">
+      <section class="panel panel-default">
+        <div class="panel-heading">
+          <strong>应聘职位</strong>
+        </div>
+        <div class="panel-body">
+          <nvd3-pie-chart data="summaries.applyPosition" id="applyPositionPie" showLabels="true" showLegend="true"
+                          height="450" interactive="true" tooltips="true" x="chartFunction.pieX()"
+                          y="chartFunction.pieY()"
+                          noData="没有可以显示的数据" labelType="percent"
+                          tooltipcontent="chartFunction.pieToolTipContentFunction()"
+                          margin="{left:0,top:0,bottom:0,right:0}" color="chartFunction.colorFunction()">
+            <svg></svg>
+          </nvd3-pie-chart>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -63,23 +63,6 @@ emailSchema.methods.verify = function (callback) {
   });
 };
 
-emailSchema.statics.setActivity = function (activity, callback) {
-  this.findOne({address: activity.address }).exec(function (err, email) {
-    if (err) return callback(err);
-    if (!email) return callback(new Error('could not find email ' + activity.address));
-    email.lastRetrieveCount = activity.count;
-    email.lastRetrieveTime = activity.time;
-    email.lastError = activity.error;
-    if (!activity.error) {
-      email.totalRetrieveCount += activity.count;
-    }
-    email.save(function (err, saved) {
-      if (err) return callback(err);
-      callback(null, saved);
-    });
-  });
-};
-
 emailSchema.plugin(timestamps);
 
 

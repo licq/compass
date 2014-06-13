@@ -43,7 +43,6 @@ exports.create = function (req, res) {
 exports.delete = function (req, res, next) {
   req.email.remove(function (err) {
     if (err) return next(err);
-    jobs.removeFetchEmailJob(req.email);
     res.end();
   });
 };
@@ -58,9 +57,6 @@ exports.update = function (req, res) {
     if (err) return res.json(400, err);
     req.email.save(function (err) {
       if (err) return res.json(400, err);
-      jobs.removeFetchEmailJob(req.email, function () {
-        jobs.addFetchEmailJob(req.email);
-      });
       res.end();
     });
   });
