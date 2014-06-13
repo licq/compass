@@ -154,6 +154,11 @@ angular.module('compass',
         controller: 'mvResumeReportViewCtrl',
         authenticate: true
       })
+      .when('/reports/interviews', {
+        templateUrl: '/app/interviewReports/view.html',
+        controller: 'mvInterviewReportViewCtrl',
+        authenticate: true
+      })
       .otherwise({
         resolve: {
           load: function (mvIdentity, $location, $q) {
@@ -297,4 +302,110 @@ angular.module('compass',
         //taOptions.toolbar[4].push('insertName','applyPosition', 'startTime', 'endTime');
         return taOptions;
       }]);
+  })
+  .run(function ($rootScope, mvMoment, $filter) {
+    $rootScope.chartFunction = {
+      convert: function (type, data) {
+        var map = {
+          day: {
+            series: _.range(mvMoment().add('months', -1).add('days', 1).startOf('day').valueOf(),
+                mvMoment().startOf('day').valueOf() + 1,
+                1000 * 60 * 60 * 24),
+            lookup: function (d, t) {
+              var m = mvMoment(t);
+              return _.find(d, {year: m.year(), month: m.month() + 1, day: m.date()});
+            },
+            format: function (time) {
+              var m = mvMoment(time);
+              if (m.date() === 1) {
+                return m.format('M月');
+              }
+              return mvMoment(time).format('D');
+            }
+          },
+          week: {
+            series: _.range(mvMoment().add('weeks', -11).startOf('week').valueOf(),
+                mvMoment().startOf('week').valueOf() + 1,
+                1000 * 60 * 60 * 24 * 7),
+            lookup: function (d, t) {
+              var m = mvMoment(t);
+              return _.find(d, {year: m.year(), week: m.week()});
+            },
+            format: function (time) {
+              return mvMoment(time).format('第w周');
+            }
+          },
+          month: {
+            series: _.map(_.range(-11, 1), function (i) {
+              return mvMoment().add('months', i).startOf('month').toDate();
+            }),
+            lookup: function (d, t) {
+              var m = mvMoment(t);
+              return _.find(d, {year: m.year(), month: m.month() + 1});
+            },
+            format: function (time) {
+              var m = mvMoment(time);
+              if (m.month() === 0) {
+                return m.format('YYYY年');
+              }
+              return m.format('M月');
+            }
+          }
+        };
+        return _.map(map[type].series, function (time) {
+          var xLabel = map[type].format(time),
+            d = map[type].lookup(data, time);
+          if (d) {
+            return [xLabel, d.count];
+          } else {
+            return [xLabel, 0];
+          }
+        });
+      },
+      yAxisTickFormatFunction: function () {
+        return function (n) {
+          if (n === Math.floor(n)) {
+            return $filter('number')(n, 0);
+          } else {
+            return '';
+          }
+        };
+      },
+      toolTipContentFunction: function () {
+        return function (key, x, y) {
+          return '<strong class="text-success">' + y + '</strong>';
+        };
+      },
+      pieToolTipContentFunction: function () {
+        return function (key, x) {
+          return key + ' <strong>' + $filter('number')(x, 0) + '</strong>';
+        };
+      },
+      pieX: function () {
+        return function (d) {
+          return d.name;
+        };
+      },
+      pieY: function () {
+        return function (d) {
+          return d.count;
+        };
+      },
+      pieDescription: function () {
+        return function (d) {
+          return d.count;
+        };
+      },
+      colorFunction: function () {
+        var colorArray = ['#FF6600', '#FCD202', '#B0DE09', '#0D8ECF', '#2A0CD0', '#CD0D74', '#CC0000', '#00CC00', '#0000CC', '#DDDDDD', '#999999', '#333333', '#990000'];
+        return function (d, i) {
+          return colorArray[i];
+        };
+      },
+      barColorFunction: function () {
+        return function () {
+          return '#0D8ECF';
+        };
+      }
+    };
   });

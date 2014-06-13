@@ -98,7 +98,6 @@ describe('resumeReports', function () {
         .expect(200)
         .end(function (err, res) {
           expect(err).to.not.exist;
-          console.log(res.body);
           expect(res.body).to.deep.equal({
             channel: [
               {name: '智联招聘', count: 1}

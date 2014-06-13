@@ -18,6 +18,7 @@ var express = require('express'),
   counts = require('../controllers/counts'),
   systemOperations = require('../controllers/systemOperations'),
   resumeReports = require('../controllers/resumeReports'),
+  interviewReports = require('../controllers/interviewReports'),
   applierRejectReasons = require('../controllers/applierRejectReasons');
 
 module.exports = function (app) {
@@ -141,6 +142,10 @@ module.exports = function (app) {
     .get(resumeReports.channels);
   apiRouter.route('/resumeReports/summaries')
     .get(resumeReports.summaries);
+  apiRouter.route('/interviewReports/counts')
+    .get(interviewReports.counts);
+  apiRouter.route('/interviewReports/summaries')
+    .get(interviewReports.summaries);
 
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
