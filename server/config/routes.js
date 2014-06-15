@@ -21,7 +21,8 @@ var express = require('express'),
   systemOperations = require('../controllers/systemOperations'),
   resumeReports = require('../controllers/resumeReports'),
   interviewReports = require('../controllers/interviewReports'),
-  applierRejectReasons = require('../controllers/applierRejectReasons');
+  applierRejectReasons = require('../controllers/applierRejectReasons'),
+  _ = require('lodash');
 
 module.exports = function (app) {
   var apiRouter = express.Router();
@@ -174,12 +175,14 @@ module.exports = function (app) {
       if (req.user) {
         Role.findOne({_id: req.user.role}).exec(function (err, role) {
           role = role || {};
+          //todo use mongoose toObject func
+          req.user = JSON.parse(JSON.stringify(req.user));
           req.user.permissions = role.permissions;
           res.render('index', {
             bootstrappedUser: req.user
           });
         });
-      } else{
+      } else {
         res.render('index', {
           bootstrappedUser: null
         });

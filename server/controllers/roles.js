@@ -31,6 +31,7 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res, next) {
+  //todo 判断是否可以删除角色
   req.role.remove(function (err) {
     if (err) return next(err);
     res.end();

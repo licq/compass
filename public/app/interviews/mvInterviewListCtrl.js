@@ -1,5 +1,3 @@
-'use strict';
-
 function totalFieldScores(interview) {
   return _.reduce(interview.reviews, function (scores, review) {
     _.forEach(review.items, function (item) {

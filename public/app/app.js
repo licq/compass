@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('compass',
-  ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar',
+  ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ui.tree',
     'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular', 'ui.daterangepicker', 'nvd3ChartDirectives'])
-  .config(function ($routeProvider, $locationProvider, $httpProvider ) {
+  .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
       .when('/welcome', {
         templateUrl: '/app/common/welcome.html'
@@ -204,9 +204,9 @@ angular.module('compass',
       }
 
       var permissions = next.permissions;
-      if(permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)){
+      if (permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)) {
         $location.path('/');
-     }
+      }
     });
   })
   .factory('states', function () {
@@ -229,6 +229,44 @@ angular.module('compass',
     pursued: '通过',
     undetermined: '待定'
   })
+  .value('menuPermissions',
+  [
+    {name: 'today', cnName: '今日', enabled: false},
+    {name: 'events', cnName: '日历', enabled: false},
+    {name: 'applications', cnName: '应聘', enabled: false,
+      submenus: [
+        {name: 'appNew', cnName: '新应聘', enabled: false},
+        {name: 'appUndetermined', cnName: '待定', enabled: false},
+        {name: 'appPursued', cnName: '通过', enabled: false}
+      ]},
+    {name: 'interviews', cnName: '面试', enabled: false,
+      submenus: [
+        {name: 'intReview', cnName: '评价', enabled: false},
+        {name: 'intList', cnName: '面试中', enabled: false},
+        {name: 'intOffer', cnName: '通过', enabled: false},
+        {name: 'intOnboard', cnName: '入职', enabled: false}
+      ]},
+    {name: 'resumes', cnName: '人才库', enabled: false},
+    { name: 'reports', cnName: '报表', enabled: false,
+      submenus: [
+        {name: 'repResumes', cnName: '应聘报表', enabled: false},
+        {name: 'repInterviews', cnName: '面试报表', enabled: false}
+      ]},
+    { name: 'settings', cnName: '设置', enabled: false,
+      submenus: [
+        {name: 'mails', cnName: '简历邮箱', enabled: false},
+        {name: 'users', cnName: '用户', enabled: false},
+        {name: 'roles', cnName: '角色', enabled: false},
+        {name: 'evaluationCriterions', cnName: '面试评价设置', enabled: false},
+        {name: 'eventSetting', cnName: '面试设置', enabled: false}
+      ]},
+    { name: 'systemSettings', cnName: '系统设置', enabled: false,
+      submenus: [
+        {name: 'companies', cnName: '公司', enabled: false},
+        {name: 'systemOperations', cnName: '系统操作', enabled: false}
+      ]}
+  ]
+)
   .value('mvMoment', moment)
   .constant('uiCalendarConfig', {
     monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],

@@ -24,7 +24,6 @@ exports.create = function (req, res) {
   var user = new User(req.body);
   user.company = req.user.company;
   user.createdBy = req.user._id;
-  user.role = req.user.role;
   user.save(function (err) {
     if (err) {
       if (err.code === 11000 || err.code === 11001) {

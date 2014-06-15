@@ -7,7 +7,6 @@ angular.module('compass')
       $scope.roles = roles;
       mvUser.get({_id: $routeParams.id}, function (user) {
         $scope.user = user;
-        $scope.selectedRoleId = $scope.user.role._id;
       });
     });
 
