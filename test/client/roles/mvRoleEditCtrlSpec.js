@@ -27,7 +27,8 @@ describe('mvRoleEditCtrl', function () {
             {name: 'appUndetermined', cnName: '待定', enabled: false},
             {name: 'appPursued', cnName: '通过', enabled: false}
           ]}
-      ]
+      ],
+      mvIdentity: {currentUser: {role:'3388'}}
     });
 
     $httpBackend.flush();

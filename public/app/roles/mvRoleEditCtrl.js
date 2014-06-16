@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvRoleEditCtrl', function ($scope, mvRole, mvIdentity, $routeParams, menuPermissions, $location, mvNotifier) {
+  .controller('mvRoleEditCtrl', function ($scope, mvRole, mvIdentity, mvPermission, $routeParams, menuPermissions, $location, mvNotifier) {
 
     function hasPermission(permission) {
       return $scope.role.permissions.indexOf(permission) > -1;
@@ -43,14 +43,11 @@ angular.module('compass')
       });
     };
 
-    $scope.onSubmenuCheckChanged = function (menu, submenu) {
-      var value = submenu.enabled;
-      if (_.every(menu.submenus, 'enabled', function (sub) {
-        return sub.enabled === value;
-      })) {
-        menu.enabled = value;
+    $scope.onSubmenuCheckChanged = function (menu) {
+      if (_.some(menu.submenus, 'enabled')) {
+        menu.enabled = true;
       }
-      else {
+      else if (_.every(menu.submenus, {'enabled': false})) {
         menu.enabled = false;
       }
     };
@@ -60,11 +57,14 @@ angular.module('compass')
         if (item) return item.enabled;
         return false;
       }), 'name');
+
       $scope.role.$update(function () {
-//        if (mvIdentity.currentUser.role)
-//          mvPermission.setPermissioins();
-        $location.path('/settings/roles');
+        if (mvIdentity.currentUser.role === $scope.role._id) {
+          mvIdentity.currentUser.permissions = $scope.role.permissions;
+          mvPermission.setPermissions();
+        }
         mvNotifier.notify('修改角色成功');
+        $location.path('/settings/roles');
       }, function (err) {
         $scope.err = err.data;
         mvNotifier.error('修改角色失败');

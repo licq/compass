@@ -41,7 +41,7 @@
                       <li ng-repeat="submenu in item.submenus" ui-tree-node>
                         <div ui-tree-handle data-nodrag>
                           <label class="checkbox">
-                            <input type="checkbox"  ng-change="onSubmenuCheckChanged(item,submenu)" ng-model="submenu.enabled">
+                            <input type="checkbox"  ng-change="onSubmenuCheckChanged(item)" ng-model="submenu.enabled">
                             {{submenu.cnName}}
                           </label>
                         </div>

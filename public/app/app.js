@@ -25,148 +25,177 @@ angular.module('compass',
       .when('/today', {
         templateUrl: '/app/today/today.html',
         controller: 'mvTodayCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions: 'today'
       })
       .
       when('/settings/emails', {
         templateUrl: '/app/emails/list.html',
         controller: 'mvEmailListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setMails'
       })
       .when('/settings/emails/new', {
         templateUrl: '/app/emails/new.html',
         controller: 'mvEmailNewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setMails'
       })
       .when('/settings/emails/edit/:id', {
         templateUrl: '/app/emails/edit.html',
         controller: 'mvEmailEditCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setMails'
       })
       .when('/settings/mails', {
         templateUrl: '/app/mails/list.html',
         controller: 'mvMailListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setMails'
       })
       .when('/settings/mails/:id', {
         templateUrl: '/app/mails/view.html',
         controller: 'mvMailViewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setMails'
       })
       .when('/settings/users', {
         templateUrl: '/app/users/list.html',
         controller: 'mvUserListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setUsers'
       })
       .when('/settings/users/new', {
         templateUrl: '/app/users/new.html',
         controller: 'mvUserNewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setUsers'
       })
       .when('/settings/users/edit/:id', {
         templateUrl: '/app/users/edit.html',
         controller: 'mvUserEditCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setUsers'
       })
       .when('/settings/roles', {
         templateUrl: '/app/roles/list.html',
         controller: 'mvRoleListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setRoles'
       })
       .when('/settings/roles/new', {
         templateUrl: '/app/roles/new.html',
         controller: 'mvRoleNewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setRoles'
       })
       .when('/settings/roles/edit/:id', {
         templateUrl: '/app/roles/edit.html',
         controller: 'mvRoleEditCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setRoles'
       })
       .when('/resumes', {
         templateUrl: '/app/resumes/list.html',
         controller: 'mvResumeListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'resumes'
       })
       .when('/resumes/:id', {
         templateUrl: '/app/resumes/view.html',
         controller: 'mvResumeViewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'resumes'
       })
       .when('/systemSettings/companies', {
         templateUrl: '/app/companies/list.html',
         controller: 'mvCompanyListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'sysSetCompanies'
       })
       .when('/events', {
         templateUrl: '/app/events/list.html',
         controller: 'mvEventListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'events'
       })
       .when('/interviews/list', {
         templateUrl: '/app/interviews/list.html',
         controller: 'mvInterviewListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'intList'
       })
       .when('/interviews/reviews', {
         templateUrl: '/app/reviews/list.html',
         controller: 'mvReviewListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'intReviews'
       })
       .when('/interviews/offers', {
         templateUrl: '/app/offers/list.html',
         controller: 'mvOfferListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'intOffers'
       })
       .when('/interviews/onboards', {
         templateUrl: '/app/onboard/list.html',
         controller: 'mvOnboardListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'intOnboards'
       })
       .when('/interviews/reviews/:id', {
         templateUrl: '/app/reviews/new.html',
         controller: 'mvReviewNewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'intReview'
       })
       .when('/interviews/:id', {
         templateUrl: '/app/interviews/view.html',
         controller: 'mvInterviewViewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'interviews'
       })
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
         controller: 'mvEventSettingCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setEventSetting'
       })
       .when('/settings/evaluationCriterions', {
         templateUrl: '/app/evaluationCriterions/edit.html',
         controller: 'mvEvaluationCriterionEditCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'setEvaluationCriterions'
       })
       .when('/applications/:status', {
         templateUrl: '/app/applications/list.html',
         controller: 'mvApplicationListCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'applications'
       })
       .when('/applications/:status/:index', {
         templateUrl: '/app/applications/view.html',
         controller: 'mvApplicationViewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'applications'
       })
       .when('/systemSettings/systemOperations', {
         templateUrl: '/app/systemOperations/view.html',
         controller: 'mvSystemOperationsCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'sysSetOperations'
       })
       .when('/reports/resumes', {
         templateUrl: '/app/resumeReports/view.html',
         controller: 'mvResumeReportViewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'repResumes'
       })
       .when('/reports/interviews', {
         templateUrl: '/app/interviewReports/view.html',
         controller: 'mvInterviewReportViewCtrl',
-        authenticate: true
+        authenticate: true,
+        permissions:'repInterviews'
       })
       .otherwise({
         resolve: {
@@ -240,10 +269,10 @@ angular.module('compass',
       ]},
     {name: 'interviews', cnName: '面试', enabled: false,
       submenus: [
-        {name: 'intReview', cnName: '评价', enabled: false},
+        {name: 'intReviews', cnName: '评价', enabled: false},
         {name: 'intList', cnName: '面试中', enabled: false},
-        {name: 'intOffer', cnName: '通过', enabled: false},
-        {name: 'intOnboard', cnName: '入职', enabled: false}
+        {name: 'intOffers', cnName: '通过', enabled: false},
+        {name: 'intOnboards', cnName: '入职', enabled: false}
       ]},
     {name: 'resumes', cnName: '人才库', enabled: false},
     { name: 'reports', cnName: '报表', enabled: false,
@@ -253,16 +282,16 @@ angular.module('compass',
       ]},
     { name: 'settings', cnName: '设置', enabled: false,
       submenus: [
-        {name: 'mails', cnName: '简历邮箱', enabled: false},
-        {name: 'users', cnName: '用户', enabled: false},
-        {name: 'roles', cnName: '角色', enabled: false},
-        {name: 'evaluationCriterions', cnName: '面试评价设置', enabled: false},
-        {name: 'eventSetting', cnName: '面试设置', enabled: false}
+        {name: 'setMails', cnName: '简历邮箱', enabled: false},
+        {name: 'setUsers', cnName: '用户', enabled: false},
+        {name: 'setRoles', cnName: '角色', enabled: false},
+        {name: 'setEvaluationCriterions', cnName: '面试评价设置', enabled: false},
+        {name: 'setEventSetting', cnName: '面试设置', enabled: false}
       ]},
     { name: 'systemSettings', cnName: '系统设置', enabled: false,
       submenus: [
-        {name: 'companies', cnName: '公司', enabled: false},
-        {name: 'systemOperations', cnName: '系统操作', enabled: false}
+        {name: 'sysSetCompanies', cnName: '公司', enabled: false},
+        {name: 'sysSetOperations', cnName: '系统操作', enabled: false}
       ]}
   ]
 )
