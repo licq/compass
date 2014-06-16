@@ -8,13 +8,15 @@ describe('/api/companies', function () {
   var request, company;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', function () {
+    helper.clearCollections('Company', 'User', 'Role', function () {
       Factory.create('company', function (createdCompany) {
-        Factory.create('user', {company: createdCompany}, function (user) {
-          helper.login(user, function (agent) {
-            company = createdCompany;
-            request = agent;
-            done();
+        Factory.create('role', {company: createdCompany}, function (createdRole) {
+          Factory.create('user', {company: createdCompany, role: createdRole}, function (user) {
+            helper.login(user, function (agent) {
+              company = createdCompany;
+              request = agent;
+              done();
+            });
           });
         });
       });

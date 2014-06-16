@@ -7,7 +7,7 @@ describe('reviews', function () {
   var user, resume, request, interview;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'Interview', 'Resume', function () {
+    helper.clearCollections('Company', 'User', 'Role','Interview', 'Resume', function () {
       helper.login(function (agent, createdUser) {
         Factory.create('user', function (anotherUser) {
           Factory.create('resume', function (createdResume) {

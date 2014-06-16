@@ -8,7 +8,7 @@ var app = require('../../../server'),
 
 describe('singups', function () {
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Signup', done);
+    helper.clearCollections('User', 'Company', 'Role','Signup', done);
   });
 
   describe('POST /api/signups', function () {

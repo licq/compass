@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
   Token = mongoose.model('Token'),
-  passport = require('passport');
+  passport = require('passport'),
+  Role = mongoose.model('Role');
 
 exports.authenticate = function (req, res, next) {
   passport.authenticate('local',
@@ -17,7 +18,13 @@ exports.authenticate = function (req, res, next) {
           Token.create({user: req.user._id}, function (err, token) {
             if (!err) {
               res.cookie('remember_me', token.id, { path: '/', httpOnly: true, maxAge: 604800000 });
+              Role.findOne({_id: req.user.role}).exec(function (err, role) {
+                  role = role || {};
+                  req.user.permissions = role.permissions;
+                }
+              );
             }
+
             return res.json(req.user);
           });
         } else {

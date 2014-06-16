@@ -11,7 +11,7 @@ describe('applications', function () {
     resume;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Resume', function () {
+    helper.clearCollections('User', 'Company', 'Resume', 'Role',function () {
       helper.login(function (agent, user) {
         request = agent;
         Factory.build('resume', {company: user.company}, function (newResume) {

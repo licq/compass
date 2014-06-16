@@ -3,6 +3,7 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   Company = mongoose.model('Company'),
+  Role = mongoose.model('Role'),
   User = mongoose.model('User'),
   validator = require('validator'),
   uuid = require('node-uuid'),
@@ -57,15 +58,20 @@ signupSchema.methods.activate = function (done) {
   var self = this;
   Company.create({name: self.companyName}, function (err, company) {
     if (err) return done(err);
-    User.create({
-      name: self.adminName,
-      email: self.adminEmail,
-      password: self.adminPassword,
-      company: company.id
-    }, function (err, user) {
-      if (err) return done(err);
-      done(null, company, user);
-    });
+    Role.create({name: 'admin', company: company._id, permissions: ['*']},
+      function (err, role) {
+        if (err) return done(err);
+        User.create({
+          name: self.adminName,
+          email: self.adminEmail,
+          password: self.adminPassword,
+          company: company._id,
+          role: role._id
+        }, function (err, user) {
+          if (err) return done(err);
+          done(null, company, user);
+        });
+      });
   });
 };
 

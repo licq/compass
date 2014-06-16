@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
+  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvPermission,mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
 
@@ -56,6 +56,7 @@ angular.module('compass')
     }
 
     if (mvIdentity.isAuthenticated()) {
+      mvPermission.setPermissions();
       $scope.onboardCount();
       refreshAll();
       $scope.interval = $interval(function () {
@@ -64,6 +65,7 @@ angular.module('compass')
     }
 
     $scope.$on('loggedIn', function () {
+      mvPermission.setPermissions();
       $scope.onboardCount();
       refreshAll();
       $scope.interval = $interval(function () {
@@ -77,7 +79,10 @@ angular.module('compass')
       }
     }
 
-    $scope.$on('loggedOut', cancelInterval);
+    $scope.$on('loggedOut', function(){
+      cancelInterval();
+      mvPermission.setPermissions();
+    });
 
     $scope.$on('$destroy', cancelInterval);
 

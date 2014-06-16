@@ -7,7 +7,7 @@ describe('resumeReports', function () {
   var request;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Mail', 'Resume', function () {
+    helper.clearCollections('User', 'Company','Role', 'Mail', 'Resume', function () {
       helper.login(function (agent, user) {
         request = agent;
         Factory.create('resume', {company: user.company,

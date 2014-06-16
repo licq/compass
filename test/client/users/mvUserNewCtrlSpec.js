@@ -9,9 +9,13 @@ describe('mvUserNewCtrl', function () {
     beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
+      $httpBackend.expectGET('/api/roles').respond([
+        {'_id': '4466', 'name': 'admin', 'permissions': ['*']}
+      ]);
       mvUserNewCtrl = $controller('mvUserNewCtrl', {
         $scope: $scope
       });
+     $httpBackend.flush();
     }));
 
     describe('create user', function () {
@@ -21,7 +25,8 @@ describe('mvUserNewCtrl', function () {
           name: 'test user',
           email: 'test@test.com',
           password: 'password',
-          title: 'ceo'
+          title: 'ceo',
+          role: '7799'
         };
       });
       it('should go to success page when create success', inject(function ($location, mvNotifier) {
@@ -29,11 +34,9 @@ describe('mvUserNewCtrl', function () {
         var spy = sinon.spy($location, 'path');
         var notifySpy = sinon.spy(mvNotifier, 'notify');
         _.merge($scope.user, userData);
-
         $scope.create();
-
         $httpBackend.flush();
-        expect(spy).to.have.been.calledWith('/users');
+        expect(spy).to.have.been.calledWith('/settings/users');
         expect(notifySpy).to.have.been.calledWith('添加用户成功');
       }));
 

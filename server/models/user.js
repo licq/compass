@@ -26,6 +26,11 @@ var userSchema = new Schema({
     required: true,
     index: true
   },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: 'Role',
+    required: true
+  },
 
   title: String,
   deleted: {

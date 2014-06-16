@@ -32,6 +32,7 @@ module.exports = function (config) {
       'public/vendor/angular-bootstrap/ui-bootstrap.js',
       'public/vendor/toastr/toastr.min.js',
       'public/vendor/select2/select2.min.js',
+      'public/vendor/angular-ui-tree/dist/angular-ui-tree.min.js',
       'public/vendor/bootstrap-daterangepicker/daterangepicker.js',
       'public/app/components/daterangepicker.js',
       'public/vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.min.js',

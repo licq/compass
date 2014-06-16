@@ -28,8 +28,12 @@ function authenticateAgent(user, cb) {
 exports.login = function login(user, cb) {
   if (!cb && typeof user === 'function') {
     cb = user;
-    Factory.create('user', function (user) {
-      authenticateAgent(user, cb);
+    Factory.create('company', function(company){
+      Factory.create('role', {company: company._id}, function(role){
+        Factory.create('user', {company:company._id, role: role._id},function (user) {
+          authenticateAgent(user, cb);
+        });
+      });
     });
   } else {
     authenticateAgent(user, cb);

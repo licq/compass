@@ -6,7 +6,7 @@ describe('applierRejectReasons', function () {
   var request;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'ApplierRejectReason', function () {
+    helper.clearCollections('User', 'Company', 'Role','ApplierRejectReason', function () {
       Factory.create('applierRejectReason', function () {
         helper.login(function (agent) {
           request = agent;

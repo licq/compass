@@ -140,8 +140,8 @@ table.table.tr-ng-grid td, table.table.tr-ng-grid th {
     margin-top: -4px;
 }
 
-.select2-choice .select2-arrow {
-    z-index: 1;
+.select2-choice .select2-arrow{
+    z-index: 3;
 }
 
 .toast-top-right {

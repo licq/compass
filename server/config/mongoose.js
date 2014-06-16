@@ -13,8 +13,9 @@ module.exports = function (config) {
     logger.info('compass db connected');
   });
 
-  require('../models/user');
   require('../models/company');
+  require('../models/role');
+  require('../models/user');
   require('../models/email');
   require('../models/mail');
   require('../models/signup');

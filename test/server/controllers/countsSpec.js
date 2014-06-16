@@ -9,7 +9,7 @@ describe('counts', function () {
   var user, request;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'Resume', 'Interview', function () {
+    helper.clearCollections('Company', 'User', 'Role','Resume', 'Interview', function () {
 
       helper.login(function (agent, createdUser) {
         request = agent;

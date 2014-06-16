@@ -1,6 +1,8 @@
 'use strict';
 
 var express = require('express'),
+  roles = require('../controllers/roles'),
+  Role = require('mongoose').model('Role'),
   sessions = require('../controllers/sessions'),
   emails = require('../controllers/emails'),
   signups = require('../controllers/signups'),
@@ -19,7 +21,8 @@ var express = require('express'),
   systemOperations = require('../controllers/systemOperations'),
   resumeReports = require('../controllers/resumeReports'),
   interviewReports = require('../controllers/interviewReports'),
-  applierRejectReasons = require('../controllers/applierRejectReasons');
+  applierRejectReasons = require('../controllers/applierRejectReasons'),
+  _ = require('lodash');
 
 module.exports = function (app) {
   var apiRouter = express.Router();
@@ -61,11 +64,22 @@ module.exports = function (app) {
   apiRouter.route('/users')
     .post(users.create)
     .get(users.list);
+
   apiRouter.route('/users/:id')
     .all(users.load)
     .get(users.get)
     .put(users.update)
     .delete(users.delete);
+
+  apiRouter.route('/roles')
+    .post(roles.create)
+    .get(roles.list);
+
+  apiRouter.route('/roles/:id')
+    .all(roles.load)
+    .get(roles.get)
+    .put(roles.update)
+    .delete(roles.delete);
 
   apiRouter.route('/companies')
     .get(companies.list);
@@ -158,10 +172,23 @@ module.exports = function (app) {
   app.use('/publicApi', publicApiRouter);
 
   app.get('/', function (req, res) {
-    res.render('index', {
-      bootstrappedUser: req.user
-    });
-  });
+      if (req.user) {
+        Role.findOne({_id: req.user.role}).exec(function (err, role) {
+          role = role || {};
+          //todo use mongoose toObject func
+          req.user = JSON.parse(JSON.stringify(req.user));
+          req.user.permissions = role.permissions;
+          res.render('index', {
+            bootstrappedUser: req.user
+          });
+        });
+      } else {
+        res.render('index', {
+          bootstrappedUser: null
+        });
+      }
+    }
+  );
 
   app.use(function (req, res) {
     logger.error('request unknown url ' + req.url);
@@ -178,4 +205,5 @@ module.exports = function (app) {
     res.type('txt').send('Not found');
   });
 
-};
+}
+;
