@@ -247,7 +247,6 @@ angular.module('compass')
   })
   .filter('interviewStatus', function (shortDateFilter) {
     return function (interview) {
-      console.log(interview);
       if (interview.status === 'offered') return '面试通过';
       if (interview.status === 'rejected') return '面试拒绝';
       if (interview.status === 'offer rejected') return '应聘者拒绝,拒绝原因:' + interview.applierRejectReason;

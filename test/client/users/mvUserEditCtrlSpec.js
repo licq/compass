@@ -1,4 +1,4 @@
-describe.only('mvUserEditCtrl', function () {
+describe('mvUserEditCtrl', function () {
   beforeEach(module('compass'));
 
   var $httpBackend,
