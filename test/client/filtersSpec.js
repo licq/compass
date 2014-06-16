@@ -249,7 +249,7 @@ describe('filters', function () {
 
   describe('interviewStatusFilter', function () {
     it('should return correctly', inject(function (interviewStatusFilter) {
-      expect(interviewStatusFilter({status: 'accepted'})).to.equal('面试通过');
+      expect(interviewStatusFilter({status: 'offered'})).to.equal('面试通过');
       expect(interviewStatusFilter({status: 'rejected'})).to.equal('面试拒绝');
       expect(interviewStatusFilter({status: 'offer rejected', applierRejectReason: '工资太低'})).to.equal('应聘者拒绝,拒绝原因:工资太低');
       expect(interviewStatusFilter({status: 'offer accepted', onboardDate: new Date(2013, 1, 5)})).to.equal('应聘者接受,入职日期:2013年2月5日');
