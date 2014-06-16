@@ -25,8 +25,7 @@ angular.module('compass',
       .when('/today', {
         templateUrl: '/app/today/today.html',
         controller: 'mvTodayCtrl',
-        authenticate: true,
-        permissions: 'today'
+        authenticate: true
       })
       .
       when('/settings/emails', {
@@ -259,7 +258,7 @@ angular.module('compass',
   })
   .value('menuPermissions',
   [
-    {name: 'today', cnName: '今日', enabled: false},
+    //{name: 'today', cnName: '今日', enabled: false},
     {name: 'events', cnName: '日历', enabled: false},
     {name: 'applications', cnName: '应聘', enabled: false,
       submenus: [

@@ -177,7 +177,6 @@ module.exports = function (app) {
           role = role || {};
           req.user = req.user.toObject();
           req.user.permissions = role.permissions;
-          console.log('routes ', req.user);
           res.render('index', {
             bootstrappedUser: req.user
           });
