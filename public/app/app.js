@@ -24,10 +24,6 @@ angular.module('compass',
         templateUrl: '/app/signup/activate.html',
         controller: 'mvSignupActivateCtrl'
       })
-      .when('/dashboard', {
-        templateUrl: '/app/dashboard/dashboard.html',
-        authenticate: true
-      })
       .when('/today', {
         templateUrl: '/app/today/today.html',
         controller: 'mvTodayCtrl',
@@ -174,7 +170,7 @@ angular.module('compass',
           load: function (mvIdentity, $location, $q) {
             var defer = $q.defer();
             if (mvIdentity.isAuthenticated()) {
-              $location.path('/dashboard');
+              $location.path('/today');
             } else {
               $location.path('/welcome');
             }
