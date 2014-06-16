@@ -25,8 +25,7 @@ angular.module('compass',
       .when('/today', {
         templateUrl: '/app/today/today.html',
         controller: 'mvTodayCtrl',
-        authenticate: true,
-        permissions: 'today'
+        authenticate: true
       })
       .
       when('/settings/emails', {
