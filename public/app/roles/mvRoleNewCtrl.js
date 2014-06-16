@@ -20,14 +20,11 @@ angular.module('compass')
       });
     };
 
-    $scope.onSubmenuCheckChanged = function (menu, submenu) {
-      var value = submenu.enabled;
-      if (_.every(menu.submenus, 'enabled', function (sub) {
-        return sub.enabled === value;
-      })) {
-        menu.enabled = value;
+    $scope.onSubmenuCheckChanged = function (menu) {
+      if (_.some(menu.submenus, 'enabled')) {
+        menu.enabled = true;
       }
-      else {
+      else if (_.every(menu.submenus, {'enabled': false})) {
         menu.enabled = false;
       }
     };
