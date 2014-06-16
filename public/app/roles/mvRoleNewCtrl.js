@@ -14,7 +14,7 @@ angular.module('compass')
     };
 
     $scope.onCheckAllChanged = function () {
-      _.forEach(menuPermissions, function(menu){
+      _.forEach(menuPermissions, function (menu) {
         menu.enabled = $scope.allChecked;
         $scope.onMenuCheckChanged(menu);
       });
@@ -33,10 +33,10 @@ angular.module('compass')
     };
 
     $scope.create = function () {
-     $scope.role.permissions = _.pluck(_.filter(_.union($scope.menuPermissions, _.flatten($scope.menuPermissions, 'submenus')), function(item){
-       if(item) return item.enabled;
-       return false;
-     }),'name');
+      $scope.role.permissions = _.pluck(_.filter(_.union($scope.menuPermissions, _.flatten($scope.menuPermissions, 'submenus')), function (item) {
+        if (item) return item.enabled;
+        return false;
+      }), 'name');
       $scope.role.$save(function () {
         $location.path('/settings/roles');
         mvNotifier.notify('添加角色成功');

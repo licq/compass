@@ -4,8 +4,8 @@ var
   expect = require('chai').expect,
   helper = require('../testHelper'),
   mongoose = require('mongoose'),
+  Factory = require('./../factory'),
   Role = mongoose.model('Role');
-
 describe('roles', function () {
   var request, existRole, existUser;
 
@@ -14,14 +14,13 @@ describe('roles', function () {
       helper.login(function (agent, user) {
         existUser = user;
         request = agent;
-        Role.find().exec(function (err, role) {
-          existRole = role[0];
+        Role.findOne({_id:existUser.role}).exec(function (err, role) {
+          existRole = role;
           done();
         });
       });
     });
   });
-
 
   describe('GET /api/roles', function () {
     it('should return 200 with json result', function (done) {
@@ -89,17 +88,28 @@ describe('roles', function () {
 
   describe('DELETE /api/roles/:id', function () {
     it('should return 200', function (done) {
-      request.del('/api/roles/' + existRole._id)
-        .expect(200)
-        .end(function (err) {
-          expect(err).to.not.exist;
-          Role.findOne({_id: existRole._id}, function (err, role) {
-            expect(role).to.equal(null);
-            done();
+      Factory.create('role', {company: existUser.company}, function (role2) {
+        request.del('/api/roles/' + role2._id)
+          .expect(200)
+          .end(function (err) {
+            expect(err).to.not.exist;
+            Role.findOne({_id: role2._id}, function (err, r2) {
+              expect(r2).to.not.exist;
+              done();
+            });
           });
+      });
+    });
+    it('should return 400 when the role is used by some users', function (done) {
+      request.del('/api/roles/' + existRole._id)
+        .expect(400)
+        .expect('content-type', /json/)
+        .end(function (err, res) {
+          expect(res.body.message).to.exist;
+          expect(res.body.message).to.be.equal('还有1个用户属于' + existRole.name + '这个角色,不能删除');
+          done();
         });
     });
   });
-})
-;
+});
 

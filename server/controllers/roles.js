@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
   Role = mongoose.model('Role'),
+  User = mongoose.model('User'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
@@ -31,11 +32,18 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res, next) {
-  //todo 判断是否可以删除角色
-  req.role.remove(function (err) {
-    if (err) return next(err);
-    res.end();
-  });
+  User.count({company: req.user.company, role: req.role._id})
+    .exec(function (err, count) {
+      if (err) return next(err);
+      if (count > 0) {
+        return res.json(400, {message: '还有' + count + '个用户属于' + req.role.name + '这个角色,不能删除'});
+      } else {
+        req.role.remove(function (err) {
+          if (err) return next(err);
+          res.end();
+        });
+      }
+    });
 };
 
 exports.get = function (req, res) {
