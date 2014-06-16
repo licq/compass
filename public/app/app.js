@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('compass',
   ['ngCookies', 'ngRoute', 'ngResource', 'ngSanitize', 'ui.bootstrap', 'ui.calendar', 'ui.tree',
     'ui.select2', 'ui.datetimepicker', 'trNgGrid', 'textAngular', 'ui.daterangepicker', 'nvd3ChartDirectives'])
@@ -65,6 +63,11 @@ angular.module('compass',
         controller: 'mvUserNewCtrl',
         authenticate: true
       })
+      .when('/settings/users/edit/:id', {
+        templateUrl: '/app/users/edit.html',
+        controller: 'mvUserEditCtrl',
+        authenticate: true
+      })
       .when('/settings/roles', {
         templateUrl: '/app/roles/list.html',
         controller: 'mvRoleListCtrl',
@@ -75,9 +78,9 @@ angular.module('compass',
         controller: 'mvRoleNewCtrl',
         authenticate: true
       })
-      .when('/settings/users/edit/:id', {
-        templateUrl: '/app/users/edit.html',
-        controller: 'mvUserEditCtrl',
+      .when('/settings/roles/edit/:id', {
+        templateUrl: '/app/roles/edit.html',
+        controller: 'mvRoleEditCtrl',
         authenticate: true
       })
       .when('/resumes', {

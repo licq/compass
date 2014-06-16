@@ -100,7 +100,7 @@ describe('roles', function () {
           });
       });
     });
-    it('should return 400 when the role is used by some users', function (done) {
+    it('should return 400 when the role is associated with some users', function (done) {
       request.del('/api/roles/' + existRole._id)
         .expect(400)
         .expect('content-type', /json/)

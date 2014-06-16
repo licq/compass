@@ -203,7 +203,7 @@
           ]
         };
       }
-    ]).directive('hasPermission', [
+    ]).directive('hasPermission', ['mvPermission',
       function (mvPermission) {
         return {
           link: function (scope, element, attrs) {

@@ -7,14 +7,14 @@ angular.module('compass')
 
     $scope.onMenuCheckChanged = function (menu) {
       if (menu.submenus) {
-        _.forEach(menu.submenus, function (submenu) {
+        angular.forEach(menu.submenus, function (submenu) {
           submenu.enabled = menu.enabled;
         });
       }
     };
 
     $scope.onCheckAllChanged = function () {
-      _.forEach(menuPermissions, function (menu) {
+      angular.forEach(menuPermissions, function (menu) {
         menu.enabled = $scope.allChecked;
         $scope.onMenuCheckChanged(menu);
       });
