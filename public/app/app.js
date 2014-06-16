@@ -230,7 +230,7 @@ angular.module('compass',
   })
   .value('menuPermissions',
   [
-    {name: 'today', cnName: '今日', enabled: false},
+    //{name: 'today', cnName: '今日', enabled: false},
     {name: 'events', cnName: '日历', enabled: false},
     {name: 'applications', cnName: '应聘', enabled: false,
       submenus: [
