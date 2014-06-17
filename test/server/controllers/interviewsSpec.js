@@ -163,7 +163,7 @@ describe('interviews', function () {
             expect(newInterview.status).to.equal('offer accepted');
             expect(newInterview.statusBy.toString()).to.equal(user.id);
             Resume.findById(resume._id, function (err, newResume) {
-              expect(newResume.status).to.equal('enrolled');
+              expect(newResume.status).to.equal('offer accepted');
               done(err);
             });
           });

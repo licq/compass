@@ -43,7 +43,7 @@ describe('mvUserEditCtrl', function () {
       $scope.update();
       $httpBackend.flush();
       expect(spy).to.have.been.calledWith('/settings/users');
-      expect(notifySpy).to.have.been.calledWith('添加用户成功');
+      expect(notifySpy).to.have.been.calledWith('修改用户成功');
     }));
 
     it('should show error if update failed', inject(function ($location, mvNotifier) {
@@ -52,7 +52,7 @@ describe('mvUserEditCtrl', function () {
       $scope.update();
       $httpBackend.flush();
 
-      expect(notifySpy).to.have.been.calledWith('添加用户失败');
+      expect(notifySpy).to.have.been.calledWith('修改用户失败');
       expect($scope.err).to.exist;
     }));
   });
