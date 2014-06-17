@@ -3,13 +3,13 @@
       data-slim-scroll
       data-collapse-nav
       data-highlight-active>
-    <li has-permission="today"><a href="#/today"> <i class="fa fa-dashboard"></i><span>今日</span> </a></li>
+    <li ><a href="#/today"> <i class="fa fa-dashboard"></i><span>今日</span> </a></li>
     <li has-permission="events"><a href="#/events"><i class="fa fa-calendar"></i><span>日历</span>
       <span class="badge badge-success"></span></a></li>
     <li has-permission="applications">
       <a href="#/applications"><i class="fa fa-user"></i><span>应聘</span></a>
       <ul>
-        <li has-permission="appNew"><a href="#/applications/new" ng-click="updateNavCounts({counts:"new"})"><i
+        <li has-permission="appNew"><a href="#/applications/new" ng-click="updateNavCounts({counts:'new'})"><i
           class="fa fa-caret-right"></i><span>新应聘</span>
           <span class="badge badge-success">{{counts.new}}</span></a></li>
         <li has-permission="appUndetermined"><a href="#/applications/undetermined"><i class="fa fa-caret-right"></i><span>待定</span>

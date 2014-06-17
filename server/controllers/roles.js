@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
   Role.find({
-    company: req.user.company,
+    company: req.user.company
   }).exec(function (err, roles) {
     if (err) return next(err);
     return res.json(roles);
@@ -17,8 +17,6 @@ exports.list = function (req, res, next) {
 exports.create = function (req, res) {
   var role = new Role(req.body);
   role.company = req.user.company;
-  role.name = req.body.name;
-  role.permissons = req.body.permissions;
   role.save(function (err) {
     if (err) {
       if (err.code === 11000 || err.code === 11001) {
@@ -32,7 +30,7 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res, next) {
-  User.count({company: req.user.company, role: req.role._id})
+  User.count({company: req.user.company, role: req.role._id, deleted: false})
     .exec(function (err, count) {
       if (err) return next(err);
       if (count > 0) {

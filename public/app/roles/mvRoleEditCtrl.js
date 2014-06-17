@@ -6,7 +6,6 @@ angular.module('compass')
     }
 
     function initializePermissions() {
-
       if (hasPermission('*')) {
         $scope.allChecked = true;
         $scope.onCheckAllChanged();

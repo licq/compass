@@ -13,7 +13,7 @@
                 <i class="fa fa-user fa-lg"></i>
                 <span class="badge badge-info">{{counts.eventsOfToday}}</span>
                 <i class="pull-right glyphicon"
-                   ng-class="{"glyphicon-chevron-down": isopen.eventsOfToday, "glyphicon-chevron-right": !isopen.eventsOfToday}"></i>
+                   ng-class="{'glyphicon-chevron-down': isopen.eventsOfToday, 'glyphicon-chevron-right': !isopen.eventsOfToday}"></i>
               </accordion-heading>
               <div ng-repeat="event in eventsOfToday">
                 <a href="#/resumes/{{event.application}}" class="media">
@@ -35,7 +35,7 @@
                 <i class="fa fa-child fa-lg"></i>
                 <span class="badge badge-info">{{counts.onboards}}</span>
                 <i class="pull-right glyphicon"
-                   ng-class="{"glyphicon-chevron-down": isopen.onboards, "glyphicon-chevron-right": !isopen.onboards}"></i>
+                   ng-class="{'glyphicon-chevron-down': isopen.onboards, 'glyphicon-chevron-right': !isopen.onboards}"></i>
               </accordion-heading>
               <div ng-repeat="onboard in onboardsOfToday ">
                 <a href="#/resumes/{{onboard.application}}" class="media">
@@ -56,7 +56,7 @@
                 <i class="fa fa-pencil fa-lg"></i>
                 <span class="badge badge-info">{{counts.unreviewed}}</span>
                 <i class="pull-right glyphicon"
-                   ng-class="{"glyphicon-chevron-down": isopen.unreviewed, "glyphicon-chevron-right": !isopen.unreviewed}"></i>
+                   ng-class="{'glyphicon-chevron-down': isopen.unreviewed, 'glyphicon-chevron-right': !isopen.unreviewed}"></i>
               </accordion-heading>
               <div ng-repeat="unreviewed in unreviewedOfDays">
                 <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">
@@ -88,7 +88,7 @@
                 <i class="fa fa-user fa-lg"></i>
                 <span class="badge badge-info">{{isopen.eventsOfNextDays}}</span>
                 <i class="pull-right glyphicon"
-                   ng-class="{"glyphicon-chevron-down": isopen.eventsOfNextDays, "glyphicon-chevron-right": !isopen.eventsOfNextDays}"></i>
+                   ng-class="{'glyphicon-chevron-down': isopen.eventsOfNextDays, 'glyphicon-chevron-right': !isopen.eventsOfNextDays}"></i>
               </accordion-heading>
               <div ng-repeat="event in eventsOfNextDays ">
                 <a href="#/resumes/{{event.application}}" class="media">
@@ -109,7 +109,7 @@
                 <i class="fa fa-child fa-lg"></i>
                 <span class="badge badge-info">{{isopen.onboardsOfNextDays}}</span>
                 <i class="pull-right glyphicon"
-                   ng-class="{"glyphicon-chevron-down": isopen.onboardsOfNextDays, "glyphicon-chevron-right": !isopen.onboardsOfNextDays}"></i>
+                   ng-class="{'glyphicon-chevron-down': isopen.onboardsOfNextDays, 'glyphicon-chevron-right': !isopen.onboardsOfNextDays}"></i>
               </accordion-heading>
               <div ng-repeat="onboard in onboardsOfNextDays ">
                 <a href="#/resumes/{{onboard.application}}" class="media">

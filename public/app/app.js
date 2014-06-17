@@ -163,7 +163,7 @@ angular.module('compass',
         templateUrl: '/app/reviews/new.html',
         controller: 'mvReviewNewCtrl',
         authenticate: true,
-        permissions: 'intReview'
+        permissions: 'intReviews'
       })
       .when('/interviews/:id', {
         templateUrl: '/app/interviews/view.html',

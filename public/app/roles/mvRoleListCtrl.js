@@ -5,15 +5,12 @@ angular.module('compass')
     $scope.remove = function (role) {
       if (confirm('真的要删除' + role.name + '吗？')) {
         role.$delete(function () {
-          var index = -1;
-          angular.forEach($scope.roles, function (r, i) {
+          _.forEach($scope.roles, function (r, i) {
             if (r._id === role._id) {
-              index = i;
+              $scope.roles.splice(i,1);
+              return false;
             }
           });
-          if (index > -1) {
-            $scope.roles.splice(index, 1);
-          }
           mvNotifier.notify('删除角色成功');
         }, function (err) {
           $scope.err = err.data;

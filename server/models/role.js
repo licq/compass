@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 var roleSchema = mongoose.Schema({
   name: {
     type: String,
-    required: [true, '姓名不能为空']
+    required: [true, '角色名不能为空']
   },
   company: {
     type: mongoose.Schema.Types.ObjectId,
@@ -18,10 +18,6 @@ var roleSchema = mongoose.Schema({
 });
 
 roleSchema.index({company: 1, name: 1}, {unique: true});
-
-roleSchema.path('name').validate(function (name) {
-  return (typeof name === 'string' && name.length > 0);
-}, '角色名不能为空');
 
 roleSchema.plugin(timestamps);
 roleSchema.plugin(merge);
