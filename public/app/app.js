@@ -94,6 +94,18 @@ angular.module('compass',
         authenticate: true,
         permissions:'setRoles'
       })
+      .when('/settings/eventSetting', {
+        templateUrl: '/app/eventSetting/view.html',
+        controller: 'mvEventSettingCtrl',
+        authenticate: true,
+        permissions:'setEventSetting'
+      })
+      .when('/settings/evaluationCriterions', {
+        templateUrl: '/app/evaluationCriterions/edit.html',
+        controller: 'mvEvaluationCriterionEditCtrl',
+        authenticate: true,
+        permissions:'setEvaluationCriterions'
+      })
       .when('/resumes', {
         templateUrl: '/app/resumes/list.html',
         controller: 'mvResumeListCtrl',
@@ -105,12 +117,6 @@ angular.module('compass',
         controller: 'mvResumeViewCtrl',
         authenticate: true,
         permissions:'resumes'
-      })
-      .when('/systemSettings/companies', {
-        templateUrl: '/app/companies/list.html',
-        controller: 'mvCompanyListCtrl',
-        authenticate: true,
-        permissions:'sysSetCompanies'
       })
       .when('/events', {
         templateUrl: '/app/events/list.html',
@@ -154,18 +160,6 @@ angular.module('compass',
         authenticate: true,
         permissions:'interviews'
       })
-      .when('/settings/eventSetting', {
-        templateUrl: '/app/eventSetting/view.html',
-        controller: 'mvEventSettingCtrl',
-        authenticate: true,
-        permissions:'setEventSetting'
-      })
-      .when('/settings/evaluationCriterions', {
-        templateUrl: '/app/evaluationCriterions/edit.html',
-        controller: 'mvEvaluationCriterionEditCtrl',
-        authenticate: true,
-        permissions:'setEvaluationCriterions'
-      })
       .when('/applications/:status', {
         templateUrl: '/app/applications/list.html',
         controller: 'mvApplicationListCtrl',
@@ -178,11 +172,17 @@ angular.module('compass',
         authenticate: true,
         permissions:'applications'
       })
+      .when('/systemSettings/companies', {
+        templateUrl: '/app/companies/list.html',
+        controller: 'mvCompanyListCtrl',
+        authenticate: true,
+        permissions:'#sysSetCompanies'
+      })
       .when('/systemSettings/systemOperations', {
         templateUrl: '/app/systemOperations/view.html',
         controller: 'mvSystemOperationsCtrl',
         authenticate: true,
-        permissions:'sysSetOperations'
+        permissions:'#sysSetOperations'
       })
       .when('/reports/resumes', {
         templateUrl: '/app/resumeReports/view.html',
@@ -286,14 +286,13 @@ angular.module('compass',
         {name: 'setRoles', cnName: '角色', enabled: false},
         {name: 'setEvaluationCriterions', cnName: '面试评价设置', enabled: false},
         {name: 'setEventSetting', cnName: '面试设置', enabled: false}
-      ]},
-    { name: 'systemSettings', cnName: '系统设置', enabled: false,
-      submenus: [
-        {name: 'sysSetCompanies', cnName: '公司', enabled: false},
-        {name: 'sysSetOperations', cnName: '系统操作', enabled: false}
       ]}
-  ]
-)
+//    { name: 'systemSettings', cnName: '系统设置', enabled: false,
+//      submenus: [
+//        {name: 'sysSetCompanies', cnName: '公司', enabled: false},
+//        {name: 'sysSetOperations', cnName: '系统操作', enabled: false}
+//      ]}
+  ])
   .value('mvMoment', moment)
   .constant('uiCalendarConfig', {
     monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],

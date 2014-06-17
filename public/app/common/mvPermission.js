@@ -14,8 +14,13 @@ angular.module('compass')
       hasPermission: function (permission) {
         permission = permission.trim();
         return _.some(permissionList, function (item) {
-          if (_.isString(item))
-            return item.trim() === permission;
+          if (_.isString(item)) {
+            item = item.trim();
+            return item === permission ||
+              (item === '*' && permission[0] !== '#') ||
+              item === '#';
+          }
+          return false;
         });
       }
     };
