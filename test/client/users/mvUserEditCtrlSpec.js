@@ -25,7 +25,8 @@ describe('mvUserEditCtrl', function () {
     $httpBackend.expectGET('/api/users/7788').respond(userData);
     mvUserEditCtrl = $controller('mvUserEditCtrl', {
       $scope: $scope,
-      $routeParams: {id: '7788'}
+      $routeParams: {id: '7788'},
+      mvIdentity: {currentUser:{_id: '7788'}}
     });
     $httpBackend.flush();
   }));

@@ -13,11 +13,11 @@ angular.module('compass')
       hideMethod: 'fadeOut'
     };
     return {
-      notify: function (msg) {
-        mvToastr.success(msg);
+      notify: function (msg, title) {
+        mvToastr.success(msg, title);
       },
-      error: function (msg) {
-        mvToastr.error(msg);
+      error: function (msg, title) {
+        mvToastr.error(msg, title);
       }
     };
   });

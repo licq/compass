@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvPermission,mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
+  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
-
     $scope.updateNavCounts = function (query) {
       mvNav.get(query, function (counts) {
         angular.extend($scope.counts, counts);
@@ -79,7 +78,7 @@ angular.module('compass')
       }
     }
 
-    $scope.$on('loggedOut', function(){
+    $scope.$on('loggedOut', function () {
       cancelInterval();
       mvPermission.setPermissions();
     });

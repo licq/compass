@@ -175,8 +175,7 @@ module.exports = function (app) {
       if (req.user) {
         Role.findOne({_id: req.user.role}).exec(function (err, role) {
           role = role || {};
-          //todo use mongoose toObject func
-          req.user = JSON.parse(JSON.stringify(req.user));
+          req.user = req.user.toObject();
           req.user.permissions = role.permissions;
           res.render('index', {
             bootstrappedUser: req.user
