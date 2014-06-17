@@ -64,7 +64,7 @@ signupSchema.methods.activate = function (done) {
   var self = this;
   Company.create({name: self.companyName}, function (err, company) {
     if (err) return done(err);
-    Role.create({name: 'admin', company: company._id, permissions: ['*']},
+    Role.create({name: '管理员', company: company._id, permissions: ['*']},
       function (err, role) {
         if (err) return done(err);
         User.create({
