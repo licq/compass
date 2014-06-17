@@ -3,54 +3,54 @@
       data-slim-scroll
       data-collapse-nav
       data-highlight-active>
-    <li has-permission='today'><a href="#/today"> <i class="fa fa-dashboard"></i><span>今日</span> </a></li>
-    <li has-permission='events'><a href="#/events"><i class="fa fa-calendar"></i><span>日历</span>
+    <li has-permission="today"><a href="#/today"> <i class="fa fa-dashboard"></i><span>今日</span> </a></li>
+    <li has-permission="events"><a href="#/events"><i class="fa fa-calendar"></i><span>日历</span>
       <span class="badge badge-success"></span></a></li>
-    <li has-permission='applications'>
+    <li has-permission="applications">
       <a href="#/applications"><i class="fa fa-user"></i><span>应聘</span></a>
       <ul>
-        <li has-permission='appNew'><a href="#/applications/new" ng-click="updateNavCounts({counts:'new'})"><i
+        <li has-permission="appNew"><a href="#/applications/new" ng-click="updateNavCounts({counts:"new"})"><i
           class="fa fa-caret-right"></i><span>新应聘</span>
           <span class="badge badge-success">{{counts.new}}</span></a></li>
-        <li has-permission='appUndetermined'><a href="#/applications/undetermined"><i class="fa fa-caret-right"></i><span>待定</span>
+        <li has-permission="appUndetermined"><a href="#/applications/undetermined"><i class="fa fa-caret-right"></i><span>待定</span>
           <span class="badge badge-success">{{counts.undetermined}}</span></a></li>
-        <li has-permission='appPursued'><a href="#/applications/pursued"><i class="fa fa-caret-right"></i><span>通过</span>
+        <li has-permission="appPursued"><a href="#/applications/pursued"><i class="fa fa-caret-right"></i><span>通过</span>
           <span class="badge badge-success">{{counts.pursued}}</span></a></li>
       </ul>
     </li>
-    <li has-permission='interviews'>
+    <li has-permission="interviews">
       <a href="#/interviews"><i class="fa fa-road"></i><span>面试</span></a>
       <ul>
-        <li has-permission='intReviews'><a href="#/interviews/reviews/"><i class="fa fa-caret-right"></i><span>评价</span>
+        <li has-permission="intReviews"><a href="#/interviews/reviews/"><i class="fa fa-caret-right"></i><span>评价</span>
           <span class="badge badge-success"></span></a></li>
-        <li has-permission='intList'><a href="#/interviews/list"><i class="fa fa-caret-right"></i><span>面试中</span>
+        <li has-permission="intList"><a href="#/interviews/list"><i class="fa fa-caret-right"></i><span>面试中</span>
           <span class="badge badge-success"></span></a></li>
-        <li has-permission='intOffers'><a href="#/interviews/offers"><i class="fa fa-caret-right"></i><span>通过</span></a></li>
-        <li has-permission='intOnboards'><a href="#/interviews/onboards"><i class="fa fa-caret-right"></i><span>入职</span></a></li>
+        <li has-permission="intOffers"><a href="#/interviews/offers"><i class="fa fa-caret-right"></i><span>通过</span></a></li>
+        <li has-permission="intOnboards"><a href="#/interviews/onboards"><i class="fa fa-caret-right"></i><span>入职</span></a></li>
       </ul>
     </li>
 
-    <li has-permission='resumes'><a href="#/resumes"> <i class="fa fa-archive"></i><span>人才库</span> </a></li>
+    <li has-permission="resumes"><a href="#/resumes"> <i class="fa fa-archive"></i><span>人才库</span> </a></li>
 
-    <li has-permission='reports'>
+    <li has-permission="reports">
       <a href="#/reports"><i class="fa fa-book"></i><span>报表</span></a>
       <ul>
-        <li has-permission='repResumes'><a href="#/reports/resumes"><i class="fa fa-caret-right"></i><span>应聘报表</span></a></li>
-        <li has-permission='repInterviews'><a href="#/reports/interviews"><i class="fa fa-caret-right"></i><span>面试报表</span></a></li>
+        <li has-permission="repResumes"><a href="#/reports/resumes"><i class="fa fa-caret-right"></i><span>应聘报表</span></a></li>
+        <li has-permission="repInterviews"><a href="#/reports/interviews"><i class="fa fa-caret-right"></i><span>面试报表</span></a></li>
       </ul>
     </li>
-    <li has-permission='settings'>
+    <li has-permission="settings">
       <a href="#/settings"><i class="fa fa-gear"></i><span>设置</span></a>
       <ul>
-        <li has-permission='setMails'><a href="#/settings/emails"><i class="fa fa-caret-right"></i><span>简历邮箱</span> <span
+        <li has-permission="setMails"><a href="#/settings/emails"><i class="fa fa-caret-right"></i><span>简历邮箱</span> <span
           class="badge badge-warning"></span></a></li>
-        <li has-permission='setUsers'><a href="#/settings/users"><i class="fa fa-caret-right"></i><span>用户</span></a></li>
-        <li has-permission='setRoles'><a href="#/settings/roles"><i class="fa fa-caret-right"></i><span>角色</span></a></li>
-        <li has-permission='setEvaluationCriterions'><a href="#/settings/evaluationCriterions"><i class="fa fa-caret-right"></i><span>面试评价设置</span></a></li>
-        <li has-permission='setEventSetting'><a href="#/settings/eventSetting"><i class="fa fa-caret-right"></i><span>面试设置</span></a></li>
+        <li has-permission="setUsers"><a href="#/settings/users"><i class="fa fa-caret-right"></i><span>用户</span></a></li>
+        <li has-permission="setRoles"><a href="#/settings/roles"><i class="fa fa-caret-right"></i><span>角色</span></a></li>
+        <li has-permission="setEvaluationCriterions"><a href="#/settings/evaluationCriterions"><i class="fa fa-caret-right"></i><span>面试评价设置</span></a></li>
+        <li has-permission="setEventSetting"><a href="#/settings/eventSetting"><i class="fa fa-caret-right"></i><span>面试设置</span></a></li>
       </ul>
     </li>
-    <li has-permission='#systemSettings'>
+    <li has-permission="#systemSettings">
       <a href="#/systemSettings"><i class="fa fa-gear"></i><span>系统设置</span></a>
       <ul>
         <li ><a href="#/systemSettings/companies"><i class="fa fa-caret-right"></i><span>公司</span></a></li>

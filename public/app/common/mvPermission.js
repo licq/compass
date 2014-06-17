@@ -12,7 +12,9 @@ angular.module('compass')
         $rootScope.$broadcast('permissionsChanged');
       },
       hasPermission: function (permission) {
-        permission = permission.trim();
+        if (_.isString(permission))
+          permission = permission.trim();
+
         return _.some(permissionList, function (item) {
           if (_.isString(item)) {
             item = item.trim();

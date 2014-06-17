@@ -28,7 +28,7 @@ describe('singups', function () {
     });
   });
 
-  describe.only('PUT /api/signups/:id', function () {
+  describe('PUT /api/signups/:id', function () {
     it('should create company and user', function (done) {
       Factory.create('signup', function (signup) {
         request(app)

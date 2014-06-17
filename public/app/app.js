@@ -32,169 +32,180 @@ angular.module('compass',
         templateUrl: '/app/emails/list.html',
         controller: 'mvEmailListCtrl',
         authenticate: true,
-        permissions:'setMails'
+        permissions: 'setMails'
       })
       .when('/settings/emails/new', {
         templateUrl: '/app/emails/new.html',
         controller: 'mvEmailNewCtrl',
         authenticate: true,
-        permissions:'setMails'
+        permissions: 'setMails'
       })
       .when('/settings/emails/edit/:id', {
         templateUrl: '/app/emails/edit.html',
         controller: 'mvEmailEditCtrl',
         authenticate: true,
-        permissions:'setMails'
+        permissions: 'setMails'
       })
       .when('/settings/mails', {
         templateUrl: '/app/mails/list.html',
         controller: 'mvMailListCtrl',
         authenticate: true,
-        permissions:'setMails'
+        permissions: 'setMails'
       })
       .when('/settings/mails/:id', {
         templateUrl: '/app/mails/view.html',
         controller: 'mvMailViewCtrl',
         authenticate: true,
-        permissions:'setMails'
+        permissions: 'setMails'
       })
       .when('/settings/users', {
         templateUrl: '/app/users/list.html',
         controller: 'mvUserListCtrl',
         authenticate: true,
-        permissions:'setUsers'
+        permissions: 'setUsers'
       })
       .when('/settings/users/new', {
         templateUrl: '/app/users/new.html',
         controller: 'mvUserNewCtrl',
         authenticate: true,
-        permissions:'setUsers'
+        permissions: 'setUsers'
       })
       .when('/settings/users/edit/:id', {
         templateUrl: '/app/users/edit.html',
         controller: 'mvUserEditCtrl',
         authenticate: true,
-        permissions:'setUsers'
+        resolve: {
+          isSelf: function (mvIdentity, mvPermission, $location, $q, $route) {
+            var defer = $q.defer();
+            if (mvPermission.hasPermission('setUsers') ||
+              mvIdentity.currentUser._id === $route.current.params.id) {
+              defer.resolve({permissions: 'setUsers'});
+            } else {
+              $location.path('/today');
+              defer.reject();
+            }
+            return defer.promise;
+          }}
       })
       .when('/settings/roles', {
         templateUrl: '/app/roles/list.html',
         controller: 'mvRoleListCtrl',
         authenticate: true,
-        permissions:'setRoles'
+        permissions: 'setRoles'
       })
       .when('/settings/roles/new', {
         templateUrl: '/app/roles/new.html',
         controller: 'mvRoleNewCtrl',
         authenticate: true,
-        permissions:'setRoles'
+        permissions: 'setRoles'
       })
       .when('/settings/roles/edit/:id', {
         templateUrl: '/app/roles/edit.html',
         controller: 'mvRoleEditCtrl',
         authenticate: true,
-        permissions:'setRoles'
+        permissions: 'setRoles'
       })
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
         controller: 'mvEventSettingCtrl',
         authenticate: true,
-        permissions:'setEventSetting'
+        permissions: 'setEventSetting'
       })
       .when('/settings/evaluationCriterions', {
         templateUrl: '/app/evaluationCriterions/edit.html',
         controller: 'mvEvaluationCriterionEditCtrl',
         authenticate: true,
-        permissions:'setEvaluationCriterions'
+        permissions: 'setEvaluationCriterions'
       })
       .when('/resumes', {
         templateUrl: '/app/resumes/list.html',
         controller: 'mvResumeListCtrl',
         authenticate: true,
-        permissions:'resumes'
+        permissions: 'resumes'
       })
       .when('/resumes/:id', {
         templateUrl: '/app/resumes/view.html',
         controller: 'mvResumeViewCtrl',
         authenticate: true,
-        permissions:'resumes'
+        permissions: 'resumes'
       })
       .when('/events', {
         templateUrl: '/app/events/list.html',
         controller: 'mvEventListCtrl',
         authenticate: true,
-        permissions:'events'
+        permissions: 'events'
       })
       .when('/interviews/list', {
         templateUrl: '/app/interviews/list.html',
         controller: 'mvInterviewListCtrl',
         authenticate: true,
-        permissions:'intList'
+        permissions: 'intList'
       })
       .when('/interviews/reviews', {
         templateUrl: '/app/reviews/list.html',
         controller: 'mvReviewListCtrl',
         authenticate: true,
-        permissions:'intReviews'
+        permissions: 'intReviews'
       })
       .when('/interviews/offers', {
         templateUrl: '/app/offers/list.html',
         controller: 'mvOfferListCtrl',
         authenticate: true,
-        permissions:'intOffers'
+        permissions: 'intOffers'
       })
       .when('/interviews/onboards', {
         templateUrl: '/app/onboard/list.html',
         controller: 'mvOnboardListCtrl',
         authenticate: true,
-        permissions:'intOnboards'
+        permissions: 'intOnboards'
       })
       .when('/interviews/reviews/:id', {
         templateUrl: '/app/reviews/new.html',
         controller: 'mvReviewNewCtrl',
         authenticate: true,
-        permissions:'intReview'
+        permissions: 'intReview'
       })
       .when('/interviews/:id', {
         templateUrl: '/app/interviews/view.html',
         controller: 'mvInterviewViewCtrl',
         authenticate: true,
-        permissions:'interviews'
+        permissions: 'interviews'
       })
       .when('/applications/:status', {
         templateUrl: '/app/applications/list.html',
         controller: 'mvApplicationListCtrl',
         authenticate: true,
-        permissions:'applications'
+        permissions: 'applications'
       })
       .when('/applications/:status/:index', {
         templateUrl: '/app/applications/view.html',
         controller: 'mvApplicationViewCtrl',
         authenticate: true,
-        permissions:'applications'
+        permissions: 'applications'
       })
       .when('/systemSettings/companies', {
         templateUrl: '/app/companies/list.html',
         controller: 'mvCompanyListCtrl',
         authenticate: true,
-        permissions:'#sysSetCompanies'
+        permissions: '#sysSetCompanies'
       })
       .when('/systemSettings/systemOperations', {
         templateUrl: '/app/systemOperations/view.html',
         controller: 'mvSystemOperationsCtrl',
         authenticate: true,
-        permissions:'#sysSetOperations'
+        permissions: '#sysSetOperations'
       })
       .when('/reports/resumes', {
         templateUrl: '/app/resumeReports/view.html',
         controller: 'mvResumeReportViewCtrl',
         authenticate: true,
-        permissions:'repResumes'
+        permissions: 'repResumes'
       })
       .when('/reports/interviews', {
         templateUrl: '/app/interviewReports/view.html',
         controller: 'mvInterviewReportViewCtrl',
         authenticate: true,
-        permissions:'repInterviews'
+        permissions: 'repInterviews'
       })
       .otherwise({
         resolve: {

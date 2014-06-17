@@ -30,7 +30,7 @@ describe('Role', function () {
 
     it('should fail to save an existing role again', function (done) {
       Factory.create('role', function (role) {
-        Factory.build('role', {name: role.name}, function (role2) {
+        Factory.build('role', {name: role.name, company:role.company}, function (role2) {
           role2.save(function (err) {
             expect(err).to.exist;
             done();
