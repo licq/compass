@@ -34,7 +34,7 @@
 
 <div ng-controller="mvNavCtrl">
   <div
-    ng-hide="!identity.isAuthenticated()"
+    ng-show="identity.isAuthenticated()"
     data-ng-cloak
     class="no-print">
     <section data-ng-include=" 'app/common/header.html' "

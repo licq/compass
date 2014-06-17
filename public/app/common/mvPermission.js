@@ -15,7 +15,7 @@ angular.module('compass')
         permission = permission.trim();
         return _.some(permissionList, function (item) {
           if (_.isString(item))
-            return item.trim() === permission;
+            return item.trim() === permission || item.trim()==='*';
         });
       }
     };
