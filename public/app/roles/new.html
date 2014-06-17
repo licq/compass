@@ -1,7 +1,7 @@
 <div class="page">
   <div class="row">
-    <div class="col-md-6">
-      <section class="panel">
+    <div class="col-md-6 col-md-offset-3">
+      <section class="panel panel-default">
         <div class="panel-heading">
           <strong>添加角色</strong>
         </div>
@@ -29,19 +29,21 @@
               </label>
 
               <div ui-tree>
-                <ol ui-tree-nodes="" ng-model="menuPermissions">
+                <ol ui-tree-nodes ng-model="menuPermissions">
                   <li ng-repeat="item in menuPermissions" ui-tree-node>
-                    <div ui-tree-handle data-nodrag>
-                      <label class="checkbox">
-                        <input type="checkbox" ng-change="onMenuCheckChanged(item)" ng-model="item.enabled">
-                        {{item.cnName}}
-                      </label>
-                    </div>
-                    <ol ui-tree-nodes="" ngIf="item.submenus" ng-model="item.submenus">
+                      <div ui-tree-handle data-nodrag>
+                        <i ng-if="item.submenus" ng-click="toggle(this)" class=" to-inline glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></i>
+                        <i ng-if="!item.submenus"  class=" to-inline glyphicon glyphicon-minus"></i>
+                          <label class="to-inline checkbox">
+                          <input type="checkbox" ng-change="onMenuCheckChanged(item)" ng-model="item.enabled">
+                          {{item.cnName}}
+                        </label>
+                      </div>
+                    <ol ui-tree-nodes ng-if="item.submenus" ng-model="item.submenus" ng-class="{hidden: collapsed}">
                       <li ng-repeat="submenu in item.submenus" ui-tree-node>
                         <div ui-tree-handle data-nodrag>
                           <label class="checkbox">
-                            <input type="checkbox"  ng-change="onSubmenuCheckChanged(item,submenu)" ng-model="submenu.enabled">
+                            <input type="checkbox" ng-change="onSubmenuCheckChanged(item)" ng-model="submenu.enabled">
                             {{submenu.cnName}}
                           </label>
                         </div>
@@ -50,7 +52,6 @@
                   </li>
                 </ol>
               </div>
-
               <br/>
               <button class="btn btn-primary" ng-click="create()"
                       ng-disabled="roleForm.$invalid">保存

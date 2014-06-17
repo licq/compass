@@ -29,6 +29,10 @@ angular.module('compass')
       }
     };
 
+    $scope.toggle = function(scope) {
+      scope.toggle();
+    };
+
     $scope.create = function () {
       $scope.role.permissions = _.pluck(_.filter(_.union($scope.menuPermissions, _.flatten($scope.menuPermissions, 'submenus')), function (item) {
         if (item) return item.enabled;
