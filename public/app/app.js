@@ -14,11 +14,11 @@ angular.module('compass',
         templateUrl: '/app/signup/new.html',
         controller: 'mvSignupNewCtrl'
       })
-      .when('/signup/success/:code/:email', {
+      .when('/signup/success', {
         templateUrl: '/app/signup/success.html',
         controller: 'mvSignupSuccessCtrl'
       })
-      .when('/signup/activate/:code', {
+      .when('/signup/activate', {
         templateUrl: '/app/signup/activate.html',
         controller: 'mvSignupActivateCtrl'
       })

@@ -12,7 +12,7 @@ exports.create = function (req, res) {
   signup.save(function (err) {
     if (err) return res.json(400, err);
     jobs.sendSignupEmail(signup.adminEmail, signup._id);
-    res.json({_id: signup._id, email: signup.adminEmail});
+    res.json({email: signup.adminEmail});
   });
 };
 

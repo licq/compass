@@ -66,23 +66,14 @@ exports.update = function (req, res, next) {
       interview.onboardDate = req.body.onboardDate;
       interview.save(function (err) {
         if (err) return next(err);
-        var interviewStatusToApplicationStatusMap = {
-          'rejected': 'rejected',
-          'offer rejected': 'offer rejected',
-          'offer accepted': 'enrolled'
-        };
-        if (_.has(interviewStatusToApplicationStatusMap, interview.status)) {
-          Resume.findById(interview.application, function (err, resume) {
+        Resume.findById(interview.application, function (err, resume) {
+          if (err) return next(err);
+          resume.status = interview.status;
+          resume.saveAndIndex(function (err) {
             if (err) return next(err);
-            resume.status = interviewStatusToApplicationStatusMap[interview.status];
-            resume.saveAndIndex(function (err) {
-              if (err) return next(err);
-              res.send(200);
-            });
+            res.send(200);
           });
-        } else {
-          res.send(200);
-        }
+        });
       });
     });
 };

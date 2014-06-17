@@ -13,7 +13,6 @@ var mongoose = require('mongoose'),
 var signupSchema = new Schema({
   _id: {
     type: String,
-    default: uuid.v1(),
     unique: true
   },
   companyName: {
@@ -54,11 +53,18 @@ signupSchema.path('adminEmail').validate(function (email, respond) {
   });
 }, '该邮箱已注册');
 
+signupSchema.pre('save', function(next){
+  if(this.isNew){
+    this._id = uuid.v1();
+  }
+  next();
+});
+
 signupSchema.methods.activate = function (done) {
   var self = this;
   Company.create({name: self.companyName}, function (err, company) {
     if (err) return done(err);
-    Role.create({name: 'admin', company: company._id, permissions: ['*']},
+    Role.create({name: '管理员', company: company._id, permissions: ['*']},
       function (err, role) {
         if (err) return done(err);
         User.create({
