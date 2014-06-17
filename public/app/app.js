@@ -222,10 +222,11 @@ angular.module('compass',
         }
       });
 
-    $httpProvider.interceptors.push(['$q', '$location', function ($q, $location) {
+    $httpProvider.interceptors.push(['$q', '$location','mvIdentity', function ($q, $location,mvIdentity) {
       return {
         'responseError': function (response) {
           if (response.status === 401 || response.status === 403) {
+            mvIdentity.currentUser = undefined;
             $location.path('/login');
             return $q.reject(response);
           } else {

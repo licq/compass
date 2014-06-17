@@ -10,7 +10,7 @@
               return $location.path();
             };
             addBg = function (path) {
-              $element.removeClass('body-home body-special body-tasks body-lock');
+              $element.removeClass('body-home body-special');
               switch (path) {
                 case '/':
                   return $element.addClass('body-home');
@@ -23,10 +23,6 @@
                 case '/welcome':
                 case '/forgot':
                   return $element.addClass('body-special');
-                case '/pages/lock-screen':
-                  return $element.addClass('body-special body-lock');
-                case '/tasks':
-                  return $element.addClass('body-tasks');
               }
             };
             addBg($location.path());
@@ -39,7 +35,8 @@
           }
         ]
       };
-    }).directive('uiColorSwitch', [
+    })
+    .directive('uiColorSwitch', [
       function () {
         return {
           restrict: 'A',
@@ -232,5 +229,3 @@
       }
     ]);
 }).call(this);
-
-//# sourceMappingURL=directives.js.map
