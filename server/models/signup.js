@@ -13,7 +13,6 @@ var mongoose = require('mongoose'),
 var signupSchema = new Schema({
   _id: {
     type: String,
-    default: uuid.v1(),
     unique: true
   },
   companyName: {
@@ -53,6 +52,13 @@ signupSchema.path('adminEmail').validate(function (email, respond) {
     respond(!err && !user);
   });
 }, '该邮箱已注册');
+
+signupSchema.pre('save', function(next){
+  if(this.isNew){
+    this._id = uuid.v1();
+  }
+  next();
+});
 
 signupSchema.methods.activate = function (done) {
   var self = this;

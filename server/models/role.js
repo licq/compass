@@ -7,7 +7,6 @@ var mongoose = require('mongoose'),
 var roleSchema = mongoose.Schema({
   name: {
     type: String,
-    unique: true,
     required: [true, '姓名不能为空']
   },
   company: {
@@ -17,6 +16,8 @@ var roleSchema = mongoose.Schema({
   },
   permissions: [String]
 });
+
+roleSchema.index({company: 1, name: 1}, {unique: true});
 
 roleSchema.path('name').validate(function (name) {
   return (typeof name === 'string' && name.length > 0);
