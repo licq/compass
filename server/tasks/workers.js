@@ -13,7 +13,7 @@ var kue = require('kue'),
 var jobs = kue.createQueue();
 
 function handleSendSignupEmail(job, done) {
-  mailer.sendSignupEmail(job.data.to, job.data.code, done);
+  mailer.sendSignupEmail(job.data.name, job.data.to, job.data.code, done);
 }
 
 function handleFetchEmail(job, done) {

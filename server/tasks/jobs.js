@@ -10,10 +10,11 @@ var kue = require('kue'),
 
 var jobs = kue.createQueue();
 
-exports.sendSignupEmail = function sendSignupEmail(to, code) {
+exports.sendSignupEmail = function sendSignupEmail(name, to, code) {
   jobs.create('send signup email', {
     title: 'send signup email to ' + to,
     to: to,
+    name: name,
     code: code
   }).priority('high').attempts(3).save();
 };

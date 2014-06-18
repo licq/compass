@@ -188,6 +188,7 @@ g.nv-series{
     color: #767676;
     padding: 0px 5px;
     margin: 3px 0;
+    height: 35px;
 }
 
 .to-inline {
@@ -201,9 +202,3 @@ g.nv-series{
 .angular-ui-tree-nodes .angular-ui-tree-nodes {
     padding-left: 35px;
 }
-
-/*.angular-ui-tree-handle:hover {*/
-    /*color: #438eb9;*/
-    /*background: #f4f6f7;*/
-    /*border-color: #dce2e8;*/
-/*}*/

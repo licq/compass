@@ -44,8 +44,8 @@ exports.init = function init(config) {
   baseurl = 'http://' + config.hostname + ':' + config.port + '/';
 };
 
-exports.sendSignupEmail = function sendSignupEmail(to, code, cb) {
-  sendTemplateEmail(to, '已注册，请激活', 'signup.html', {link: baseurl + '/#/signup/activate?code=' + code}, cb);
+exports.sendSignupEmail = function sendSignupEmail(name, to, code, cb) {
+  sendTemplateEmail(to, '欢迎您注册compass 请立即激活您的帐户', 'signup.html', {link: baseurl + '/#/signup/activate?code=' + code, name: name}, cb);
 };
 
 exports.sendEmail = function sendEmail(mail, cb) {

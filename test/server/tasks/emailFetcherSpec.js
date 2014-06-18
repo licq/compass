@@ -25,7 +25,7 @@ describe.skip('emailFetcher', function () {
       this.timeout(0);
 
       async.eachSeries(_.range(3), function (i, callback) {
-        mailer.sendSignupEmail('compass_test@126.com', i, function (error) {
+        mailer.sendSignupEmail('applicant' + i, 'compass_test@126.com', i, function (error) {
           callback(error);
         });
       }, function () {
