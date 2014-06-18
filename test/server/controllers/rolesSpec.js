@@ -60,7 +60,6 @@ describe('roles', function () {
         })
         .expect(200, function () {
           Role.find({company: existUser.company}, function (err, roles) {
-            console.log(roles);
             expect(roles).to.have.length(2);
             done();
           });

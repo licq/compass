@@ -276,7 +276,7 @@ exports.parse = function (data) {
     resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'));
   }
 
-  resume.careerObjective = parseCareerObjective(findTable('自我评价', '职业目标', '技能专长', '专业技能'));
+  resume.careerObjective = parseCareerObjective(findTable('专业特长', '自我评价', '职业目标', '技能专长', '专业技能'));
   resume.workExperience = parseWorkExperience(findTable('工作经历'));
   resume.educationHistory = parseEducationHistory(findTable('教育经历'));
   resume.certifications = parseCertifications(findTable('证书'));

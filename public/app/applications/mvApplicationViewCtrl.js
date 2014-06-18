@@ -1,14 +1,16 @@
 angular.module('compass')
   .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap, $modal) {
     $scope.index = $routeParams.index;
-    $scope.searchOptions = states.get('mvApplicationListCtrl' + $routeParams.status).searchOptions || {};
+    $scope.listQueryOptions = states.get('mvApplicationListCtrl' + $routeParams.status).queryOptions || {};
 
     function retrieveApplication() {
-      var queryConditions = angular.extend({
-        pageSize: 1,
-        page: $scope.index,
-        status: $routeParams.status
-      }, $scope.searchOptions);
+      var queryConditions = angular.extend(
+        {},
+        $scope.listQueryOptions, {
+          pageSize: 1,
+          page: $scope.index,
+          status: $routeParams.status
+        });
 
       $http.get('/api/applications', {params: queryConditions}).success(function (result) {
         if (result.hits && result.hits.hits && result.hits.hits.length === 1) {
