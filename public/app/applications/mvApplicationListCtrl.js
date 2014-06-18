@@ -6,7 +6,8 @@ angular.module('compass')
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
       queryOptions: {
         pageSize: 50,
-        page: 1
+        page: 1,
+        status: $routeParams.status
       }
     });
 
@@ -14,7 +15,6 @@ angular.module('compass')
 
     $scope.totalApplicationCount = 999;
     $scope.queryOptions = states.get('mvApplicationListCtrl' + $routeParams.status).queryOptions;
-    $scope.queryOptions.status = $routeParams.status;
 
     $scope.query = function () {
       $http.get('/api/applications', {params: $scope.queryOptions}).success(function (result) {

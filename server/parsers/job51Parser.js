@@ -35,6 +35,9 @@ function parseBasicInfo(table) {
     resume.birthday = helper.parseDate(firstLineItems[2].split('(')[1]);
     resume.job51Id = helper.onlyNumber(tableData[0][1]);
     resume.residency = tableData[1][1];
+    if (tableData.length >= 4) {
+      resume.hukou = tableData[1][3];
+    }
     resume.mobile = helper.onlyNumber(tableData[2][1]);
     resume.email = tableData[3][1];
     resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
@@ -146,14 +149,14 @@ function parseEducationHistory(table) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
-    return _.times((tableData.length + 1) / 3, function (n) {
+    return _.times(Math.ceil((tableData.length + 1) / 3), function (n) {
       var dateRange = helper.parseDateRange(tableData[n * 3][0]);
       return { from: dateRange.from,
         to: dateRange.to,
         school: tableData[n * 3][1],
         major: tableData[n * 3][2],
         degree: helper.parseDegree(tableData[n * 3][3]),
-        description: tableData[n * 3 + 1][0]
+        description: tableData[n * 3 + 1] ? tableData[n * 3 + 1][0] : ''
       };
     });
   } catch (e) {

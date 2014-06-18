@@ -5,7 +5,7 @@ var _ = require('lodash'),
 
 exports.onlyNumber = function onlyNumber(input) {
   var match = input.match(/\d+/g);
-  return match[0];
+  return match ? match[0] : null;
 };
 
 var genderMap = {
@@ -327,7 +327,7 @@ exports.isPoliticalStatus = function isPoliticalStatus(input) {
 };
 
 exports.isMobile = function isMobile(input) {
-  return input.indexOf('手机') > -1;
+  return input.indexOf('手机') > -1 || (exports.onlyNumber(input) && exports.onlyNumber(input).length === 11);
 };
 
 exports.isEmail = function isEmail(input) {
