@@ -19,8 +19,7 @@ angular.module('compass')
           if (_.isString(item)) {
             item = item.trim();
             return item === permission ||
-              (item === '*' && permission[0] !== '#') ||
-              item === '#';
+              item === '*';
           }
           return false;
         });
