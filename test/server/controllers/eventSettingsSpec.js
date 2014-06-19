@@ -8,7 +8,7 @@ describe('eventSettings', function () {
     user;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User','Role', 'EventSetting', function () {
+    helper.clearCollections('Company', 'User', 'Role', 'EventSetting', function () {
       helper.login(function (agent, newUser) {
         request = agent;
         user = newUser;
@@ -70,7 +70,6 @@ describe('eventSettings', function () {
           .expect(200, function () {
             EventSetting.findOne({company: user.company}, function (err, eventSetting) {
               expect(eventSetting.duration).to.equal(45);
-              expect(eventSetting.createdBy.toString()).to.equal(user.id);
               done();
             });
           });

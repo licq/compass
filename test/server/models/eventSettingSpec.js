@@ -4,7 +4,8 @@ var
   EventSetting = require('mongoose').model('EventSetting'),
   helper = require('../testHelper'),
   expect = require('chai').expect,
-  Factory = require('../factory');
+  Factory = require('../factory'),
+  _ = require('lodash');
 
 describe('EventSetting', function () {
   beforeEach(function (done) {
@@ -14,9 +15,8 @@ describe('EventSetting', function () {
   describe('#create', function () {
     it('should create an eventSetting', function (done) {
       Factory.build('eventSetting', function (eventSetting) {
-        eventSetting.save(function (err, saved) {
+        eventSetting.save(function (err) {
           expect(err).to.not.exist;
-          expect(saved.createdAt).to.exist;
           done();
         });
       });
@@ -34,12 +34,17 @@ describe('EventSetting', function () {
       });
     });
 
-    it('should generate email contents', function (done) {
-      Factory.create('user', function (user) {
-        Factory.create('eventSetting', {newToApplier: true, newTemplateToApplier: '',
-            newToInterviewer: true, newTemplateToInterviewer: '', createdBy: user, company: user.company },
-          function (eventSetting) {
-            EventSetting.generateEmails('new', {interviewers: [eventSetting.createdBy],
+    var statusForSubject = {new: '', edit: '变更', delete: '取消'};
+    _.forEach(_.keys(statusForSubject), function (key) {
+      it('should generate email contents with event status ' + key, function (done) {
+        Factory.create('user', function (user) {
+          var eventsSettingValue = {};
+          eventsSettingValue[key + 'ToApplier'] = true;
+          eventsSettingValue[key + 'ToInterviewer'] = true;
+          eventsSettingValue.company = user.company;
+
+          Factory.create('eventSetting', eventsSettingValue, function () {
+            EventSetting.generateEmails(key, {interviewers: [user._id],
               email: 'aa@aa.com',
               applyPosition: 'cio',
               startTime: new Date(),
@@ -49,11 +54,12 @@ describe('EventSetting', function () {
               expect(err).to.not.exist;
               expect(emails).to.have.length(2);
               expect(emails[0].to).to.deep.equal(['aa@aa.com']);
-              expect(emails[0].subject).to.equal('面试提醒');
+              expect(emails[0].subject).to.equal('面试' + statusForSubject[key] + '提醒');
               expect(emails[1].to[0]).to.equal(user.email);
               done();
             });
           });
+        });
       });
     });
 
@@ -65,4 +71,4 @@ describe('EventSetting', function () {
       });
     });
   });
-}) ;
+});

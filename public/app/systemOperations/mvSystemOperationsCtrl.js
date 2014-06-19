@@ -39,6 +39,7 @@ angular.module('compass')
     };
 
     $scope.reparseMails = function () {
+      mvNotifier.notify('准备重新解析邮件');
       $http.post('/api/systemOperations/reparseMails').success(function () {
         $scope.refreshResumeCounts();
         mvNotifier.notify('重新解析任务已生成，请手动刷新');

@@ -18,10 +18,10 @@ module.exports = function (config) {
   require('../models/user');
   require('../models/email');
   require('../models/mail');
+  require('../models/eventSetting');
   require('../models/signup');
   require('../models/token');
   require('../models/resume');
-  require('../models/eventSetting');
   require('../models/interview');
   require('../models/evaluationCriterion');
   require('../models/applierRejectReason');

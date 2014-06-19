@@ -11,7 +11,7 @@ exports.create = function (req, res) {
 
   signup.save(function (err) {
     if (err) return res.json(400, err);
-    jobs.sendSignupEmail(signup.adminEmail, signup._id);
+    jobs.sendSignupEmail(signup.adminName, signup.adminEmail, signup._id);
     res.json({email: signup.adminEmail});
   });
 };
