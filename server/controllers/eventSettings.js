@@ -19,7 +19,6 @@ exports.save = function (req, res, next) {
         _.merge(eventSetting, req.body);
       else {
         eventSetting = new EventSetting(req.body);
-        eventSetting.createdBy = req.user._id;
         eventSetting.company = req.user.company;
       }
       eventSetting.save(function (err) {

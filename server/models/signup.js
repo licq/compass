@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
   Company = mongoose.model('Company'),
   Role = mongoose.model('Role'),
   User = mongoose.model('User'),
+  EventSetting = mongoose.model('EventSetting'),
   validator = require('validator'),
   uuid = require('node-uuid'),
   timestamps = require('mongoose-timestamp'),
@@ -53,12 +54,13 @@ signupSchema.path('adminEmail').validate(function (email, respond) {
   });
 }, '该邮箱已注册');
 
-signupSchema.pre('save', function(next){
-  if(this.isNew){
+signupSchema.pre('save', function (next) {
+  if (this.isNew) {
     this._id = uuid.v1();
   }
   next();
 });
+
 
 signupSchema.methods.activate = function (done) {
   var self = this;
@@ -75,11 +77,13 @@ signupSchema.methods.activate = function (done) {
           role: role._id
         }, function (err, user) {
           if (err) return done(err);
-          done(null, company, user);
+          EventSetting.create({company: company._id}, function (err) {
+            if (err) return done(err);
+            done(null, company, user);
+          });
         });
       });
   });
 };
-
 
 mongoose.model('Signup', signupSchema);

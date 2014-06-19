@@ -8,12 +8,13 @@ var app = require('../../../server'),
   expect = require('chai').expect,
   Role = mongoose.model('Role'),
   User = mongoose.model('User'),
+  EventSetting = mongoose.model('EventSetting'),
   Company = mongoose.model('Company');
 
 
 describe('singups', function () {
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Role', 'Signup', done);
+    helper.clearCollections('User', 'Company', 'Role', 'Signup', 'EventSetting', done);
   });
 
   describe('POST /api/signups', function () {
@@ -29,7 +30,7 @@ describe('singups', function () {
   });
 
   describe('PUT /api/signups/:id', function () {
-    it('should create company and user', function (done) {
+    it('should create company role, user and eventsetting', function (done) {
       Factory.create('signup', function (signup) {
         request(app)
           .put('/publicApi/signups/' + signup._id)
@@ -44,7 +45,11 @@ describe('singups', function () {
                 User.findOne({role: role._id}, function (err, user) {
                   expect(err).to.not.exist;
                   expect(user).to.exist;
-                  done();
+                  EventSetting.findOne({company: company._id}, function (err, es) {
+                    expect(err).to.not.exist;
+                    expect(es).to.exist;
+                    done();
+                  });
                 });
               });
             });
