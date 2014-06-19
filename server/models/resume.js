@@ -252,20 +252,47 @@ resumeSchema.statics.query = function (params, callback) {
 
   if (params.q) {
     queryConditions.query.filtered.query = {
-      match: {
-        _all: {
-          query: params.q,
-          operator: 'and'
-        }
+      bool: {
+        must: _.map(params.q.split(' '), function (item) {
+          return {
+            multi_match: {
+              query: item,
+              analyzer: 'ik',
+              type: 'phrase',
+              slop: 1,
+              fields: [
+                'name',
+                'careerObjective.selfAssessment',
+                'certifications.subject',
+                'channel',
+                'email',
+                'inSchoolPractices.content',
+                'inSchoolStudy',
+                'itSkills.skill',
+                'languageCertificates.english',
+                'languageSkills.language',
+                'educationHistory.major',
+                'educationHistory.school',
+                'projectExperience.description',
+                'projectExperience.developmentTools',
+                'projectExperience.name',
+                'projectExperience.responsibility',
+                'projectExperience.softwareEnvironment',
+                'workExperience.company',
+                'workExperience.department',
+                'workExperience.industry',
+                'workExperience.jobTitle',
+                'workExperience.jobDescription'
+              ]
+            }
+          };
+        })
       }
     };
   } else {
     queryConditions.query.filtered.query = {
       match_all: {}
     };
-  }
-  if (params.sort) {
-    queryConditions.sort = params.sort;
   }
 
   if (params.page && params.pageSize) {
@@ -421,11 +448,10 @@ resumeSchema.plugin(mongoosastic, {
             type: 'string'
           },
           selfAssessment: {
-            index: 'no',
-            type: 'string'
+            type: 'string',
+            analyzer: 'ik'
           },
           targetSalary: {
-
             properties: {
               from: {
                 index: 'not_analyzed',
@@ -496,7 +522,8 @@ resumeSchema.plugin(mongoosastic, {
           },
           degree: {
             type: 'string',
-            index: 'not_analyzed'
+            index: 'not_analyzed',
+            boost: 5
           },
           from: {
             type: 'date',
@@ -505,11 +532,13 @@ resumeSchema.plugin(mongoosastic, {
           },
           major: {
             type: 'string',
-            analyzer: 'ik'
+            analyzer: 'ik',
+            boost: 5
           },
           school: {
             type: 'string',
-            analyzer: 'ik'
+            analyzer: 'ik',
+            boost: 10
           },
           to: {
             type: 'date',
@@ -642,11 +671,8 @@ resumeSchema.plugin(mongoosastic, {
       },
       name: {
         type: 'string',
-        boost: 5,
-        index: 'not_analyzed',
-        norms: {
-          enabled: true
-        }
+        boost: 15,
+        analyzer: 'ik'
       },
       politicalStatus: {
         type: 'string',
@@ -714,7 +740,7 @@ resumeSchema.plugin(mongoosastic, {
           company: {
             type: 'string',
             analyzer: 'ik',
-            boost: 5
+            boost: 10
           },
           department: {
             type: 'string',
@@ -739,7 +765,7 @@ resumeSchema.plugin(mongoosastic, {
           jobTitle: {
             type: 'string',
             analyzer: 'ik',
-            boost: 3
+            boost: 5
           },
           to: {
             type: 'date',
