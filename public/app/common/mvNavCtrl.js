@@ -66,7 +66,6 @@ angular.module('compass')
     }
 
     $scope.$on('loggedIn', function () {
-      console.log('liMVI', mvIdentity);
       mvPermission.setPermissions();
       $scope.onboardCount();
       refreshAll();
@@ -134,7 +133,6 @@ angular.module('compass')
     $scope.$on('roleChanged', function (event, role) {
       if (mvIdentity.currentUser.role._id === role._id) {
         mvIdentity.currentUser.role = role;
-        console.log('role ', role);
         mvPermission.setPermissions();
       }
     });
@@ -142,8 +140,6 @@ angular.module('compass')
     $scope.$on('userChanged', function (event, user) {
       if (mvIdentity.currentUser._id === user._id) {
         mvIdentity.currentUser = angular.copy(user);
-        console.log('userchange', mvIdentity);
-        console.log('user', user);
         mvPermission.setPermissions();
       }
     });

@@ -182,9 +182,17 @@ module.exports = function (app) {
   app.use('/publicApi', publicApiRouter);
 
   app.get('/', function (req, res) {
-    res.render('index', {
-      bootstrappedUser: req.user
-    });
+    if (req.user) {
+      req.user.withPermissions(function (err, user) {
+        res.render('index', {
+          bootstrappedUser: user
+        });
+      });
+    } else {
+      res.render('index', {
+        bootstrappedUser: null
+      });
+    }
   });
 
   app.use(function (req, res) {

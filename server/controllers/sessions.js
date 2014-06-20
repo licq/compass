@@ -18,10 +18,14 @@ exports.authenticate = function (req, res, next) {
               if (!err) {
                 res.cookie('remember_me', token.id, { path: '/', httpOnly: true, maxAge: 604800000 });
               }
-              return res.json(req.user);
+              return req.user.withPermissions(function (err, user) {
+                res.json(user);
+              });
             });
           } else {
-            return res.json(req.user);
+            return req.user.withPermissions(function (err, user) {
+              res.json(user);
+            });
           }
         }
       );
