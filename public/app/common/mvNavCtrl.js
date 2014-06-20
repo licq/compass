@@ -3,7 +3,6 @@
 angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
-    console.log('MVI', mvIdentity);
     $scope.counts = {};
     $scope.updateNavCounts = function (query) {
       mvNav.get(query, function (counts) {
@@ -56,7 +55,6 @@ angular.module('compass')
     }
 
     if (mvIdentity.isAuthenticated()) {
-      console.log('auMVI', mvIdentity);
       mvPermission.setPermissions();
       $scope.onboardCount();
       refreshAll();
