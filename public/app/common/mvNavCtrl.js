@@ -3,6 +3,7 @@
 angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
+    console.log('MVI', mvIdentity);
     $scope.counts = {};
     $scope.updateNavCounts = function (query) {
       mvNav.get(query, function (counts) {
@@ -55,6 +56,7 @@ angular.module('compass')
     }
 
     if (mvIdentity.isAuthenticated()) {
+      console.log('auMVI', mvIdentity);
       mvPermission.setPermissions();
       $scope.onboardCount();
       refreshAll();
@@ -126,6 +128,20 @@ angular.module('compass')
 
     $scope.$on('reviewAdded', function () {
       $scope.counts.unreviewed--;
+    });
+
+    $scope.$on('roleChanged', function (event, role) {
+      if (mvIdentity.currentUser.role._id === role._id) {
+        mvIdentity.currentUser.role = role;
+        mvPermission.setPermissions();
+      }
+    });
+
+    $scope.$on('userChanged', function (event, user) {
+      if (mvIdentity.currentUser._id === user._id) {
+        mvIdentity.currentUser = angular.copy(user);
+        mvPermission.setPermissions();
+      }
     });
 
     $scope.logout = function () {

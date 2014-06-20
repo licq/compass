@@ -28,6 +28,7 @@ var express = require('express'),
 module.exports = function (app) {
   var apiRouter = express.Router();
   var publicApiRouter = express.Router();
+  var systemApiRouter = express.Router();
 
   publicApiRouter.route('/sessions')
     .post(sessions.authenticate)
@@ -143,15 +144,6 @@ module.exports = function (app) {
   apiRouter.route('/counts')
     .get(counts.get);
 
-  apiRouter.route('/systemOperations/recreateAllJobs')
-    .post(systemOperations.recreateAllJobs);
-  apiRouter.route('/systemOperations/recreateFetchEmailJobs')
-    .post(systemOperations.recreateFetchEmailJobs);
-  apiRouter.route('/systemOperations/synchronizeEsToDb')
-    .post(systemOperations.synchronizeEsToDb);
-  apiRouter.route('/systemOperations/reparseMails')
-    .post(systemOperations.reparseMails);
-
   apiRouter.route('/resumeReports/counts')
     .get(resumeReports.counts);
   apiRouter.route('/resumeReports/applyPositions')
@@ -172,26 +164,40 @@ module.exports = function (app) {
       stack: err.stack});
   });
 
+  systemApiRouter.use(sessions.requiresLogin);
+  systemApiRouter.use(roles.isSystemAdmin);
+  systemApiRouter.use(function (err, req, res, next) {
+    if (!err) return next();
+    logger.error(err.stack);
+    res.send(500, {message: 'Internal Server Error',
+      stack: err.stack});
+  });
+  systemApiRouter.route('/recreateAllJobs')
+    .post(systemOperations.recreateAllJobs);
+  systemApiRouter.route('/recreateFetchEmailJobs')
+    .post(systemOperations.recreateFetchEmailJobs);
+  systemApiRouter.route('/synchronizeEsToDb')
+    .post(systemOperations.synchronizeEsToDb);
+  systemApiRouter.route('/reparseMails')
+    .post(systemOperations.reparseMails);
+
+  app.use('/api/systemOperations', systemApiRouter);
   app.use('/api', apiRouter);
   app.use('/publicApi', publicApiRouter);
 
   app.get('/', function (req, res) {
-      if (req.user) {
-        Role.findOne({_id: req.user.role}).exec(function (err, role) {
-          role = role || {};
-          req.user = req.user.toObject();
-          req.user.permissions = role.permissions;
-          res.render('index', {
-            bootstrappedUser: req.user
-          });
-        });
-      } else {
+    if (req.user) {
+      req.user.withPermissions(function (err, user) {
         res.render('index', {
-          bootstrappedUser: null
+          bootstrappedUser: user
         });
-      }
+      });
+    } else {
+      res.render('index', {
+        bootstrappedUser: null
+      });
     }
-  );
+  });
 
   app.use(function (req, res) {
     logger.error('request unknown url ' + req.url);
@@ -208,5 +214,4 @@ module.exports = function (app) {
     res.type('txt').send('Not found');
   });
 
-}
-;
+};

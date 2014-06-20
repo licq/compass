@@ -187,13 +187,13 @@ angular.module('compass',
         templateUrl: '/app/companies/list.html',
         controller: 'mvCompanyListCtrl',
         authenticate: true,
-        permissions: '#sysSetCompanies'
+        permissions: '#systemSettings'
       })
       .when('/systemSettings/systemOperations', {
         templateUrl: '/app/systemOperations/view.html',
         controller: 'mvSystemOperationsCtrl',
         authenticate: true,
-        permissions: '#sysSetOperations'
+        permissions: '#systemSettings'
       })
       .when('/reports/resumes', {
         templateUrl: '/app/resumeReports/view.html',
