@@ -34,7 +34,11 @@ describe('mvNavCtrl', function () {
         ]);
 
       mvIdentity.currentUser = {
-        _id: '7788'
+        _id: '7788',
+        role : {
+          id: '6677',
+          permissions:['viewUsers']
+        }
       };
 
       $controller('mvNavCtrl', {

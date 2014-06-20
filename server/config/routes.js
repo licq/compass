@@ -182,22 +182,10 @@ module.exports = function (app) {
   app.use('/publicApi', publicApiRouter);
 
   app.get('/', function (req, res) {
-      if (req.user) {
-        Role.findOne({_id: req.user.role}).exec(function (err, role) {
-          role = role || {};
-          req.user = req.user.toObject();
-          req.user.permissions = role.permissions;
-          res.render('index', {
-            bootstrappedUser: req.user
-          });
-        });
-      } else {
-        res.render('index', {
-          bootstrappedUser: null
-        });
-      }
-    }
-  );
+    res.render('index', {
+      bootstrappedUser: req.user
+    });
+  });
 
   app.use(function (req, res) {
     logger.error('request unknown url ' + req.url);

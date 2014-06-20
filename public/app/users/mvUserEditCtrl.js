@@ -1,26 +1,25 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvUserEditCtrl', function ($scope, mvUser, mvRole, $routeParams, mvPermission, mvIdentity, $location, mvNotifier) {
-
+  .controller('mvUserEditCtrl', function ($scope, $rootScope, mvUser, mvRole, $routeParams, mvPermission, mvIdentity, $location, mvNotifier) {
     mvRole.query(function (roles) {
       $scope.roles = roles;
       mvUser.get({_id: $routeParams.id}, function (user) {
         $scope.user = user;
-        $scope.oldUser = angular.copy(user);
       });
     });
 
     $scope.update = function () {
-      $scope.user.$update(function () {
-        if ($scope.user._id === mvIdentity.currentUser._id && $scope.user.role._id !== $scope.oldUser.role._id) {
-          mvRole.get({_id: $scope.user.role._id}, function (role) {
-            mvIdentity.currentUser.permissions = role.permissions;
-            mvPermission.setPermissions();
-          });
+      _.forEach($scope.roles,function(role){
+        if(role._id === $scope.user.role._id){
+          $scope.user.role = role;
+          return false;
         }
-        $location.path('/settings/users');
+      });
+      $scope.user.$update(function () {
+        $rootScope.$broadcast('userChanged', $scope.user);
         mvNotifier.notify('修改用户成功');
+        $location.path('/settings/users');
       }, function (err) {
         $scope.err = err.data;
         mvNotifier.error('修改用户失败');

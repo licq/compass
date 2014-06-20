@@ -5,7 +5,8 @@ angular.module('compass')
     return {
       setPermissions: function () {
         if (mvIdentity.currentUser) {
-          permissionList = mvIdentity.currentUser.permissions;
+          permissionList = mvIdentity.currentUser.role.permissions;
+          console.log('pl',permissionList);
         } else {
           permissionList = [];
         }

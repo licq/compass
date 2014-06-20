@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvRoleEditCtrl', function ($scope, mvRole, mvIdentity, mvPermission, $routeParams, menuPermissions, $location, mvNotifier) {
+  .controller('mvRoleEditCtrl', function ($scope, $rootScope, mvRole, mvIdentity, mvPermission, $routeParams, menuPermissions, $location, mvNotifier) {
 
     function hasPermission(permission) {
       return $scope.role.permissions.indexOf(permission) > -1;
@@ -62,11 +62,8 @@ angular.module('compass')
       }), 'name');
 
       $scope.role.$update(function () {
-        if (mvIdentity.currentUser.role === $scope.role._id) {
-          mvIdentity.currentUser.permissions = $scope.role.permissions;
-          mvPermission.setPermissions();
-        }
         mvNotifier.notify('修改角色成功');
+        $rootScope.$broadcast('roleChanged', $scope.role);
         $location.path('/settings/roles');
       }, function (err) {
         $scope.err = err.data;
