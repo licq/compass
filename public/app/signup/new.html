@@ -98,22 +98,51 @@
                    ng-show="eventForm.adminPassword.$error.minlength && !eventForm.adminPassword.$pristine">
                   密码最短为6位</p>
               </div>
+            </div>
 
-              <div class="form-group">
-                <p class="text-muted text-small">点击注册, 代表您同意 <a href="javascript:;">terms &
-                  conditions</a> 以及 <a href="javascript:;">隐私策略</a></p>
+            <div class="form-group captcha-group">
+              <div class="input-group input-group-lg">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                </span>
 
-                <div class="divider"></div>
-                <a class="btn btn-primary btn-block btn-lg" ng-click="create()"
-                   ng-disabled="eventForm.$invalid">注册</a>
+                <div class="row">
+                  <div class="col-md-4">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="请输入验证码"
+                           ng-model="captcha"
+                           name="captcha"
+                           required>
+                  </div>
+                  <div class="col-md-1">
+                    <span class="text-success glyphicon glyphicon-ok" ng-show="captchaValid"></span>
+                    <span class="text-danger glyphicon glyphicon-remove" ng-show="captchaValid === false"></span>
+                  </div>
+                  <div class="col-md-7">
+
+                    <img ng-src="{{captchaUrl}}" class="form-control" ng-click="changeCaptchaUrl()">
+                  </div>
+                </div>
+
+                <p class="text-danger" ng-show="err.errors.captcha"> {{err.errors.captcha.message}}</p>
+
               </div>
+            </div>
+
+            <div class="form-group">
+              <p class="text-muted text-small">点击注册, 代表您同意 <a href="javascript:;">terms &
+                conditions</a> 以及 <a href="javascript:;">隐私策略</a></p>
+
+              <div class="divider"></div>
+              <a class="btn btn-primary btn-block btn-lg" ng-click="create()"
+                 ng-disabled="eventForm.$invalid || !captchaValid">注册</a>
             </div>
           </form>
         </section>
         <section>
           <p class=" text-center text-muted">已经有帐号? <a href="#/login">现在登陆</a></p>
         </section>
-
       </div>
     </div>
   </div>

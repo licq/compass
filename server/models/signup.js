@@ -37,7 +37,6 @@ var signupSchema = new Schema({
     required: [true, '请输入管理员密码'],
     validate: [_.partialRight(validator.isLength, 6), '密码长度应大于6位']
   }
-
 });
 
 signupSchema.plugin(timestamps);

@@ -7,6 +7,10 @@ var mongoose = require('mongoose'),
 
 
 exports.create = function (req, res) {
+  if (req.session.captcha)
+    if(!req.body.captcha || req.body.captcha.toLowerCase() !== req.session.captcha.toLowerCase()) {
+    return res.send(400, {errors: {captcha: {message: '验证码不正确'}}});
+  }
   var signup = new Signup(req.body);
 
   signup.save(function (err) {

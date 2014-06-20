@@ -18,6 +18,7 @@ var express = require('express'),
   reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
   counts = require('../controllers/counts'),
+  captchas = require('../controllers/captchas'),
   systemOperations = require('../controllers/systemOperations'),
   resumeReports = require('../controllers/resumeReports'),
   interviewReports = require('../controllers/interviewReports'),
@@ -34,6 +35,9 @@ module.exports = function (app) {
 
   publicApiRouter.route('/signups').post(signups.create);
   publicApiRouter.route('/signups/:code').put(signups.activate);
+  publicApiRouter.route('/captchas')
+    .get(captchas.create)
+    .put(captchas.verify);
 
   apiRouter.use(sessions.requiresLogin);
   apiRouter.route('/emails')

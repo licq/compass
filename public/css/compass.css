@@ -202,3 +202,20 @@ g.nv-series{
 .angular-ui-tree-nodes .angular-ui-tree-nodes {
     padding-left: 35px;
 }
+
+.captcha-group .row div.col-md-4{
+    padding: 0 0 0 15px;
+}
+.captcha-group .row div.col-md-1{
+    padding: 0 0 0 0;
+}
+.captcha-group .row div.col-md-7{
+    padding: 0 15px 0 0;
+}
+
+.captcha-group .row div.col-md-1 span{
+    margin-top: 15px;
+}
+.captcha-group .row div input, .captcha-group .row div img{
+    height: 46px;
+}
