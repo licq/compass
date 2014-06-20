@@ -2,7 +2,6 @@
 
 var express = require('express'),
   roles = require('../controllers/roles'),
-  Role = require('mongoose').model('Role'),
   sessions = require('../controllers/sessions'),
   emails = require('../controllers/emails'),
   signups = require('../controllers/signups'),
@@ -51,9 +50,6 @@ module.exports = function (app) {
     .delete(emails.delete)
     .put(emails.update);
 
-  apiRouter.route('/emailCount')
-    .get(emails.count);
-
   apiRouter.route('/mails')
     .get(mails.list);
 
@@ -86,20 +82,11 @@ module.exports = function (app) {
     .put(roles.update)
     .delete(roles.delete);
 
-  apiRouter.route('/companies')
-    .get(companies.list);
-  apiRouter.route('/companies/:id')
-    .all(companies.load)
-    .get(companies.get);
-
   apiRouter.route('/resumes')
     .get(resumes.list);
   apiRouter.route('/resumes/:id')
     .all(resumes.load)
     .get(resumes.get);
-
-  apiRouter.route('/resumeCounts')
-    .get(resumes.counts);
 
   apiRouter.route('/eventSettings')
     .get(eventSettings.get);
@@ -165,7 +152,7 @@ module.exports = function (app) {
   });
 
   systemApiRouter.use(sessions.requiresLogin);
-  systemApiRouter.use(roles.isSystemAdmin);
+  systemApiRouter.use(users.isSystemAdmin);
   systemApiRouter.use(function (err, req, res, next) {
     if (!err) return next();
     logger.error(err.stack);
@@ -180,8 +167,17 @@ module.exports = function (app) {
     .post(systemOperations.synchronizeEsToDb);
   systemApiRouter.route('/reparseMails')
     .post(systemOperations.reparseMails);
+  systemApiRouter.route('/resumeCounts')
+    .get(resumes.counts);
+  systemApiRouter.route('/emailCount')
+    .get(emails.count);
+  systemApiRouter.route('/companies')
+    .get(companies.list);
+  systemApiRouter.route('/companies/:id')
+    .all(companies.load)
+    .get(companies.get);
 
-  app.use('/api/systemOperations', systemApiRouter);
+  app.use('/sysAdminApi', systemApiRouter);
   app.use('/api', apiRouter);
   app.use('/publicApi', publicApiRouter);
 

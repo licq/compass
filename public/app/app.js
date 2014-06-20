@@ -244,7 +244,7 @@ angular.module('compass',
 
       var permissions = next.permissions;
       if (permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)) {
-        $location.path('/');
+        $location.path('/today');
       }
     });
   })

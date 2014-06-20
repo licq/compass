@@ -4,13 +4,13 @@ angular.module('compass')
       $http.get('/tasks/stats').success(function (res) {
         $scope.taskStats = res;
       });
-      $http.get('/api/emailCount').success(function (res) {
+      $http.get('/sysAdminApi/emailCount').success(function (res) {
         $scope.emailCount = res.emailCount;
       });
     };
 
     $scope.refreshResumeCounts = function () {
-      $http.get('/api/resumeCounts').success(function (res) {
+      $http.get('/sysAdminApi/resumeCounts').success(function (res) {
         $scope.resumeCountInDb = res.resumeCountInDb;
         $scope.resumeCountInEs = res.resumeCountInEs;
         $scope.mailCount = res.mailCount;
@@ -18,13 +18,13 @@ angular.module('compass')
     };
 
     $scope.recreateAllJobs = function () {
-      $http.post('/api/systemOperations/recreateAllJobs').success(function () {
+      $http.post('/sysAdminApi/recreateAllJobs').success(function () {
         $scope.refreshTaskStats();
         mvNotifier.notify('重建已完成');
       });
     };
     $scope.recreateFetchEmailJobs = function () {
-      $http.post('/api/systemOperations/recreateFetchEmailJobs').success(function () {
+      $http.post('/sysAdminApi/recreateFetchEmailJobs').success(function () {
         $scope.refreshTaskStats();
         mvNotifier.notify('重建已完成');
       });
@@ -32,7 +32,7 @@ angular.module('compass')
 
     $scope.synchronizeEsToDb = function () {
       mvNotifier.notify('重建ES开始');
-      $http.post('/api/systemOperations/synchronizeEsToDb').success(function () {
+      $http.post('/sysAdminApi/synchronizeEsToDb').success(function () {
         $scope.refreshResumeCounts();
         mvNotifier.notify('重建ES完成');
       });
@@ -40,7 +40,7 @@ angular.module('compass')
 
     $scope.reparseMails = function () {
       mvNotifier.notify('准备重新解析邮件');
-      $http.post('/api/systemOperations/reparseMails').success(function () {
+      $http.post('/sysAdminApi/reparseMails').success(function () {
         $scope.refreshResumeCounts();
         mvNotifier.notify('重新解析任务已生成，请手动刷新');
       });

@@ -65,11 +65,3 @@ exports.load = function (req, res, next) {
       next();
     });
 };
-
-exports.isSystemAdmin = function (req, res, next) {
-  Role.findOne({_id: req.user.role}, function (err, role) {
-    if (role.name === '系统管理员' && role.permissions[0] ==='#systemSettings')
-      return next();
-    res.send(403, {message: 'Forbidden'});
-  });
-};

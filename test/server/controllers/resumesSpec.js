@@ -8,7 +8,7 @@ describe('#resumes', function () {
   var request, resume, user;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company','Role', 'Resume', 'Mail', function () {
+    helper.clearCollections('User', 'Company', 'Role', 'Resume', 'Mail', function () {
       Resume.recreateIndex(function () {
         helper.login(function (agent, newUser) {
           user = newUser;
@@ -41,17 +41,33 @@ describe('#resumes', function () {
       });
   });
 
-  describe('get /api/resumeCounts', function () {
+  describe('get /sysAdminApi/resumeCounts', function () {
     it('should return resumeCountInDb and resumeCountInEs', function (done) {
-      request.get('/api/resumeCounts')
-        .expect(200)
-        .end(function (err, res) {
-          expect(err).to.not.exist;
-          expect(res.body).to.have.property('resumeCountInDb', 1);
-          expect(res.body).to.have.property('resumeCountInEs', 1);
-          expect(res.body).to.have.property('mailCount', 1);
-          done();
+      Factory.create('company', {name: 'compasstest'}, function (createdCompany) {
+        Factory.create('role', {name: '系统管理员', company: createdCompany._id, permissions: ['#systemSettings']}, function (createdRole) {
+          Factory.create('user',
+            {name: 'systemadmin',
+              email: 'sysad@cpstest.com',
+              password: 'test123',
+              company: createdCompany._id,
+              role: createdRole._id,
+              title: 'system admin'}, function (sysAdmin) {
+              helper.login(sysAdmin, function (agent) {
+                request = agent;
+                request.get('/sysAdminApi/resumeCounts')
+                  .expect(200)
+                  .end(function (err, res) {
+                    expect(err).to.not.exist;
+                    expect(res.body).to.have.property('resumeCountInDb', 1);
+                    expect(res.body).to.have.property('resumeCountInEs', 1);
+                    expect(res.body).to.have.property('mailCount', 1);
+                    done();
+                  });
+              });
+            });
         });
+      });
+
     });
   });
 

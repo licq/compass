@@ -13,7 +13,7 @@ describe('mvLoginCtrl', function () {
     });
   }));
 
-  it('should redirect to /dashboard when login success', inject(function ($location, mvNotifier) {
+  it('should redirect to /today when login success', inject(function ($location, mvNotifier) {
     var notifySpy = sinon.spy(mvNotifier, 'notify');
     var userData = {email: 'email', password: 'password', remember_me: true};
     $httpBackend.expectPOST('/publicApi/sessions', userData)
@@ -24,7 +24,7 @@ describe('mvLoginCtrl', function () {
 
     $scope.login();
     $httpBackend.flush();
-    expect(spy).to.have.been.calledWith('/dashboard');
+    expect(spy).to.have.been.calledWith('/today');
     expect(spy).to.have.been.calledOnce;
     expect(notifySpy).to.have.been.calledWith('登陆成功');
   }));

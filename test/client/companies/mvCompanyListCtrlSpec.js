@@ -7,7 +7,7 @@ describe('mvCompanyListCtrl', function () {
 
   beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/companies').respond(function () {
+    $httpBackend.expectGET('/sysAdminApi/companies').respond(function () {
       return [200, [
         {name: 'compass1'},
         {name: 'compass2'},

@@ -67,3 +67,12 @@ exports.load = function (req, res, next) {
       next();
     });
 };
+
+
+exports.isSystemAdmin = function (req, res, next) {
+  req.user.isSystemAdmin(function (err, result) {
+    if (err) return next(err);
+    if (result === true) return next();
+    res.send(403, {message: 'Forbidden'});
+  });
+};
