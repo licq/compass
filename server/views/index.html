@@ -7,10 +7,7 @@
   <title>Compass</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-  <!--<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet'-->
-  <!--type='text/css'>-->
-  <!-- needs images, font... therefore can not be part of ui.css -->
+  <!-- build:css(public) styles/vendor.css -->
   <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="/vendor/fullcalendar/fullcalendar.css">
   <link rel="stylesheet" href="/vendor/select2/select2.css">
@@ -18,16 +15,17 @@
   <link rel="stylesheet" href="/vendor/angular-ui-tree/dist/angular-ui-tree.min.css">
   <link rel="stylesheet" href="/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css">
   <link rel="stylesheet" href="/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"/>
-  <!-- end needs images -->
   <link rel="stylesheet" href="/vendor/trNgGrid/release/trNgGrid.min.css"/>
   <link rel="stylesheet" href="/vendor/nvd3/nv.d3.min.css"/>
+  <!-- endbuild -->
+  <!-- build:css(public) styles/main.css -->
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/compass.css">
-
+  <!-- endbuild -->
 </head>
 
 <body ng-app="compass" id="app" data-custom-background data-off-canvas-nav>
-<!--[if lt IE 9]>
+<!--[if lt IE 8]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
   your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -49,44 +47,45 @@
     <section data-ng-view id="content" class="animate-fade-up"></section>
   </div>
 </div>
-<!-- build:js scripts/vendor.js -->
+<!-- build:js(public) scripts/vendor.js -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/angular/angular.min.js"></script>
 <script src="/vendor/angular-route/angular-route.min.js"></script>
 <script src="/vendor/angular-animate/angular-animate.min.js"></script>
 <script src="/vendor/angular-cookies/angular-cookies.min.js"></script>
 <script src="/vendor/angular-resource/angular-resource.min.js"></script>
+<script src="/vendor/textAngular/dist/textAngular-sanitize.min.js"></script>
 <script src="/vendor/moment/min/moment-with-langs.min.js"></script>
 <script src="/vendor/lodash/dist/lodash.min.js"></script>
-<script src="/vendor/d3/d3.min.js"></script>
-<script src="/scripts/vendors/nv.d3.js"></script>
-<!-- endbuild -->
+<script src="/vendor/jquery-ui/ui/jquery-ui.custom.js"></script>
 
-<!-- build:js scripts/ui.js -->
 <script src="/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="/vendor/toastr/toastr.min.js"></script>
 <script src="/vendor/jquery.slimscroll/jquery.slimscroll.min.js"></script>
-<script src="/scripts/vendors/responsive-tables.js"></script>
-<script src="/vendor/textAngular/dist/textAngular-sanitize.min.js"></script>
+
 <script src="/vendor/textAngular/dist/textAngular.min.js"></script>
 <script src="/vendor/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
 <script src="/vendor/ng-tags-input/ng-tags-input.min.js"></script>
-<script src="/vendor/select2/select2.min.js"></script>
-<script src="/vendor/select2/select2_locale_zh-CN.js"></script>
+
 <script src="/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/vendor/d3/d3.min.js"></script>
+<script src="/scripts/vendors/nv.d3.js"></script>
 <script src="/vendor/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.min.js"></script>
 
+<script src="/vendor/trNgGrid/src/js/trNgGrid.min.js"></script>
+<script src="/vendor/fullcalendar/fullcalendar.min.js"></script>
+<script src="/vendor/angular-ui-calendar/src/calendar.js"></script>
+
+<script src="/vendor/select2/select2.min.js"></script>
+<script src="/vendor/select2/select2_locale_zh-CN.js"></script>
+<script src="/vendor/angular-ui-select2/src/select2.js"></script>
+
+<script src="/vendor/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/app.js -->
-<script type="text/javascript" src="/vendor/trNgGrid/src/js/trNgGrid.js"></script>
-<script type="text/javascript" src="/vendor/jquery-ui/ui/jquery-ui.custom.js"></script>
-<script type="text/javascript" src="/vendor/fullcalendar/fullcalendar.js"></script>
-<script type="text/javascript" src="/vendor/angular-ui-calendar/src/calendar.js"></script>
-<script type="text/javascript" src="/vendor/angular-ui-select2/src/select2.js"></script>
-<script type="text/javascript" src="/app/components/datetimepicker.js"></script>
-<script type="text/javascript" src="/vendor/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="/app/components/daterangepicker.js"></script>
+<!-- build:js(public) scripts/scripts.js -->
+<script src="/app/components/datetimepicker.js"></script>
+<script src="/app/components/daterangepicker.js"></script>
 <script type="text/javascript" src="/app/app.js"></script>
 <script type="text/javascript" src="/app/common/directives.js"></script>
 <script type="text/javascript" src="/app/directives.js"></script>
@@ -115,7 +114,8 @@
 <script type="text/javascript" src="/app/users/mvUser.js"></script>
 <script type="text/javascript" src="/app/users/mvUserNewCtrl.js"></script>
 <script type="text/javascript" src="/app/users/mvUserListCtrl.js"></script>
-<script type="text/javascript" src="/app/users/mvUserEditCtrl.js"></script><script type="text/javascript" src="/app/users/mvUser.js"></script>
+<script type="text/javascript" src="/app/users/mvUserEditCtrl.js"></script>
+<script type="text/javascript" src="/app/users/mvUser.js"></script>
 
 <script type="text/javascript" src="/app/roles/mvRole.js"></script>
 <script type="text/javascript" src="/app/roles/mvRoleNewCtrl.js"></script>
@@ -162,9 +162,11 @@
 <script type="text/javascript" src="/app/resumeReports/mvResumeReportViewCtrl.js"></script>
 <script type="text/javascript" src="/app/interviewReports/mvInterviewReportViewCtrl.js"></script>
 
+<!-- endbuild -->
+
 {% if (process.env.NODE_ENV == 'development') %}
 <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 {% endif %}
-<!-- endbuild -->
+
 </body>
 </html>

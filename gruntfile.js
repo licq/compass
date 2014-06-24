@@ -8,6 +8,10 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    project: {
+      app: 'public',
+      dist: 'dist'
+    },
     watch: {
       client: {
         files: ['public/app/**/*.js'],
@@ -31,7 +35,7 @@ module.exports = function (grunt) {
       },
 
       livereload: {
-        files: ['.rebooted','server/**/*.html', 'public/app/**','public/css/*.css'],
+        files: ['.rebooted', 'server/**/*.html', 'public/app/**', 'public/css/*.css'],
         options: {
           livereload: true
         }
@@ -60,9 +64,6 @@ module.exports = function (grunt) {
       },
       client: {
         src: ['public/app/**/*.js'],
-        options: {
-          ignores: ['public/app/Chart/*.js']
-        }
       },
       testServer: {
         src: ['test/server/**/*.js']
@@ -92,7 +93,7 @@ module.exports = function (grunt) {
         script: 'server.js',
         options: {
           nodeArgs: ['--debug'],
-          ignore: ['public/**', 'test/**','compass.log','compass-test.log'],
+          ignore: ['public/**', 'test/**', 'compass.log', 'compass-test.log'],
           callback: function (nodemon) {
             nodemon.on('restart', function () {
               setTimeout(function () {
@@ -101,8 +102,25 @@ module.exports = function (grunt) {
             });
           }
         }
+      },
+      prod: {
+        script: 'dist/server.js',
+        options: {
+          env: {
+            NODE_ENV: 'production',
+          }
+        }
       }
     },
+    express: {
+      prod: {
+        options: {
+          script: '<%=project.dist%>/server.js',
+          node_env: 'production'
+        }
+      }
+    },
+
     concurrent: {
       dev: {
         tasks: ['nodemon:dev', 'watch'],
@@ -117,6 +135,133 @@ module.exports = function (grunt) {
         }
       }
     },
+    clean: {
+      dist: {
+        files: [
+          {
+            dot: true,
+            src: [
+              '.tmp',
+              '<%= project.dist %>/*',
+              '!<%= project.dist %>/.git*',
+              '!<%= project.dist %>/Procfile'
+            ]
+          }
+        ]
+      },
+      server: '.tmp'
+    },
+    autoprefixer: {
+      options: {
+        browsers: ['last 1 version']
+      },
+      dist: {
+        files: [
+          {
+            expand: true,
+            cwd: '.tmp/styles/',
+            src: '{,*/}*.css',
+            dest: '.tmp/styles/'
+          }
+        ]
+      }
+    },
+    rev: {
+      dist: {
+        files: {
+          src: [
+            '<%= project.dist %>/public/scripts/{,*/}*.js',
+            '<%= project.dist %>/public/styles/{,*/}*.css',
+            '<%= project.dist %>/public/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= project.dist %>/public/styles/fonts/*'
+          ]
+        }
+      }
+    },
+    useminPrepare: {
+      html: [
+        'server/views/index.html',
+      ],
+      options: {
+        dest: '<%= project.dist %>/public'
+      }
+    },
+    usemin: {
+      html: [ '<%= project.dist %>/server/views/{,*/}*.html' ],
+//      css: ['<%= project.dist %>/public/styles/{,*/}*.css'],
+      options: {
+        assetsDirs: ['<%= project.dist %>/public']
+      }
+    },
+
+    ngmin: {
+      dist: {
+        files: [
+          {
+            expand: true,
+            cwd: '.tmp/concat/scripts',
+            src: '*.js',
+            dest: '.tmp/concat/scripts'
+          }
+        ]
+      }
+    },
+    copy: {
+      dist: {
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= project.app %>',
+            dest: '<%= project.dist %>/public',
+            src: [
+              '*.{ico,png,txt}',
+              '.htaccess',
+              'img/{,*/}*.{webp}',
+              'fonts/**/*'
+            ]
+          },
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= project.app %>/vendor/select2',
+            dest: '<%= project.dist %>/public/styles',
+            src: [
+              '**/*.{png,gif}'
+            ]
+          },
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= project.app %>/app',
+            dest: '<%= project.dist %>/public/app',
+            src: '**/*.html'
+          },
+          {
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= project.dist %>/public/images',
+            src: ['generated/*']
+          },
+          {
+            expand: true,
+            dest: '<%= project.dist %>',
+            src: [
+              'package.json',
+              'server.js',
+              'server/**/*'
+            ]
+          }
+        ]
+      },
+      styles: {
+        expand: true,
+        cwd: '<%= project.app %>/styles',
+        dest: '.tmp/styles/',
+        src: '{,*/}*.css'
+      }
+    },
+
     mochaTest: {
       options: {
         reporter: 'spec',
@@ -165,6 +310,8 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', function (target) {
     if (target === 'debug') {
       return grunt.task.run(['concurrent:debug']);
+    } else if (target === 'prod') {
+      return grunt.task.run(['build', 'nodemon:prod'])
     }
     grunt.task.run([ 'concurrent:dev' ]);
   });
@@ -179,5 +326,19 @@ module.exports = function (grunt) {
     grunt.task.run(['test:server', 'test:client']);
   });
 
+  grunt.registerTask('build', [
+    'clean:dist',
+    'useminPrepare',
+    'concat',
+    'autoprefixer',
+    'ngmin',
+    'copy:dist',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin'
+  ]);
+
   grunt.registerTask('default', ['jshint', 'test', 'sloc']);
+  grunt.registerTask('all', ['jshint', 'test', 'sloc', 'build']);
 };

@@ -9,3 +9,5 @@ test/coverage
 compass.iml
 *.log
 .rebooted
+dist/
+.tmp/

@@ -46,7 +46,7 @@ var configs = {
     }
   }, defaultConfig),
   production: _.defaults({
-    port: process.env.PORT || 80,
+    port: process.env.PORT || 8080,
     db: 'mongodb://localhost/compass',
     elastic_index: 'compass'
   }, defaultConfig)

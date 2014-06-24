@@ -75,7 +75,7 @@ angular.module('compass',
         controller: 'mvUserEditCtrl',
         authenticate: true,
         resolve: {
-          isSelf: function (mvIdentity, mvPermission, $location, $q, $route) {
+          isSelf: ['mvIdentity', 'mvPermission', '$location', '$q', '$route', function (mvIdentity, mvPermission, $location, $q, $route) {
             var defer = $q.defer();
             if (mvPermission.hasPermission('setUsers') ||
               mvIdentity.currentUser._id === $route.current.params.id) {
@@ -85,7 +85,8 @@ angular.module('compass',
               defer.reject();
             }
             return defer.promise;
-          }}
+          }]
+        }
       })
       .when('/settings/roles', {
         templateUrl: '/app/roles/list.html',
@@ -209,7 +210,7 @@ angular.module('compass',
       })
       .otherwise({
         resolve: {
-          load: function (mvIdentity, $location, $q) {
+          load: ['mvIdentity', '$location', '$q', function (mvIdentity, $location, $q) {
             var defer = $q.defer();
             if (mvIdentity.isAuthenticated()) {
               $location.path('/today');
@@ -218,11 +219,11 @@ angular.module('compass',
             }
             defer.reject();
             return defer.promise;
-          }
+          }]
         }
       });
 
-    $httpProvider.interceptors.push(['$q', '$location','mvIdentity', function ($q, $location,mvIdentity) {
+    $httpProvider.interceptors.push(['$q', '$location', 'mvIdentity', function ($q, $location, mvIdentity) {
       return {
         'responseError': function (response) {
           if (response.status === 401 || response.status === 403) {
