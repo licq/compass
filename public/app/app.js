@@ -10,6 +10,14 @@ angular.module('compass',
         templateUrl: '/app/auth/login.html',
         controller: 'mvLoginCtrl'
       })
+      .when('/forgot', {
+        templateUrl: '/app/forgot/forgot.html',
+        controller: 'mvForgotCtrl'
+      })
+      .when('/forgot/reset', {
+        templateUrl: '/app/forgot/reset.html',
+        controller: 'mvResetCtrl'
+      })
       .when('/signup', {
         templateUrl: '/app/signup/new.html',
         controller: 'mvSignupNewCtrl'

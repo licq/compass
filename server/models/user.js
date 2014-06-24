@@ -44,7 +44,8 @@ var userSchema = new Schema({
 
   hashed_password: String,
   provider: String,
-  salt: String
+  salt: String,
+  token: String
 });
 
 userSchema.plugin(timestamps);

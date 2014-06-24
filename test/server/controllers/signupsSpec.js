@@ -29,7 +29,7 @@ describe('singups', function () {
     });
   });
 
-  describe('PUT /api/signups/:id', function () {
+  describe('PUT /publicApi/signups/:id', function () {
     it('should create company role, user and eventsetting', function (done) {
       Factory.create('signup', function (signup) {
         request(app)

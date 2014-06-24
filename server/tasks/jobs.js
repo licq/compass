@@ -19,6 +19,15 @@ exports.sendSignupEmail = function sendSignupEmail(name, to, code) {
   }).priority('high').attempts(3).save();
 };
 
+exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, token) {
+  jobs.create('send resetPassword email', {
+    title: 'send resetPassword email to ' + to,
+    to: to,
+    name: name,
+    token: token
+  }).priority('high').attempts(3).save();
+};
+
 jobs.on('job complete', function (id) {
   Job.get(id, function (err, job) {
     if (err) return;

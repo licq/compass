@@ -16,6 +16,10 @@ function handleSendSignupEmail(job, done) {
   mailer.sendSignupEmail(job.data.name, job.data.to, job.data.code, done);
 }
 
+function handleSendResetPasswordEmail(job, done) {
+  mailer.sendResetPasswordEmail(job.data.name, job.data.to, job.data.token, done);
+}
+
 function handleFetchEmail(job, done) {
   logger.info(job.data.title, ' start');
   Email.findById(job.data.id, function (err, email) {
@@ -64,6 +68,8 @@ exports.start = function () {
   });
 
   jobs.process('send signup email', 20, handleSendSignupEmail);
+
+  jobs.process('send resetPassword email', 20, handleSendResetPasswordEmail);
 
   jobs.process('send email', 20, handleSendEmail);
 

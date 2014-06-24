@@ -7,6 +7,7 @@ var express = require('express'),
   signups = require('../controllers/signups'),
   mails = require('../controllers/mails'),
   users = require('../controllers/users'),
+  forgots = require('../controllers/forgots'),
   resumes = require('../controllers/resumes'),
   evaluationCriterions = require('../controllers/evaluationCriterions'),
   applications = require('../controllers/applications'),
@@ -32,6 +33,9 @@ module.exports = function (app) {
   publicApiRouter.route('/sessions')
     .post(sessions.authenticate)
     .delete(sessions.logout);
+
+  publicApiRouter.route('/forgot').post(forgots.create);
+  publicApiRouter.route('/forgot').put(forgots.reset);
 
   publicApiRouter.route('/signups').post(signups.create);
   publicApiRouter.route('/signups/:code').put(signups.activate);

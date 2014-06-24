@@ -22,6 +22,7 @@
                 case '/signup/success':
                 case '/welcome':
                 case '/forgot':
+                case '/forgot/reset':
                   return $element.addClass('body-special');
               }
             };
