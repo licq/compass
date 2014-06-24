@@ -311,7 +311,7 @@ module.exports = function (grunt) {
     if (target === 'debug') {
       return grunt.task.run(['concurrent:debug']);
     } else if (target === 'prod') {
-      return grunt.task.run(['build', 'nodemon:prod'])
+      return grunt.task.run(['build', 'nodemon:prod']);
     }
     grunt.task.run([ 'concurrent:dev' ]);
   });
