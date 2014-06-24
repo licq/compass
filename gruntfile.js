@@ -27,7 +27,7 @@ module.exports = function (grunt) {
       },
       testClient: {
         files: ['test/client/**/*.js'],
-        tasks: ['jshint:testClient', 'test:client'],
+        tasks: ['jshint:testClient', 'test:client']
       },
       testServer: {
         files: ['test/server/**/*.js'],

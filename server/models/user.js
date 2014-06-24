@@ -1,10 +1,14 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+  Role = require('mongoose').model('Role'),
+  Company = require('mongoose').model('Company'),
   Schema = mongoose.Schema,
   timestamps = require('mongoose-timestamp'),
   crypto = require('crypto'),
-  validator = require('validator');
+  validator = require('validator'),
+  logger = require('../config/winston').logger(),
+  async = require('async');
 
 
 var userSchema = new Schema({
@@ -40,7 +44,8 @@ var userSchema = new Schema({
 
   hashed_password: String,
   provider: String,
-  salt: String
+  salt: String,
+  token: String
 });
 
 userSchema.plugin(timestamps);
@@ -96,9 +101,72 @@ userSchema.methods = {
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
   },
 
-  withPermissions: function(cb){
+  withPermissions: function (cb) {
     this.populate('role', 'name permissions', cb);
+  },
+
+  isSystemAdmin: function (cb) {
+    Role.findOne({_id: this.role}).exec(function (err, role) {
+      if (err) return cb(err, false);
+      cb(err, role.isSystemAdmin());
+    });
   }
+};
+
+userSchema.statics.createSystemAdmin = function (callback) {
+  var model = this;
+  async.waterfall([
+    function (cb) {
+      Company.findOneAndUpdate(
+        {name: 'CompassLtd'},
+        {name: 'CompassLtd'},
+        {upsert: true}, cb);
+    },
+    function (company, cb) {
+      Role.createRoleForSystemAdmin(company, cb);
+    },
+    function (role, company, cb) {
+      var salt = crypto.randomBytes(16).toString('base64');
+      var hashed_password = crypto.pbkdf2Sync('compass.123', new Buffer(salt, 'base64'), 10000, 64).toString('base64');
+      model.findOneAndUpdate(
+        { name: 'systemadmin',
+          email: 'sysadmin@compass.com',
+          company: company._id,
+          role: role._id},
+        { name: 'systemadmin',
+          email: 'sysadmin@compass.com',
+          salt: salt,
+          hashed_password: hashed_password,
+          company: company._id,
+          role: role._id,
+          title: 'system admin'
+        },
+        {upsert: true}, function (err, sysAdmin) {
+          cb(err, sysAdmin);
+        });
+//      model.findOne(
+//        { name: 'systemadmin',
+//          email: 'sysadmin@compass.com',
+//          company: company._id,
+//          role: role._id}, function (err, sysAdmin) {
+//
+//          if (sysAdmin) {
+//            cb(err, sysAdmin);
+//          } else {
+//            model.create(
+//              { name: 'systemadmin',
+//                email: 'sysadmin@compass.com',
+//                password: 'compass.123',
+//                company: company._id,
+//                role: role._id
+//              }, function (err, sysAdmin) {
+//                cb(err, sysAdmin);
+//              });
+//          }
+//        });
+    }], function (err, sysAdmin) {
+    if (callback) callback(err, sysAdmin);
+  });
 };
 
 mongoose.model('User', userSchema);

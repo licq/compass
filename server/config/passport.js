@@ -12,7 +12,6 @@ module.exports = function () {
 
   passport.deserializeUser(function (id, done) {
     User.findOne({ _id: id })
-      .populate('role', 'name permissions')
       .exec(function (err, user) {
       if (user) {
         return done(null, user);

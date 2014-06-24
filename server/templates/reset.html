@@ -1,0 +1,94 @@
+<html>
+<head>
+  <title>密码重置邮件</title>
+  <style type="text/css">
+    .panel {
+      margin-bottom: 20px;
+      background-color: #fff;
+      border: 1px solid transparent;
+      border-radius: 0;
+      -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05)
+    }
+
+    .panel-body {
+      padding: 15px
+    }
+
+    .panel-heading {
+      padding: 10px 15px;
+      border-bottom: 1px solid transparent;
+      border-top-right-radius: -1;
+      border-top-left-radius: -1
+    }
+
+    .panel-success {
+      border-color: #d5ffe1
+    }
+
+    .panel-success > .panel-heading {
+      color: #4c9c77;
+      background-color: #eefff6;
+      border-color: #d5ffe1
+    }
+
+    .btn {
+      display: inline-block;
+      margin-bottom: 0;
+      font-weight: normal;
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+      background-image: none;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857;
+      border-radius: 0;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none
+    }
+
+    .btn-primary {
+      color: #fff;
+      background-color: #31c0be;
+      border-color: #2cacaa
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="panel panel-success">
+        <div class="panel-heading">重置您的密码</div>
+        <div class="panel-body">
+          <p>尊敬的{{name}}, 您好! </p>
+
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您最近申请了重设密码，请点击下面的按钮设置您在www.1youcai.com的新密码。如果你没有请求，请忽略。24小时后这个请求将会过期不可用。</p>
+
+          <a href="{{link}}" class="btn btn-primary">重置密码</a>
+
+          <p>温馨提示：如果您的邮箱不支持链接点击，您还可以复制下面的链接到浏览器地址栏中访问，完成密码重置操作。</p>
+
+          <a href="{{link}}">{{link}}</a>
+
+          <p>感谢您的访问，祝您使用愉快!</p>
+
+          <p>我们的宗旨：竭尽全力为您的公司提高招聘效率，降低招聘成本!</p>
+
+          <p>此致</p>
+
+          <p>Compass 团队</p>
+
+          <p>http://www.1youcai.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

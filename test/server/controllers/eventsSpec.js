@@ -108,6 +108,7 @@ describe('events', function () {
       });
     });
   });
+
   describe('delete /api/events/:id', function () {
     it('should delete event', function (done) {
       Factory.create('resume', {company: user.company}, function (resume) {

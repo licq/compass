@@ -1,63 +1,52 @@
-describe('mvSignupNewCtrl', function () {
-  var $httpBackend,
-    $scope,
-    mvSignupNewCtrl;
+describe('mvForgotCtrl', function () {
+  beforeEach(module('compass'));
+  var $httpBackend, $scope;
+  beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
+    $httpBackend = _$httpBackend_;
+    $scope = $rootScope.$new();
+    $controller('mvForgotCtrl', {
+      $scope: $scope
+    });
+  }));
 
-  describe('#create', function () {
-    beforeEach(module('compass'));
-    beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
-      $httpBackend = _$httpBackend_;
-      $scope = $rootScope.$new();
+  it('should post email successfully', function () {
+    var data = {
+      email: 'test@compass.com',
+      captcha: 'aabbcc'
+    };
 
-      mvSignupNewCtrl = $controller('mvSignupNewCtrl', {
-        $scope: $scope
-      });
-    }));
+    $httpBackend.expectPUT('/publicApi/captchas', {captcha: data.captcha}).respond(200);
+    _.merge($scope, data);
+    $httpBackend.flush();
 
-    it('should go to success page when create success', inject(function ($location) {
-      var signupData = {
-        companyName: 'company',
-        adminEmail: 'aa@aa.com',
-        adminName: 'aa',
-        adminPassword: 'password',
-        captcha: 'aabbcc'
-      };
-      $httpBackend.expectPUT('/publicApi/captchas', {captcha: signupData.captcha}).respond(200);
-      _.merge($scope, signupData);
-      $httpBackend.flush();
+    $httpBackend.expectPOST('/publicApi/forgot', data).respond(200);
 
-      $httpBackend.expectPOST('/publicApi/signups', signupData)
-        .respond({_id: '7788'});
-      var spy = sinon.spy($location, 'path');
-      var searchSpy = sinon.spy($location, 'search');
+    $scope.sendResetEmail();
 
-      $scope.create();
+    $httpBackend.flush();
+    expect($scope.sent).to.be.true;
+  });
 
-      $httpBackend.flush();
-      expect(spy).to.have.been.calledWith('/signup/success');
-      expect(searchSpy).to.have.been.calledWith({email: 'aa@aa.com'});
-    }));
+  describe('captcha', function () {
 
     it('should show error when captcha not right', function () {
-      var signupData = {
-        companyName: 'company',
-        adminEmail: 'aa@aa.com',
-        adminName: 'aa',
-        adminPassword: 'password',
+      var data = {
+        email: 'test@compass.com',
         captcha: 'aabbcc'
       };
-      $httpBackend.expectPUT('/publicApi/captchas', {captcha: signupData.captcha}).respond(200);
-      _.merge($scope, signupData);
+      $httpBackend.expectPUT('/publicApi/captchas', {captcha: data.captcha}).respond(200);
+      _.merge($scope, data);
       $httpBackend.flush();
 
-      $httpBackend.expectPOST('/publicApi/signups', signupData)
+      $httpBackend.expectPOST('/publicApi/forgot', data)
         .respond(function () {
           return [400, {errors: {captcha: {message: '验证码不正确'}}}];
         });
 
-      $scope.create();
+      $scope.sendResetEmail();
 
       $httpBackend.flush();
+      expect($scope.sent).to.be.false;
       expect($scope.captchaValid).to.be.false;
       expect($scope.err).to.deep.equal({errors: {captcha: {message: '验证码不正确'}}});
     });

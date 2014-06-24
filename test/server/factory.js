@@ -6,6 +6,7 @@ var Factory = require('factory-lady'),
   Role = mongoose.model('Role'),
   User = mongoose.model('User'),
   Signup = mongoose.model('Signup'),
+  Token = mongoose.model('Token'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
   EventSetting = mongoose.model('EventSetting'),
@@ -44,6 +45,9 @@ Factory.define('user', User, {
   role: Factory.assoc('role', 'id')
 });
 
+Factory.define('token', Token, {
+  user: Factory.assoc('user', 'id')
+});
 
 var emailAddressCounter = 1;
 Factory.define('email', Email, {

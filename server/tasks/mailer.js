@@ -45,7 +45,11 @@ exports.init = function init(config) {
 };
 
 exports.sendSignupEmail = function sendSignupEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '欢迎您注册compass 请立即激活您的帐户', 'signup.html', {link: baseurl + '/#/signup/activate?code=' + code, name: name}, cb);
+  sendTemplateEmail(to, '欢迎您注册compass 请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name}, cb);
+};
+
+exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, code, cb) {
+  sendTemplateEmail(to, '重设您在Compass的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name}, cb);
 };
 
 exports.sendEmail = function sendEmail(mail, cb) {

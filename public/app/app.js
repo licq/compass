@@ -10,6 +10,14 @@ angular.module('compass',
         templateUrl: '/app/auth/login.html',
         controller: 'mvLoginCtrl'
       })
+      .when('/forgot', {
+        templateUrl: '/app/forgot/forgot.html',
+        controller: 'mvForgotCtrl'
+      })
+      .when('/forgot/reset', {
+        templateUrl: '/app/forgot/reset.html',
+        controller: 'mvResetCtrl'
+      })
       .when('/signup', {
         templateUrl: '/app/signup/new.html',
         controller: 'mvSignupNewCtrl'
@@ -245,7 +253,7 @@ angular.module('compass',
 
       var permissions = next.permissions;
       if (permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)) {
-        $location.path('/');
+        $location.path('/today');
       }
     });
   })
@@ -321,6 +329,7 @@ angular.module('compass',
       'day': '天'
     },
     allDaySlot: false,
+    lazyFetching: true,
     timeFormat: 'H:mm{ -H:mm}',
     titleFormat: {
       month: 'yyyy年M月',
