@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvNavCtrl', function ($scope, $interval, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
+  .controller('mvNavCtrl', function ($scope, $interval, $timeout, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
     $scope.updateNavCounts = function (query) {
@@ -90,9 +90,15 @@ angular.module('compass')
       if ($scope.counts.hasOwnProperty(from)) $scope.counts[from]--;
     });
 
+    var refreshUnreviewed = null;
     $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime, countOfEvents) {
       var today = mvMoment().startOf('day').toDate(),
         endOfToday = mvMoment().endOf('day').toDate();
+
+      $timeout.cancel(refreshUnreviewed);
+      refreshUnreviewed = $timeout(function () {
+        $scope.updateNavCounts({counts: 'unreviewed'});
+      }, 2000);
 
       switch (operation) {
         case 'delete':

@@ -328,6 +328,7 @@ angular.module('compass',
       'day': '天'
     },
     allDaySlot: false,
+    lazyFetching: true,
     timeFormat: 'H:mm{ -H:mm}',
     titleFormat: {
       month: 'yyyy年M月',
