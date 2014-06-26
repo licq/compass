@@ -259,7 +259,7 @@ describe('filters', function () {
   describe('zeroToLiteralFilter', function () {
     it('should return correctly', inject(function (zeroToLiteralFilter) {
       expect(zeroToLiteralFilter(0)).to.equal('没有');
-      expect(zeroToLiteralFilter(3)).to.equal('有3个');
+      expect(zeroToLiteralFilter(3)).to.equal('总共有3个');
     }));
   });
   

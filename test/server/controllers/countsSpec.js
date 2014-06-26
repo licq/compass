@@ -71,8 +71,7 @@ describe('counts', function () {
         expect(res.body.pursued).to.equal(1);
         expect(res.body.undetermined).to.equal(1);
         expect(res.body.unreviewed).to.equal(0);
-        expect(res.body.interviews).to.equal(1);
-        expect(res.body.eventsOfToday).to.equal(1);
+        expect(res.body.eventsOfToday).to.equal(2);
         expect(res.body.onboards).to.equal(0);
         done(err);
       });
