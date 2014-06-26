@@ -25,18 +25,19 @@ exports.get = function (req, res, next) {
       Interview.count({company: req.user.company, status: 'offer accepted'})
         .where('onboardDate').gte(start).lte(end).exec(cb);
     },
-    interviews: function (cb) {
-      Interview.countNew(req.user.company, {}, cb);
-    },
     unreviewed: function (cb) {
       Interview.countForUnreviewed(req.user, cb);
     },
     eventsOfToday: function (cb) {
-      Interview.eventsCountForInterviewer(req.user._id, start, end, cb);
+      Interview.eventsCountForInterviewer(req.user._id, start, end, function (err, group) {
+        if (group && group.length > 0)
+          cb(err, group[0].total);
+        else cb(err, 0);
+      });
     }
   };
 
-  var queries = req.query.counts || ['new', 'pursued', 'undetermined', 'eventsOfToday', 'unreviewed', 'interviews'];
+  var queries = req.query.counts || ['new', 'pursued', 'undetermined', 'eventsOfToday', 'unreviewed'];
 
   if (!Array.isArray(queries)) {
     queries = [queries];

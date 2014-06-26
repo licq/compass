@@ -19,7 +19,7 @@ exports.create = function (req, res) {
     if (user) {
       jobs.sendResetPasswordEmail(user.name, user.email, token);
       res.end();
-    } else res.json(400, {errors: {email: {message: '邮箱地址不正确'}}});
+    } else res.end();
   });
 };
 

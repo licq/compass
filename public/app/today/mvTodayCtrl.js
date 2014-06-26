@@ -1,16 +1,11 @@
 angular.module('compass')
   .controller('mvTodayCtrl', function (mvIdentity, mvEvent, mvMoment, mvReview, mvInterview, $scope) {
-    $scope.isopen = {};
-    angular.extend($scope.isopen, $scope.counts);
+    $scope.isopen = {unreviewed: true, eventsOfToday: true, eventsOfNextDays: true, onboardsOfToday: true, onboardsOfNextDays: true};
     $scope.nextNdays = 3;
     var onToday = function (obj, field) {
       return mvMoment(obj[field]).toDate() >= mvMoment().startOf('day').toDate() &&
         mvMoment(obj[field]).toDate() <= mvMoment().endOf('day').toDate();
     };
-//    var notOnToday = function (obj, field) {
-//      return mvMoment(obj[field]).toDate() < mvMoment().startOf('day').toDate() ||
-//        mvMoment(obj[field]).toDate() > mvMoment().endOf('day').toDate();
-//    };
 
     $scope.retrieveEventsOfDays = function () {
       mvEvent.query({
@@ -25,7 +20,7 @@ angular.module('compass')
         $scope.eventsOfNextDays = _.filter(events, function (event) {
           return !onToday(event, 'startTime');
         });
-        angular.extend($scope.isopen, {eventsOfNextDays: $scope.eventsOfNextDays.length});
+        angular.extend($scope.isopen, {eventsOfToday: $scope.eventsOfToday.length, eventsOfNextDays: $scope.eventsOfNextDays.length});
       });
     };
 
@@ -33,6 +28,7 @@ angular.module('compass')
       return mvReview.query({orderBy: 'events[0].startTime',
         orderByReverse: false, unreviewed: true}, function (unreviewed) {
         $scope.unreviewedOfDays = unreviewed;
+        angular.extend($scope.isopen, {unreviewed: $scope.unreviewedOfDays.length});
       });
     };
 
@@ -50,7 +46,7 @@ angular.module('compass')
           return !onToday(interview, 'onboardDate');
         });
 
-        angular.extend($scope.isopen, {onboardsOfNextDays: $scope.onboardsOfNextDays.length});
+        angular.extend($scope.isopen, {onboardsOfToday: $scope.onboardsOfToday.length, onboardsOfNextDays: $scope.onboardsOfNextDays.length});
 
       });
     };

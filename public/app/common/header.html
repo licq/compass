@@ -1,148 +1,139 @@
 <header class="clearfix">
 
-<!-- Logo -->
-<div class="logo">
-  <a href="/">
-    <span class="logo-icon fa fa-users"></span>
-    <span>Compass</span>
-  </a>
-</div>
+  <!-- Logo -->
+  <div class="logo">
+    <a href="/">
+      <span class="logo-icon fa fa-users"></span>
+      <span>Compass</span>
+    </a>
+  </div>
 
-<!-- needs to be put after logo to make it working-->
-<div class="menu-button" toggle-off-canvas>
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-</div>
+  <!-- needs to be put after logo to make it working-->
+  <div class="menu-button" toggle-off-canvas>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </div>
 
-<div class="top-nav">
-  <ul class="nav-left list-unstyled">
-    <li>
-      <a href="/" data-toggle-min-nav
-         class="toggle-min"
-        ><i class="fa fa-bars"></i></a>
-    </li>
+  <div class="top-nav">
+    <ul class="nav-left list-unstyled">
+      <li>
+        <a href="/" data-toggle-min-nav
+           class="toggle-min"><i class="fa fa-bars"></i></a>
+      </li>
 
-    <li class="dropdown text-normal nav-profile">
-      <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+      <li class="dropdown text-normal nav-profile">
+        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                             <span class="hidden-xs">
                         <span>{{identity.currentUser.name}}</span>
-                    </span>
-      </a>
-      <ul class="dropdown-menu dropdown-dark with-arrow">
-        <li>
-          <a href="#/settings/users/edit/{{identity.currentUser._id}}">
-            <i class="fa fa-user"></i>
-            <span data-i18n="My Profile">个人资料</span>
-          </a>
-        </li>
-        <li>
-          <a ng-click="logout()">
-            <i class="fa fa-sign-out"></i>
-            <span>注销</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-  </ul>
+                    </span> </a>
+        <ul class="dropdown-menu dropdown-dark with-arrow">
+          <li>
+            <a href="#/settings/users/edit/{{identity.currentUser._id}}">
+              <i class="fa fa-user"></i>
+              <span data-i18n="My Profile">个人资料</span> </a>
+          </li>
+          <li>
+            <a ng-click="logout()">
+              <i class="fa fa-sign-out"></i>
+              <span>注销</span> </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
 
-  <ul class="nav-right pull-right list-unstyled">
-    <li class="dropdown">
-      <a href="" class="dropdown-toggle bg-orange" data-toggle="dropdown"
-        ng-click="retrieveEvents()">
-        <i class="fa fa-user"></i>
-        <span class="badge badge-info">{{counts.eventsOfToday}}</span>
-      </a>
+    <ul class="nav-right pull-right list-unstyled">
+      <li class="dropdown">
+        <a href="" class="dropdown-toggle bg-orange" data-toggle="dropdown"
+           ng-click="retrieveEvents()">
+          <i class="fa fa-user"></i>
+          <span class="badge badge-info">{{counts.eventsOfToday}}</span>
+        </a>
 
-      <div class="dropdown-menu pull-right with-arrow panel panel-default">
-        <div class="panel-heading">
-          您今天{{counts.eventsOfToday | zeroToLiteral}}面试
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="event in eventsForHeader">
-            <a href="#/resumes/{{event.application}}" class="media">
+        <div class="dropdown-menu pull-right with-arrow panel panel-default">
+          <div class="panel-heading">
+            您今天{{counts.eventsOfToday | zeroToLiteral}}面试，以下为即将进行的面试
+          </div>
+          <ul class="list-group">
+            <li ng-cloak class="list-group-item" ng-repeat="event in eventsForHeader">
+              <a href="#/resumes/{{event.application}}" class="media">
                                 <span class="pull-left media-icon">
                                     <span class="square-icon sm bg-orange"><i class="fa fa-user"></i></span>
                                 </span>
 
-              <div class="media-body">
-                <span class="text-muted block">{{event | eventTimeRange}}</span>
-                <span class="block">{{event.name}}面试({{event.applyPosition}})</span>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <div class="panel-footer">
-          <a href="#/events">查看所有事件</a>
+                <div class="media-body">
+                  <span class="text-muted block">{{event | eventTimeRange}}</span>
+                  <span class="block">{{event.name}}面试({{event.applyPosition}})</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+          <div class="panel-footer">
+            <a href="#/events">查看所有面试</a>
+          </div>
         </div>
-      </div>
-    </li>
-    <li class="dropdown">
-      <a href="" class="dropdown-toggle bg-warning" data-toggle="dropdown"
-        ng-click="retrieveReviews()">
-        <i class="fa fa-pencil"></i>
-        <span class="badge badge-info">{{counts.unreviewed}}</span>
-      </a>
+      </li>
+      <li class="dropdown">
+        <a href="" class="dropdown-toggle bg-warning" data-toggle="dropdown"
+           ng-click="retrieveReviews()">
+          <i class="fa fa-pencil"></i>
+          <span class="badge badge-info">{{counts.unreviewed}}</span>
+        </a>
 
-      <div class="dropdown-menu pull-right with-arrow panel panel-default">
-        <div class="panel-heading">
-          您{{counts.unreviewed | zeroToLiteral}}面试待评价.
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="unreviewed in unreviewedForHeader">
-            <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">
+        <div class="dropdown-menu pull-right with-arrow panel panel-default">
+          <div class="panel-heading">
+            您{{counts.unreviewed | zeroToLiteral}}面试待评价.
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="unreviewed in unreviewedForHeader">
+              <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">
                                 <span class="pull-left media-icon">
                                     <span class="square-icon sm bg-warning">z<i class="fa fa-pencil"></i></span>
                                 </span>
 
-              <div class="media-body">
-                <span class="text-muted block">{{unreviewed.events[0].startTime|shortDate}}</span>
-                <span class="block">{{unreviewed.name}}应聘{{unreviewed.applyPosition}}</span>
-              </div>
-            </a>
-          </li>
+                <div class="media-body">
+                  <span class="text-muted block">{{unreviewed.events[0].startTime|shortDate}}</span>
+                  <span class="block">{{unreviewed.name}}应聘{{unreviewed.applyPosition}}</span>
+                </div>
+              </a>
+            </li>
 
-        </ul>
-        <div class="panel-footer" ng-show="counts.unreviewed">
-          <a href="#/interviews/reviews">查看所有待评价面试</a>
+          </ul>
+          <div class="panel-footer" ng-show="counts.unreviewed">
+            <a href="#/interviews/reviews">查看所有待评价面试</a>
+          </div>
         </div>
-      </div>
-    </li>
-    <li class="dropdown">
-      <a href="" class="dropdown-toggle bg-success" data-toggle="dropdown">
-        <i class="fa fa-child fa-lg"></i>
-        <span class="badge badge-info">{{counts.onboards}}</span>
-      </a>
+      </li>
+      <li class="dropdown">
+        <a href="" class="dropdown-toggle bg-success" data-toggle="dropdown">
+          <i class="fa fa-child fa-lg"></i>
+          <span class="badge badge-info">{{counts.onboards}}</span>
+        </a>
 
-      <div class="dropdown-menu pull-right with-arrow panel panel-default">
-        <div class="panel-heading">
-          今天{{counts.onboards | zeroToLiteral}}新员工入职
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="onboard in onboardsForHeader">
-            <a href="#/resumes/{{onboard.application}}" class="media">
+        <div class="dropdown-menu pull-right with-arrow panel panel-default">
+          <div class="panel-heading">
+            今天{{counts.onboards | zeroToLiteral}}新员工入职
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="onboard in onboardsForHeader">
+              <a href="#/resumes/{{onboard.application}}" class="media">
                                 <span class="pull-left media-icon">
                                     <span class="square-icon sm bg-success"><i class="fa fa-child fa-lg"></i></span>
                                 </span>
-              <div class="media-body">
-                <span class="text-muted block">{{onboard.name}}</span>
-                <span class="block">{{onboard.applyPosition}}</span>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <div class="panel-footer">
-          <a href="#/interviews/onboards">查看所有待入职员工</a>
+
+                <div class="media-body">
+                  <span class="text-muted block">{{onboard.name}}</span>
+                  <span class="block">{{onboard.applyPosition}}</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+          <div class="panel-footer">
+            <a href="#/interviews/onboards">查看所有待入职员工</a>
+          </div>
         </div>
-      </div>
-    </li>
-    <!--<li>-->
-      <!--<a href="#/tasks" class="bg-info">-->
-        <!--<i class="fa fa-child fa-lg"></i>-->
-        <!--<span class="badge badge-info">6</span>-->
-      <!--</a>-->
-    <!--</li>-->
-  </ul>
-</div>
+      </li>
+    </ul>
+  </div>
 
 </header>

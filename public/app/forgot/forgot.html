@@ -16,8 +16,7 @@
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-envelope"></span>
                                 </span>
-                <input type="email"
-                       class="form-control"
+                <input class="form-control"
                        placeholder="Email"
                        ng-model="email"
                        name="email"
@@ -28,9 +27,9 @@
                    ng-show="forgotForm.email.$error.required && !forgotForm.email.$pristine">
                   请输入Email</p>
 
-                <p class="text-danger"
-                   ng-show="forgotForm.email.$error.email && !forgotForm.email.$pristine">
-                  邮箱格式不正确</p>
+                <!--<p class="text-danger"-->
+                   <!--ng-show="forgotForm.email.$error.email && !forgotForm.email.$pristine">-->
+                  <!--邮箱格式不正确</p>-->
 
                 <p class="text-danger"
                    ng-show="err.errors.email">

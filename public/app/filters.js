@@ -264,7 +264,7 @@ angular.module('compass')
   })
   .filter('zeroToLiteral', function () {
     return function (input) {
-      return input > 0 ? ('有' + input + '个') : '没有';
+      return input > 0 ? ('总共有' + input + '个') : '没有';
     };
   })
   .filter('eventTimeRange', function (mvMoment) {
