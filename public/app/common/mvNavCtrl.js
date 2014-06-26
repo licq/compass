@@ -98,7 +98,7 @@ angular.module('compass')
       $timeout.cancel(refreshUnreviewed);
       refreshUnreviewed = $timeout(function () {
         $scope.updateNavCounts({counts: 'unreviewed'});
-      }, 2000);
+      }, 3000);
 
       switch (operation) {
         case 'delete':

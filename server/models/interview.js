@@ -251,15 +251,36 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
 interviewSchema.statics.eventsCountForInterviewer = function (interviewer, start, end, cb) {
   interviewer = mongoose.Types.ObjectId(interviewer);
 
-  return this.find({status: 'new'}).
-    where('events').elemMatch({
-      startTime: {
-        $gte: start,
-        $lt: end
-      },
-      interviewers: interviewer
-    }
-  ).count().exec(cb);
+  var match = {
+    $match: {
+      status: 'new',
+      events: {
+        $elemMatch: {
+          startTime: {
+            $gte: start,
+            $lt: end
+          },
+          interviewers: interviewer
+        }
+      }
+    }};
+  var query = this.aggregate(match)
+    .project({
+      events: 1,
+      company: 1
+    })
+    .unwind('events')
+    .project({
+      company: 1,
+      _id: '$events._id',
+      createdBy: '$events.createdBy',
+      startTime: '$events.startTime',
+      interviewers: '$events.interviewers'
+    })
+    .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } })
+    .group({_id: '$company', total: {$sum: 1}});
+
+  query.exec(cb);
 };
 
 interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
