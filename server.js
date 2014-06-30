@@ -14,7 +14,7 @@ require('./server/config/express')(app, config);
 
 require('./server/config/passport')();
 
-require('./server/config/systemadmin').init();
+require('./server/config/systemAdmin').init();
 
 require('./server/tasks/mailer').init(config);
 
