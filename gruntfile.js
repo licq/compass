@@ -249,7 +249,7 @@ module.exports = function (grunt) {
             src: [
               'package.json',
               'server.js',
-              'server/**/*'
+              'server/**/*',
             ]
           }
         ]

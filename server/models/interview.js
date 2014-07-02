@@ -5,9 +5,8 @@ var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume'),
   moment = require('moment'),
   logger = require('../config/winston').logger(),
-  kue = require('kue'),
   _ = require('lodash'),
-  jobs = kue.createQueue(),
+  jobs = require('../tasks/jobs'),
   timestamps = require('mongoose-timestamp');
 
 function interviewersValidator(interviewers) {
@@ -125,13 +124,6 @@ interviewSchema.pre('save', function (next) {
   next();
 });
 
-function createSendEmailJob(emails) {
-  emails.forEach(function (email) {
-    email.title = 'send Event Alert Email to ' + email.to;
-    jobs.create('send email', email).save();
-  });
-}
-
 function createEmailContext(interview, event) {
   return {
     name: interview.name,
@@ -180,7 +172,7 @@ interviewSchema.statics.addEvent = function (event, cb) {
                 if (err) {
                   logger.error('create alert email failed ' + err);
                 } else {
-                  createSendEmailJob(emails);
+                  jobs.createSendEmailJob(emails);
                 }
                 cb(err, interview);
               });
@@ -327,7 +319,7 @@ interviewSchema.statics.updateEvent = function (id, data, cb) {
         if (err) {
           logger.error('create alert email failed ' + err);
         } else {
-          createSendEmailJob(emails);
+          jobs.createSendEmailJob(emails);
         }
         cb(err, interview);
       });
@@ -340,7 +332,7 @@ function sendDeleteEventEmail(interview, event, cb) {
     if (err) {
       logger.error('create alert email failed ' + err);
     } else {
-      createSendEmailJob(emails);
+      jobs.createSendEmailJob(emails);
     }
     cb(null, interview);
   });

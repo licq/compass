@@ -10,7 +10,7 @@ var kue = require('kue'),
   parser = require('../parsers/resumeParser'),
   Resume = mongoose.model('Resume');
 
-var jobs = kue.createQueue();
+var jobs;
 
 function handleSendSignupEmail(job, done) {
   mailer.sendSignupEmail(job.data.name, job.data.to, job.data.code, done);
@@ -62,7 +62,15 @@ function handleParseResume(job, done) {
   }
 }
 
-exports.start = function () {
+exports.start = function (config) {
+  jobs = kue.createQueue({
+    prefix: config.redis_prefix || 'q',
+    redis: {
+      port: config.redis_port || 6379,
+      host: config.redis_host || 'localhost'
+    }
+  });
+
   jobs.on('error', function (error) {
     logger.error('job error', error);
   });

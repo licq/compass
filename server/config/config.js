@@ -20,9 +20,9 @@ var defaultConfig = {
   rootPath: rootPath,
   hostname: 'localhost',
   templatePath: rootPath + 'server/templates/',
-  logFileName: 'compass.log',
-  elastic_host: 'localhost',
-  elastic_port: 9200
+  logFileName: process.env.LOG_FILE ||'compass.log',
+  elastic_host: process.env.ELASTICSEARCH_PORT_9200_TCP_ADDR || 'localhost',
+  elastic_port: process.env.ELASTICSEARCH_PORT_9200_TCP_PORT || 9200
 };
 
 var configs = {
@@ -43,12 +43,15 @@ var configs = {
         user: "compass_test@126.com",
         pass: "compass123"
       }
-    }
+    },
+    redis_prefix: 'test'
   }, defaultConfig),
   production: _.defaults({
     port: process.env.PORT || 8080,
-    db: 'mongodb://localhost/compass',
-    elastic_index: 'compass'
+    db: 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/compass',
+    elastic_index: 'compass',
+    redis_host: process.env.REDIS_PORT_6379_TCP_ADDR || 'localhost',
+    redis_port: process.env.REDIS_PORT_6379_TCP_PORT || 6379
   }, defaultConfig)
 };
 
