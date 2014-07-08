@@ -13,9 +13,9 @@ function transport() {
 function send(mail, cb) {
   transport().sendMail(mail, function (error, response) {
     if (error) {
-      logger.error('Email sent to ' + mail.to + 'failed' + error);
+      logger.error('Email sent to ' + mail.to + ' failed' + error);
     } else {
-      logger.info("Email sent to " + mail.to + 'successfully with ' + response.message);
+      logger.info("Email sent to " + mail.to + ' successfully with ' + response.message);
     }
     if (cb) return cb(error);
   });
@@ -46,11 +46,11 @@ exports.init = function init(config) {
 };
 
 exports.sendSignupEmail = function sendSignupEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '欢迎您注册compass 请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name, site: site, siteName: siteName}, cb);
+  sendTemplateEmail(to, '欢迎您注册' + siteName + '请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name, site: site, siteName: siteName}, cb);
 };
 
 exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '重设您在Compass的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name,site: site, siteName: siteName}, cb);
+  sendTemplateEmail(to, '重设您在' + siteName + '的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name,site: site, siteName: siteName}, cb);
 };
 
 exports.sendEmail = function sendEmail(mail, cb) {

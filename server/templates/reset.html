@@ -68,7 +68,9 @@
         <div class="panel-body">
           <p>尊敬的{{name}}, 您好! </p>
 
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您最近申请了重设密码，请点击下面的按钮设置您在{{siteName}}的新密码。如果你没有请求，请忽略。24小时后这个请求将会过期不可用。</p>
+          <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您最近申请了重设密码，请点击下面的按钮设置您在<a href="{{site}}">{{siteName}}</a>的新密码。
+            如果你没有请求，请忽略此邮件。24小时后这个请求将会过期不可用。</p>
 
           <a href="{{link}}" class="btn btn-primary">重置密码</a>
 
@@ -77,14 +79,15 @@
           <a href="{{link}}">{{link}}</a>
 
           <p>感谢您的访问，祝您使用愉快!</p>
+          <br>
 
           <p>我们的宗旨：竭尽全力为您的公司提高招聘效率，降低招聘成本!</p>
+          <br>
 
           <p>致礼!</p>
 
-          <p>{{siteName}}团队</p>
+          <p><a href="{{site}}">{{siteName}}</a></p>
 
-          <p>{{site}}</p>
         </div>
       </div>
     </div>
