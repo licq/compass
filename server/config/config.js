@@ -7,56 +7,89 @@ var rootPath = path.normalize(__dirname + '/../../');
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-var defaultConfig = {
-  emailOptions: {
-    host: "smtp.126.com",
-    port: 25,
-    auth: {
-      user: "compass_test@126.com",
-      pass: "compass123"
-    }
-  },
-  emailFrom: "compass_test@126.com",
+var all = {
   rootPath: rootPath,
-
   templatePath: rootPath + 'server/templates/',
-  logFileName: process.env.LOG_FILE ||'compass.log',
-  elastic_host: process.env.ELASTICSEARCH_PORT_9200_TCP_ADDR || 'localhost',
-  elastic_port: process.env.ELASTICSEARCH_PORT_9200_TCP_PORT || 9200,
   siteName: '领聘网'
 };
 
 var configs = {
-  development: _.defaults({
+  development: {
+    emailOptions: {
+      host: "smtp.126.com",
+      port: 25,
+      auth: {
+        user: "compass_test@126.com",
+        pass: "compass123"
+      },
+      from: "compass_test@126.com",
+    },
     hostname: 'localhost',
     port: process.env.PORT || 3000,
+    logFileName: 'compass-dev.log',
     db: 'mongodb://localhost/compass-dev',
-    elastic_index: 'compass-dev',
-  }, defaultConfig),
-  test: _.defaults({
+    elastic: {
+      host: 'localhost',
+      port: 9200,
+      index: 'compass-dev'
+    },
+    redis: {
+      host: 'localhost',
+      port: 6379,
+      prefix: 'compass-dev'
+    }
+  },
+  test: {
     hostname: 'localhost',
-    port: process.env.PORT || 3001,
+    port: 3001,
     db: 'mongodb://localhost/compass-test',
     logFileName: 'compass-test.log',
-    elastic_index: 'compass-test',
+    elastic: {
+      host: 'localhost',
+      port: 9200,
+      index: 'compass-test'
+    },
     emailOptions: {
       host: "smtp.1269.com",
       port: 25,
       auth: {
         user: "compass_test@126.com",
         pass: "compass123"
-      }
+      },
+      from: "compass_test@126.com"
     },
-    redis_prefix: 'test'
-  }, defaultConfig),
-  production: _.defaults({
+    redis: {
+      host: 'localhost',
+      port: 6379,
+      prefix: 'compass-test'
+    }
+  },
+  production: {
     hostname: 'www.lingpin.cc',
     port: process.env.PORT || 8080,
-    db: 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/compass',
-    elastic_index: 'compass',
-    redis_host: process.env.REDIS_PORT_6379_TCP_ADDR || 'localhost',
-    redis_port: process.env.REDIS_PORT_6379_TCP_PORT || 6379
-  }, defaultConfig)
+    logFileName: process.env.LOG_FILE || 'compass.log',
+    db: 'mongodb://' + (process.env.MONGODB_PORT_27017_TCP_ADDR || 'localhost') + ':' + (process.env.MONGODB_PORT_27017_TCP_PORT || 27017) + '/compass',
+    redis: {
+      host: process.env.REDIS_PORT_6379_TCP_ADDR || 'localhost',
+      port: process.env.REDIS_PORT_6379_TCP_PORT || 6379,
+      prefix: 'compass'
+    },
+    elastic: {
+      host: process.env.ELASTICSEARCH_PORT_9200_TCP_ADDR || 'localhost',
+      port: process.env.ELASTICSEARCH_PORT_9200_TCP_PORT || 9200,
+      index: 'compass'
+    },
+    emailOptions: {
+      host: "smtp.exmail.qq.com",
+      port: 465,
+      auth: {
+        user: "service@lingpin.cc",
+        pass: "compass.123"
+      },
+      secureConnection: true,
+      from: 'service@lingpin.cc'
+    }
+  }
 };
 
-module.exports = configs[env];
+module.exports = _.defaults(configs[env], all);
