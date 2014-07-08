@@ -94,7 +94,7 @@
           共计{{totalInterviewsCount}}
         </span>
 
-          <div class="col-md-6" align="center">
+          <div class="col-md-6" align="center" ng-show="totalInterviewsCount">
             <pagination boundary-links="true" total-items="totalInterviewsCount"
                         items-per-page="queryOptions.pageSize"
                         ng-model="queryOptions.page"
