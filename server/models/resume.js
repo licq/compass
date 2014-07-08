@@ -396,9 +396,9 @@ resumeSchema.pre('save', function (next) {
 
 resumeSchema.plugin(merge);
 resumeSchema.plugin(mongoosastic, {
-  index: config.elastic_index,
-  host: config.elastic_host,
-  port: config.elastic_port,
+  index: config.elastic.index,
+  host: config.elastic.host,
+  port: config.elastic.port,
   mapping: {
     properties: {
       applyDate: {

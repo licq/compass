@@ -2,7 +2,7 @@
   <div class="signin-header">
     <div class="container text-center">
       <section class="logo">
-        <a href="#/">Compass</a>
+        <a href="#/">领聘</a>
       </section>
     </div>
   </div>
@@ -39,8 +39,8 @@
 
             <div class="form-group">
               <div class="divider"></div>
-              <a  class="btn btn-primary btn-block btn-lg" ng-click="reset()"
-                 ng-disabled="resetForm.$invalid">重置密码</a>
+              <input type="submit"  class="btn btn-primary btn-block btn-lg" ng-click="reset()"
+                 ng-disabled="resetForm.$invalid" value="重置密码"></input>
             </div>
             <h3 class="text-danger" align="center" ng-show="err.errors"> {{err.errors.message}}</h3>
           </form>

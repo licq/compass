@@ -100,10 +100,10 @@ exports.addParseResumeJob = function (mail, cb) {
 
 exports.init = function (config) {
   jobs = kue.createQueue({
-    prefix: config.redis_prefix || 'q',
+    prefix: config.redis.prefix,
     redis: {
-      port: config.redis_port || 6379,
-      host: config.redis_host || 'localhost'
+      port: config.redis.port,
+      host: config.redis.host
     }
   });
 

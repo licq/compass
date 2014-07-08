@@ -4,7 +4,7 @@ var nodemailer = require("nodemailer"),
   emailTemplates = require('swig-email-templates'),
   logger = require('../config/winston').logger();
 
-var emailFrom, emailOptions, templateOptions, baseurl, smtpTransport, site, siteName;
+var emailFrom, emailOptions, templateOptions, baseurl, smtpTransport, siteName;
 
 function transport() {
   return smtpTransport || (smtpTransport = nodemailer.createTransport("SMTP", emailOptions));
@@ -35,22 +35,21 @@ function sendTemplateEmail(to, subject, template, context, cb) {
 }
 
 exports.init = function init(config) {
-  emailFrom = config.emailFrom;
+  emailFrom = config.emailOptions.from;
   emailOptions = config.emailOptions;
   templateOptions = {
     root: config.templatePath
   };
-  site = config.hostname;
-  siteName = config.siteName;
   baseurl = 'http://' + config.hostname + ':' + config.port + '/';
+  siteName = config.siteName;
 };
 
 exports.sendSignupEmail = function sendSignupEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '欢迎您注册' + siteName + '请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name, site: site, siteName: siteName}, cb);
+  sendTemplateEmail(to, '欢迎您注册' + siteName + '请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name, baseurl: baseurl, siteName: siteName}, cb);
 };
 
 exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '重设您在' + siteName + '的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name,site: site, siteName: siteName}, cb);
+  sendTemplateEmail(to, '重设您在' + siteName + '的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name,baseurl: baseurl, siteName: siteName}, cb);
 };
 
 exports.sendEmail = function sendEmail(mail, cb) {
