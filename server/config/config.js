@@ -18,20 +18,23 @@ var defaultConfig = {
   },
   emailFrom: "compass_test@126.com",
   rootPath: rootPath,
-  hostname: 'localhost',
+
   templatePath: rootPath + 'server/templates/',
   logFileName: process.env.LOG_FILE ||'compass.log',
   elastic_host: process.env.ELASTICSEARCH_PORT_9200_TCP_ADDR || 'localhost',
-  elastic_port: process.env.ELASTICSEARCH_PORT_9200_TCP_PORT || 9200
+  elastic_port: process.env.ELASTICSEARCH_PORT_9200_TCP_PORT || 9200,
+  siteName: '领聘网'
 };
 
 var configs = {
   development: _.defaults({
+    hostname: 'localhost',
     port: process.env.PORT || 3000,
     db: 'mongodb://localhost/compass-dev',
-    elastic_index: 'compass-dev'
+    elastic_index: 'compass-dev',
   }, defaultConfig),
   test: _.defaults({
+    hostname: 'localhost',
     port: process.env.PORT || 3001,
     db: 'mongodb://localhost/compass-test',
     logFileName: 'compass-test.log',
@@ -47,6 +50,7 @@ var configs = {
     redis_prefix: 'test'
   }, defaultConfig),
   production: _.defaults({
+    hostname: 'www.lingpin.cc',
     port: process.env.PORT || 8080,
     db: 'mongodb://' + process.env.MONGODB_PORT_27017_TCP_ADDR + ':' + process.env.MONGODB_PORT_27017_TCP_PORT + '/compass',
     elastic_index: 'compass',

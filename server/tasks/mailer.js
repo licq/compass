@@ -4,7 +4,7 @@ var nodemailer = require("nodemailer"),
   emailTemplates = require('swig-email-templates'),
   logger = require('../config/winston').logger();
 
-var emailFrom, emailOptions, templateOptions, baseurl, smtpTransport;
+var emailFrom, emailOptions, templateOptions, baseurl, smtpTransport, site, siteName;
 
 function transport() {
   return smtpTransport || (smtpTransport = nodemailer.createTransport("SMTP", emailOptions));
@@ -40,16 +40,17 @@ exports.init = function init(config) {
   templateOptions = {
     root: config.templatePath
   };
-
+  site = config.hostname;
+  siteName = config.siteName;
   baseurl = 'http://' + config.hostname + ':' + config.port + '/';
 };
 
 exports.sendSignupEmail = function sendSignupEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '欢迎您注册compass 请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name}, cb);
+  sendTemplateEmail(to, '欢迎您注册compass 请立即激活您的帐户', 'signup.html', {link: baseurl + '#/signup/activate?code=' + code, name: name, site: site, siteName: siteName}, cb);
 };
 
 exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, code, cb) {
-  sendTemplateEmail(to, '重设您在Compass的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name}, cb);
+  sendTemplateEmail(to, '重设您在Compass的密码', 'reset.html', {link: baseurl + '#/forgot/reset?token=' + code, name: name,site: site, siteName: siteName}, cb);
 };
 
 exports.sendEmail = function sendEmail(mail, cb) {
