@@ -37,6 +37,7 @@ angular.module('compass')
 
     $scope.viewResume = function (application) {
       $location.path('/resumes/' + application);
+      $modalInstance.close();
     };
 
     mvEventSetting.get(function (res) {
