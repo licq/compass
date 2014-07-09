@@ -17,8 +17,6 @@ angular.module('compass')
           $scope.totalApplicationCount = result.hits.total;
           $scope.resume = result.hits.hits[0];
           $scope.title = $scope.resume.name;
-
-          $window.scrollTo(0, 0);
         } else {
           $location.path('/applications/' + $routeParams.status);
         }
@@ -77,6 +75,7 @@ angular.module('compass')
     };
 
     $scope.cancel = function () {
-      $location.path('/applications/' + $routeParams.status);
+      $location.path('/applications/' + $routeParams.status).hash($scope.index);
+
     };
   });
