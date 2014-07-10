@@ -44,8 +44,40 @@
                 enable-sorting="true"></th>
             <th field-name="onboardDate" display-name="入职时间" enable-filtering="false"
                 enable-sorting="true" display-format="shortDate"></th>
+            <th class="col-md-6">操作</th>
           </tr>
           </thead>
+
+          <tbody>
+          <tr>
+            <td class="vert-align">
+              <div ng-show="!gridItem.status">
+                <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者入职</button>
+                <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者未入职</button>
+              </div>
+
+              <form ng-show="gridItem.status==='not recruited'">
+                <div class="form-group col-md-10">
+                  <label class="col-md-3">选择拒绝原因</label>
+
+                  <div class="col-md-5">
+                    <select ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
+                            data-placeholder="选择拒绝原因">
+                      <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
+                    </select>
+
+                  </div>
+                  <div class="col-md-4">
+                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存
+                    </button>
+                    <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>
+          </tbody>
         </table>
       </div>
     </div>
