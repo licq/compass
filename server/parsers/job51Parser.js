@@ -33,6 +33,9 @@ function parseBasicInfo(table) {
     resume.yearsOfExperience = helper.parseYearsOfExperience(firstLineItems[0]);
     resume.gender = helper.parseGender(firstLineItems[1]);
     resume.birthday = helper.parseDate(firstLineItems[2].split('(')[1]);
+    if (firstLineItems.length > 3) {
+      resume.civilStatus = helper.parseCivilState(firstLineItems[3]);
+    }
     resume.job51Id = helper.onlyNumber(tableData[0][1]);
     resume.residency = tableData[1][1];
     if (tableData.length >= 4) {
@@ -50,7 +53,7 @@ function parseBasicInfo(table) {
 function parseLanguageSkills(table) {
   if (!table) return;
   try {
-    var languageTable = table.find('table');
+    var languageTable = table.find('tr td table');
     return _.map(_.filter(helper.parseTable(languageTable), function (line) {
       return line[0].indexOf('等级') < 0;
     }), function (line) {
@@ -67,22 +70,21 @@ function parseCareerObjective(table) {
     var careerObjective = {};
     var tableData = helper.parseTable(table);
     var items = _.map(tableData, function (line) {
-      return helper.removeSpaces(helper.splitByColon(line[0])[1]);
+      return helper.removeSpaces(line[0]);
     });
-
     _.forEach(items, function (item) {
       if (helper.isEntryTime(item)) {
         careerObjective.entryTime = helper.parseEntryTime(item);
       } else if (helper.isTypeOfEmployment(item)) {
-        careerObjective.typeOfEmployment = helper.parseTypeOfEmployment(item);
+        careerObjective.typeOfEmployment = helper.parseTypeOfEmployment(helper.splitByColon(item)[1]);
       } else if (helper.isIndustry(item)) {
-        careerObjective.industry = helper.splitByCommas(item);
+        careerObjective.industry = helper.splitByCommas(helper.splitByColon(item)[1]);
       } else if (helper.isLocations(item)) {
-        careerObjective.locations = helper.splitByCommas(item);
+        careerObjective.locations = helper.splitByCommas(helper.splitByColon(item)[1]);
       } else if (helper.isTargetSalary(item)) {
-        careerObjective.targetSalary = helper.parseTargetSalary(item);
+        careerObjective.targetSalary = helper.parseTargetSalary(helper.splitByColon(item)[1]);
       } else if (helper.isJobCategory(item)) {
-        careerObjective.jobCategory = helper.splitByCommas(item);
+        careerObjective.jobCategory = helper.splitByCommas(helper.splitByColon(item)[1]);
       }
     });
     return careerObjective;
@@ -248,7 +250,7 @@ function parseInSchoolPractices(table) {
 }
 
 exports.parse = function (data) {
-  var $ = cheerio.load(data.html);
+  var $ = cheerio.load(data.html, {normalizeWhitespace: true});
 
   var findTable = function () {
     var tableNames = Array.prototype.slice.call(arguments, 0);
@@ -259,7 +261,7 @@ exports.parse = function (data) {
         table = table.next();
       }
       if (table.length > 0) {
-        return table;
+        return table.find('table');
       }
     }
   };

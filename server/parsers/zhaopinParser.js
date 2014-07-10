@@ -4,6 +4,7 @@
 var cheerio = require('cheerio'),
   logger = require('../config/winston').logger(),
   _ = require('lodash'),
+  entities = require('entities'),
   helper = require('../utilities/helper');
 
 function parseBasicInfo(table) {
@@ -15,7 +16,7 @@ function parseBasicInfo(table) {
     if (table.find('img')) {
       resume.photoUrl = table.find('img').attr('src');
     }
-    var basicInfos = helper.replaceEmpty(table.find('td:nth-child(2)').html().split(/<br>|\|/g));
+    var basicInfos = helper.replaceEmpty(entities.decodeHTML(table.find('td:nth-child(2)').html()).split(/<br>|\|/g));
     _.forEach(basicInfos, function (item) {
       item = helper.removeTags(item);
       if (helper.isGender(item)) resume.gender = helper.parseGender(item);
@@ -23,7 +24,11 @@ function parseBasicInfo(table) {
       else if (helper.isBirthday(item)) resume.birthday = helper.parseDate(item);
       else if (helper.isHukou(item)) resume.hukou = helper.splitByColon(item)[1];
       else if (helper.isResidency(item)) resume.residency = item.substr(4);
-      else if (helper.isPoliticalStatus(item)) resume.politicalStatus = helper.parsePoliticalStatus(item);
+      else if (helper.isPoliticalStatus(item)){
+        var parts = item.split(' ');
+        resume.politicalStatus = helper.parsePoliticalStatus(parts[0]);
+        if(parts.length > 1) resume.address = parts[1];
+      }
       else if (helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
       else if (helper.isMobile(item)) resume.mobile = helper.onlyNumber(item);
     });
@@ -69,10 +74,10 @@ function parseWorkExperience(table) {
   try {
     var workExperience = [];
     table.children().each(function () {
-      var dateRangeText = this.children().first().text();
+      var dateRangeText = cheerio(this).children().first().text();
       if (dateRangeText.trim().length > 0) {
         var dateRange = helper.parseDateRange(dateRangeText);
-        var contents = this.children().last().html().split(/<br\/?>/g);
+        var contents = entities.decodeHTML(cheerio(this).children().last().html()).split(/<br\/?>/g);
         var companyInfo = helper.replaceEmpty(contents[0].split('|'));
         var industryInfo = helper.replaceEmpty(contents[1].split('|'));
         workExperience.push({
@@ -96,29 +101,32 @@ function parseTrainingHistory(table) {
   if (!table) return;
 
   try {
-    var htmls = helper.parseTableHtml(table);
-    return _.map(_.filter(htmls, function (value, index) {
-      return index % 2 === 0;
-    }), function (element) {
-      var lines = element[0].split('<br>');
-      var items = helper.splitByColon(lines.shift());
+    var trs = table.find('tr');
+    return _.times((trs.length + 1) / 2, function (index) {
+      var contents = trs.eq(index * 2).children().eq(0).contents();
+      var items = helper.splitByColon(contents[0].data);
       var dateRange = helper.parseDateRange(items[0]);
       var training = {
         from: dateRange.from,
         to: dateRange.to,
         institution: items[1]
       };
-      _.forEach(lines, function (line) {
-        if (helper.isTrainingCourse(line)) {
-          training.course = helper.splitByColon(line)[1];
-        } else if (helper.isTrainingCertification(line)) {
-          training.certification = helper.splitByColon(line)[1];
-        } else if (helper.isTrainingLocation(line)) {
-          training.location = helper.splitByColon(line)[1];
-        } else if (helper.isTrainingDescription(line)) {
-          training.description = helper.splitByColon(line)[1];
+      for (var i = 1; i < contents.length; i++) {
+        if (contents[i].type === 'text') {
+          var line = contents[i].data;
+          if (helper.isTrainingCourse(line)) {
+            training.course = helper.splitByColon(line)[1];
+          } else if (helper.isTrainingCertification(line)) {
+            training.certification = helper.splitByColon(line)[1];
+          } else if (helper.isTrainingLocation(line)) {
+            training.location = helper.splitByColon(line)[1];
+          } else if (helper.isTrainingDescription(line)) {
+            training.description = helper.splitByColon(line).slice(1).join('');
+          } else if (helper.isTrainingDescriptionAdditional(line)) {
+            training.description += line;
+          }
         }
-      });
+      }
       return training;
     });
   } catch (e) {
@@ -126,39 +134,37 @@ function parseTrainingHistory(table) {
   }
 }
 
-function parseProjectExperience(table) {
+function parseProjectExperience(table, $) {
   if (!table) return;
 
   try {
-    var html = table.find('td').html();
-    var projectsHtml = html.split(/<\/div><br>/g);
-    return _.map(_.filter(projectsHtml, function (projectHtml) {
-      return projectHtml.match('.resume_p');
-    }), function (project) {
-      project = project + '</div>';
-      var parts = helper.replaceEmpty(project.substr(0, project.indexOf('<div')).split(/<br\/?>|<\/?p>/g));
-      var titleParts = helper.splitByColon(parts[0]);
+    var td = table.find('td').first();
+    var projectCount = (td.children().length + 1) / 2;
+    return _.times(projectCount, function (index) {
+      var title = index === 0 ? td.contents()[0].data : td.children().eq(index * 2 - 1).text();
+      var titleParts = helper.splitByColon(title);
       var dateRange = helper.parseDateRange(titleParts[0]);
-      var descriptions = project.match(/<div.+?>.+?<\/div>/g);
       var result = {
         from: dateRange.from,
         to: dateRange.to,
         name: helper.removeSpaces(titleParts[1])
       };
 
-      _.forEach(descriptions, function (description) {
-        description = helper.removeSpaces(helper.removeTags(description));
+      var p = td.children().eq(index * 2);
+      for (var i = 0; i < p.contents().length; i++) {
+        if (p.contents()[i].type === 'text') {
+          var parts = p.contents()[i].data.split(/：/g);
+          if (helper.isDevelopmentTools(parts[0])) result.developmentTools = parts[1];
+          else if (helper.isSoftwareEnvironment(parts[0])) result.softwareEnvironment = parts[1];
+          else if (helper.isHardwareEnvironment(parts[0])) result.hardwareEnvironment = parts[1];
+        }
+      }
+      var divs = p.find('div.resume_p');
+      for (i = 0; i < divs.length; i++) {
+        var description = helper.removeSpaces(helper.removeTags(divs.eq(i).text()));
         if (helper.isProjectDescription(description.substr(0, 4))) result.description = description.substr(5);
         if (helper.isProjectResponsibility(description.substr(0, 4))) result.responsibility = description.substr(5);
-      });
-
-      _.forEach(parts.slice(1), function (item) {
-        var parts = item.split(/：/g);
-        if (helper.isDevelopmentTools(parts[0])) result.developmentTools = parts[1];
-        else if (helper.isSoftwareEnvironment(parts[0])) result.softwareEnvironment = parts[1];
-        else if (helper.isHardwareEnvironment(parts[0])) result.hardwareEnvironment = parts[1];
-      });
-
+      }
       return result;
     });
   } catch (e) {
@@ -185,7 +191,7 @@ function parseCertifications(table) {
 function parseEducationHistory(table) {
   if (!table) return;
   try {
-    var data = helper.replaceEmpty(helper.parseTableHtml(table)[0][0].split('<br>'));
+    var data = helper.replaceEmpty(entities.decodeHTML(table.find('tr td').html()).split('<br>'));
     return _.map(data, function (line) {
       var parts = line.split(/：|\|/g);
       var dateRange = helper.parseDateRange(parts[0]);
@@ -204,8 +210,8 @@ function parseEducationHistory(table) {
 function parseItSkills(table) {
   if (!table) return;
   try {
-    if (table.find('div.resume_p')) return;
-    return _.map(helper.parseTableHtml(table)[0][0].split('<br>'), function (item) {
+    if (table.find('div.resume_p').length > 0) return;
+    return _.map(entities.decodeHTML(table.find('td').html()).split('<br>'), function (item) {
       item = helper.removeTags(item);
       var parts = item.split('|');
       if (parts.length === 3) {
@@ -228,9 +234,9 @@ function parseItSkills(table) {
 function parseLanguageSkills(table) {
   if (!table) return;
   try {
-    var data = helper.parseTable(table);
-    return _.map(data, function (item) {
-      var parts = item[0].split(/：|\|/g);
+    var contents = table.find('tr td').contents();
+    return _.times((contents.length + 1) / 2, function (index) {
+      var parts = contents[index * 2].data.split(/：|\|/g);
       return {
         language: helper.parseLanguage(parts[0]),
         readingAndWriting: helper.parseLanguageLevel(parts[1]),
@@ -245,8 +251,8 @@ function parseLanguageSkills(table) {
 function parseInSchoolStudy(table) {
   if (!table) return;
   try {
-    var data = helper.parseTableHtml(table);
-    return _.map(helper.replaceEmpty(data[0][0].split(/<br>|<\/?div.*?>|<\/?p>/g)),
+    var data = entities.decodeHTML(table.find('tr td').html());
+    return _.map(helper.replaceEmpty(data.split(/<br>|<\/?div.*?>|<\/?p>/g)),
       function (line) {
         return helper.removeTags(line);
       });
@@ -255,8 +261,17 @@ function parseInSchoolStudy(table) {
   }
 }
 
+function parseHobbies(table){
+  if(!table) return;
+  try{
+    return table.find('tr td').text();
+  }catch(e){
+    logger.error(e.stack);
+  }
+}
+
 exports.parse = function (data) {
-  var $ = cheerio.load(data.html);
+  var $ = cheerio.load(data.html, {normalizeWhitespace: true});
   var findTable = function () {
     var tableNames = Array.prototype.slice.call(arguments, 0);
     var table;
@@ -277,8 +292,8 @@ exports.parse = function (data) {
   }
 
   resume.careerObjective = parseCareerObjective(findTable('专业特长', '自我评价', '职业目标', '技能专长', '专业技能'));
-  resume.workExperience = parseWorkExperience(findTable('工作经历'));
-  resume.educationHistory = parseEducationHistory(findTable('教育经历'));
+  resume.workExperience = parseWorkExperience(findTable('工作经历'), $);
+  resume.educationHistory = parseEducationHistory(findTable('教育经历'), $);
   resume.certifications = parseCertifications(findTable('证书'));
   resume.itSkills = parseItSkills(findTable('专业技能'));
   resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
@@ -286,6 +301,7 @@ exports.parse = function (data) {
   resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'));
   resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
   resume.trainingHistory = parseTrainingHistory(findTable('培训经历'));
+  resume.hobbies = parseHobbies(findTable('兴趣爱好'));
   resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
   resume.channel = '智联招聘';
   resume.company = data.company;

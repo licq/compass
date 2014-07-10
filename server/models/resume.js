@@ -43,6 +43,8 @@ var resumeSchema = mongoose.Schema({
 
   hukou: String, //户口
   residency: String,
+  address: String,
+  hobbies: String,
   civilState: {
     type: String,
     enum: ['married', 'single', 'divorced', 'confidential']
@@ -672,6 +674,14 @@ resumeSchema.plugin(mongoosastic, {
       name: {
         type: 'string',
         boost: 15,
+        analyzer: 'ik'
+      },
+      address: {
+        type: 'string',
+        analyzer: 'ik'
+      },
+      hobbies: {
+        type: 'string',
         analyzer: 'ik'
       },
       politicalStatus: {
