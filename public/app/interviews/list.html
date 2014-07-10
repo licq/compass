@@ -88,13 +88,13 @@
           <button ng-click='view(interview._id)' class="btn btn-primary btn-sm">详细</button>
         </div>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-12" ng-show="totalInterviewsCount">
         <div class="row">
-        <span class="col-md-3">
+        <span class="col-md-3" >
           共计{{totalInterviewsCount}}
         </span>
 
-          <div class="col-md-6" align="center" ng-show="totalInterviewsCount">
+          <div class="col-md-6" align="center">
             <pagination boundary-links="true" total-items="totalInterviewsCount"
                         items-per-page="queryOptions.pageSize"
                         ng-model="queryOptions.page"
