@@ -108,8 +108,8 @@ exports.parseTargetSalary = function parseTargetSalary(input) {
   var match = input.match(/(\d+).*?(\d+)/);
   if (match) {
     return {
-      from: match[1],
-      to: match[2]
+      from: +match[1],
+      to: +match[2]
     };
   }
 };
@@ -127,25 +127,16 @@ exports.replaceEmpty = function replaceEmpty(input) {
 
 exports.parseTable = function parseTable(table) {
   var items = [];
-  table.find('tr').each(function () {
-    var item = [];
-    this.find('td').each(function () {
-      item.push(exports.replaceEmpty(this.text()));
-    });
+  var item, i,j;
+  var trs = table.find('tr');
+  for(i = 0;i< trs.length;i++){
+    item = [];
+    var tds = trs.eq(i).children('td');
+    for(j = 0; j< tds.length; j++){
+      item.push(exports.replaceEmpty(tds.eq(j).text()));
+    }
     items.push(item);
-  });
-  return items;
-};
-
-exports.parseTableHtml = function parseTableHtml(table) {
-  var items = [];
-  table.find('tr').each(function () {
-    var item = [];
-    this.find('td').each(function () {
-      item.push(exports.replaceEmpty(this.html()));
-    });
-    items.push(item);
-  });
+  }
   return items;
 };
 
@@ -177,6 +168,8 @@ var languageSkillMap = {
 var languageMap = {
   '英语': 'english',
   '日语': 'japanese',
+  '上海话': 'shanghaihua',
+  '普通话': 'mandarin',
   '其它': 'other',
   '其他': 'other'
 };
@@ -323,7 +316,7 @@ exports.isYearsOfExperience = function isYearsOfExperience(input) {
 };
 
 exports.isPoliticalStatus = function isPoliticalStatus(input) {
-  return _.has(politicalStatusMap, input.trim());
+  return _.has(politicalStatusMap, input.trim().split(' ')[0]);
 };
 
 exports.isMobile = function isMobile(input) {
@@ -383,11 +376,16 @@ exports.isTrainingLocation = function isTraningLocatioin(input) {
   return input.indexOf('培训地点') > -1;
 };
 
-exports.isTrainingCertification = function isTraningLocatioin(input) {
+exports.isTrainingCertification = function isTrainingCertification(input) {
   return input.indexOf('所获证书') > -1;
 };
-exports.isTrainingDescription = function isTraningLocatioin(input) {
+exports.isTrainingDescription = function isTrainingDescription(input) {
   return input.indexOf('培训描述') > -1;
+};
+
+exports.isTrainingDescriptionAdditional = function isTrainingDescriptionAdditional(input) {
+  return !exports.isTrainingCertification(input) && !exports.isTrainingDescription(input) &&
+    !exports.isTrainingLocation(input) && !exports.isTrainingCourse(input);
 };
 
 exports.isEntryTime = function isEntryTime(input) {

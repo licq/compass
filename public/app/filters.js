@@ -140,6 +140,8 @@ angular.module('compass')
       var languageMap = {
         'english': '英语',
         'japanese': '日语',
+        'mandarin': '普通话',
+        'shanghaihua': '上海话',
         'other': '其他'
       };
       return languageMap[input];

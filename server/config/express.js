@@ -39,7 +39,8 @@ module.exports = function (app, config) {
     msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
   }));
   app.use(require('cookie-parser')());
-  app.use(require('body-parser')());
+  app.use(require('body-parser').urlencoded({extended: true}));
+  app.use(require('body-parser').json());
   app.use(require('method-override')());
   app.use(session({
     secret: 'This is another secret',
@@ -47,7 +48,9 @@ module.exports = function (app, config) {
       db: mongoose.connection.db,
       collection: 'sessions',
       auto_reconnect: true
-    })
+    }),
+    resave: true,
+    saveUninitialized: true
   }));
 
   app.use(passport.initialize());
