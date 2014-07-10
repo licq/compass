@@ -54,6 +54,15 @@ describe('helper', function () {
     });
   });
 
+  describe('#calculateBirthday', function () {
+    it('should calculateBirthday correctly', function () {
+      var birthday = helper.calculateBirthday('30岁', moment('2014 09 20', 'YYYY MM DD'));
+      expect(birthday.getFullYear()).to.equal(1984);
+      expect(birthday.getMonth()).to.equal(8);
+      expect(birthday.getDate()).to.equal(20);
+    });
+  });
+
   describe('#parseMatchRate', function () {
     it('should parse correctly', function () {
       expect(helper.parseMatchRate('91%')).to.equal(91);
@@ -71,6 +80,7 @@ describe('helper', function () {
       expect(helper.parseYearsOfExperience('应届毕业生')).to.equal(0);
       expect(helper.parseYearsOfExperience('2年工作经验')).to.equal(2);
       expect(helper.parseYearsOfExperience('一年以上工作经验')).to.equal(1);
+      expect(helper.parseYearsOfExperience('10年')).to.equal(10);
     });
   });
 
@@ -428,6 +438,7 @@ describe('helper', function () {
   describe('#isIndustry', function () {
     it('should return correctly', function () {
       expect(helper.isIndustry('希望行业： 实习')).to.be.true;
+      expect(helper.isIndustry('期望从事行业：')).to.be.true;
       expect(helper.isIndustry('培训地点：北京化工大学主教学楼')).to.be.false;
     });
   });
@@ -472,4 +483,23 @@ describe('helper', function () {
         .to.equal('hello,beijing,销售经理--2014年6月5日8:00:2014年6月5日9:00');
     });
   });
+
+  describe('#parseTargetAnnualSalary', function () {
+    it('should parse targetSalary correctly', function () {
+      expect(helper.parseTargetAnnualSalary('21.60万（18000元/月 * 12个月）')).to.deep.equal({
+        from: 18000,
+        to: 18000,
+        months: 12
+      });
+    });
+  });
+
+  describe('#splitBySemiolon', function () {
+    it('should return correctly', function () {
+      expect(helper.splitBySemiolon('产品经理/主管;信息技术经理/主管;项目经理/主管')).to.deep.equal([
+          '产品经理/主管','信息技术经理/主管','项目经理/主管'
+      ]);
+    });
+  });
 });
+

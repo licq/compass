@@ -66,6 +66,8 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
       return chineseToNumberMap[first];
     }
   }
+  var match = input.match(/^(\d+)年$/);
+  if (match) return Number(match[1]);
 };
 
 var entryTimeMap = {
@@ -127,12 +129,12 @@ exports.replaceEmpty = function replaceEmpty(input) {
 
 exports.parseTable = function parseTable(table) {
   var items = [];
-  var item, i,j;
+  var item, i, j;
   var trs = table.find('tr');
-  for(i = 0;i< trs.length;i++){
+  for (i = 0; i < trs.length; i++) {
     item = [];
     var tds = trs.eq(i).children('td');
-    for(j = 0; j< tds.length; j++){
+    for (j = 0; j < tds.length; j++) {
       item.push(exports.replaceEmpty(tds.eq(j).text()));
     }
     items.push(item);
@@ -384,8 +386,7 @@ exports.isTrainingDescription = function isTrainingDescription(input) {
 };
 
 exports.isTrainingDescriptionAdditional = function isTrainingDescriptionAdditional(input) {
-  return !exports.isTrainingCertification(input) && !exports.isTrainingDescription(input) &&
-    !exports.isTrainingLocation(input) && !exports.isTrainingCourse(input);
+  return !exports.isTrainingCertification(input) && !exports.isTrainingDescription(input) && !exports.isTrainingLocation(input) && !exports.isTrainingCourse(input);
 };
 
 exports.isEntryTime = function isEntryTime(input) {
@@ -397,19 +398,19 @@ exports.isTypeOfEmployment = function isTypeOfEmployment(input) {
 };
 
 exports.isIndustry = function isIndustry(input) {
-  return input.indexOf('希望行业') > -1;
+  return input.indexOf('希望行业') > -1 || input.indexOf('期望从事行业') > -1;
 };
 
 exports.isLocations = function isLocations(input) {
-  return input.indexOf('目标地点') > -1;
+  return input.indexOf('目标地点') > -1 || input.indexOf('期望工作地点') > -1;
 };
 
 exports.isTargetSalary = function isTargetSalary(input) {
-  return input.indexOf('期望月薪') > -1;
+  return input.indexOf('期望月薪') > -1 || input.indexOf('期望年薪') > -1;
 };
 
 exports.isJobCategory = function isJobCategory(input) {
-  return input.indexOf('目标职能') > -1;
+  return input.indexOf('目标职能') > -1 || input.indexOf('期望从事职业') > -1;
 };
 
 exports.render = function render(template, event) {
@@ -418,4 +419,23 @@ exports.render = function render(template, event) {
     .replace(/\{\{应聘职位\}\}/g, event.applyPosition)
     .replace(/\{\{开始时间\}\}/g, moment(event.startTime).format(dateFormat))
     .replace(/\{\{结束时间\}\}/g, moment(event.endTime).format(dateFormat));
+};
+
+exports.calculateBirthday = function calculateBirthday(age, current) {
+  return moment(current).add('years', -exports.onlyNumber(age)).toDate();
+};
+
+exports.parseTargetAnnualSalary = function parseTargetAnnualSalary(input) {
+  var match = input.match(/(\d+)元\/月 \* (\d+)个月/);
+  if (match) {
+    return {
+      from: Number(match[1]),
+      to: Number(match[1]),
+      months: Number(match[2])
+    };
+  }
+};
+
+exports.splitBySemiolon = function splitBySemiolon(input){
+  return input.split(/;|；/);
 };
