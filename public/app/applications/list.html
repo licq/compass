@@ -1,5 +1,5 @@
 <div class="page">
-  <section class="panel panel-default">
+  <section id="item0" class="panel panel-default">
     <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>{{title}}</strong></div>
     <div class="panel-body">
       <form name="searchForm" class="form-horizontal" role="form">
@@ -58,8 +58,8 @@
     </div>
 
     <div class="panel-body">
-      <div class="row callout callout-info" ng-repeat="application in applications">
-        <div class="col-md-1 resume-name">
+      <div class="row callout callout-info" ng-repeat="application in applications" on-finish-render="scroll()">
+        <div  class="col-md-1 resume-name">
           <h4>{{application.name}}</h4>
           <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo">
         </div>
@@ -98,7 +98,7 @@
             </table>
           </div>
 
-          <blockquote>
+          <blockquote id="item{{$index + 1}} ">
             <small>
               {{application.careerObjective.selfAssessment}}
             </small>

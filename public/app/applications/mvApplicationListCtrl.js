@@ -1,6 +1,6 @@
 angular.module('compass')
   .controller('mvApplicationListCtrl',
-  function ($scope, states, $rootScope, mvApplication, $http, $location, $routeParams, applicationStatusMap, $modal, mvNotifier) {
+  function ($scope, states, $rootScope, mvApplication, $anchorScroll, $http, $location, $routeParams, applicationStatusMap, $modal, mvNotifier) {
     $scope.title = applicationStatusMap[$routeParams.status];
 
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
@@ -23,6 +23,29 @@ angular.module('compass')
         $scope.facets = result.facets;
         $scope.initialized = true;
       });
+    };
+
+    $scope.scroll = function() {
+
+      if($location.hash()){
+        var index = $location.hash() - ($scope.queryOptions.page - 1) * $scope.queryOptions.pageSize;
+       var item = '#item' + (index - 1);
+
+        var settings = {
+          container: 'section',
+          scrollTo: item,
+          offset: 0,
+          duration: 5,
+          easing: 'swing'
+        };
+        var scrollPane = angular.element(settings.container);
+        var scrollTo = (typeof settings.scrollTo === 'number') ? settings.scrollTo : angular.element(settings.scrollTo);
+        var scrollY = (typeof scrollTo === 'number') ? scrollTo : scrollTo.offset().top - settings.offset;
+        scrollPane.animate({scrollTop: scrollY }, settings.duration, settings.easing, function () {
+          $location.hash(null);
+        });
+      }
+
     };
 
     function oneMore() {
@@ -111,7 +134,7 @@ angular.module('compass')
     $scope.view = function (index) {
       index += $scope.queryOptions.pageSize * ($scope.queryOptions.page - 1);
       index += 1;
-      $location.path('/applications/' + $routeParams.status + '/' + index);
+      $location.path('/applications/' + $routeParams.status + '/' + index).hash('');
     };
 
     $scope.newEvent = function (application) {
@@ -144,5 +167,4 @@ angular.module('compass')
 
     $scope.query();
 
-  })
-;
+  });

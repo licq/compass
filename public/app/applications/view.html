@@ -1,20 +1,20 @@
-<div class="page">
+<div  class="page">
   <section class="panel panel-default">
     <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>{{title}}</strong></div>
     <div class="panel-body">
       <div ng-include="'/app/common/resumeView.html'"></div>
       <div class="col-md-12">
         <div align="center">
-          <button class="btn btn-success" ng-click="newEvent()"
+          <button  class="btn btn-success" ng-click="newEvent()"
                   ng-show="resume | showInterviewButton">预约面试
           </button>
-          <button class="btn btn-success" ng-click="pursue()"
+          <button scroll-to-section-top class="btn btn-success" ng-click="pursue()"
                   ng-show="resume | showPursueButton">通过
           </button>
-          <button class="btn btn-danger" ng-click="archive()"
+          <button scroll-to="section" class="btn btn-danger" ng-click="archive()"
                   ng-show="resume | showArchiveButton">归档
           </button>
-          <button class="btn btn-warning" ng-click="undetermine()"
+          <button scroll-to-section-top class="btn btn-warning" ng-click="undetermine()"
                   ng-show="resume | showUndetermineButton">待定
           </button>
         </div>
