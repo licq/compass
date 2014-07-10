@@ -247,10 +247,13 @@ angular.module('compass')
   })
   .filter('interviewStatus', function (shortDateFilter) {
     return function (interview) {
-      if (interview.status === 'offered') return '面试通过';
-      if (interview.status === 'rejected') return '面试拒绝';
-      if (interview.status === 'offer rejected') return '应聘者拒绝,拒绝原因:' + interview.applierRejectReason;
-      if (interview.status === 'offer accepted') return '应聘者接受,入职日期:' + shortDateFilter(interview.onboardDate);
+      if (interview) {
+        if (interview.status === 'offered') return '面试通过';
+        if (interview.status === 'rejected') return '面试拒绝';
+        if (interview.status === 'offer rejected') return '应聘者拒绝,拒绝原因:' + interview.applierRejectReason;
+        if (interview.status === 'offer accepted') return '应聘者接受,入职日期:' + shortDateFilter(interview.onboardDate);
+        return 'unknown';
+      }
       return 'unknown';
     };
   })

@@ -8,6 +8,7 @@ angular.module('compass')
         setupNewReview();
       } else {
         $scope.isNewReview = false;
+        $scope.isShowDetail = !$scope.isNewReview;
         sync();
       }
     });
@@ -20,6 +21,7 @@ angular.module('compass')
 
     function setupNewReview() {
       $scope.isNewReview = true;
+      $scope.isShowDetail = !$scope.isNewReview;
       mvEvaluationCriterion.get({}, function (res) {
         $scope.review = {
           items: [],

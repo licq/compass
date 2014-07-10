@@ -2,6 +2,7 @@ angular.module('compass')
   .controller('mvInterviewViewCtrl', function ($scope, $routeParams, mvInterview, $location, mvNotifier) {
     mvInterview.get({_id: $routeParams.id}, function (interview) {
       $scope.interview = interview;
+      $scope.isShowDetail = true;
       sync();
     });
 
