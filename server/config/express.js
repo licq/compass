@@ -4,7 +4,6 @@ var express = require('express'),
   swig = require('swig'),
   mongoose = require('mongoose'),
   passport = require('passport'),
-  kue = require('kue'),
   session = require('express-session'),
   mongoStore = require('connect-mongo')(session),
   Token = mongoose.model('Token'),
@@ -21,7 +20,6 @@ module.exports = function (app, config) {
   app.set('view engine', 'html');
   app.set('views', config.rootPath + '/server/views');
 
-  app.use('/tasks', kue.app);
   app.use(require('serve-favicon')('public/favicon.ico'));
   app.use(require('compression')({
     filter: function (req, res) {

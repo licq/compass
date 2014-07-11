@@ -6,6 +6,7 @@ var kue = require('kue'),
   Email = mongoose.model('Email'),
   _ = require('lodash'),
   emailFetcher = require('./emailFetcher'),
+  delayedJobs = require('./jobs'),
   logger = require('../config/winston').logger(),
   parser = require('../parsers/resumeParser'),
   Resume = mongoose.model('Resume');
@@ -35,7 +36,7 @@ function handleFetchEmail(job, done) {
       }
       email.save(function (err) {
         if (err) logger.error('save email failed ', email.address, ' because ', err);
-        done();
+        delayedJobs.addFetchEmailJob(email, 2, done);
       });
     });
   });
@@ -52,12 +53,15 @@ function handleParseResume(job, done) {
     var data = parser.parse(job.data);
     data.createdAt = job.data.createdAt;
     Resume.createOrUpdateAndIndex(data, function (err) {
-      if (err && (err.code === 11000 || err.code === 11001))
-        logger.error('resume duplication of ', data.name);
+      if (err) {
+        logger.error('save resume to db failed ', err.stack);
+        if (err.code === 11000 || err.code === 11001)
+          logger.error('resume duplication of ', data.name);
+      }
       done(err);
     });
   } catch (err) {
-    logger.warn('error:', err.message);
+    logger.error(err.message);
     done(err);
   }
 }

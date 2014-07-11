@@ -20,7 +20,6 @@ require('./server/config/initDB').init();
 
 require('./server/tasks/mailer').init(config);
 
-
 var workers = require('./server/tasks/workers');
 
 workers.start(config);

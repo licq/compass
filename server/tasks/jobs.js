@@ -34,12 +34,18 @@ exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, token
   }).priority('high').attempts(3).save();
 };
 
-exports.addFetchEmailJob = function addFetchEmailJob(email, done) {
-  jobs.create('fetch email', {
+exports.addFetchEmailJob = function addFetchEmailJob(email, minutes, done) {
+  if(!done && typeof minutes === 'function'){
+    done = minutes;
+    minutes = 0;
+  }
+  var job = jobs.create('fetch email', {
     id: email.id,
     title: 'fetch email from ' + email.address
-  }).save(function (err) {
-    if (err) logger.error('job save failed because of', err);
+  });
+  if(minutes) job.delay(1000 * 60 * minutes);
+  job.save(function (err) {
+    if (err) logger.error('job create failed because of ', err);
     done && done(err);
   });
 };
@@ -111,11 +117,6 @@ exports.init = function (config) {
     Job.get(id, function (err, job) {
       if (err) return;
       logger.info(job.data.title, 'complete');
-      if (job.type === 'fetch email') {
-        jobs.create('fetch email', job.data).delay(1000 * 60 * 30).save(function (err) {
-          if (err) logger.error('job create failed because of ', err);
-        });
-      }
     });
   });
 
