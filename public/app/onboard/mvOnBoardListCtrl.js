@@ -1,9 +1,13 @@
 angular.module('compass')
-  .controller('mvOnboardListCtrl', function ($scope, mvInterview, mvMoment) {
+  .controller('mvOnboardListCtrl', function ($scope, $http, mvInterview, mvNotifier, mvMoment) {
     $scope.dateRange = {
       startDate: mvMoment().startOf('day'),
       endDate: mvMoment().add('months', 1).endOf('day')
     };
+
+    $http.get('/api/applierRejectReasons').success(function (result) {
+      $scope.applierRejectReasons = result;
+    });
 
     $scope.query = function () {
       mvInterview.query({
@@ -18,4 +22,38 @@ angular.module('compass')
     };
 
     $scope.query();
+
+    $scope.accept = function (onboard) {
+      onboard.status = 'recruited';
+      $scope.save(onboard);
+    };
+
+    $scope.reject = function (onboard) {
+      onboard.status = 'not recruited';
+      onboard.onboardDate = undefined;
+    };
+
+    $scope.cancel = function (onboard) {
+      onboard.status = null;
+    };
+
+
+    $scope.save = function (onboard) {
+      mvInterview.update({ _id: onboard._id },
+        {status: onboard.status,
+          applierRejectReason: onboard.applierRejectReason,
+          onboardDate: onboard.onboardDate
+        },
+        function () {
+          mvNotifier.notify('保存成功');
+          angular.forEach($scope.onboards, function (inOffer, index) {
+            if (inOffer._id === onboard._id) {
+              $scope.onboards.splice(index, 1);
+              return false;
+            }
+          });
+        });
+    };
+
+
   });

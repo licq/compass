@@ -55,6 +55,7 @@ angular.module('compass')
             $scope.review.createdAt = new Date();
             $scope.interview.reviews.push($scope.review);
             $scope.isNewReview = false;
+            $scope.isShowDetail = !$scope.isNewReview;
             sync();
             mvNotifier.notify('评价保存成功');
           },

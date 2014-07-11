@@ -93,7 +93,7 @@ var interviewSchema = mongoose.Schema({
   applyPosition: String,
   status: {
     type: 'String',
-    enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted'],
+    enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted', 'recruited', 'not recruited'],
     default: 'new'
   },
   onboardDate: {
@@ -501,7 +501,7 @@ interviewSchema.statics.queryOffered = function (company, options, cb) {
   var query = this.find({company: company, status: 'offered'});
   if (options.name)
     query.where('name').regex(new RegExp(options.name));
-  query.select('name applyPosition').sort('updatedAt').exec(cb);
+  query.select('name applyPosition onboardDate').sort('updatedAt').exec(cb);
 };
 
 interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {

@@ -256,6 +256,8 @@ angular.module('compass')
         if (interview.status === 'rejected') return '面试拒绝';
         if (interview.status === 'offer rejected') return '应聘者拒绝,拒绝原因:' + interview.applierRejectReason;
         if (interview.status === 'offer accepted') return '应聘者接受,入职日期:' + shortDateFilter(interview.onboardDate);
+        if (interview.status === 'recruited') return '已入职,入职日期:' + shortDateFilter(interview.onboardDate);
+        if (interview.status === 'not recruited') return '应聘者未入职,拒绝原因:' + interview.applierRejectReason;
         return 'unknown';
       }
       return 'unknown';

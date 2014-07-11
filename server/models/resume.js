@@ -203,7 +203,8 @@ var resumeSchema = mongoose.Schema({
   status: {
     type: String,
     default: 'new',
-    enum: ['new', 'undetermined', 'pursued', 'archived', 'offer accepted', 'interview', 'offered', 'rejected', 'offer rejected']
+    enum: ['new', 'undetermined', 'pursued', 'archived', 'offer accepted', 'interview', 'offered',
+      'rejected', 'offer rejected', 'recruited', 'not recruited']
   },
   createdAtLocaltime: Date,
   updatedAtLocaltime: Date

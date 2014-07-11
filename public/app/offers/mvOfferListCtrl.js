@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvOfferListCtrl', function ($scope, mvInterview, states, mvNotifier, $http) {
+  .controller('mvOfferListCtrl', function ($scope, mvInterview, mvNotifier, $http) {
     $scope.today = new Date();
 
     $http.get('/api/applierRejectReasons').success(function (result) {
