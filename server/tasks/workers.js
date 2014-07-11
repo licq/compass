@@ -36,7 +36,7 @@ function handleFetchEmail(job, done) {
       }
       email.save(function (err) {
         if (err) logger.error('save email failed ', email.address, ' because ', err);
-        delayedJobs.addFetchEmailJob(email, 2, done);
+        delayedJobs.addFetchEmailJob(email, 30, done);
       });
     });
   });
