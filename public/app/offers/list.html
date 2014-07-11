@@ -43,19 +43,20 @@
                 <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者拒绝</button>
               </div>
 
-              <form ng-show="gridItem.status==='offer rejected'">
+              <form name="rejectForm" ng-show="gridItem.status==='offer rejected'">
                 <div class="form-group col-md-10">
                   <label class="col-md-3">选择拒绝原因</label>
 
                   <div class="col-md-5">
-                    <select ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
+                    <select name="selectReason"required ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
                             data-placeholder="选择拒绝原因">
                       <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
                     </select>
 
                   </div>
                   <div class="col-md-4">
-                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存
+                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm"
+                            ng-disabled="rejectForm.$invalid">保存
                     </button>
                     <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
                     </button>
@@ -63,19 +64,20 @@
                 </div>
               </form>
 
-              <form ng-show="gridItem.status==='offer accepted'">
+              <form name="acceptForm" ng-show="gridItem.status==='offer accepted'">
                 <div class="form-group col-md-10">
                   <label class="col-md-3">选择入职日期</label>
 
                   <div class="col-md-5">
-                    <div datetimepicker ng-model="gridItem.onboardDate" use-seconds="false" min-date="today"
+                    <div required name="dp" datetimepicker ng-model="gridItem.onboardDate" use-seconds="false" min-date="today"
                          pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
                       <input type='text' class="form-control"/>
                       <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                     </div>
                   </div>
                   <div class="col-md-4">
-                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存
+                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm"
+                            ng-disabled="acceptForm.$invalid" >保存
                     </button>
                     <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
                     </button>
