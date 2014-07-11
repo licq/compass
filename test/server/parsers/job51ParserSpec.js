@@ -16,7 +16,6 @@ describe('job51Parser', function () {
         expect(resume.mobile).to.equal('18645149586');
         expect(resume.applyPosition).to.equal('Java开发实习生（上海）');
         expect(resume.yearsOfExperience).to.equal(0);
-//                expect(resume.projectExperience).to.have.length(3);
         console.log(resume);
         done(err);
       });

@@ -162,6 +162,7 @@ var resumeSchema = mongoose.Schema({
   ],
 
   inSchoolStudy: [String ],
+  addtionalInformation: String,
 
   languageCertificates: {
     english: {
@@ -675,6 +676,10 @@ resumeSchema.plugin(mongoosastic, {
       name: {
         type: 'string',
         boost: 15,
+        analyzer: 'ik'
+      },
+      additionalInformation: {
+        type: 'string',
         analyzer: 'ik'
       },
       address: {

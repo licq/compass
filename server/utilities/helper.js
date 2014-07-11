@@ -66,7 +66,7 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
       return chineseToNumberMap[first];
     }
   }
-  var match = input.match(/^(\d+)年$/);
+  var match = input.match(/^(\d+)\s*年$/);
   if (match) return Number(match[1]);
 };
 
@@ -264,7 +264,7 @@ exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
 };
 
 exports.parseDateRange = function parseDateRange(input) {
-  var parts = input.split(/--|：/g);
+  var parts = input.split(/-+|：/g);
   return {
     from: exports.parseDate(parts[0]),
     to: exports.parseDate(parts[1])
@@ -355,11 +355,11 @@ exports.chunkByEmptyArray = function chunk(input) {
 };
 
 exports.isProjectDescription = function isProjectDescription(input) {
-  return input.indexOf('项目描述') > -1;
+  return input.indexOf('项目描述') > -1 || input.indexOf('项目简介') > -1;
 };
 
 exports.isProjectResponsibility = function isProjectResponsibility(input) {
-  return input.indexOf('责任描述') > -1;
+  return input.indexOf('责任描述') > -1 || input.indexOf('项目职责') > -1 || input.indexOf('项目业绩') > -1;
 };
 
 exports.removeTags = function removeTags(input) {
@@ -438,4 +438,8 @@ exports.parseTargetAnnualSalary = function parseTargetAnnualSalary(input) {
 
 exports.splitBySemiolon = function splitBySemiolon(input){
   return input.split(/;|；/);
+};
+
+exports.isNewWork = function isNewWork(input){
+  return input.length === 2 && (!!input[0].match(/\d+\.\d+ - 至今/) || !!input[0].match(/\d+\.\d+ - \d+\.\d+/));
 };
