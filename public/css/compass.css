@@ -219,3 +219,15 @@ g.nv-series{
 .captcha-group .row div input, .captcha-group .row div img{
     height: 46px;
 }
+
+.page-err .err-status h1 {
+    margin: 0 0 -45px;
+    color: #fafafa;
+    font-size: 80px
+}
+
+@media (min-width: 768px) {
+    .page-err .err-status h1 {
+        font-size: 150px
+    }
+}
