@@ -81,6 +81,7 @@ describe('helper', function () {
       expect(helper.parseYearsOfExperience('2年工作经验')).to.equal(2);
       expect(helper.parseYearsOfExperience('一年以上工作经验')).to.equal(1);
       expect(helper.parseYearsOfExperience('10年')).to.equal(10);
+      expect(helper.parseYearsOfExperience('10 年')).to.equal(10);
     });
   });
 
@@ -499,6 +500,14 @@ describe('helper', function () {
       expect(helper.splitBySemiolon('产品经理/主管;信息技术经理/主管;项目经理/主管')).to.deep.equal([
           '产品经理/主管','信息技术经理/主管','项目经理/主管'
       ]);
+    });
+  });
+
+  describe('#isNewWork', function () {
+    it('should return correctly', function () {
+      expect(helper.isNewWork([ '2008.05 - 至今', '华数集团-华数传媒网络有限公司' ])).to.be.true;
+      expect(helper.isNewWork([ '', '产品部门经理 2008.05 - 至今' ])).to.be.false;
+      expect(helper.isNewWork([ '- 所在地区：杭州 - 汇报对象：总监 - 下属人数：18人 - 工作职责： 1、部门管理：团队组建人员招聘、公司管理规章制度落实、工作流程规范的制定、人才梯队的培养建设、员工季度及年度绩效考核等； 2、产品开发：产品业务需求分析和产品规划、系统平台设计及实施、项目开发管理、产品版本管控、日常推广运营等。 工作业绩： 手机视频产品华数与移动、联通、电信三大运营商合作的产品线；该产品线自11年本人加入后经历了从无到有、从免费到收费的逐步成长历程。目前华数TV（手机视频）在全国范围内完成商用，与电信三大运营商展开多种合作模式，如系统平台供应商、SP、CP角色等（如：垂直频道、专区模式），产品线类目包括：客户端（IOS版/安卓版）、WAP门户（炫彩版/触屏版/文字版）、公网等多个产品，用户已超过百万级别。' ])).to.be.false;
     });
   });
 });

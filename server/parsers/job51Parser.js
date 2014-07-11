@@ -97,20 +97,20 @@ function parseCareerObjective(table) {
 function parseWorkExperience(table) {
   if (!table) return;
   try {
-    var workExperience = [];
     var tableData = helper.parseTable(table);
-    var firstLineItems = tableData[0][0].split(/：|（/);
-    var dateRange = helper.parseDateRange(firstLineItems[0]);
-    workExperience.push({
-      from: dateRange.from,
-      to: dateRange.to,
-      company: firstLineItems[1],
-      industry: tableData[1][1],
-      department: tableData[2][0],
-      jobTitle: tableData[2][1],
-      jobDescription: tableData[3][0]
+    return _.times((tableData.length + 1) / 5, function(index){
+      var firstLineItems = tableData[index * 5][0].split(/：|（/);
+      var dateRange = helper.parseDateRange(firstLineItems[0]);
+      return {
+        from: dateRange.from,
+        to: dateRange.to,
+        company: firstLineItems[1],
+        industry: tableData[index * 5 + 1][1],
+        department: tableData[ index * 5 + 2][0],
+        jobTitle: tableData[index * 5 + 2][1],
+        jobDescription: tableData[index * 5 + 3][0]
+      };
     });
-    return workExperience;
   } catch (e) {
     logger.error(e.stack);
   }
@@ -201,8 +201,9 @@ function parseInSchoolStudy(table) {
 function parseItSkills(table) {
   if (!table) return;
   try {
-    return _.map(_.filter(helper.parseTable(table).slice(2), function (line) {
-      return line.length === 3;
+    var tableData = helper.parseTable(table).slice(2);
+    return _.map(_.filter(tableData, function (line) {
+      return line.length >= 3;
     }), function (line) {
       return {
         skill: line[0],
