@@ -23,10 +23,18 @@ module.exports = function (app, config) {
   app.use(require('serve-favicon')('public/favicon.ico'));
   app.use(require('compression')({
     filter: function (req, res) {
-      return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
+      return (/json|text/).test(res.getHeader('Content-Type'));
     },
     threshold: 512
   }));
+  if ('production' === app.get('env')) {
+    app.use(function (req, res, next) {
+      if (/[javascript|css]$/.test(req.url)) {
+        res.setHeader('Cache-Control', 'public, max-age=' + 60 * 60 * 24 * 365);
+      }
+      next();
+    });
+  }
   app.use(express.static(config.rootPath + '/public'));
   app.route('/app/*', function (req, res) {
     res.send(404);
