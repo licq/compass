@@ -31,8 +31,8 @@
             <th field-name="name" display-name="应聘者" enable-filtering="false"
                 enable-sorting="true" class="col-md-3"></th>
             <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
-                enable-sorting="true" class="col-md-4"></th>
-            <th class="col-md-5">操作</th>
+                enable-sorting="true" class="col-md-3"></th>
+            <th class="col-md-6">操作</th>
           </tr>
           </thead>
           <tbody>
@@ -45,33 +45,42 @@
 
               <form ng-show="gridItem.status==='offer rejected'">
                 <div class="form-group col-md-10">
-                  <label class="col-md-4">选择拒绝原因</label>
+                  <label class="col-md-3">选择拒绝原因</label>
 
-                  <div class="col-md-8">
+                  <div class="col-md-5">
                     <select ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
                             data-placeholder="选择拒绝原因">
                       <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
                     </select>
+
+                  </div>
+                  <div class="col-md-4">
+                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存
+                    </button>
+                    <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
+                    </button>
                   </div>
                 </div>
-                <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存</button>
               </form>
 
               <form ng-show="gridItem.status==='offer accepted'">
                 <div class="form-group col-md-10">
-                  <label class="col-md-4">选择入职日期</label>
+                  <label class="col-md-3">选择入职日期</label>
 
-                  <div class="col-md-8">
+                  <div class="col-md-5">
                     <div datetimepicker ng-model="gridItem.onboardDate" use-seconds="false" min-date="today"
                          pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
                       <input type='text' class="form-control"/>
                       <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                     </div>
                   </div>
+                  <div class="col-md-4">
+                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存
+                    </button>
+                    <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
+                    </button>
+                  </div>
                 </div>
-                <button type="submit" ng-click="save(gridItem)" ng-show="gridItem.status!=='offered'"
-                        class="btn btn-success btn-sm">保存
-                </button>
               </form>
             </td>
           </tr>

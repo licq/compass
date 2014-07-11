@@ -27,6 +27,10 @@ angular.module('compass')
       offer.status = 'offer rejected';
     };
 
+    $scope.cancel = function (offer) {
+      offer.status = null;
+    };
+
     $scope.save = function (offer) {
       mvInterview.update({ _id: offer._id },
         {status: offer.status,
