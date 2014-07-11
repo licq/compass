@@ -168,7 +168,7 @@ module.exports = function (app) {
   tasksRouter.use(sessions.requiresLogin);
   tasksRouter.use(users.isSystemAdmin);
   tasksRouter.use(kue.app);
-  systemApiRouter.use('/tasks', kue.app);
+
   systemApiRouter.route('/recreateAllJobs')
     .post(systemOperations.recreateAllJobs);
   systemApiRouter.route('/recreateFetchEmailJobs')
