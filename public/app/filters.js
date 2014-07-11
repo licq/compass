@@ -142,6 +142,8 @@ angular.module('compass')
         'japanese': '日语',
         'mandarin': '普通话',
         'shanghaihua': '上海话',
+        'cantonese': '粤语',
+        'french': '法语',
         'other': '其他'
       };
       return languageMap[input];

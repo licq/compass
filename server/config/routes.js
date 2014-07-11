@@ -2,6 +2,7 @@
 
 var express = require('express'),
   roles = require('../controllers/roles'),
+  kue = require('kue'),
   sessions = require('../controllers/sessions'),
   emails = require('../controllers/emails'),
   signups = require('../controllers/signups'),
@@ -26,9 +27,10 @@ var express = require('express'),
   _ = require('lodash');
 
 module.exports = function (app) {
-  var apiRouter = express.Router();
-  var publicApiRouter = express.Router();
-  var systemApiRouter = express.Router();
+  var apiRouter = express.Router(),
+    publicApiRouter = express.Router(),
+    systemApiRouter = express.Router(),
+    tasksRouter = express.Router();
 
   publicApiRouter.route('/sessions')
     .post(sessions.authenticate)
@@ -163,6 +165,10 @@ module.exports = function (app) {
     res.send(500, {message: 'Internal Server Error',
       stack: err.stack});
   });
+  tasksRouter.use(sessions.requiresLogin);
+  tasksRouter.use(users.isSystemAdmin);
+  tasksRouter.use(kue.app);
+  systemApiRouter.use('/tasks', kue.app);
   systemApiRouter.route('/recreateAllJobs')
     .post(systemOperations.recreateAllJobs);
   systemApiRouter.route('/recreateFetchEmailJobs')
@@ -184,6 +190,7 @@ module.exports = function (app) {
   app.use('/sysAdminApi', systemApiRouter);
   app.use('/api', apiRouter);
   app.use('/publicApi', publicApiRouter);
+  app.use('/tasks',tasksRouter);
 
   app.get('/', function (req, res) {
     if (req.user) {

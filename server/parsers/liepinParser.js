@@ -144,6 +144,15 @@ function parseInSchoolStudy(table) {
   }
 }
 
+function parseFirstTdText(table){
+  if(!table) return;
+  try{
+    return table.find('td:nth-child(1)').text();
+  }catch(e){
+    logger.error('parse in first td text failed: ', e.stack);
+  }
+}
+
 exports.parse = function (data) {
   var $ = cheerio.load(data.html, {normalizeWhitespace: true});
 
@@ -161,19 +170,17 @@ exports.parse = function (data) {
   var resume = parseBasicInfo(findTable('基本信息'));
   resume.applyPosition = $('body > table table tr:nth-child(1) td div span').text();
   resume.careerObjective = parseCareerObjective(findTable('求职意向'));
-  console.log(findTable('自我评价').find('td:nth-child(1)').text());
-  resume.careerObjective.selfAssessment = findTable('自我评价').find('td:nth-child(1)').text();
+  resume.careerObjective.selfAssessment = parseFirstTdText(findTable('自我评价'));
   resume.workExperience = parseWorkExperience(findTable('工作经历'));
   resume.projectExperience = parseProjectExperience(findTable('项目经历'));
   resume.educationHistory = parseEducationHistory(findTable('教育经历'));
   resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
-  resume.inSchoolStudy = parseInSchoolStudy(findTable('所获奖项'));
-  resume.additionalInformation = findTable('附加信息').find('td:nth-child(1)').text();
+  resume.additionalInformation = parseFirstTdText(findTable('附加信息'));
   resume.channel = '猎聘网';
   resume.mail = data.mailId;
   resume.company = data.company;
-  return resume;
 
+  return resume;
 };
 
 exports.test = function (data) {

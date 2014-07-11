@@ -136,7 +136,7 @@ var resumeSchema = mongoose.Schema({
     {
       language: {
         type: String,
-        enum: ['english', 'japanese', 'other']
+        enum: ['english', 'japanese', 'mandarin', 'shanghaihua', 'cantonese', 'french', 'other']
       },
       level: {
         type: String,
@@ -495,7 +495,7 @@ resumeSchema.plugin(mongoosastic, {
         }
       },
       channel: {
-        index: 'not_analyzed',
+        analyzer: 'ik',
         type: 'string'
       },
       civilState: {

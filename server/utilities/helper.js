@@ -172,6 +172,8 @@ var languageMap = {
   '日语': 'japanese',
   '上海话': 'shanghaihua',
   '普通话': 'mandarin',
+  '粤语': 'cantonese',
+  '法语': 'french',
   '其它': 'other',
   '其他': 'other'
 };
@@ -436,10 +438,10 @@ exports.parseTargetAnnualSalary = function parseTargetAnnualSalary(input) {
   }
 };
 
-exports.splitBySemiolon = function splitBySemiolon(input){
+exports.splitBySemiolon = function splitBySemiolon(input) {
   return input.split(/;|；/);
 };
 
-exports.isNewWork = function isNewWork(input){
+exports.isNewWork = function isNewWork(input) {
   return input.length === 2 && (!!input[0].match(/\d+\.\d+ - 至今/) || !!input[0].match(/\d+\.\d+ - \d+\.\d+/));
 };
