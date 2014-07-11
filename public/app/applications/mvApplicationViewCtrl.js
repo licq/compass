@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap, $modal) {
+  .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $rootScope, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap, $modal) {
     $scope.index = $routeParams.index;
     $scope.listQueryOptions = states.get('mvApplicationListCtrl' + $routeParams.status).queryOptions || {};
 
@@ -30,6 +30,8 @@ angular.module('compass')
 
     $scope.pursue = function () {
       mvApplication.pursue({_id: $scope.resume._id}, function () {
+        var from = $routeParams.status, to = 'pursued';
+        $rootScope.$broadcast('applicationStatusUpdated', from, to);
         mvNotifier.notify('已将' + $scope.resume.name + '加入面试列表');
         retrieveApplication();
       });
@@ -37,6 +39,7 @@ angular.module('compass')
 
     $scope.undetermine = function () {
       mvApplication.undetermine({_id: $scope.resume._id}, function () {
+        $rootScope.$broadcast('applicationStatusUpdated', $routeParams.status, 'undetermined');
         mvNotifier.notify('已将' + $scope.resume.name + '加入待定列表');
         retrieveApplication();
       });
@@ -44,6 +47,7 @@ angular.module('compass')
 
     $scope.archive = function () {
       mvApplication.archive({_id: $scope.resume._id}, function () {
+        $rootScope.$broadcast('applicationStatusUpdated', $routeParams.status, 'archived');
         mvNotifier.notify('已将' + $scope.resume.name + '归档到人才库中');
         retrieveApplication();
       });
