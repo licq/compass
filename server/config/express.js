@@ -23,14 +23,14 @@ module.exports = function (app, config) {
   app.use(require('serve-favicon')('public/favicon.ico'));
   app.use(require('compression')({
     filter: function (req, res) {
-      return (/json|text/).test(res.getHeader('Content-Type'));
+      return (/css|javascript|json|text|html/).test(res.getHeader('Content-Type'));
     },
     threshold: 512
   }));
   if ('production' === app.get('env')) {
     app.use(function (req, res, next) {
-      if (/[javascript|css]$/.test(req.url)) {
-        res.setHeader('Cache-Control', 'public, max-age=' + 60 * 60 * 24 * 365);
+      if (/(js|css)$/.test(req.url)) {
+        res.setHeader('Cache-Control', 'public, max-age=' + 1000 * 60 * 60 * 24 * 365);
       }
       next();
     });
