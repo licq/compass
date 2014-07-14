@@ -28,6 +28,19 @@ describe('positions', function () {
         .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
+          console.log(res.body);
+          expect(res.body).to.have.length(1);
+          var r = res.body[0];
+          expect(r).to.have.property('name');
+          done(err);
+        });
+    });
+
+    it('should return 200 with json result', function (done) {
+      request.get('/api/positions?byUserId=true')
+        .expect(200)
+        .expect('content-type', /json/)
+        .end(function (err, res) {
           expect(res.body).to.have.length(1);
           var r = res.body[0];
           expect(r).to.have.property('name');

@@ -6,11 +6,18 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
-  Position.find({
-    company: req.user.company
-  }).populate('owners', 'name')
-    .select('name owners evaluationCriterions department createdAt')
-    .exec(function (err, positions) {
+
+  var query = Position.find({ company: req.user.company });
+  console.log(req.query);
+  if (req.query.byUserId) {
+    console.log('byuid');
+    console.log(req.user._id);
+    query = query.select('name').where('owners',req.user._id);
+  } else {
+    query = query.populate('owners', 'name')
+      .select('name owners evaluationCriterions department createdAt');
+  }
+  query.exec(function (err, positions) {
     if (err) return next(err);
     return res.json(positions);
   });
@@ -60,3 +67,15 @@ exports.load = function (req, res, next) {
       next();
     });
 };
+
+//exports.getByUserId = function (req, res, next) {
+//  Position.find()
+//    .select('name')
+//    .where('owners', req.user._id)
+//    .exec(function (err, positions) {
+//      if (err) return next(err);
+//      if (!positions) return res.send(404, {message: 'not found'});
+//      req.positions = positions;
+//      next();
+//    });
+//};
