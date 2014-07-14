@@ -6,7 +6,8 @@ var _ = require('lodash'),
 var parsers = [
   require('./job51Parser'),
   require('./zhaopinParser'),
-  require('./liepinParser')
+  require('./liepinParser'),
+  require('./dongfangParser')
 ];
 
 exports.parse = function (data) {

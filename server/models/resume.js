@@ -75,7 +75,6 @@ var resumeSchema = mongoose.Schema({
     selfAssessment: String
   },
   job51Id: String,
-
   workExperience: [
     {
       from: Date,

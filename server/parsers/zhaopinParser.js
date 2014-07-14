@@ -7,7 +7,7 @@ var cheerio = require('cheerio'),
   entities = require('entities'),
   helper = require('../utilities/helper');
 
-function parseBasicInfo(table) {
+function parseBasicInfo(table,errors) {
   if (!table) return {};
   try {
     var resume = {};
@@ -24,20 +24,21 @@ function parseBasicInfo(table) {
       else if (helper.isBirthday(item)) resume.birthday = helper.parseDate(item);
       else if (helper.isHukou(item)) resume.hukou = helper.splitByColon(item)[1];
       else if (helper.isResidency(item)) resume.residency = item.substr(4);
-      else if (helper.isPoliticalStatus(item)){
+      else if (helper.isPoliticalStatus(item)) {
         var parts = item.split(' ');
         resume.politicalStatus = helper.parsePoliticalStatus(parts[0]);
-        if(parts.length > 1) resume.address = parts[1];
+        if (parts.length > 1) resume.address = parts[1];
       }
       else if (helper.isYearsOfExperience(item)) resume.yearsOfExperience = helper.parseYearsOfExperience(item);
       else if (helper.isMobile(item)) resume.mobile = helper.onlyNumber(item);
     });
     return  resume;
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
-function parseCareerObjective(table) {
+function parseCareerObjective(table,errors) {
   if (!table) return;
   try {
     var objectiveTable = table.find('table');
@@ -50,10 +51,11 @@ function parseCareerObjective(table) {
       selfAssessment: helper.replaceEmpty(table.find('.resume_p:nth-child(1)').text())
     };
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
-function parseInSchoolPractices(table) {
+function parseInSchoolPractices(table,errors) {
   if (!table) return;
   try {
     var data = helper.parseTable(table);
@@ -66,10 +68,11 @@ function parseInSchoolPractices(table) {
       };
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
-function parseWorkExperience(table) {
+function parseWorkExperience(table,errors) {
   if (!table) return;
   try {
     var workExperience = [];
@@ -93,16 +96,17 @@ function parseWorkExperience(table) {
     });
     return workExperience;
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseTrainingHistory(table) {
+function parseTrainingHistory(table,errors) {
   if (!table) return;
 
   try {
     var trs = table.find('tr');
-    return _.times((trs.length + 1) / 2, function (index) {
+    return _.times(Math.ceil(trs.length / 2), function (index) {
       var contents = trs.eq(index * 2).children().eq(0).contents();
       var items = helper.splitByColon(contents[0].data);
       var dateRange = helper.parseDateRange(items[0]);
@@ -130,11 +134,12 @@ function parseTrainingHistory(table) {
       return training;
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error('parse failed: ', e.stack);
   }
 }
 
-function parseProjectExperience(table, $) {
+function parseProjectExperience(table,errors) {
   if (!table) return;
 
   try {
@@ -168,11 +173,12 @@ function parseProjectExperience(table, $) {
       return result;
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseCertifications(table) {
+function parseCertifications(table,errors) {
   if (!table) return;
   try {
     var certificationTableData = (helper.parseTable(table));
@@ -185,10 +191,11 @@ function parseCertifications(table) {
       };
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
-function parseEducationHistory(table) {
+function parseEducationHistory(table,errors) {
   if (!table) return;
   try {
     var data = helper.replaceEmpty(entities.decodeHTML(table.find('tr td').html()).split('<br>'));
@@ -204,10 +211,11 @@ function parseEducationHistory(table) {
       };
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
-function parseItSkills(table) {
+function parseItSkills(table,errors) {
   if (!table) return;
   try {
     if (table.find('div.resume_p').length > 0) return;
@@ -228,10 +236,11 @@ function parseItSkills(table) {
     });
   }
   catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
-function parseLanguageSkills(table) {
+function parseLanguageSkills(table,errors) {
   if (!table) return;
   try {
     var contents = table.find('tr td').contents();
@@ -244,11 +253,12 @@ function parseLanguageSkills(table) {
       };
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseInSchoolStudy(table) {
+function parseInSchoolStudy(table,errors) {
   if (!table) return;
   try {
     var data = entities.decodeHTML(table.find('tr td').html());
@@ -257,15 +267,17 @@ function parseInSchoolStudy(table) {
         return helper.removeTags(line);
       });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseHobbies(table){
-  if(!table) return;
-  try{
+function parseHobbies(table,errors) {
+  if (!table) return;
+  try {
     return table.find('tr td').text();
-  }catch(e){
+  } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
@@ -284,29 +296,30 @@ exports.parse = function (data) {
   };
 
   var resume;
+  var errors = [];
   if ($('html html').length > 0) {
-    resume = parseBasicInfo($('td tr:nth-child(1) table:nth-child(1)'));
+    resume = parseBasicInfo($('td tr:nth-child(1) table:nth-child(1)'), errors);
     resume.letter = helper.replaceEmpty($('html html p').text());
   } else {
-    resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'));
+    resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'), errors);
   }
 
-  resume.careerObjective = parseCareerObjective(findTable('专业特长', '自我评价', '职业目标', '技能专长', '专业技能'));
-  resume.workExperience = parseWorkExperience(findTable('工作经历'), $);
-  resume.educationHistory = parseEducationHistory(findTable('教育经历'), $);
-  resume.certifications = parseCertifications(findTable('证书'));
-  resume.itSkills = parseItSkills(findTable('专业技能'));
-  resume.languageSkills = parseLanguageSkills(findTable('语言能力'));
-  resume.projectExperience = parseProjectExperience(findTable('项目经验'));
-  resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'));
-  resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'));
-  resume.trainingHistory = parseTrainingHistory(findTable('培训经历'));
-  resume.hobbies = parseHobbies(findTable('兴趣爱好'));
-  resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject);
+  resume.careerObjective = parseCareerObjective(findTable('专业特长', '自我评价', '职业目标', '技能专长', '专业技能'), errors);
+  resume.workExperience = parseWorkExperience(findTable('工作经历'), errors);
+  resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
+  resume.certifications = parseCertifications(findTable('证书'), errors);
+  resume.itSkills = parseItSkills(findTable('专业技能'), errors);
+  resume.languageSkills = parseLanguageSkills(findTable('语言能力'), errors);
+  resume.projectExperience = parseProjectExperience(findTable('项目经验'), errors);
+  resume.inSchoolPractices = parseInSchoolPractices(findTable('在校实践经验'), errors);
+  resume.inSchoolStudy = parseInSchoolStudy(findTable('在校学习情况'), errors);
+  resume.trainingHistory = parseTrainingHistory(findTable('培训经历'), errors);
+  resume.hobbies = parseHobbies(findTable('兴趣爱好'), errors);
+  resume.applyPosition = helper.parseZhaopinApplyPosition(data.subject, errors);
   resume.channel = '智联招聘';
   resume.company = data.company;
   resume.mail = data.mailId;
-
+  resume.parseErrors = errors;
   return resume;
 
 };

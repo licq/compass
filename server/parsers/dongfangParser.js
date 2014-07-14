@@ -5,7 +5,7 @@ var cheerio = require('cheerio'),
   helper = require('../utilities/helper'),
   logger = require('../config/winston').logger();
 
-function parseBasicInfo(table) {
+function parseBasicInfo(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
@@ -19,11 +19,12 @@ function parseBasicInfo(table) {
       politicalStatus: helper.parsePoliticalStatus(tableData[4][3]),
     };
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseContactInfo(table) {
+function parseContactInfo(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
@@ -32,11 +33,12 @@ function parseContactInfo(table) {
       email: tableData[2][3]
     };
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseLanguageSkills(table) {
+function parseLanguageSkills(table, errors) {
   if (!table) return;
   try {
     return _.map(helper.parseTable(table), function (line) {
@@ -47,11 +49,12 @@ function parseLanguageSkills(table) {
       };
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseCareerObjective(table) {
+function parseCareerObjective(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
@@ -63,12 +66,13 @@ function parseCareerObjective(table) {
       targetSalary: helper.parseTargetSalary(tableData[4][1])
     };
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
 
-function parseWorkExperience(tr) {
+function parseWorkExperience(tr, errors) {
   try {
     var workExperience = [];
     while (tr.text().match(/\d{4}\/\d{1,2}/)) {
@@ -85,11 +89,12 @@ function parseWorkExperience(tr) {
     }
     return workExperience;
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseEducationHistory(tr) {
+function parseEducationHistory(tr, errors) {
   try {
     var educationHistory = [];
     while (tr.text().match(/\d{4}\/\d{1,2}/)) {
@@ -107,11 +112,12 @@ function parseEducationHistory(tr) {
     }
     return educationHistory;
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
 
-function parseItSkills(table) {
+function parseItSkills(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
@@ -122,6 +128,7 @@ function parseItSkills(table) {
       };
     });
   } catch (e) {
+    errors.push(e.message);
     logger.error(e.stack);
   }
 }
@@ -133,21 +140,23 @@ exports.parse = function (data) {
     return $('td.tdBar:contains(' + tableName + ')').parent().next().next().find('table:nth-child(1)');
   };
 
-  var resume = parseBasicInfo(findTable('基本情况'));
-  _.extend(resume, parseContactInfo(findTable('联系方式')));
-  resume.careerObjective = parseCareerObjective(findTable('求职意向'));
+  var errors = [];
+  var resume = parseBasicInfo(findTable('基本情况'), errors);
+  _.extend(resume, parseContactInfo(findTable('联系方式')), errors);
+  resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
   resume.careerObjective.selfAssessment = $('td.bluecolor:contains(自我评价：)').next().text();
   var tr = $('td.tdBar:contains(工作经历)').parent();
   resume.yearsOfExperience = helper.parseYearsOfExperience(tr.next().next().find('td:nth-child(2)').text());
-  resume.workExperience = parseWorkExperience(tr.next().next().next());
-  resume.educationHistory = parseEducationHistory($('td.tdBar:contains(教育背景)').parent().next().next());
-  resume.languageSkills = parseLanguageSkills(findTable('语言/技能'));
-  resume.itSkills = parseItSkills($('td.tdBar:contains(语言/技能)').parent().next().next().next().find('table:nth-child(1)')) ;
+  resume.workExperience = parseWorkExperience(tr.next().next().next(), errors);
+  resume.educationHistory = parseEducationHistory($('td.tdBar:contains(教育背景)').parent().next().next(), errors);
+  resume.languageSkills = parseLanguageSkills(findTable('语言/技能'), errors);
+  resume.itSkills = parseItSkills($('td.tdBar:contains(语言/技能)').parent().next().next().next().find('table:nth-child(1)'), errors);
   resume.applyPosition = $('td.bluecolor:contains(应聘岗位)').next().text();
   resume.applyDate = helper.parseDate($('td.bluecolor:contains(应聘日期)').next().text());
   resume.channel = '最佳东方';
   resume.mail = data.mailId;
   resume.company = data.company;
+  resume.parseErrors = errors;
   return resume;
 
 };
