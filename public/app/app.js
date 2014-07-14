@@ -114,6 +114,24 @@ angular.module('compass',
         authenticate: true,
         permissions: 'setRoles'
       })
+      .when('/settings/positions', {
+        templateUrl: '/app/positions/list.html',
+        controller: 'mvPositionListCtrl',
+        authenticate: true,
+        permissions: 'setPositions'
+      })
+      .when('/settings/positions/new', {
+        templateUrl: '/app/positions/new.html',
+        controller: 'mvPositionNewCtrl',
+        authenticate: true,
+        permissions: 'setPositions'
+      })
+      .when('/settings/positions/edit/:id', {
+        templateUrl: '/app/positions/edit.html',
+        controller: 'mvPositionEditCtrl',
+        authenticate: true,
+        permissions: 'setPositions'
+      })
       .when('/settings/eventSetting', {
         templateUrl: '/app/eventSetting/view.html',
         controller: 'mvEventSettingCtrl',
@@ -305,6 +323,7 @@ angular.module('compass',
         {name: 'setMails', cnName: '简历邮箱', enabled: false},
         {name: 'setUsers', cnName: '用户', enabled: false},
         {name: 'setRoles', cnName: '角色', enabled: false},
+        {name: 'setPositions', cnName: '职位', enabled: false},
         {name: 'setEvaluationCriterions', cnName: '面试评价设置', enabled: false},
         {name: 'setEventSetting', cnName: '面试设置', enabled: false}
       ]}
