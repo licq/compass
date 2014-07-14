@@ -10,7 +10,8 @@ var Factory = require('factory-lady'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
   EventSetting = mongoose.model('EventSetting'),
-  Resume = mongoose.model('Resume');
+  Resume = mongoose.model('Resume'),
+  Position = mongoose.model('Position');
 
 var companyCounter = 1;
 
@@ -130,6 +131,18 @@ Factory.define('interview', mongoose.model('Interview'), {
     }
   ],
   reviews: []
+});
+
+var positionCounter = 1;
+Factory.define('position', Position, {
+  name: function (cb) {
+    cb('position' + positionCounter++);
+  },
+  company: Factory.assoc('company', 'id'),
+  evaluationCriterions: [{
+    'name': '主动性',
+    'rate': 0.5
+  }]
 });
 
 var applierRejectReasonCounter = 1;

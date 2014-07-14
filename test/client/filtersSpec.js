@@ -278,4 +278,10 @@ describe('filters', function () {
       expect(resumeStatusFilter('offer rejected')).to.equal('应聘者拒绝');
     }));
   });
+
+  describe('resumeStatusFilter', function () {
+    it('should return correctly', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter([{id:333, name:'11'}, {id:444, name:'22'}])).to.equal('11, 22');
+    }));
+  });
 });

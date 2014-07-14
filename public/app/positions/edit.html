@@ -1,0 +1,106 @@
+<div class="page">
+  <div class="row">
+    <div class="col-md-7 col-md-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>修改职位</strong>
+        </div>
+        <div class="panel-body">
+          <form name="positionForm" novalidate="" class="form-validation">
+            <div class="well text-danger" ng-show="err">
+              {{err.message}}
+            </div>
+            <fieldset>
+              <div class="form-group">
+                <label>名称</label>
+                <input type="text" ng-model="position.name" name="name"
+                       class="form-control"
+                       placeholder="名称" required=""/>
+
+                <p class="text-danger"
+                   ng-show="positionForm.name.$error.required && !positionForm.name.$pristine">
+                  请输入名称</p>
+
+              </div>
+              <div class="form-group">
+                <label>部门</label>
+                <input type="text"
+                       class="form-control"
+                       ng-model="position.department" placeholder="部门"
+                       name="department"/>
+              </div>
+
+              <div class="form-group">
+                <label>选择面试负责人</label>
+                <div>
+                  <select ui-select2 class="form-control" name="owners"
+                          ng-model="position.owners"
+                          ng-required="true" data-placeholder="请选择面试负责人，可以多选" multiple="true">
+                    <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}
+                    </option>
+                  </select>
+                  <p class="text-danger"
+                     ng-show="positionForm.owners.$invalid && !positionForm.owners.$pristine">
+                    请输入面试负责人</p>
+                </div>
+              </div>
+
+              <div class="form-group panel panel-default">
+                <div class="panel-heading">
+                  <strong>面试评价</strong>
+                </div>
+                <div class="panel-body">
+                  <div class="table-responsive">
+                    <table tr-ng-grid="" class="table table-bordered table-striped"
+                           items="position.evaluationCriterions" enable-filtering="false">
+                      <thead>
+                      <tr>
+                        <th field-name="name" display-name="名称" enable-filtering="false" enable-sorting="false"></th>
+                        <th field-name="rate" display-name="系数" enable-filtering="false" enable-sorting="false"></th>
+                        <th>操作</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td>
+                          <delete-button action="remove(gridItem)"></delete-button>
+                        </td>
+                      </tr>
+                      </tbody>
+                      <tfoot ng-hide="'true'">
+                      <tr>
+                        <td></td>
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+
+                  <div class="form-inline" novalidate="" ng-if="adding">
+                    <label>名称</label>
+                    <input type="text" name="ecName" class="form-control" ng-model="item.name" required=""/>
+                    <label>系数</label>
+                    <input type="number" name="ecRate" class="form-control" ng-pattern="/\d+/"
+                           ng-model="item.rate" required=""/>
+                    <button class="btn btn-primary btn-sm" ng-disabled="positionForm.ecRate.$invalid || positionForm.ecName.$invalid "
+                            ng-click="save()">添加</button>
+                    <button class="btn btn-default btn-sm" ng-click="cancel()">取消</button>
+                  </div>
+                </div>
+                <div ng-show="!adding" class="panel-footer">
+                  <button class="btn btn-warning btn-sm" ng-click="add()">添加</button>
+                </div>
+              </div>
+
+              <br/>
+              <button class="btn btn-primary" ng-click="update()"
+                      ng-disabled="positionForm.$invalid || position.evaluationCriterions.length == 0">保存
+              </button>
+              <button class="btn btn-default" ng-click="close()">取消</button>
+
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

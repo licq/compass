@@ -24,5 +24,6 @@ module.exports = function (config) {
   require('../models/resume');
   require('../models/interview');
   require('../models/evaluationCriterion');
+  require('../models/position');
   require('../models/applierRejectReason');
 };

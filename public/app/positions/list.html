@@ -1,0 +1,36 @@
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <strong>职位</strong>
+
+      <div class="pull-right">
+        <a href="#/settings/positions/new" class="btn btn-sm btn-success"><i class="fa fa-plus-circle"></i>添加</a>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table tr-ng-grid="" class="table table-bordered table-striped"
+               items="positions" enable-filtering="false">
+          <thead>
+          <tr>
+            <th field-name="name" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
+            <th field-name="owners" display-name="面试负责人" enable-filtering="false" enable-sorting="false" display-format="displayNames"></th>
+            <th field-name="department" display-name="部门" enable-filtering="false" enable-sorting="false"></th>
+            <th field-name="createdAt" display-name="创建时间" enable-filtering="false"
+                display-format="longDate"></th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              <edit-button action="edit(gridItem)"></edit-button>
+              <delete-button action="remove(gridItem)"></delete-button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
