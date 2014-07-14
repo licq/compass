@@ -18,18 +18,19 @@ exports.parseGender = function parseGender(input) {
 };
 
 exports.parseDate = function parseDate(input) {
-  if (input.indexOf('至今') > -1) {
+  if (!input) return undefined;
+  var match = input.match(/\d+/g);
+  if (match) {
+    var result = new Date();
+    result.setYear(parseInt(match[0], 10));
+    result.setMonth(parseInt(match[1], 10) - 1);
+    result.setDate(parseInt(match[2], 10) || 1);
+    return result;
+  } else if (input.indexOf('至今') > -1 || input.indexOf('现在') > -1) {
     var date = new Date();
     date.setFullYear(9999);
     return date;
   }
-
-  var match = input.match(/\d+/g);
-  var result = new Date();
-  result.setYear(parseInt(match[0], 10));
-  result.setMonth(parseInt(match[1], 10) - 1);
-  result.setDate(parseInt(match[2], 10) || 1);
-  return result;
 };
 
 exports.parseMatchRate = function parseMatchRate(input) {
@@ -133,7 +134,7 @@ exports.parseTable = function parseTable(table) {
   var trs = table.find('tr');
   for (i = 0; i < trs.length; i++) {
     item = [];
-    var tds = trs.eq(i).children('td');
+    var tds = trs.eq(i).find('td');
     for (j = 0; j < tds.length; j++) {
       item.push(exports.replaceEmpty(tds.eq(j).text()));
     }
@@ -266,7 +267,7 @@ exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
 };
 
 exports.parseDateRange = function parseDateRange(input) {
-  var parts = input.split(/-+|：/g);
+  var parts = input.split(/-+|：|—|–/g);
   return {
     from: exports.parseDate(parts[0]),
     to: exports.parseDate(parts[1])
@@ -443,5 +444,5 @@ exports.splitBySemiolon = function splitBySemiolon(input) {
 };
 
 exports.isNewWork = function isNewWork(input) {
-  return input.length === 2 && (!!input[0].match(/\d+\.\d+ - 至今/) || !!input[0].match(/\d+\.\d+ - \d+\.\d+/));
+  return input.length === 2 && (!!input[0].match(/\d+\.\d+\.?\s?-\s?至今/) || !!input[0].match(/\d+\.\d+\.?\s?-\s?\d+\.\d+/) || !!input[0].match(/\d+\/\d+—\d+\/\d+/));
 };

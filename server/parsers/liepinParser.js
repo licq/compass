@@ -28,9 +28,9 @@ function parseBasicInfo(table) {
 function parseLanguageSkills(table) {
   if (!table) return;
   try {
-    return table.find('td:nth-child(1)').text().split('、').map(function(language){
+    return table.find('td:nth-child(1)').text().split('、').map(function (language) {
       return {
-        language:helper.parseLanguage(language)
+        language: helper.parseLanguage(language)
       };
     });
   } catch (e) {
@@ -68,18 +68,49 @@ function parseWorkExperience(table) {
   if (!table) return;
   try {
     var workExperience = [];
-    var tableData = helper.parseTable(table.find('table'));
-    for (var i = 0; i < tableData.length; i++) {
-      if (helper.isNewWork(tableData[i])) {
-        var dateRange = helper.parseDateRange(tableData[i][0]);
-        workExperience.push({
-          from: dateRange.from,
-          to: dateRange.to,
-          company: tableData[i][1],
-          jobTitle: tableData[i + 1][1].split(' ')[0],
-          jobDescription: tableData[i + 2][0]
-        });
+    var workTable = table.find('table');
+    var tableData = helper.parseTable(workTable);
+    if (tableData[0].length === 2) {
+      for (var i = 0; i < tableData.length; i++) {
+        if (helper.isNewWork(tableData[i])) {
+          var dateRange = helper.parseDateRange(tableData[i][0]);
+          workExperience.push({
+            from: dateRange.from,
+            to: dateRange.to,
+            company: tableData[i][1],
+            jobTitle: tableData[i + 1][1].split(' ')[0],
+            jobDescription: tableData[i + 2][0]
+          });
+        }
       }
+    } else {
+      var work;
+      var contents = workTable.find('td:nth-child(1)').contents();
+      _.forEach(_.map(_.filter(contents, function (item) {
+        return item.type === 'text';
+      }), function (item) {
+        return item.data.trim();
+      }), function (data) {
+        var items = data.split(/ |：/);
+        if (helper.isNewWork(items)) {
+          if (!!work) workExperience.push(work);
+          var dateRange = helper.parseDateRange(items[0]);
+          work = {
+            from: dateRange.from,
+            to: dateRange.to,
+            company: items[1]
+          };
+        } else if (items[0].indexOf('所属行业') > -1) {
+          work.industry = items[1].trim();
+        } else if (items[0].indexOf('所在部门') > -1) {
+          work.department = items[1].trim();
+        } else if (items[0].indexOf('职位') > -1) {
+          work.jobTitle = items[1].trim();
+        } else if (items[0].indexOf('工作职责') > -1) {
+          work.jobDescription = items[items.length - 1].trim();
+        }
+      });
+      if (!!work) workExperience.push(work);
     }
     return workExperience;
   } catch (e) {
@@ -91,23 +122,59 @@ function parseProjectExperience(table) {
   if (!table) return;
   try {
     var trs = table.find('table').find('tr');
-    return _.times(trs.length / 2, function (index) {
-      var dateRange = helper.parseDateRange(trs.eq(index * 2).children().eq(0).text());
-      var items = entities.decodeHTML(trs.eq(index * 2 + 1).children().eq(1).html()).split('<br>');
-      var project = {
-        from: dateRange.from,
-        to: dateRange.to,
-        name: trs.eq(index * 2).children().eq(1).text()
-      };
-      items.forEach(function (item) {
-        if (helper.isProjectDescription(item)) {
-          project.description = helper.splitByColon(item)[1];
-        } else if (helper.isProjectResponsibility(item)) {
-          project.responsibility = (project.reponsibility || '') + helper.splitByColon(item)[1];
+    if (trs.length > 1) {
+      return _.times(trs.length / 2, function (index) {
+        var dateRange = helper.parseDateRange(trs.eq(index * 2).children().eq(0).text());
+        var items = entities.decodeHTML(trs.eq(index * 2 + 1).children().eq(1).html()).split('<br>');
+        var project = {
+          from: dateRange.from,
+          to: dateRange.to,
+          name: trs.eq(index * 2).children().eq(1).text()
+        };
+        items.forEach(function (item) {
+          if (helper.isProjectDescription(item)) {
+            project.description = helper.splitByColon(item)[1];
+          } else if (helper.isProjectResponsibility(item)) {
+            project.responsibility = (project.reponsibility || '') + helper.splitByColon(item)[1];
+          }
+        });
+        return project;
+      });
+    } else {
+      var projects = [];
+      var project;
+      var match;
+      var contents = trs.find('td:nth-child(1)').contents();
+      contents = _.filter(contents, function (item) {
+        return item.type === 'text';
+      });
+      contents = _.map(contents, function (item) {
+        return item.data;
+      });
+      _.forEach(contents, function (data) {
+        if ((match = data.match(/(\d{4}\/\d{1,2}\s?(?:–|—)\s?(?:\d{4}\/\d{1,2})?)\s+(.+)/))) {
+          if (!!project) projects.push(project);
+          var dateRange = helper.parseDateRange(match[1]);
+          project = {
+            from: dateRange.from,
+            to: dateRange.to,
+            name: match[2]
+          };
+        } else if (data.indexOf('职责') === 0) {
+          project.responsibility = (project.responsibility || '') + data.split(':')[1].trim();
+        } else if (data.indexOf('技术工具') === 0) {
+          project.softwareEnvironment = data.split(':')[1].trim();
+        } else if (data.indexOf('业绩') === 0) {
+          project.responsibility = (project.responsibility || '') + data.split(':')[1].trim();
+        } else if (data.indexOf('团队人数') === 0) {
+        } else {
+          if (project)
+            project.description = data;
         }
       });
-      return project;
-    });
+      if (!!project) projects.push(project);
+      return projects;
+    }
   } catch (e) {
     logger.error(e.stack);
   }
@@ -117,38 +184,55 @@ function parseEducationHistory(table) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table.find('table'));
-    return _.times(tableData.length / 3, function (index) {
-      var dateRange = helper.parseDateRange(tableData[index * 3][0]);
-      return {
-        from: dateRange.from,
-        to: dateRange.to,
-        school: tableData[index * 3][1],
-        major: helper.splitByColon(tableData[index * 3 + 1][1])[1],
-        degree: helper.parseDegree(helper.splitByColon(tableData[index * 3 + 2][0])[1])
-      };
-    });
+    if (tableData[0].length === 2) {
+      return _.times(tableData.length / 3, function (index) {
+        var dateRange = helper.parseDateRange(tableData[index * 3][0]);
+        return {
+          from: dateRange.from,
+          to: dateRange.to,
+          school: tableData[index * 3][1],
+          major: helper.splitByColon(tableData[index * 3 + 1][1])[1],
+          degree: helper.parseDegree(helper.splitByColon(tableData[index * 3 + 2][0])[1])
+        };
+      });
+    } else {
+      var contents = table.find('table').find('td:nth-child(1)').contents();
+      contents = _.filter(contents, function (item) {
+        return item.type === 'text';
+      });
+      contents = _.map(contents, function (item) {
+        return item.data;
+      });
+      var educationHistory = [],
+        education,
+        match;
+      _.forEach(contents, function (content) {
+        if (content.match(/\d+年\d+月到\d+年\d+月/)) {
+          if (!!education) educationHistory.push(education);
+          education = helper.parseDateRange(content);
+        } else if ((match = content.match(/学\s*校\s+(.+)/))) {
+          education.school = match[1];
+        } else if ((match = content.match(/专\s*业\s+(.+)/))) {
+          education.major = match[1];
+        } else if ((match = content.match(/学\s*历\s+(.+)/))) {
+          education.degree = helper.parseDegree(match[1]);
+        } else if ((match = content.match(/专业描述\s+(.+)/))) {
+          education.description = match[1];
+        }
+      });
+      if (!!education) educationHistory.push(education);
+      return educationHistory;
+    }
   } catch (e) {
     logger.error(e.stack);
   }
 }
 
-function parseInSchoolStudy(table) {
+function parseFirstTdText(table) {
   if (!table) return;
   try {
-    var data = helper.parseTable(table);
-    return _.map(data, function (item) {
-      return item.join(' ');
-    });
-  } catch (e) {
-    logger.error('parse in school study failed: ', e.stack);
-  }
-}
-
-function parseFirstTdText(table){
-  if(!table) return;
-  try{
     return table.find('td:nth-child(1)').text();
-  }catch(e){
+  } catch (e) {
     logger.error('parse in first td text failed: ', e.stack);
   }
 }
