@@ -282,4 +282,9 @@ angular.module('compass')
         end = mvMoment(event.startTime).add('minutes', event.duration).format('H:mm');
       return start + '-' + end;
     };
+  })
+  .filter('displayNames', function () {
+    return function (array) {
+      return _.map(array, 'name').join(', ');
+    };
   });

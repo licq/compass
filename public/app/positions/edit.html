@@ -3,7 +3,7 @@
     <div class="col-md-7 col-md-offset-2">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <strong>添加职位</strong>
+          <strong>修改职位</strong>
         </div>
         <div class="panel-body">
           <form name="positionForm" novalidate="" class="form-validation">
@@ -28,22 +28,24 @@
                        class="form-control"
                        ng-model="position.department" placeholder="部门"
                        name="department"/>
-
               </div>
-              <div class="form-group">
-                <label>选择面试官</label>
 
-                <div class="row">
-                  <select class="col-md-5" ui-select2 class="form-control" name="interviewers"
-                          ng-model="position.interviewers"
-                          ng-required="true" data-placeholder="请选择面试官，可以多选" multiple="true">
+              <div class="form-group">
+                <label>选择面试负责人</label>
+                <div>
+                  <select ui-select2 class="form-control" name="owners"
+                          ng-model="position.owners"
+                          ng-required="true" data-placeholder="请选择面试负责人，可以多选" multiple="true">
                     <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}
                     </option>
                   </select>
+                  <p class="text-danger"
+                     ng-show="positionForm.owners.$invalid && !positionForm.owners.$pristine">
+                    请输入面试负责人</p>
                 </div>
               </div>
 
-              <div class=" form-group panel panel-default">
+              <div class="form-group panel panel-default">
                 <div class="panel-heading">
                   <strong>面试评价</strong>
                 </div>
@@ -73,7 +75,7 @@
                     </table>
                   </div>
 
-                  <div class="form-inline" novalidate="" ng-show="adding">
+                  <div class="form-inline" novalidate="" ng-if="adding">
                     <label>名称</label>
                     <input type="text" name="ecName" class="form-control" ng-model="item.name" required=""/>
                     <label>系数</label>
@@ -84,14 +86,14 @@
                     <button class="btn btn-default btn-sm" ng-click="cancel()">取消</button>
                   </div>
                 </div>
-                <div class="panel-footer">
+                <div ng-show="!adding" class="panel-footer">
                   <button class="btn btn-warning btn-sm" ng-click="add()">添加</button>
                 </div>
               </div>
 
               <br/>
               <button class="btn btn-primary" ng-click="update()"
-                      ng-disabled="positionForm.$invalid">保存
+                      ng-disabled="positionForm.$invalid || position.evaluationCriterions.length == 0">保存
               </button>
               <button class="btn btn-default" ng-click="close()">取消</button>
 

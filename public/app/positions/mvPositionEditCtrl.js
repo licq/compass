@@ -4,6 +4,7 @@ angular.module('compass')
       $scope.users = users;
       mvPosition.get({_id: $routeParams.id}, function (position) {
         $scope.position = position;
+        $scope.item = {};
       });
     });
 

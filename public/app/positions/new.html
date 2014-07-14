@@ -30,16 +30,19 @@
                        name="department"/>
 
               </div>
-              <div class="form-group">
-                <label>选择面试官</label>
 
-                <div class="row">
-                  <select class="col-md-5" ui-select2 class="form-control" name="users"
-                          ng-model="position.users"
-                          ng-required="true" data-placeholder="请选择面试官，可以多选" multiple="true">
+              <div class="form-group">
+                <label>选择面试负责人</label>
+                <div>
+                  <select ui-select2 class="form-control" name="owners"
+                          ng-model="position.owners"
+                          ng-required="true" data-placeholder="请选择面试负责人，可以多选" multiple="true">
                     <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}
                     </option>
                   </select>
+                  <p class="text-danger"
+                     ng-show="positionForm.owners.$invalid && !positionForm.owners.$pristine">
+                    请输入面试负责人</p>
                 </div>
               </div>
 
@@ -80,11 +83,11 @@
                     <input type="number" name="ecRate" class="form-control" ng-pattern="/\d+/"
                            ng-model="item.rate" required=""/>
                     <button class="btn btn-primary btn-sm" ng-disabled="positionForm.ecRate.$invalid || positionForm.ecName.$invalid "
-                            ng-click="save()">添加</button>
+                            ng-click="save()">保存</button>
                     <button class="btn btn-default btn-sm" ng-click="cancel()">取消</button>
                   </div>
                 </div>
-                <div class="panel-footer">
+                <div ng-show="!adding" class="panel-footer">
                   <button class="btn btn-warning btn-sm" ng-click="add()">添加</button>
                 </div>
               </div>

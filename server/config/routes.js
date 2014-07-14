@@ -18,6 +18,7 @@ var express = require('express'),
   interviews = require('../controllers/interviews'),
   reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
+  positions = require('../controllers/positions'),
   counts = require('../controllers/counts'),
   captchas = require('../controllers/captchas'),
   systemOperations = require('../controllers/systemOperations'),
@@ -87,6 +88,16 @@ module.exports = function (app) {
     .get(roles.get)
     .put(roles.update)
     .delete(roles.delete);
+  
+  apiRouter.route('/positions')
+    .post(positions.create)
+    .get(positions.list);
+
+  apiRouter.route('/positions/:id')
+    .all(positions.load)
+    .get(positions.get)
+    .put(positions.update)
+    .delete(positions.delete);
 
   apiRouter.route('/resumes')
     .get(resumes.list);
