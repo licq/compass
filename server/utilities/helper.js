@@ -26,7 +26,7 @@ exports.parseDate = function parseDate(input) {
     result.setMonth(parseInt(match[1], 10) - 1);
     result.setDate(parseInt(match[2], 10) || 1);
     return result;
-  } else if (input.indexOf('至今') > -1) {
+  } else if (input.indexOf('至今') > -1 || input.indexOf('现在') > -1) {
     var date = new Date();
     date.setFullYear(9999);
     return date;
@@ -134,7 +134,7 @@ exports.parseTable = function parseTable(table) {
   var trs = table.find('tr');
   for (i = 0; i < trs.length; i++) {
     item = [];
-    var tds = trs.eq(i).children('td');
+    var tds = trs.eq(i).find('td');
     for (j = 0; j < tds.length; j++) {
       item.push(exports.replaceEmpty(tds.eq(j).text()));
     }
