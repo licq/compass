@@ -8,10 +8,7 @@ var mongoose = require('mongoose'),
 exports.list = function (req, res, next) {
 
   var query = Position.find({ company: req.user.company });
-  console.log(req.query);
   if (req.query.byUserId) {
-    console.log('byuid');
-    console.log(req.user._id);
     query = query.select('name').where('owners',req.user._id);
   } else {
     query = query.populate('owners', 'name')

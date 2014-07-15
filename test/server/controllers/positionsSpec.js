@@ -28,7 +28,6 @@ describe('positions', function () {
         .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
-          console.log(res.body);
           expect(res.body).to.have.length(1);
           var r = res.body[0];
           expect(r).to.have.property('name');
