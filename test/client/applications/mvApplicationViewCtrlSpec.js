@@ -57,7 +57,7 @@ describe('mvApplicationViewCtrl', function () {
       });
 
       it('should set mailhtml correctly', function () {
-        $scope.selectMail();
+        expect($scope.original).to.be.false;
         expect($scope.mailHtml).to.equal('/api/mails/8899/html');
       });
 
