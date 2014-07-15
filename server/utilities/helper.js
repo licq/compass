@@ -444,5 +444,6 @@ exports.splitBySemiolon = function splitBySemiolon(input) {
 };
 
 exports.isNewWork = function isNewWork(input) {
+  console.log(input);
   return input.length === 2 && (!!input[0].match(/\d+\.\d+\.?\s?-\s?至今/) || !!input[0].match(/\d+\.\d+\.?\s?-\s?\d+\.\d+/) || !!input[0].match(/\d+\/\d+—\d+\/\d+/));
 };

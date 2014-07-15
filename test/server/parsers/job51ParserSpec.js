@@ -21,7 +21,7 @@ describe('job51Parser', function () {
       });
     });
 
-    it('should parse 51job another resume correctly', function (done) {
+    it.only('should parse 51job another resume correctly', function (done) {
       fs.readFile(__dirname + '/51jobanotherresume.html', 'utf-8', function (err, data) {
         var resume = resumeParser.parse({
           html: data

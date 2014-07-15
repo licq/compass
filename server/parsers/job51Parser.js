@@ -102,18 +102,29 @@ function parseWorkExperience(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
-    return _.times((tableData.length + 1) / 5, function (index) {
+    return _.times(Math.ceil((tableData.length + 1) / 5), function (index) {
       var firstLineItems = tableData[index * 5][0].split(/：|（/);
       var dateRange = helper.parseDateRange(firstLineItems[0]);
-      return {
+      var work = {
         from: dateRange.from,
         to: dateRange.to,
         company: firstLineItems[1],
-        industry: tableData[index * 5 + 1][1],
-        department: tableData[ index * 5 + 2][0],
-        jobTitle: tableData[index * 5 + 2][1],
-        jobDescription: tableData[index * 5 + 3][0]
       };
+      if (tableData[index * 5 + 1][0].indexOf('所属行业') > -1) {
+        _.extend(work, {
+          industry: tableData[index * 5 + 1][1],
+          department: tableData[ index * 5 + 2][0],
+          jobTitle: tableData[index * 5 + 2][1],
+          jobDescription: tableData[index * 5 + 3][0]
+        });
+      } else {
+        _.extend(work, {
+          department: tableData[ index * 5 + 1][0],
+          jobTitle: tableData[index * 5 + 1][1],
+          jobDescription: tableData[index * 5 + 2][0]
+        });
+      }
+      return work;
     });
   } catch (e) {
     errors.push(e.message);
@@ -156,17 +167,30 @@ function parseProjectExperience(table, errors) {
 function parseEducationHistory(table, errors) {
   if (!table) return;
   try {
-    var tableData = helper.parseTable(table);
-    return _.times(Math.ceil((tableData.length + 1) / 3), function (n) {
-      var dateRange = helper.parseDateRange(tableData[n * 3][0]);
-      return { from: dateRange.from,
-        to: dateRange.to,
-        school: tableData[n * 3][1],
-        major: tableData[n * 3][2],
-        degree: helper.parseDegree(tableData[n * 3][3]),
-        description: tableData[n * 3 + 1] ? tableData[n * 3 + 1][0] : ''
-      };
+    var tableData = _.filter(helper.parseTable(table), function (line) {
+      return line[0].trim().length !== 0;
     });
+    var history = [],
+      education;
+
+    for (var i = 0; i < tableData.length; i++) {
+      if (tableData[i].length > 1) {
+        if (education) history.push(education);
+        var dateRange = helper.parseDateRange(tableData[i][0]);
+        education = {
+          from: dateRange.from,
+          to: dateRange.to,
+          school: tableData[i][1],
+          major: tableData[i][2],
+          degree: helper.parseDegree(tableData[i][3])
+        };
+      } else {
+        education.description = tableData[i][0];
+      }
+    }
+
+    if (education) history.push(education);
+    return history;
   } catch (e) {
     errors.push(e.message);
     logger.error(e.stack);
@@ -198,8 +222,10 @@ function parseInSchoolStudy(table, errors) {
   if (!table) return;
   try {
     var data = helper.parseTable(table);
-    return _.map(data, function (item) {
+    return _.filter(_.map(data, function (item) {
       return item.join(' ');
+    }), function (line) {
+      return line.trim().length !== 0;
     });
   } catch (e) {
     errors.push(e.message);
@@ -248,14 +274,22 @@ function parseInSchoolPractices(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
-    return _.times(tableData.length / 2, function (n) {
-      var dateRange = helper.parseDateRange(tableData[n * 2][0]);
-      return {
-        from: dateRange.from,
-        to: dateRange.to,
-        content: tableData[n * 2][1] + tableData[n * 2 + 1][0]
-      };
+    tableData = _.filter(tableData, function (line) {
+      return line[0].trim().length !== 0;
     });
+    var practices = [],
+      practice;
+    for (var i = 0; i < tableData.length; i++) {
+      if (tableData[i].length === 2) {
+        if (practice) practices.push(practice);
+        practice = helper.parseDateRange(tableData[i][0]);
+        practice.content = tableData[i][1];
+      } else {
+        practice.content += tableData[i][0];
+      }
+    }
+    if (practice) practices.push(practice);
+    return practices;
   } catch (e) {
     errors.push(e.message);
     logger.error(e.stack);

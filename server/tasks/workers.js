@@ -49,31 +49,33 @@ function handleSendEmail(job, done) {
 }
 
 function handleParseResume(job, done) {
-  logger.info('handleParseResume ', job.data.title);
-  var data = parser.parse(job.data);
-  data.createdAt = job.data.createdAt;
-  var parseErrors = data.parseErrors;
-  delete data.parseErrors;
+  try {
+    logger.info('handleParseResume ', job.data.title);
+    var data = parser.parse(job.data);
+    data.createdAt = job.data.createdAt;
+    var parseErrors = data.parseErrors;
+    delete data.parseErrors;
 
-  Resume.createOrUpdateAndIndex(data, function (err) {
-    if (err) {
-      if (err.code === 11000 || err.code === 11001) {
-        logger.error('resume duplication of ', data.name);
-      } else {
-        logger.error('save resume to db failed ', err.stack);
+    Resume.createOrUpdateAndIndex(data, function (err) {
+      if (err) {
+        if (err.code === 11000 || err.code === 11001) {
+          logger.error('resume duplication of ', data.name);
+        } else {
+          logger.error('save resume to db failed ', err.stack);
+        }
       }
-    }
 
-    if (parseErrors.length > 0) {
       Mail.findById(job.data.mailId).exec(function (err, mail) {
         if (err) return done(err);
         mail.parseErrors = parseErrors;
+        mail.markModified('parseErrors');
         mail.save(done);
       });
-    } else {
-      done(err);
-    }
-  });
+    });
+  } catch (e) {
+    done(e.message);
+    logger.error('handleParseResume failed: ' + job.data.title + ':' + e.message);
+  }
 }
 
 exports.start = function (config) {
