@@ -36,7 +36,9 @@ angular.module('compass')
           'offered': '面试通过',
           'rejected': '面试拒绝',
           'offer accepted': '应聘者接受',
-          'offer rejected': '应聘者拒绝'
+          'offer rejected': '应聘者拒绝',
+          'recruited': '已入职',
+          'not recruited': '未入职'
         };
         return {name: statusMap[s.name], count: s.count};
       });

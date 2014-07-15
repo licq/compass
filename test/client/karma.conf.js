@@ -40,10 +40,11 @@ module.exports = function (config) {
       'public/vendor/angular-ui-select2/src/select2.js',
       'public/vendor/textAngular/dist/textAngular-sanitize.min.js',
       'public/vendor/textAngular/dist/textAngular.min.js',
-      'public/app/app.js',
+      'test/client/app.js',
+      'public/app/config.js',
       'public/app/directives.js',
       'public/app/filters.js',
-      'public/app/**/*.js',
+      'public/app/**/!(app).js',
       'node_modules/karma-chai-plugins/node_modules/chai-jquery/chai-jquery.js',
       'test/client/**/*.js'
     ],
