@@ -17,6 +17,7 @@ angular.module('compass')
           $scope.totalApplicationCount = result.hits.total;
           $scope.resume = result.hits.hits[0];
           $scope.title = $scope.resume.name;
+          $scope.mailHtml = '/api/mails/' + $scope.resume.mail + '/html';
         } else {
           $location.path('/applications/' + $routeParams.status);
         }
@@ -24,9 +25,6 @@ angular.module('compass')
     }
 
     retrieveApplication();
-    $scope.selectMail = function () {
-      $scope.mailHtml = $scope.mailHtml || '/api/mails/' + $scope.resume.mail + '/html';
-    };
 
     $scope.pursue = function () {
       mvApplication.pursue({_id: $scope.resume._id}, function () {
@@ -80,6 +78,15 @@ angular.module('compass')
 
     $scope.cancel = function () {
       $location.path('/applications/' + $routeParams.status).hash($scope.index);
+    };
 
+    $scope.original = false;
+
+    $scope.print = function () {
+      $scope.original = true;
+      setTimeout(function () {
+        $window.frames['mail-frame'].focus();
+        $window.frames['mail-frame'].print();
+      }, 500);
     };
   });

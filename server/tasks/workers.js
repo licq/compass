@@ -9,6 +9,7 @@ var kue = require('kue'),
   delayedJobs = require('./jobs'),
   logger = require('../config/winston').logger(),
   parser = require('../parsers/resumeParser'),
+  Mail = mongoose.model('Mail'),
   Resume = mongoose.model('Resume');
 
 var jobs;
@@ -48,21 +49,32 @@ function handleSendEmail(job, done) {
 }
 
 function handleParseResume(job, done) {
-  logger.info('handleParseResume ', job.data.title);
   try {
+    logger.info('handleParseResume ', job.data.title);
     var data = parser.parse(job.data);
     data.createdAt = job.data.createdAt;
+    var parseErrors = data.parseErrors;
+    delete data.parseErrors;
+
     Resume.createOrUpdateAndIndex(data, function (err) {
       if (err) {
-        logger.error('save resume to db failed ', err.stack);
-        if (err.code === 11000 || err.code === 11001)
+        if (err.code === 11000 || err.code === 11001) {
           logger.error('resume duplication of ', data.name);
+        } else {
+          logger.error('save resume to db failed ', err.stack);
+        }
       }
-      done(err);
+
+      Mail.findById(job.data.mailId).exec(function (err, mail) {
+        if (err) return done(err);
+        mail.parseErrors = parseErrors;
+        mail.markModified('parseErrors');
+        mail.save(done);
+      });
     });
-  } catch (err) {
-    logger.error(err.message);
-    done(err);
+  } catch (e) {
+    done(e.message);
+    logger.error('handleParseResume failed: ' + job.data.title + ':' + e.message);
   }
 }
 

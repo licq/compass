@@ -1,6 +1,7 @@
 <div class="ui-tab-container">
 <tabset class="ui-tab" justified="true">
 <tab heading="简历">
+<div id="resumeDiv">
 <div class="panel panel-default">
   <div class="panel-heading">
     <strong>个人信息</strong></div>
@@ -43,7 +44,7 @@
 </div>
 
 
-<div class="panel panel-default" ng-show="resume.careerObjective">
+<div class="panel panel-default" ng-if="resume.careerObjective">
   <div class="panel-heading">
     <strong>职业目标</strong>
   </div>
@@ -54,27 +55,27 @@
           <td class="col-md-1">自我评价</td>
           <td>{{resume.careerObjective.selfAssessment}}</td>
         </tr>
-        <tr ng-show="resume.careerObjective.typeOfEmployment">
+        <tr ng-if="resume.careerObjective.typeOfEmployment">
           <td>工作性质</td>
           <td>{{resume.careerObjective.typeOfEmployment | typeOfEmployment}}</td>
         </tr>
-        <tr ng-show="resume.careerObjective.targetSalary">
+        <tr ng-if="resume.careerObjective.targetSalary">
           <td>期望薪水</td>
           <td>{{resume.careerObjective.targetSalary | targetSalary}}</td>
         </tr>
-        <tr ng-show="resume.careerObjective.locations">
+        <tr ng-if="resume.careerObjective.locations">
           <td>工作地点</td>
           <td>{{resume.careerObjective.locations.join(',')}}</td>
         </tr>
-        <tr ng-show="resume.careerObjective.industry">
+        <tr ng-if="resume.careerObjective.industry">
           <td>行业</td>
           <td>{{resume.careerObjective.industry.join(',')}}</td>
         </tr>
-        <tr ng-show="resume.careerObjective.jobCategory">
+        <tr ng-if="resume.careerObjective.jobCategory">
           <td>工作</td>
           <td>{{resume.careerObjective.jobCategory.join(',')}}</td>
         </tr>
-        <tr ng-show="resume.careerObjective.entryTime">
+        <tr ng-if="resume.careerObjective.entryTime">
           <td>上班时间</td>
           <td>{{resume.careerObjective.entryTime | entryTime}}</td>
         </tr>
@@ -82,7 +83,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.workExperience">
+<div class="panel panel-default" ng-if="resume.workExperience">
   <div class="panel-heading">
     <strong>工作经历</strong>
   </div>
@@ -96,14 +97,14 @@
           <td>{{work.department}}</td>
           <td>{{work.jobTitle}}</td>
         </tr>
-        <tr ng-show="work.jobDescription" ng-repeat-end>
+        <tr ng-if="work.jobDescription" ng-repeat-end>
           <td colspan="5">{{work.jobDescription}}</td>
         </tr>
       </table>
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.projectExperience">
+<div class="panel panel-default" ng-if="resume.projectExperience">
   <div class="panel-heading">
     <strong>项目经验</strong>
   </div>
@@ -118,7 +119,7 @@
           <td class="col-md-1">项目职责</td>
           <td>{{project.responsibility}}</td>
         </tr>
-        <tr>
+        <tr ng-if="project.softwareEnvironment || project.hardwareEnvironment || project.developmentTools">
           <td>软件环境</td>
           <td>{{project.softwareEnvironment}}</td>
           <td>硬件环境</td>
@@ -126,7 +127,7 @@
           <td>开发工具</td>
           <td>{{project.developmentTools}}</td>
         </tr>
-        <tr ng-show="project.description" ng-repeat-end>
+        <tr ng-if="project.description" ng-repeat-end>
           <td>项目描述</td>
           <td colspan="5">{{project.description}}</td>
         </tr>
@@ -134,7 +135,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.educationHistory">
+<div class="panel panel-default" ng-if="resume.educationHistory">
   <div class="panel-heading">
     <strong>教育经历</strong>
   </div>
@@ -142,16 +143,12 @@
     <div class="table-responsive">
       <table class="table table-bordered">
         <tr ng-repeat-start="education in resume.educationHistory">
-          <td>时间</td>
           <td>{{education.from | yearAndMonth}} -- {{education.to | yearAndMonth}}</td>
-          <td>学校</td>
           <td>{{education.school}}</td>
-          <td>专业</td>
           <td>{{education.major}}</td>
-          <td>学位</td>
           <td>{{education.degree | degree}}</td>
         </tr>
-        <tr ng-show="education.description" ng-repeat-end>
+        <tr ng-if="education.description" ng-repeat-end>
           <td>附加说明</td>
           <td colspan="7">{{education.description}}</td>
         </tr>
@@ -159,7 +156,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.trainingHistory">
+<div class="panel panel-default" ng-if="resume.trainingHistory">
   <div class="panel-heading">
     <strong>培训</strong>
   </div>
@@ -175,7 +172,7 @@
           <td>课程</td>
           <td>{{training.course}}</td>
         </tr>
-        <tr ng-show="training.location">
+        <tr ng-if="training.location">
           <td>地点</td>
           <td>{{training.location}}</td>
           <td>取得证书</td>
@@ -183,7 +180,7 @@
           <td></td>
           <td></td>
         </tr>
-        <tr ng-show="training.description" ng-repeat-end>
+        <tr ng-if="training.description" ng-repeat-end>
           <td>附加说明</td>
           <td colspan="5">{{training.description}}</td>
         </tr>
@@ -191,7 +188,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.certifications">
+<div class="panel panel-default" ng-if="resume.certifications">
   <div class="panel-heading">
     <strong>证书</strong>
   </div>
@@ -207,7 +204,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.languageSkills">
+<div class="panel panel-default" ng-if="resume.languageSkills">
   <div class="panel-heading">
     <strong>语言能力</strong>
   </div>
@@ -216,7 +213,7 @@
       <table class="table table-bordered table-striped">
         <tr ng-repeat="skill in resume.languageSkills">
           <td>{{skill.language | language}}</td>
-          <td ng-show="skill.level">{{skill.level | languageSkillLevel}}</td>
+          <td ng-if="skill.level">{{skill.level | languageSkillLevel}}</td>
           <td>读写能力{{skill.readingAndWriting | languageSkillLevel}}</td>
           <td>听说能力{{skill.listeningAndSpeaking | languageSkillLevel}}</td>
         </tr>
@@ -224,7 +221,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.inSchoolPractices">
+<div class="panel panel-default" ng-if="resume.inSchoolPractices">
   <div class="panel-heading">
     <strong>在校实习情况</strong>
   </div>
@@ -239,7 +236,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.inSchoolStudy">
+<div class="panel panel-default" ng-if="resume.inSchoolStudy">
   <div class="panel-heading">
     <strong>在校学习情况</strong>
   </div>
@@ -253,7 +250,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-show="resume.languageCertifications">
+<div class="panel panel-default" ng-if="resume.languageCertifications">
   <div class="panel-heading">
     <strong>语言成绩</strong>
   </div>
@@ -278,7 +275,7 @@
   </div>
 </div>
 
-<div class="panel panel-default" ng-show="resume.itSkills">
+<div class="panel panel-default" ng-if="resume.itSkills">
   <div class="panel-heading">
     <strong>IT能力</strong>
   </div>
@@ -294,10 +291,11 @@
     </div>
   </div>
 </div>
+</div>
 </tab>
-<tab heading="原始邮件" select="selectMail()">
+<tab heading="原始邮件" active="original">
   <div class="center-block">
-    <iframe class="mail-frame" ng-src="{{mailHtml}}"></iframe>
+    <iframe name="mail-frame" class="mail-frame" ng-src="{{mailHtml}}"></iframe>
   </div>
 </tab>
 </tabset>

@@ -46,10 +46,7 @@ var mailSchema = mongoose.Schema({
     ref: 'Company',
     index: true
   },
-  mail: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Mail'
-  }
+  parseErrors: [String]
 });
 
 mailSchema.pre('save', function (next) {
