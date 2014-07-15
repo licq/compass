@@ -18,12 +18,12 @@ exports.authenticate = function (req, res, next) {
               if (!err) {
                 res.cookie('remember_me', token.id, { path: '/', httpOnly: true, maxAge: 604800000 });
               }
-              return req.user.withPermissions(function (err, user) {
+              return req.user.withPopulation(function (err, user) {
                 res.json(user);
               });
             });
           } else {
-            return req.user.withPermissions(function (err, user) {
+            return req.user.withPopulation(function (err, user) {
               res.json(user);
             });
           }

@@ -6,12 +6,13 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   timestamps = require('mongoose-timestamp'),
   crypto = require('crypto'),
+  merge = require('mongoose-merge-plugin'),
   validator = require('validator'),
   logger = require('../config/winston').logger(),
   async = require('async');
 
 
-var userSchema = new Schema({
+var userSchema = mongoose.Schema({
   name: {
     type: String,
     required: [true, '姓名不能为空']
@@ -35,6 +36,12 @@ var userSchema = new Schema({
     ref: 'Role',
     required: true
   },
+  positions: {type: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Position'
+    }
+  ]},
 
   title: String,
   deleted: {
@@ -49,6 +56,7 @@ var userSchema = new Schema({
 });
 
 userSchema.plugin(timestamps);
+userSchema.plugin(merge);
 
 userSchema.virtual('password').set(function (password) {
   this._password = password;
@@ -101,8 +109,11 @@ userSchema.methods = {
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
   },
 
-  withPermissions: function (cb) {
-    this.populate('role', 'name permissions', cb);
+  withPopulation: function (cb) {
+    this.hashed_password = undefined;
+    this.salt = undefined;
+    this.populate('positions', 'name')
+      .populate('role', 'name permissions', cb);
   },
 
   isSystemAdmin: function (cb) {
@@ -144,26 +155,6 @@ userSchema.statics.createSystemAdmin = function (callback) {
         {upsert: true}, function (err, sysAdmin) {
           cb(err, sysAdmin);
         });
-//      model.findOne(
-//        { name: 'systemadmin',
-//          email: 'sysadmin@compass.com',
-//          company: company._id,
-//          role: role._id}, function (err, sysAdmin) {
-//
-//          if (sysAdmin) {
-//            cb(err, sysAdmin);
-//          } else {
-//            model.create(
-//              { name: 'systemadmin',
-//                email: 'sysadmin@compass.com',
-//                password: 'compass.123',
-//                company: company._id,
-//                role: role._id
-//              }, function (err, sysAdmin) {
-//                cb(err, sysAdmin);
-//              });
-//          }
-//        });
     }], function (err, sysAdmin) {
     if (callback) callback(err, sysAdmin);
   });

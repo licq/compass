@@ -205,7 +205,7 @@ module.exports = function (app) {
 
   app.get('/', function (req, res) {
     if (req.user) {
-      req.user.withPermissions(function (err, user) {
+      req.user.withPopulation(function (err, user) {
         res.render('index', {
           bootstrappedUser: user
         });
