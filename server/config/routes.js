@@ -114,6 +114,9 @@ module.exports = function (app) {
     .get(evaluationCriterions.get)
     .put(evaluationCriterions.update);
 
+  apiRouter.route('/evaluationCriterions/forReview')
+    .get(evaluationCriterions.forReview);
+
   apiRouter.route('/applications')
     .get(applications.list);
   apiRouter.route('/applications/:id')

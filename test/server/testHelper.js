@@ -57,8 +57,8 @@ exports.createPosition = function (options, cb) {
     if (!options.owners)
       owners = [user._id];
     var positionFields = {company: user.company, owners: owners};
-    if (options.positionName)
-      positionFields.name = options.positionName;
+    if (options.name)
+      positionFields.name = options.name;
     Factory.build('position', positionFields, function (p) {
       Position.createPosition(p, function (err, ps) {
         position = ps;

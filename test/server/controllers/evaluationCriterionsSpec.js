@@ -10,7 +10,7 @@ describe('evaluationCriterion', function () {
     evaluationCriterion;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Role','EvaluationCriterion', function () {
+    helper.clearCollections('User', 'Company', 'Role', 'EvaluationCriterion','Position', function () {
       helper.login(function (agent, createdUser) {
         user = createdUser;
         request = agent;
@@ -39,6 +39,35 @@ describe('evaluationCriterion', function () {
     });
   });
 
+  describe('GET /api/evaluationCriterions/forReview', function () {
+    it('should return 200 with criterions from the position', function (done) {
+      helper.createPosition({owners: [user], company: user.company, name: 'cio'}, function (err) {
+        expect(err).to.not.exist;
+        request.get('/api/evaluationCriterions/forReview?applyPosition=cio')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            var ec = res.body;
+            expect(ec.items).to.have.length(2);
+            done(err);
+          });
+      });
+    });
+
+    it('should return 200 with default criterions', function (done) {
+      helper.createPosition({owners: [user], company: user.company, name: 'tester'}, function (err) {
+        expect(err).to.not.exist;
+        request.get('/api/evaluationCriterions/forReview?applyPosition=cio')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            var ec = res.body;
+            expect(ec.items).to.have.length(1);
+            done(err);
+          });
+      });
+    });
+  });
 
   describe('PUT /api/evaluationCriterions', function () {
     it('should return 200', function (done) {

@@ -132,7 +132,7 @@ describe('Resume', function () {
       });
 
       it('should return one result when user has associated positions', function (done) {
-        helper.createPosition({company: resume.company, positionName: '销售主管'}, function (err, createdPosition, createdUser) {
+        helper.createPosition({company: resume.company, name: '销售主管'}, function (err, createdPosition, createdUser) {
           position = createdPosition;
           user = createdUser;
           User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {
@@ -145,7 +145,7 @@ describe('Resume', function () {
       });
 
       it('should return one result when user has no associated positions', function (done) {
-        helper.createPosition({company: resume.company, positionName: '销售主管'}, function (err, createdPosition, createdUser) {
+        helper.createPosition({company: resume.company, name: '销售主管'}, function (err, createdPosition, createdUser) {
           position = createdPosition;
           user = createdUser;
           Resume.query({positions: user.positions}, function (err, results) {
@@ -156,7 +156,7 @@ describe('Resume', function () {
       });
 
       it('should return no result', function (done) {
-        helper.createPosition({company: resume.company, positionName: '财务总监'}, function (err, createdPosition, createdUser) {
+        helper.createPosition({company: resume.company, name: '财务总监'}, function (err, createdPosition, createdUser) {
           position = createdPosition;
           user = createdUser;
           User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {

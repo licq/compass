@@ -86,7 +86,7 @@ describe('counts', function () {
   });
 
   it('should get counts correctly for user with positions', function (done) {
-    helper.createPosition({owners: [user], positionName: '销售主管'}, function () {
+    helper.createPosition({owners: [user], name: '销售主管'}, function () {
       request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
         .expect(200)
         .expect('content-type', /json/)
@@ -104,7 +104,7 @@ describe('counts', function () {
   });
 
   it('should get counts correctly', function (done) {
-    helper.createPosition({owners: [user], positionName: '财务总监cfo'}, function () {
+    helper.createPosition({owners: [user], name: '财务总监cfo'}, function () {
       request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
         .expect(200)
         .expect('content-type', /json/)
