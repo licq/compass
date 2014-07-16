@@ -112,8 +112,7 @@ userSchema.methods = {
   withPopulation: function (cb) {
     this.hashed_password = undefined;
     this.salt = undefined;
-    this.populate('positions', 'name')
-      .populate('role', 'name permissions', cb);
+    this.populate('role', 'name permissions', cb);
   },
 
   isSystemAdmin: function (cb) {
