@@ -5,6 +5,7 @@ angular.module('compass')
       mvPosition.get({_id: $routeParams.id}, function (position) {
         $scope.position = position;
         $scope.item = {};
+        $scope.dataReady = true;
       });
     });
 
