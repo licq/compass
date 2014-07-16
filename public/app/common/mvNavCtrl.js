@@ -4,6 +4,7 @@ angular.module('compass')
   .controller('mvNavCtrl', function ($scope, $interval, $timeout, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
+
     $scope.updateNavCounts = function (query) {
       mvNav.get(query, function (counts) {
         angular.extend($scope.counts, counts);
@@ -14,6 +15,10 @@ angular.module('compass')
       mvNav.get({counts: 'onboards'}, function (counts) {
         angular.extend($scope.counts, counts);
       });
+    };
+
+    $scope.updateAppCounts = function(){
+      $scope.updateNavCounts({counts:['new','pursued','undetermined']});
     };
 
     $scope.retrieveEvents = function () {

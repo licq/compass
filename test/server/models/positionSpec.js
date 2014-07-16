@@ -30,7 +30,7 @@ describe('Position', function () {
     });
 
     it('should be able to save without problems', function (done) {
-      Factory.build('position', {company: company._id, owners: [ user._id]}, function (position) {
+      Factory.build('position', {company: company._id, owners: [user._id]}, function (position) {
         Position.createPosition(position, function (err) {
           expect(err).to.not.exist;
           User.find({_id: {$in: position.owners}}, function (err, users) {

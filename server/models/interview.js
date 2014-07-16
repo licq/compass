@@ -460,9 +460,13 @@ function constructQueryNew(model, company, options) {
   if (options.name) {
     query.where('name').regex(new RegExp(options.name));
   }
+
   if (options.applyPosition) {
     query.where('applyPosition').regex(new RegExp(options.applyPosition));
+  } else if (options.positions) {
+    query.where('applyPosition').in(options.positions);
   }
+
   if (options.startDate) {
     options.startDate = options.startDate.replace(/"/g, '');
     var start = moment(options.startDate).startOf('day').toDate();
@@ -501,6 +505,9 @@ interviewSchema.statics.queryOffered = function (company, options, cb) {
   var query = this.find({company: company, status: 'offered'});
   if (options.name)
     query.where('name').regex(new RegExp(options.name));
+  if (options.positions) {
+    query.where('applyPosition').in(options.positions);
+  }
   query.select('name applyPosition onboardDate').sort('updatedAt').exec(cb);
 };
 
@@ -511,6 +518,9 @@ interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
   if (options.startDate && options.endDate) {
     query.where('onboardDate').lte(options.endDate).gte(options.startDate);
   }
+  if (options.positions) {
+    query.where('applyPosition').in(options.positions);
+  }
 
   query.select('name applyPosition onboardDate application');
   if (options.pageSize) {
@@ -520,9 +530,14 @@ interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
   }
 };
 
-interviewSchema.statics.applyPositionsForCompany = function (company, cb) {
+interviewSchema.statics.applyPositionsForCompany = function (user, cb) {
+  var company = user.company, positions;
   var query = this.distinct('applyPosition');
   query.where('company', company);
+  if (user.positions && user.positions.length > 0) {
+    positions = _.map(user.positions, 'name');
+    query.where('applyPosition').in(positions);
+  }
   query.exec(cb);
 };
 
@@ -531,6 +546,5 @@ interviewSchema.statics.applyPositionsForUser = function (user, cb) {
   query.where('events.interviewers', user._id);
   query.exec(cb);
 };
-
 
 mongoose.model('Interview', interviewSchema);

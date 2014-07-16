@@ -15,24 +15,24 @@ module.exports = function () {
       .populate('positions', 'name')
       .select('-hashed_password -salt')
       .exec(function (err, user) {
-      if (user) {
-        return done(null, user);
-      } else {
-        return done(null, false);
-      }
-    });
+        if (user) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      });
   });
 
   passport.use(new LocalStrategy({ usernameField: 'email' },
     function (email, password, done) {
       User.findOne({ email: email })
         .exec(function (err, user) {
-        if (err) return done(err);
-        if (!user || !user.authenticate(password)) {
-          return done(null, false, { message: '用户名或密码不匹配' });
-        }
-        return done(null, user);
-      });
+          if (err) return done(err);
+          if (!user || !user.authenticate(password)) {
+            return done(null, false, { message: '用户名或密码不匹配' });
+          }
+          return done(null, user);
+        });
     }
   ));
 };

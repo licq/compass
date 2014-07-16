@@ -2,7 +2,9 @@ var async = require('async'),
   mongoose = require('mongoose'),
   request = require('supertest'),
   app = require('../../server'),
-  Factory = require('./factory');
+  Factory = require('./factory'),
+  Position = mongoose.model('Position'),
+  _ = require('lodash');
 
 exports.clearCollections = function () {
   var models = Array.prototype.slice.call(arguments, 0);
@@ -25,12 +27,12 @@ function authenticateAgent(user, cb) {
     });
 }
 
-exports.login = function login(user, cb) {
+exports.login = function (user, cb) {
   if (!cb && typeof user === 'function') {
     cb = user;
-    Factory.create('company', function(company){
-      Factory.create('role', {company: company._id}, function(role){
-        Factory.create('user', {company:company._id, role: role._id},function (user) {
+    Factory.create('company', function (company) {
+      Factory.create('role', {company: company._id}, function (role) {
+        Factory.create('user', {company: company._id, role: role._id}, function (user) {
           authenticateAgent(user, cb);
         });
       });
@@ -39,3 +41,30 @@ exports.login = function login(user, cb) {
     authenticateAgent(user, cb);
   }
 };
+exports.createPosition = function (options, cb) {
+  if (!cb && typeof options === 'function') {
+    cb = options;
+  }
+  var owners, position, userFields = {};
+  if (options.owners) {
+    userFields = {company: options.owners[0].company};
+    owners = _.map(options.owners, '_id');
+  } else if (options.company) {
+    userFields = {company: options.company};
+  }
+  Factory.create('user', userFields, function (createdUser) {
+    var user = createdUser;
+    if (!options.owners)
+      owners = [user._id];
+    var positionFields = {company: user.company, owners: owners};
+    if (options.positionName)
+      positionFields.name = options.positionName;
+    Factory.build('position', positionFields, function (p) {
+      Position.createPosition(p, function (err, ps) {
+        position = ps;
+        cb(err, position, user);
+      });
+    });
+  });
+};
+
