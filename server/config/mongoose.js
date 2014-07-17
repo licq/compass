@@ -21,6 +21,7 @@ module.exports = function (config) {
   require('../models/email');
   require('../models/mail');
   require('../models/eventSetting');
+  require('../models/applicationSetting');
   require('../models/signup');
   require('../models/token');
   require('../models/resume');

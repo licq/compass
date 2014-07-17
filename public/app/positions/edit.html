@@ -31,17 +31,17 @@
               </div>
 
               <div class="form-group">
-                <label>选择面试负责人</label>
+                <label>选择招聘负责人</label>
                 <div>
                   <select ui-select2 class="form-control" name="owners"
                           ng-model="position.owners"
-                          ng-required="true" data-placeholder="请选择面试负责人，可以多选。可在输入框中输入名称进行搜索。" multiple="true">
+                          ng-required="true" data-placeholder="请选择招聘负责人，可以多选。可在输入框中输入名称进行搜索。" multiple="true">
                     <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}
                     </option>
                   </select>
                   <p class="text-danger"
                      ng-show="positionForm.owners.$invalid && !positionForm.owners.$pristine">
-                    请输入面试负责人</p>
+                    请输入招聘负责人</p>
                 </div>
               </div>
 

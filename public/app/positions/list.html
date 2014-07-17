@@ -8,17 +8,23 @@
       </div>
     </div>
     <div class="panel-body">
+      <div>
+        <label class="checkbox">
+          <input type="checkbox" ng-change="checked()" ng-model="settings.positionRightControlled">
+          <p>控制职位权限<span class="text-small text-danger">（如不勾选,所有人都可查看所有职位的应聘情况;否则,只有招聘负责人和该职位面试官才能查看)</span></p>
+        </label>
+      </div>
+      <hr/>
       <div class="table-responsive">
         <table tr-ng-grid="" class="table table-bordered table-striped"
                items="positions" enable-filtering="false">
           <thead>
           <tr>
-            <th field-name="name" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="owners" display-name="面试负责人" enable-filtering="false" enable-sorting="false" display-format="displayNames"></th>
+            <th field-name="name" class="col-md-2" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
+            <th field-name="owners" display-name="招聘负责人" enable-filtering="false" enable-sorting="false"
+                display-format="displayNames"></th>
             <th field-name="department" display-name="部门" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="createdAt" display-name="创建时间" enable-filtering="false"
-                display-format="longDate"></th>
-            <th>操作</th>
+            <th class="col-md-1">操作</th>
           </tr>
           </thead>
           <tbody>

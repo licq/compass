@@ -19,6 +19,7 @@ describe('mvPositionNewCtrl', function () {
           rate: 0.5
         }
       ]});
+      $httpBackend.expectGET('/api/applicationSettings?fields=positionRightControlled').respond({positionRightControlled:false});
       mvPositionNewCtrl = $controller('mvPositionNewCtrl', {
         $scope: $scope
       });

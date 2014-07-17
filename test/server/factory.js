@@ -6,6 +6,7 @@ var Factory = require('factory-lady'),
   Role = mongoose.model('Role'),
   User = mongoose.model('User'),
   Signup = mongoose.model('Signup'),
+  ApplicationSetting = mongoose.model('ApplicationSetting'),
   Token = mongoose.model('Token'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
@@ -27,6 +28,16 @@ Factory.define('role', Role, {
     cb('role' + roleCounter++);
   },
   permissions: ['testpermission'],
+  company: Factory.assoc('company', 'id')
+});
+
+var settingCounter = 1;
+
+Factory.define('applicationSetting', ApplicationSetting, {
+  name: function (cb) {
+    cb('applicationSetting' + settingCounter++);
+  },
+  positionRightControlled : false,
   company: Factory.assoc('company', 'id')
 });
 

@@ -4,11 +4,20 @@ var
   User = require('mongoose').model('User'),
   expect = require('chai').expect,
   Factory = require('../factory'),
-  helper = require('../testHelper');
+  helper = require('../testHelper'),
+  Position = require('mongoose').model('Position');
 
 describe('User', function () {
+  var position;
+
   beforeEach(function (done) {
-    helper.clearCollections('Company', User, 'Role',done);
+    helper.clearCollections('Company', User, 'Role', 'Position', done);
+    Factory.build('position', function (p) {
+      Position.createPosition(p, function (err, createdPosition) {
+        expect(err).to.not.exist;
+        position = createdPosition;
+      });
+    });
   });
 
   describe('#validate', function () {

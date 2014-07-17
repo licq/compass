@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvEvaluationCriterion, mvUser, mvNotifier) {
+  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier) {
     $scope.dataReady = false;
     mvUser.query(function (users) {
       $scope.users = users;
@@ -11,8 +11,11 @@ angular.module('compass')
         else {
           $scope.position.evaluationCriterions = [];
         }
-        $scope.dataReady = true;
-        $scope.item = {};
+        mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
+          $scope.positionRightControlled = settings.positionRightControlled;
+          $scope.dataReady = true;
+          $scope.item = {};
+        });
       });
     });
 

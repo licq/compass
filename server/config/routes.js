@@ -18,6 +18,7 @@ var express = require('express'),
   interviews = require('../controllers/interviews'),
   reviews = require('../controllers/reviews'),
   eventSettings = require('../controllers/eventSettings'),
+  applicationSettings = require('../controllers/applicationSettings'),
   positions = require('../controllers/positions'),
   counts = require('../controllers/counts'),
   captchas = require('../controllers/captchas'),
@@ -79,6 +80,10 @@ module.exports = function (app) {
     .put(users.update)
     .delete(users.delete);
 
+  apiRouter.route('/companies/:id')
+    .all(companies.load)
+    .get(companies.get);
+
   apiRouter.route('/roles')
     .post(roles.create)
     .get(roles.list);
@@ -109,6 +114,11 @@ module.exports = function (app) {
     .get(eventSettings.get);
   apiRouter.route('/eventSettings')
     .post(eventSettings.save);
+
+  apiRouter.route('/applicationSettings')
+    .get(applicationSettings.get);
+  apiRouter.route('/applicationSettings')
+    .post(applicationSettings.save);
 
   apiRouter.route('/evaluationCriterions')
     .get(evaluationCriterions.get)

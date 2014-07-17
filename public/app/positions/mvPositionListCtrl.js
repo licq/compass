@@ -1,6 +1,15 @@
 angular.module('compass')
-  .controller('mvPositionListCtrl', function ($scope, mvPosition, $location, mvNotifier) {
-    $scope.positions = mvPosition.query();
+  .controller('mvPositionListCtrl', function ($scope, mvApplicationSetting, mvPosition, $location, mvNotifier) {
+    mvPosition.query(function (positions) {
+      $scope.positions = positions;
+      mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
+        $scope.settings = settings;
+      });
+    });
+
+    $scope.checked = function(){
+      mvApplicationSetting.save($scope.settings);
+    };
 
     $scope.remove = function (position) {
       if (confirm('真的要删除' + position.name + '吗？')) {
