@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
   config = require('../config/config'),
   _ = require('lodash'),
   moment = require('moment'),
-  merge = require('mongoose-merge-plugin'),
   timestamps = require('mongoose-timestamp');
 
 function makeTermFilter(queryValue, termKey) {
@@ -390,7 +389,6 @@ resumeSchema.pre('save', function (next) {
   next();
 });
 
-resumeSchema.plugin(merge);
 resumeSchema.plugin(mongoosastic, {
   index: config.elastic.index,
   host: config.elastic.host,

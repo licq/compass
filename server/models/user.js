@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   timestamps = require('mongoose-timestamp'),
   crypto = require('crypto'),
-  merge = require('mongoose-merge-plugin'),
   validator = require('validator'),
   logger = require('../config/winston').logger(),
   async = require('async');
@@ -56,7 +55,6 @@ var userSchema = mongoose.Schema({
 });
 
 userSchema.plugin(timestamps);
-userSchema.plugin(merge);
 
 userSchema.virtual('password').set(function (password) {
   this._password = password;

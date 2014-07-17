@@ -1,8 +1,11 @@
 angular.module('compass')
-  .controller('mvUserNewCtrl', function ($scope, $location, mvUser, mvRole, mvNotifier) {
+  .controller('mvUserNewCtrl', function ($scope, $location, mvUser, mvPosition, mvRole, mvNotifier) {
     mvRole.query(function (roles) {
       $scope.roles = roles;
-      $scope.user = new mvUser();
+      mvPosition.query({fields: 'name'}, function (positions) {
+        $scope.positions = positions;
+        $scope.user = new mvUser();
+      });
     });
     $scope.create = function () {
       $scope.user.$save(function () {

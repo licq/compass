@@ -49,7 +49,7 @@ exports.get = function (req, res) {
 };
 
 exports.update = function (req, res, next) {
-  _.merge(req.loadedUser, req.body);
+  req.loadedUser.merge(req.body);
   req.loadedUser.save(function (err) {
     if (err) return next(err);
     res.end();
@@ -59,7 +59,7 @@ exports.update = function (req, res, next) {
 exports.load = function (req, res, next) {
   User.findOne({_id: req.params.id, company: req.user.company})
     .populate('role', 'name permissions')
-    .select('name email title role')
+    .select('name email title role positions')
     .exec(function (err, loadedUser) {
       if (err) return next(err);
       if (!loadedUser) return res.send(404, {message: 'not found'});

@@ -1,9 +1,11 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  logger = require('./winston').logger();
+  logger = require('./winston').logger(),
+  merge = require('mongoose-merge-plugin');
 
 module.exports = function (config) {
+  mongoose.plugin(merge);
   mongoose.connect(config.db);
   var db = mongoose.connection;
 

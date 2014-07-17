@@ -3,7 +3,6 @@
 var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamp'),
   validator = require('validator'),
-  merge = require('mongoose-merge-plugin'),
   User = mongoose.model('User'),
   async = require('async'),
   _ = require('lodash');
@@ -102,6 +101,5 @@ positionSchema.statics.updatePosition = function (position, cb) {
 positionSchema.index({company: 1, name: 1}, {unique: true});
 
 positionSchema.plugin(timestamps);
-positionSchema.plugin(merge);
 
 mongoose.model('Position', positionSchema);

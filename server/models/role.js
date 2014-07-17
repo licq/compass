@@ -2,8 +2,7 @@
 
 var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamp'),
-  validator = require('validator'),
-  merge = require('mongoose-merge-plugin');
+  validator = require('validator');
 var roleSchema = mongoose.Schema({
   name: {
     type: String,
@@ -20,7 +19,6 @@ var roleSchema = mongoose.Schema({
 roleSchema.index({company: 1, name: 1}, {unique: true});
 
 roleSchema.plugin(timestamps);
-roleSchema.plugin(merge);
 
 roleSchema.methods.isSystemAdmin = function () {
   return this.name === '系统管理员' && this.permissions[0] === '#systemSettings';

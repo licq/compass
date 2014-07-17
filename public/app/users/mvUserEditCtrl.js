@@ -1,11 +1,14 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvUserEditCtrl', function ($scope, $rootScope, mvUser, mvRole, $routeParams, mvPermission, mvIdentity, $location, mvNotifier) {
+  .controller('mvUserEditCtrl', function ($scope, $rootScope, mvUser, mvRole, mvPosition, $routeParams, mvPermission, mvIdentity, $location, mvNotifier) {
     mvRole.query(function (roles) {
       $scope.roles = roles;
-      mvUser.get({_id: $routeParams.id}, function (user) {
-        $scope.user = user;
+      mvPosition.query({fields: 'name'}, function (positions) {
+        $scope.positions = positions;
+        mvUser.get({_id: $routeParams.id}, function (user) {
+          $scope.user = user;
+        });
       });
     });
 

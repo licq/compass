@@ -12,6 +12,11 @@ describe('mvUserNewCtrl', function () {
       $httpBackend.expectGET('/api/roles').respond([
         {'_id': '4466', 'name': 'admin', 'permissions': ['*']}
       ]);
+
+      $httpBackend.expectGET('/api/positions?fields=name').respond([
+        {'_id': '1122', 'name': 'cio'},
+        {'_id': '3344', 'name': 'sales'}
+      ]);
       mvUserNewCtrl = $controller('mvUserNewCtrl', {
         $scope: $scope
       });

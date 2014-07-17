@@ -38,6 +38,22 @@
                   </select>
                 </div>
               </div>
+
+              <div class="form-group">
+                <label>选择负责职位</label>
+                <div>
+                  <select ui-select2 class="form-control" name="positions"
+                          ng-model="user.positions" has-permission="setPositions"
+                          ng-required="true" data-placeholder="请选择负责职位，可以多选。可在输入框中输入名称进行搜索。" multiple="true">
+                    <option ng-repeat="position in positions" value="{{position._id}}">{{position.name}}
+                    </option>
+                  </select>
+                  <p class="text-danger"
+                     ng-show="userForm.positions.$invalid && !userForm.positions.$pristine">
+                    请选择负责职位</p>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label>邮箱地址</label>
                 <input type="email" class="form-control"

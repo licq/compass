@@ -12,7 +12,7 @@ describe('mvPositionListCtrl', function () {
       return [200, [{
         name: 'cio',
         department:'技术部',
-        interviewers: ['张三', '李四'],
+        owners: ['张三', '李四'],
         evaluationCriterions: [
           {
             'name': '专业知识',

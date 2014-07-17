@@ -36,7 +36,7 @@
                 <div>
                   <select ui-select2 class="form-control" name="owners"
                           ng-model="position.owners"
-                          ng-required="true" data-placeholder="请选择面试负责人，可以多选" multiple="true">
+                          ng-required="true" data-placeholder="请选择面试负责人，可以多选。可在输入框中输入名称进行搜索。" multiple="true">
                     <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}
                     </option>
                   </select>

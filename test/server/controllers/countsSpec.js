@@ -74,7 +74,6 @@ describe('counts', function () {
       .expect(200)
       .expect('content-type', /json/)
       .end(function (err, res) {
-        console.log(res.body);
         expect(res.body.new).to.equal(1);
         expect(res.body.pursued).to.equal(1);
         expect(res.body.undetermined).to.equal(1);
@@ -91,7 +90,6 @@ describe('counts', function () {
         .expect(200)
         .expect('content-type', /json/)
         .end(function (err, res) {
-          console.log(res.body);
           expect(res.body.new).to.equal(1);
           expect(res.body.pursued).to.equal(1);
           expect(res.body.undetermined).to.equal(1);

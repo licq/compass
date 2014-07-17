@@ -22,6 +22,10 @@ describe('mvUserEditCtrl', function () {
       {'_id': '4466', 'name': 'admin', 'permissions': ['*']},
       {'_id': '7799', 'name': 'IAmARoleForTestingPurpose', 'permissions': ['viewUser', 'viewResume']}
     ]);
+    $httpBackend.expectGET('/api/positions?fields=name').respond([
+      {'_id': '1122', 'name': 'cio'},
+      {'_id': '3344', 'name': 'sales'}
+    ]);
     $httpBackend.expectGET('/api/users/7788').respond(userData);
     mvUserEditCtrl = $controller('mvUserEditCtrl', {
       $scope: $scope,
