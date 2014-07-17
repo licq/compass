@@ -13,6 +13,12 @@ describe('mvPositionNewCtrl', function () {
         {'_id': '4466', 'name': '张三'},
         {'_id': '5577', 'name': '李四'}
       ]);
+      $httpBackend.expectGET('/api/evaluationCriterions').respond({company: 'company', items: [
+        {
+          name: '英语',
+          rate: 0.5
+        }
+      ]});
       mvPositionNewCtrl = $controller('mvPositionNewCtrl', {
         $scope: $scope
       });

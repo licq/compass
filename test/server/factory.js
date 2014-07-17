@@ -26,7 +26,7 @@ Factory.define('role', Role, {
   name: function (cb) {
     cb('role' + roleCounter++);
   },
-  permissions:['testpermission'],
+  permissions: ['testpermission'],
   company: Factory.assoc('company', 'id')
 });
 
@@ -139,16 +139,22 @@ Factory.define('position', Position, {
     cb('position' + positionCounter++);
   },
   company: Factory.assoc('company', 'id'),
-  evaluationCriterions: [{
-    'name': '主动性',
-    'rate': 0.5
-  }]
+  evaluationCriterions: [
+    {
+      'name': '主动性',
+      'rate': 0.5
+    },
+    {
+      'name': '英语',
+      'rate': 0.7
+    }
+  ]
 });
 
 var applierRejectReasonCounter = 1;
 
-Factory.define('applierRejectReason', mongoose.model('ApplierRejectReason'),{
-  reason: 'reason' + applierRejectReasonCounter ++
+Factory.define('applierRejectReason', mongoose.model('ApplierRejectReason'), {
+  reason: 'reason' + applierRejectReasonCounter++
 });
 
 module.exports = Factory;

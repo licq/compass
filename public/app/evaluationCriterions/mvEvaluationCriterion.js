@@ -4,6 +4,11 @@ angular.module('compass')
       update: {
         method: 'PUT',
         isArray: false
+      },
+      forReview: {
+        method: 'GET',
+        isArray: false,
+        url: '/api/evaluationCriterions/forReview'
       }
     });
   });

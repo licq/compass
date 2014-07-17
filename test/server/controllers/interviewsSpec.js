@@ -11,7 +11,7 @@ describe('interviews', function () {
   var user, resume, request, interview;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User','Role', 'Interview', 'Resume', function () {
+    helper.clearCollections('Company', 'User', 'Role', 'Interview', 'Position', 'Resume', function () {
       helper.login(function (agent, createdUser) {
         Factory.create('resume', function (createdResume) {
           resume = createdResume;

@@ -1,5 +1,6 @@
 var
   Resume = require('mongoose').model('Resume'),
+  User = require('mongoose').model('User'),
   helper = require('../testHelper'),
   expect = require('chai').expect,
   Factory = require('../factory');
@@ -121,6 +122,54 @@ describe('Resume', function () {
         });
       });
     });
+
+    describe('using positions filter', function () {
+      var user, position;
+      beforeEach(function (done) {
+        helper.clearCollections('User', 'Position', function () {
+          done();
+        });
+      });
+
+      it('should return one result when user has associated positions', function (done) {
+        helper.createPosition({company: resume.company, name: '销售主管'}, function (err, createdPosition, createdUser) {
+          position = createdPosition;
+          user = createdUser;
+          User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {
+            Resume.query({positions: u.positions}, function (err, results) {
+              expect(results.hits.total).to.equal(1);
+              done(err);
+            });
+          });
+        });
+      });
+
+      it('should return one result when user has no associated positions', function (done) {
+        helper.createPosition({company: resume.company, name: '销售主管'}, function (err, createdPosition, createdUser) {
+          position = createdPosition;
+          user = createdUser;
+          Resume.query({positions: user.positions}, function (err, results) {
+            expect(results.hits.total).to.equal(1);
+            done(err);
+          });
+        });
+      });
+
+      it('should return no result', function (done) {
+        helper.createPosition({company: resume.company, name: '财务总监'}, function (err, createdPosition, createdUser) {
+          position = createdPosition;
+          user = createdUser;
+          User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {
+            Resume.query({positions: u.positions}, function (err, results) {
+              expect(results.hits.total).to.equal(0);
+              done(err);
+            });
+          });
+        });
+      });
+
+    });
+
     describe('using age filter', function () {
       it('should return only one result if query for age=[20,25]', function (done) {
         Resume.query({age: [20, 25]}, function (err, results) {

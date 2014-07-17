@@ -9,21 +9,33 @@ var mongoose = require('mongoose'),
 
 exports.get = function (req, res, next) {
   var start = moment().startOf('day').toDate(),
-    end = moment().endOf('day').toDate();
+    end = moment().endOf('day').toDate(),
+    positions;
+  if (req.user.positions && req.user.positions.length > 0) {
+    positions = _.map(req.user.positions, 'name');
+  }
+
+  function resumeCount(options) {
+    return function (cb) {
+      var query = Resume.count({company: req.user.company, status: options.status});
+      if (positions) {
+        query.where('applyPosition').in(positions);
+      }
+      query.exec(cb);
+    };
+  }
 
   var countFunctions = {
-    new: function (cb) {
-      Resume.count({company: req.user.company, status: 'new'}).exec(cb);
-    },
-    undetermined: function (cb) {
-      Resume.count({company: req.user.company, status: 'undetermined'}).exec(cb);
-    },
-    pursued: function (cb) {
-      Resume.count({company: req.user.company, status: 'pursued'}).exec(cb);
-    },
+    new: resumeCount({status: 'new'}),
+    undetermined: resumeCount({status: 'undetermined'}),
+    pursued: resumeCount({status: 'pursued'}),
     onboards: function (cb) {
-      Interview.count({company: req.user.company, status: 'offer accepted'})
-        .where('onboardDate').gte(start).lte(end).exec(cb);
+      var query = Interview.count({company: req.user.company, status: 'offer accepted'})
+        .where('onboardDate').gte(start).lte(end);
+      if (positions) {
+        query.where('applyPosition').in(positions);
+      }
+      query.exec(cb);
     },
     unreviewed: function (cb) {
       Interview.countForUnreviewed(req.user, cb);

@@ -22,7 +22,7 @@ angular.module('compass')
     function setupNewReview() {
       $scope.isNewReview = true;
       $scope.isShowDetail = !$scope.isNewReview;
-      mvEvaluationCriterion.get({}, function (res) {
+      mvEvaluationCriterion.forReview({applyPosition:$scope.interview.applyPosition}, function (res) {
         $scope.review = {
           items: [],
           totalScore: 0,

@@ -1,10 +1,12 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  Resume = mongoose.model('Resume');
+  Resume = mongoose.model('Resume'),
+  _ = require('lodash');
 
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
+  req.query.positions = req.user.positions;
   req.query.sort = [
     {
       createdAt: {order: 'desc'}
@@ -29,12 +31,18 @@ exports.update = function (req, res, next) {
 };
 
 exports.load = function (req, res, next) {
-  Resume.findOne({_id: req.params.id})
-    .exec(function (err, resume) {
-      if (err) return next(err);
-      if (!resume) return res.send(404, {message: 'not found'});
-      req.resume = resume;
-      next();
-    });
+  var query = Resume.findOne({_id: req.params.id});
+
+  if (req.user.positions && req.user.positions.length > 0) {
+    var positions = _.map(req.user.positions, 'name');
+    query.where('applyPosition').in(positions);
+  }
+
+  query.exec(function (err, resume) {
+    if (err) return next(err);
+    if (!resume) return res.send(404, {message: 'not found'});
+    req.resume = resume;
+    next();
+  });
 };
 

@@ -14,7 +14,7 @@ describe('interview', function () {
 
   beforeEach(function (done) {
     helper.clearCollections('Company', 'User', Resume, Interview, function () {
-      Factory.create('user', function (createdUser) {
+      Factory.create('user',function (createdUser) {
         Factory.create('resume', function (createdResume) {
           user = createdUser;
           resume = createdResume;
@@ -465,7 +465,8 @@ describe('interview', function () {
             createdBy: user._id
           }
         ]}, function () {
-        Interview.applyPositionsForCompany(user.company, function (err, positions) {
+
+        Interview.applyPositionsForCompany(user, function (err, positions) {
           expect(err).to.not.exist;
           expect(positions).to.deep.equal(['销售总监']);
           done();

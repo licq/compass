@@ -1,13 +1,22 @@
 angular.module('compass')
-  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvUser, mvNotifier) {
+  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvEvaluationCriterion, mvUser, mvNotifier) {
+    $scope.dataReady = false;
     mvUser.query(function (users) {
       $scope.users = users;
       $scope.position = new mvPosition();
-      $scope.position.evaluationCriterions = [];
-      $scope.item = {};
+      mvEvaluationCriterion.get({}, function (res) {
+        if (res && res.items) {
+          $scope.position.evaluationCriterions = res.items;
+        }
+        else {
+          $scope.position.evaluationCriterions = [];
+        }
+        $scope.dataReady = true;
+        $scope.item = {};
+      });
     });
 
-   $scope.adding = false;
+    $scope.adding = false;
     $scope.create = function () {
       $scope.position.$save(function () {
         $location.path('/settings/positions');

@@ -50,7 +50,6 @@ function updateUsers(owners, position, operation, cb) {
         if (positions.length === 0)
           positions = undefined;
       }
-
       user.positions = positions;
       user.markModified('positions');
       user.save(function (err) {

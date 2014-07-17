@@ -94,7 +94,7 @@ describe('mvReviewNewCtrl', function () {
             }}
         ]
       });
-      $httpBackend.expectGET('/api/evaluationCriterions').respond({
+      $httpBackend.expectGET('/api/evaluationCriterions/forReview?applyPosition=cio').respond({
         items: [
           {name: '学习能力', rate: 1},
           {name: '工作态度', rate: 1},

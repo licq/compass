@@ -252,7 +252,6 @@ resumeSchema.statics.query = function (params, callback) {
     }
   };
 
-
   if (params.q) {
     queryConditions.query.filtered.query = {
       bool: {
@@ -314,26 +313,20 @@ resumeSchema.statics.query = function (params, callback) {
   if (highestDegreeFilter) {
     filters.push(highestDegreeFilter);
   }
+
   var applyPositionFilter = makeTermFilter(params.applyPosition, 'applyPosition.original');
   if (applyPositionFilter) {
     filters.push(applyPositionFilter);
   }
 
-  if (params.status) {
-    if (Array.isArray(params.status)) {
-      filters.push({
-        terms: {
-          status: params.status
-        }
-      });
+  if (params.positions && params.positions.length > 0) {
+    var positionsFilter = makeTermFilter(_.map(params.positions, 'name'), 'applyPosition.original');
+    filters.push(positionsFilter);
+  }
 
-    } else {
-      filters.push({
-        term: {
-          status: params.status
-        }
-      });
-    }
+  var statusFilter = makeTermFilter(params.status, 'status');
+  if (statusFilter) {
+    filters.push(statusFilter);
   }
 
   if (params.age) {
