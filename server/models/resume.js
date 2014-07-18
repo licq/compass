@@ -208,7 +208,7 @@ var resumeSchema = mongoose.Schema({
   updatedAtLocaltime: Date
 });
 
-resumeSchema.index({company: 1, name: 1, mobile: 1, createdAt: 1});
+resumeSchema.index({company: 1, name: 1, mobile: 1, email: 1, createdAt: 1 });
 
 resumeSchema.virtual('highestDegree').get(function () {
   if (this.educationHistory && this.educationHistory.length > 0) {
@@ -380,12 +380,14 @@ resumeSchema.post('remove', function () {
   this.unIndex();
 });
 
+
 resumeSchema.plugin(timestamps);
 resumeSchema.pre('save', function (next) {
   if (this.isNew) {
     this.createdAtLocaltime = moment(this.createdAt).add('hours', 8).toDate();
   }
   this.updatedAtLocaltime = moment(this.updatedAt).add('hours', 8).toDate();
+  this.statusChanged = this.isModified('status');
   next();
 });
 
@@ -395,7 +397,7 @@ resumeSchema.pre('save', function (next) {
     mongoose.model('ApplicationSetting').findOne({company: self.company}).select('filterSamePerson').exec(function (err, as) {
       if (err || !as) return next();
       if (as.filterSamePerson === 0) return next();
-      self.constructor.count({name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().add('months', 0 - as.filterSamePerson).toDate()}})
+      self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().add('months', 0 - as.filterSamePerson).toDate()}})
         .exec(function (err, resumeCount) {
           if (err || resumeCount === 0) return next();
           self.status = 'archived';
@@ -404,6 +406,12 @@ resumeSchema.pre('save', function (next) {
     });
   } else {
     next();
+  }
+});
+
+resumeSchema.post('save', function () {
+  if (this.statusChanged) {
+    mongoose.model('ApplicationSetting').notify('resumeStatusChanged', this);
   }
 });
 

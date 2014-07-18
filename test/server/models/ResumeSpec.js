@@ -257,7 +257,6 @@ describe('Resume', function () {
           });
         });
       });
-
     });
 
     describe('using age filter', function () {
@@ -276,5 +275,4 @@ describe('Resume', function () {
       });
     });
   });
-})
-;
+}) ;

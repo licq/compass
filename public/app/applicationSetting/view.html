@@ -22,20 +22,20 @@
             <div class="form-group">
               <label class="col-md-5">
                 <input type="checkbox" class="icheckbox_square-green"
-                       ng-model="applicationSetting.rejectToApplier">
+                       ng-model="applicationSetting.rejectLetterToApplier">
                 当拒绝应聘者时，自动发送邮件给应聘者
               </label>
 
 
-              <div text-angular name="rejectToApplierTemplate"
-                   ng-model="applicationSetting.rejectToApplierTemplate"
-                   ng-required="applicationSetting.rejectToApplier"
-                   ta-toolbar="[['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'], ['bold', 'italics', 'underline', 'ul', 'ol', 'redo', 'undo', 'clear'], ['justifyLeft','justifyCenter','justifyRight'], ['html', 'insertImage', 'insertLink', 'unlink'],['insertName', 'applyPosition' ]]">
+              <div text-angular name="rejectLetterToApplierTemplate"
+                   ng-model="applicationSetting.rejectLetterToApplierTemplate"
+                   ng-required="applicationSetting.rejectLetterToApplier"
+                   ta-toolbar="[['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'], ['bold', 'italics', 'underline', 'ul', 'ol', 'redo', 'undo', 'clear'], ['justifyLeft','justifyCenter','justifyRight'], ['html', 'insertImage', 'insertLink', 'unlink'],['insertName', 'applyPosition']]">
               </div>
 
               <p class="text-danger"
-                 ng-show="applicationSettingForm.rejectToApplierTemplate.$error.required
-                       && !applicationSettingForm.rejectToApplierTemplate.$pristine">
+                 ng-show="applicationSettingForm.rejectLetterToApplierTemplate.$error.required
+                       && !applicationSettingForm.rejectLetterToApplierTemplate.$pristine">
                 请输入邮件内容模板</p>
             </div>
             <button class="btn btn-primary" ng-click="save()"
