@@ -4,6 +4,7 @@ var Factory = require('factory-lady'),
   mongoose = require('mongoose'),
   Company = mongoose.model('Company'),
   Role = mongoose.model('Role'),
+  Position = mongoose.model('Position'),
   User = mongoose.model('User'),
   Signup = mongoose.model('Signup'),
   ApplicationSetting = mongoose.model('ApplicationSetting'),
@@ -11,8 +12,7 @@ var Factory = require('factory-lady'),
   Email = mongoose.model('Email'),
   Mail = mongoose.model('Mail'),
   EventSetting = mongoose.model('EventSetting'),
-  Resume = mongoose.model('Resume'),
-  Position = mongoose.model('Position');
+  Resume = mongoose.model('Resume');
 
 var companyCounter = 1;
 

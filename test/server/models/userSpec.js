@@ -2,30 +2,24 @@
 
 var
   User = require('mongoose').model('User'),
+  Position = require('mongoose').model('Position'),
   expect = require('chai').expect,
   Factory = require('../factory'),
-  helper = require('../testHelper'),
-  Position = require('mongoose').model('Position');
+  helper = require('../testHelper');
 
 describe('User', function () {
-  var position;
-
   beforeEach(function (done) {
-    helper.clearCollections('Company', User, 'Role', 'Position', done);
-    Factory.build('position', function (p) {
-      Position.createPosition(p, function (err, createdPosition) {
-        expect(err).to.not.exist;
-        position = createdPosition;
-      });
-    });
+    helper.clearCollections('User', 'Company', 'Role', 'Position', done);
   });
 
   describe('#validate', function () {
     it('should begin with no users', function (done) {
-      User.find({}, function (err, users) {
-        expect(users).to.be.empty;
-        done();
-      });
+      User.find()
+        .where('name').ne('systemadmin')
+        .exec(function (err, users) {
+          expect(users).to.be.empty;
+          done();
+        });
     });
 
     it('should be able to save without problems', function (done) {
@@ -33,6 +27,67 @@ describe('User', function () {
         user.save(function (err) {
           expect(user.deleted).to.be.false;
           done(err);
+        });
+      });
+    });
+
+    it('should create a user and update the position owners', function (done) {
+      helper.createPosition(function (err, position) {
+        expect(err).to.not.exist;
+        Factory.build('user', {positions: position._id, company: position.company}, function (u) {
+          User.createUser(u, function (err, user) {
+            expect(err).to.not.exist;
+            expect(user.positions[0]).to.deep.equal(position._id);
+            User.count()
+              .where('name').ne('systemadmin')
+              .exec(function (err, count) {
+                expect(count).to.be.equal(1);
+                done(err);
+              });
+          });
+        });
+      });
+    });
+
+    it('should delete user and ownership from positions', function (done) {
+      helper.createPosition({toCreateUser: true}, function (err, position, createdUser) {
+        expect(err).to.not.exist;
+        User.deleteUser(createdUser, function (err, deletedUser) {
+          expect(err).to.not.exist;
+          User.findOne({_id: deletedUser._id}, function (err, u) {
+            expect(err).to.not.exist;
+            expect(u.deleted).to.be.true;
+            Position.findOne({_id: position._id}, function (err, p) {
+              expect(err).to.not.exist;
+              expect(p.owners).to.have.length(0);
+              done(err);
+            });
+          });
+        });
+      });
+    });
+
+    it('should update position and users', function (done) {
+      helper.createPosition({toCreateUser: true}, function (err, position1, user) {
+        expect(err).to.not.exist;
+        helper.createPosition({company: user.company}, function (err, position2) {
+          user.positions = [position2._id];
+          User.updateUser(user, function (err) {
+            expect(err).to.not.exist;
+            User.findOne({_id: user._id}, function (err, u) {
+              expect(err).to.not.exist;
+              expect(u.positions[0]).to.deep.equal(position2._id);
+              Position.findOne({_id: position1._id}, function (err, p1) {
+                //expect(err).to.not.exist;
+                expect(p1.owners).to.have.length(0);
+                Position.findOne({_id: position2._id}, function (err, p2) {
+                  //expect(err).to.not.exist;
+                  expect(p2.owners).to.have.length(1);
+                  done(err);
+                });
+              });
+            });
+          });
         });
       });
     });
@@ -47,7 +102,6 @@ describe('User', function () {
         });
       });
     });
-
 
     it('should show an error when try to save empty user', function (done) {
       return new User().save(function (err) {
@@ -103,4 +157,5 @@ describe('User', function () {
       });
     });
   });
-});
+})
+;

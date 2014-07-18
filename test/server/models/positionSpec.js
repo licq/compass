@@ -77,8 +77,7 @@ describe('Position', function () {
 
   describe('deletePosition', function () {
     it('should delete position and users', function (done) {
-      Factory.build('position', {company: company._id, owners: [user._id]}, function (position) {
-        Position.createPosition(position, function (err) {
+        helper.createPosition({company: company._id, owners: [user]}, function (err, position) {
           expect(err).to.not.exist;
           Position.deletePosition(position, function (err) {
             expect(err).to.not.exist;
@@ -94,8 +93,6 @@ describe('Position', function () {
             });
           });
         });
-      });
-
     });
   });
 

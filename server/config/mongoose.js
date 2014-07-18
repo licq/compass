@@ -17,6 +17,7 @@ module.exports = function (config) {
 
   require('../models/company');
   require('../models/role');
+  require('../models/position');
   require('../models/user');
   require('../models/email');
   require('../models/mail');
@@ -27,6 +28,5 @@ module.exports = function (config) {
   require('../models/resume');
   require('../models/interview');
   require('../models/evaluationCriterion');
-  require('../models/position');
   require('../models/applierRejectReason');
 };

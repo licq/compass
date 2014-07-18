@@ -1,9 +1,9 @@
 var async = require('async'),
   mongoose = require('mongoose'),
   request = require('supertest'),
+  Position = mongoose.model('Position'),
   app = require('../../server'),
   Factory = require('./factory'),
-  Position = mongoose.model('Position'),
   _ = require('lodash');
 
 exports.clearCollections = function () {
@@ -42,29 +42,33 @@ exports.login = function (user, cb) {
   }
 };
 exports.createPosition = function (options, cb) {
+  var owners, fields = {};
   if (!cb && typeof options === 'function') {
     cb = options;
+  } else {
+    _.merge(fields, options);
   }
-  var owners, position, userFields = {};
+
   if (options.owners) {
-    userFields = {company: options.owners[0].company};
     owners = _.map(options.owners, '_id');
-  } else if (options.company) {
-    userFields = {company: options.company};
+    fields.owners = owners;
   }
-  Factory.create('user', userFields, function (createdUser) {
-    var user = createdUser;
-    if (!options.owners)
-      owners = [user._id];
-    var positionFields = {company: user.company, owners: owners};
-    if (options.name)
-      positionFields.name = options.name;
-    Factory.build('position', positionFields, function (p) {
-      Position.createPosition(p, function (err, ps) {
-        position = ps;
-        cb(err, position, user);
+  if (options.toCreateUser) {
+    Factory.build('position', fields, function (p) {
+      Factory.create('user', {positions: [p._id], company: p.company}, function (user) {
+        p.owners = fields.owners || [];
+        p.owners.push(user._id);
+        Position.create(p, function (err, position) {
+          cb(err, position, user);
+        });
       });
     });
-  });
+  } else {
+    Factory.build('position', fields, function (p) {
+      Position.createPosition(p, function (err, position) {
+        cb(err, position);
+      });
+    });
+  }
 };
 

@@ -18,7 +18,6 @@ exports.list = function (req, res, next) {
 
 exports.create = function (req, res) {
   var position = new Position(req.body);
-
   position.company = req.user.company;
   Position.createPosition(position, function (err) {
     if (err) {
@@ -53,7 +52,7 @@ exports.update = function (req, res, next) {
 
 exports.load = function (req, res, next) {
   Position.findOne({_id: req.params.id, company: req.user.company})
-    .select('name owners evaluationCriterions department createdAt')
+    .select('name owners company evaluationCriterions department createdAt')
     .exec(function (err, position) {
       if (err) return next(err);
       if (!position) return res.send(404, {message: 'not found'});

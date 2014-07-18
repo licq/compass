@@ -1,9 +1,10 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
+  _ = require('lodash'),
   Role = require('mongoose').model('Role'),
   Company = require('mongoose').model('Company'),
-  Schema = mongoose.Schema,
   timestamps = require('mongoose-timestamp'),
   crypto = require('crypto'),
   validator = require('validator'),
@@ -119,6 +120,76 @@ userSchema.methods = {
       cb(err, role.isSystemAdmin());
     });
   }
+};
+
+function arrayToString(array) {
+  return  _.map(array, function (element) {
+    return element.toString();
+  });
+}
+
+function updatePositions(positionsOfUser, user, operation, cb) {
+  var Position = mongoose.model('Position');
+  Position.find({_id: {$in: positionsOfUser}, company: user.company}, function (err, positions) {
+    if (err) return cb(err);
+    async.each(positions, function (position, callback) {
+      var owners = arrayToString(position.owners || []);
+
+      if (operation === 'add') {
+        owners = _.union(owners, [user.id]);
+      } else if (operation === 'remove') {
+        owners = _.without(owners, user.id);
+        if (owners.length === 0)
+          owners = undefined;
+      }
+      position.owners = owners;
+      position.markModified('owners');
+      position.save(function (err) {
+        if (err) callback(err);
+        callback();
+      });
+    }, function (err) {
+      if (err) return cb(err);
+      cb(null);
+    });
+  });
+}
+
+userSchema.statics.createUser = function (user, cb) {
+  user.save(function (err, savedUser) {
+    if (err)  return cb(err);
+    updatePositions(savedUser.positions, savedUser, 'add', function(err){
+      cb(err, savedUser);
+    });
+  });
+};
+
+userSchema.statics.deleteUser = function (user, cb) {
+  user.deleted = true;
+  user.save(function (err, deletedUser) {
+    if (err)  return cb(err);
+    updatePositions(deletedUser.positions, deletedUser, 'remove', function(err){
+      cb(err, deletedUser);
+    });
+  });
+};
+
+userSchema.statics.updateUser = function (user, cb) {
+  this.findOne({_id: user._id}, function (err, oldUser) {
+    if (err) return cb(err);
+    var oldPositions = _.difference(arrayToString(oldUser.positions), arrayToString(user.positions));
+    var newPositions = _.difference(arrayToString(user.positions), arrayToString(oldUser.positions));
+    user.markModified('positions');
+    user.save(function (err, savedUser) {
+      if (err)  return cb(err);
+      updatePositions(oldPositions, savedUser, 'remove', function (err) {
+        if (err) return cb(err);
+        updatePositions(newPositions, savedUser, 'add', function(err){
+          cb(err, savedUser);
+        });
+      });
+    });
+  });
 };
 
 userSchema.statics.createSystemAdmin = function (callback) {

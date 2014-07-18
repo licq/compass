@@ -16,8 +16,6 @@ require('./server/config/express')(app, config);
 
 require('./server/config/passport')();
 
-require('./server/config/initDB').init();
-
 require('./server/tasks/mailer').init(config);
 
 var workers = require('./server/tasks/workers');
@@ -32,8 +30,12 @@ process.on('SIGINT', function () {
   }, 5000);
 });
 
-app.listen(config.port, function () {
-  console.log('Compass Listening on port ' + config.port + '...');
+
+
+require('./server/config/initDB').init(function(){
+  app.listen(config.port, function () {
+    console.log('Compass Listening on port ' + config.port + '...');
+  });
 });
 
 module.exports = app;

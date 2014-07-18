@@ -8,17 +8,20 @@ var
   User = mongoose.model('User'),
   Position = mongoose.model('Position');
 describe('positions', function () {
-  var request, existPosition, existUser;
+  var request, existPosition, existUser, user2;
 
   beforeEach(function (done) {
     helper.clearCollections('User', 'Company', 'Position', function () {
       helper.login(function (agent, user) {
         existUser = user;
         request = agent;
-        Factory.build('position', {company: existUser.company, owners: [existUser._id]}, function (p) {
-          Position.createPosition(p, function (err, position) {
-            existPosition = position;
-            done();
+        Factory.create('user', {company: existUser.company}, function (u2) {
+          user2 = u2;
+          Factory.build('position', {company: existUser.company, owners: [existUser._id]}, function (p) {
+            Position.createPosition(p, function (err, position) {
+              existPosition = position;
+              done();
+            });
           });
         });
       });
@@ -86,25 +89,22 @@ describe('positions', function () {
 
   describe('put /api/positions/:id', function () {
     it('should update position', function (done) {
-      Factory.create('user', function (user2) {
-        request.put('/api/positions/' + existPosition._id)
-          .send({owners: [existUser._id, user2._id], name: 'cto' })
-          .expect(200)
-          .end(function (err) {
-            expect(err).to.not.exist;
-
-            Position.findOne({_id: existPosition._id}, function (err, position) {
-              expect(position.name).to.equal('cto');
-              expect(position.owners).to.have.length(2);
-              User.find({_id: {$in: position.owners}}, function (err, users) {
-                expect(err).to.not.exist;
-                expect(users[0].positions[0]).to.deep.equal(position._id);
-                expect(users[1].positions[0]).to.deep.equal(position._id);
-                done();
-              });
+      request.put('/api/positions/' + existPosition._id)
+        .send({owners: [user2._id], name: 'cto' })
+        .expect(200)
+        .end(function (err) {
+          expect(err).to.not.exist;
+          Position.findOne({_id: existPosition._id}, function (err, position) {
+            expect(position.name).to.equal('cto');
+            expect(position.owners).to.have.length(1);
+            User.find({_id: {$in: position.owners}}, function (err, users) {
+              expect(err).to.not.exist;
+              expect(users[0].positions[0]).to.deep.equal(position._id);
+              expect(users[0]._id).to.deep.equal(user2._id);
+              done();
             });
           });
-      });
+        });
     });
   });
 

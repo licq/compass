@@ -3,7 +3,6 @@
 var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamp'),
   validator = require('validator'),
-  User = mongoose.model('User'),
   async = require('async'),
   _ = require('lodash');
 var positionSchema = mongoose.Schema({
@@ -37,11 +36,11 @@ function arrayToString(array) {
 }
 
 function updateUsers(owners, position, operation, cb) {
-  User.find({_id: {$in: owners}}, function (err, users) {
+  var User = mongoose.model('User');
+  User.find({_id: {$in: owners}, company:position.company}, function (err, users) {
     if (err) return cb(err);
     async.each(users, function (user, callback) {
       var positions = arrayToString(user.positions || []);
-
       if (operation === 'add') {
         positions = _.union(positions, [position.id]);
       } else if (operation === 'remove') {
@@ -63,6 +62,7 @@ function updateUsers(owners, position, operation, cb) {
 }
 
 positionSchema.statics.createPosition = function (position, cb) {
+  position.markModified('owners');
   position.save(function (err, savedPosition) {
     if (err)  return cb(err);
     updateUsers(savedPosition.owners, savedPosition, 'add', function(err){
@@ -83,9 +83,9 @@ positionSchema.statics.deletePosition = function (position, cb) {
 positionSchema.statics.updatePosition = function (position, cb) {
   this.findOne({_id: position._id}, function (err, oldPosition) {
     if (err) return cb(err);
-
     var oldOwners = _.difference(arrayToString(oldPosition.owners), arrayToString(position.owners));
     var newOwners = _.difference(arrayToString(position.owners), arrayToString(oldPosition.owners));
+    position.markModified('owners');
     position.save(function (err, savedPosition) {
       if (err)  return cb(err);
       updateUsers(oldOwners, savedPosition, 'remove', function (err) {
