@@ -58,11 +58,7 @@ function handleParseResume(job, done) {
 
     Resume.createOrUpdateAndIndex(data, function (err) {
       if (err) {
-        if (err.code === 11000 || err.code === 11001) {
-          logger.error('resume duplication of ', data.name);
-        } else {
-          logger.error('save resume to db failed ', err.stack);
-        }
+        logger.error('save resume to db failed ', err.stack);
       }
 
       Mail.findById(job.data.mailId).exec(function (err, mail) {

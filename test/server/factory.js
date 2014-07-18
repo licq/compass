@@ -68,7 +68,7 @@ Factory.define('email', Email, {
   },
   account: 'emailaccountforverifypass',
   password: 'password',
-  server: 'server.com',
+  server: 'lingpin.cc',
   company: Factory.assoc('company', 'id')
 });
 
