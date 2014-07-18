@@ -87,7 +87,7 @@ describe('mvUserNewCtrl', function () {
         });
       });
 
-      describe('onChecked', function () {
+      describe('onSelectPosition', function () {
         it('should set selectAll to true when one position is not checked', function () {
           $scope.selectAll = true;
           $scope.onSelectAll();
