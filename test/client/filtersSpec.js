@@ -286,8 +286,13 @@ describe('filters', function () {
         {id: 444, name: '22'}
       ])).to.equal('11, 22');
     }));
-    it('should return different when length is 0', inject(function (displayNamesFilter) {
-      expect(displayNamesFilter([])).to.equal('该职位没有招聘负责人');
+
+    it('should return 该职位没有招聘负责人 when length is 0 when type is position', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter([], 'position')).to.equal('该职位没有招聘负责人');
+    }));
+
+    it('should return 该用户没有负责招聘岗位 when length is 0', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter([], 'user')).to.equal('该用户没有负责招聘岗位');
     }));
   });
 });

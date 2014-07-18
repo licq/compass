@@ -1,6 +1,11 @@
 angular.module('compass')
-  .controller('mvUserListCtrl', function ($scope, mvUser, $location) {
-    $scope.users = mvUser.query();
+  .controller('mvUserListCtrl', function ($scope, mvApplicationSetting, mvUser, $location) {
+    mvUser.query(function (users) {
+      $scope.users = users;
+      mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
+        $scope.settings = settings;
+      });
+    });
 
     $scope.remove = function (user) {
       if (confirm('真的要删除' + user.name + '吗？')) {

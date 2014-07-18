@@ -33,7 +33,7 @@ describe('mvPositionNewCtrl', function () {
         $scope.position.department = 'sales';
         postData = {
           name: 'cio',
-          department:'sales',
+          department: 'sales',
           owners: ['4466', '5577'],
           evaluationCriterions: [
             {
@@ -127,7 +127,7 @@ describe('mvPositionNewCtrl', function () {
         });
       });
 
-      describe('onChecked', function () {
+      describe('onSelectUser', function () {
         it('should set selectAll to true when one user is not checked', function () {
           $scope.selectAll = true;
           $scope.onSelectAll();

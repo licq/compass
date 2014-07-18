@@ -13,7 +13,7 @@ describe('mvUserListCtrl', function () {
         {email: 'compass2@best.com'}
       ]];
     });
-
+    $httpBackend.expectGET('/api/applicationSettings?fields=positionRightControlled').respond({positionRightControlled:false});
     $scope = $rootScope.$new();
     mvUserListCtrl = $controller('mvUserListCtrl', {
       $scope: $scope
@@ -22,7 +22,7 @@ describe('mvUserListCtrl', function () {
 
   it('should get the user list', function () {
     $httpBackend.flush();
-
+    expect($scope.settings.positionRightControlled).to.be.false;
     expect($scope.users).to.have.length(2);
   });
 });

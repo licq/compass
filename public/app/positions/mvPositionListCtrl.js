@@ -14,12 +14,7 @@ angular.module('compass')
     $scope.remove = function (position) {
       if (confirm('真的要删除' + position.name + '吗？')) {
         position.$delete(function () {
-          _.forEach($scope.positions, function (r, i) {
-            if (r._id === position._id) {
-              $scope.positions.splice(i, 1);
-              return false;
-            }
-          });
+          $scope.positions.splice(_.findIndex($scope.positions, {'_id': position._id}), 1);
           mvNotifier.notify('删除职位成功');
         }, function (err) {
           $scope.err = err.data;

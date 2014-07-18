@@ -17,14 +17,16 @@
             <th field-name="email" display-name="邮箱" enable-filtering="false" enable-sorting="false"></th>
             <th field-name="title" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
             <th field-name="role.name" display-name="角色" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="createdAt" display-name="创建时间" enable-filtering="false"
-                display-format="longDate"></th>
+            <th enable-filtering="true" ng-show="settings.positionRightControlled">负责职位</th>
             <th field-name="deleted" display-name="状态" enable-filtering="false"></th>
             <th>操作</th>
           </tr>
           </thead>
           <tbody>
           <tr>
+            <td ng-show="settings.positionRightControlled">
+              <span  ng-class="{'text-danger': !gridItem.positions.length}">{{gridItem.positions | displayNames:'user'}}</span>
+            </td>
             <td field-name="deleted">
               <status-span value="gridItem.deleted">{{gridItem.deleted | deletedState }}</status-span>
             </td>

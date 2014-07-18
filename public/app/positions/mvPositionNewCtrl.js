@@ -8,7 +8,6 @@ angular.module('compass')
         user.checked = false;
       });
       $scope.position = new mvPosition();
-      $scope.position.owners = [];
       mvEvaluationCriterion.get({}, function (res) {
         if (res && res.items) {
           $scope.position.evaluationCriterions = res.items;
@@ -26,6 +25,7 @@ angular.module('compass')
 
     $scope.adding = false;
     $scope.create = function () {
+      $scope.position.owners = [];
       angular.forEach($scope.users, function (user) {
         if (user.checked)
           $scope.position.owners.push(user._id);
