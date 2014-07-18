@@ -279,9 +279,15 @@ describe('filters', function () {
     }));
   });
 
-  describe('resumeStatusFilter', function () {
+  describe('displayNamesFilter', function () {
     it('should return correctly', inject(function (displayNamesFilter) {
-      expect(displayNamesFilter([{id:333, name:'11'}, {id:444, name:'22'}])).to.equal('11, 22');
+      expect(displayNamesFilter([
+        {id: 333, name: '11'},
+        {id: 444, name: '22'}
+      ])).to.equal('11, 22');
+    }));
+    it('should return different when length is 0', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter([])).to.equal('该职位没有招聘负责人');
     }));
   });
 });

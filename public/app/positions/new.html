@@ -30,22 +30,23 @@
                        name="department"/>
 
               </div>
-
-              <div class="form-group" ng-if="positionRightControlled">
-                <label>选择招聘负责人</label>
-                <div>
-                  <select ui-select2 class="form-control" name="owners"
-                          ng-model="position.owners"
-                          ng-required="true" data-placeholder="请选择招聘负责人，可以多选。可在输入框中输入名称进行搜索。" multiple="true">
-                    <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}
-                    </option>
-                  </select>
-                  <p class="text-danger"
-                     ng-show="positionForm.owners.$invalid && !positionForm.owners.$pristine">
-                    请输入招聘负责人</p>
-                </div>
+              <div ng-show="positionRightControlled">
+                <label>选择招聘负责人(所有未选择的用户(除应聘者的面试官外)将不能查看该职位应聘情况)</label>
+                <ul class="list-inline">
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="selectAll" ng-change="onSelectAll()">
+                      全选
+                    </label>
+                  </li>
+                  <li ng-repeat="user in users">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="user.checked" ng-change="onSelectUser(user)">
+                      {{user.name}}
+                    </label>
+                  </li>
+                </ul>
               </div>
-
               <div class=" form-group panel panel-default">
                 <div class="panel-heading">
                   <strong>面试评价</strong>
@@ -82,8 +83,10 @@
                     <label>系数</label>
                     <input type="number" name="ecRate" class="form-control" ng-pattern="/\d+/"
                            ng-model="item.rate" required=""/>
-                    <button class="btn btn-primary btn-sm" ng-disabled="positionForm.ecRate.$invalid || positionForm.ecName.$invalid "
-                            ng-click="save()">保存</button>
+                    <button class="btn btn-primary btn-sm"
+                            ng-disabled="positionForm.ecRate.$invalid || positionForm.ecName.$invalid "
+                            ng-click="save()">保存
+                    </button>
                     <button class="btn btn-default btn-sm" ng-click="cancel()">取消</button>
                   </div>
                 </div>

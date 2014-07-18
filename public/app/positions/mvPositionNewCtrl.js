@@ -1,9 +1,14 @@
 angular.module('compass')
   .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier) {
     $scope.dataReady = false;
-    mvUser.query(function (users) {
+    mvUser.query({fields: 'name'}, function (users) {
       $scope.users = users;
+      $scope.selectAll = false;
+      angular.forEach($scope.users, function (user) {
+        user.checked = false;
+      });
       $scope.position = new mvPosition();
+      $scope.position.owners = [];
       mvEvaluationCriterion.get({}, function (res) {
         if (res && res.items) {
           $scope.position.evaluationCriterions = res.items;
@@ -21,6 +26,10 @@ angular.module('compass')
 
     $scope.adding = false;
     $scope.create = function () {
+      angular.forEach($scope.users, function (user) {
+        if (user.checked)
+          $scope.position.owners.push(user._id);
+      });
       $scope.position.$save(function () {
         $location.path('/settings/positions');
         mvNotifier.notify('添加职位成功');
@@ -36,6 +45,16 @@ angular.module('compass')
           $scope.position.evaluationCriterions.splice(index, 1);
         }
       });
+    };
+
+    $scope.onSelectAll = function () {
+      angular.forEach($scope.users, function (user) {
+        user.checked = $scope.selectAll;
+      });
+    };
+
+    $scope.onSelectUser = function () {
+      $scope.selectAll = _.every($scope.users, 'checked');
     };
 
     $scope.add = function () {

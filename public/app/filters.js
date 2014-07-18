@@ -285,6 +285,9 @@ angular.module('compass')
   })
   .filter('displayNames', function () {
     return function (array) {
-      return _.map(array, 'name').join(', ');
+      if (array.length)
+        return _.map(array, 'name').join(', ');
+      else
+        return '该职位没有招聘负责人';
     };
   });

@@ -43,12 +43,7 @@ angular.module('compass')
     };
 
     $scope.onSubmenuCheckChanged = function (menu) {
-      if (_.some(menu.submenus, 'enabled')) {
-        menu.enabled = true;
-      }
-      else if (_.every(menu.submenus, {'enabled': false})) {
-        menu.enabled = false;
-      }
+      menu.enabled = _.some(menu.submenus, 'enabled');
     };
 
     $scope.toggle = function(scope) {

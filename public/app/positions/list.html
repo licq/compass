@@ -21,14 +21,17 @@
           <thead>
           <tr>
             <th field-name="name" class="col-md-2" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="owners" display-name="招聘负责人" enable-filtering="false" enable-sorting="false"
-                display-format="displayNames"></th>
-            <th field-name="department" display-name="部门" enable-filtering="false" enable-sorting="false"></th>
+            <th display-name="招聘负责人" enable-filtering="false" enable-sorting="false">招聘负责人</th>
+            <th class="col-md-2" field-name="department" display-name="部门" enable-filtering="false" enable-sorting="false"></th>
             <th class="col-md-1">操作</th>
           </tr>
           </thead>
           <tbody>
           <tr>
+            <td>
+              <p ng-show="settings.positionRightControlled" ng-class="{'text-danger': !gridItem.owners.length}">{{gridItem.owners | displayNames}}</p>
+              <p ng-show="!settings.positionRightControlled">所有用户</p>
+            </td>
             <td>
               <edit-button action="edit(gridItem)"></edit-button>
               <delete-button action="remove(gridItem)"></delete-button>
