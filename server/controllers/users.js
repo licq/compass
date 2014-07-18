@@ -25,7 +25,7 @@ exports.create = function (req, res) {
   var user = new User(req.body);
   user.company = req.user.company;
   user.createdBy = req.user._id;
-  user.save(function (err) {
+  User.createUser(user, function (err) {
     if (err) {
       if (err.code === 11000 || err.code === 11001) {
         return res.json(400, {message: '邮箱地址已经存在'});
@@ -38,8 +38,7 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res, next) {
-  req.loadedUser.deleted = true;
-  req.loadedUser.save(function (err) {
+  User.deleteUser(req.user, function (err) {
     if (err) return next(err);
     res.end();
   });
@@ -51,7 +50,7 @@ exports.get = function (req, res) {
 
 exports.update = function (req, res, next) {
   req.loadedUser.merge(req.body);
-  req.loadedUser.save(function (err) {
+  User.updateUser(req.loadedUser, function (err) {
     if (err) return next(err);
     res.end();
   });
@@ -60,7 +59,7 @@ exports.update = function (req, res, next) {
 exports.load = function (req, res, next) {
   User.findOne({_id: req.params.id, company: req.user.company})
     .populate('role', 'name permissions')
-    .select('name email title role positions')
+    .select('name email company title role positions')
     .exec(function (err, loadedUser) {
       if (err) return next(err);
       if (!loadedUser) return res.send(404, {message: 'not found'});
