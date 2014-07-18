@@ -102,11 +102,8 @@ exports.start = function (config) {
   jobs.process('parse resume', 10, handleParseResume);
 
   jobs.promote(60000, 200);
+
+  return jobs;
 };
 
-exports.stop = function () {
-  jobs.shutdown(function (err) {
-    logger.info('Kue is shut down.', err || '');
-    process.exit(0);
-  }, 5000);
-};
+

@@ -22,13 +22,18 @@ require('./server/tasks/mailer').init(config);
 
 var workers = require('./server/tasks/workers');
 
-workers.start(config);
+var jobs = workers.start(config);
 
-app.listen(config.port);
-console.log('Compass Listening on port ' + config.port + '...');
+process.on('SIGINT', function () {
+  console.log('server is shutting down');
+  jobs.shutdown(function (err) {
+    console.log('Kue is shut down.', err || '');
+    process.exit(0);
+  }, 5000);
+});
 
-process.once('SIGTERM', function () {
-  workers.stop();
+app.listen(config.port, function () {
+  console.log('Compass Listening on port ' + config.port + '...');
 });
 
 module.exports = app;
