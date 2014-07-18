@@ -1,0 +1,49 @@
+<div class="page">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>应聘设置</strong>
+    </div>
+    <div class="panel-body">
+      <div class="col-md-12">
+        <form name="applicationSettingForm" novalidate="" class="form-horizontal form-validation">
+          <div class="well text-danger" ng-show="err">
+            {{err.message | state}}
+          </div>
+          <fieldset>
+            <div class="form-group">
+              <label class="control-label col-md-2">过滤相同的应聘者简历 </label>
+
+              <div class="col-md-3">
+                <select class="form-control" ng-model="applicationSetting.filterSamePerson"
+                        ng-options="option.value as option.label for option in applicationFilterOptions">
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-5">
+                <input type="checkbox" class="icheckbox_square-green"
+                       ng-model="applicationSetting.rejectLetterToApplier">
+                当拒绝应聘者时，自动发送邮件给应聘者
+              </label>
+
+
+              <div text-angular name="rejectLetterToApplierTemplate"
+                   ng-model="applicationSetting.rejectLetterToApplierTemplate"
+                   ng-required="applicationSetting.rejectLetterToApplier"
+                   ta-toolbar="[['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'], ['bold', 'italics', 'underline', 'ul', 'ol', 'redo', 'undo', 'clear'], ['justifyLeft','justifyCenter','justifyRight'], ['html', 'insertImage', 'insertLink', 'unlink'],['insertName', 'applyPosition']]">
+              </div>
+
+              <p class="text-danger"
+                 ng-show="applicationSettingForm.rejectLetterToApplierTemplate.$error.required
+                       && !applicationSettingForm.rejectLetterToApplierTemplate.$pristine">
+                请输入邮件内容模板</p>
+            </div>
+            <button class="btn btn-primary" ng-click="save()"
+                    ng-disabled="applicationSettingForm.$invalid">保存
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

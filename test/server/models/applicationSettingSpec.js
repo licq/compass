@@ -20,6 +20,19 @@ describe('ApplicationSetting', function () {
       });
     });
 
+    it('should have the right defaults', function (done) {
+      Factory.create('company', function (company) {
+        new ApplicationSetting({company: company}).save(function(err,as){
+          expect(err).to.not.exist;
+          expect(as.positionRightControlled).to.be.false;
+          expect(as.filterSamePerson).to.equal(0);
+          expect(as.rejectLetterToApplier).to.be.false;
+          expect(as.rejectLetterToApplierTemplate).to.exist;
+          done();
+        });
+      });
+    });
+
     it('should show error one applicationSetting for the same company exist', function (done) {
       Factory.create('applicationSetting', function (applicationSetting) {
         Factory.build('applicationSetting', {company: applicationSetting.company}, function (newApplicationSetting) {

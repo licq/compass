@@ -8,6 +8,7 @@ module.exports = function (config) {
   mongoose.plugin(merge);
   mongoose.connect(config.db);
   var db = mongoose.connection;
+//  mongoose.set('debug', true);
 
   db.on('error', console.error.bind(console, 'connection error...'));
 

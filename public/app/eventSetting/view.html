@@ -10,7 +10,7 @@
         </div>
         <fieldset>
           <div class="form-group">
-            <lable class="control-label col-md-1">默认时长</lable>
+            <lable class="control-label col-md-1">默认时长(分钟)</lable>
             <div class="col-md-2">
               <input type="text" class="form-control" ng-model="eventSetting.duration" name="duration"
                      placeholder="请输入时长(分钟)" ng-pattern="/\d+/" required=""/>
@@ -34,7 +34,7 @@
                     当创建面试邀请时，自动发送邮件提醒给应聘者
                   </label>
 
-                  <div text-angular ng-model="eventSetting.newTemplateToApplier"></div>
+                  <div text-angular ng-model="eventSetting.newTemplateToApplier" name="newTemplateToApplier" ng-required="eventSetting.newToApplier"></div>
                   <p class="text-danger"
                      ng-show="eventSettingForm.newTemplateToApplier.$error.required
                        && !eventSettingForm.newTemplateToApplier.$pristine">
@@ -47,7 +47,7 @@
                     当创建面试邀请时，自动发送邮件提醒给面试官
                   </label>
 
-                  <div text-angular ng-model="eventSetting.newTemplateToInterviewer"></div>
+                  <div text-angular ng-model="eventSetting.newTemplateToInterviewer" ng-required="eventSetting.newToInterviewer" name="newTemplateToInterviewer"></div>
                   <p class="text-danger"
                      ng-show="eventSettingForm.newTemplateToInterviewer.$error.required && !eventSettingForm.newTemplateToInterviewer.$pristine">
                     请输入邮件内容模板</p>
@@ -61,7 +61,7 @@
                     当修改面试邀请时，自动发送邮件提醒给应聘者
                   </label>
 
-                  <div text-angular ng-model="eventSetting.editTemplateToApplier"></div>
+                  <div text-angular ng-model="eventSetting.editTemplateToApplier" name="editTemplateToApplier" ng-required="eventSetting.editToApplier"></div>
                   <p class="text-danger"
                      ng-show="eventSettingForm.editTemplateToApplier.$error.required
                        && !eventSettingForm.editTemplateToApplier.$pristine">
@@ -74,7 +74,7 @@
                     当修改面试邀请时，自动发送邮件提醒给面试官
                   </label>
 
-                  <div text-angular ng-model="eventSetting.editTemplateToInterviewer"></div>
+                  <div text-angular ng-model="eventSetting.editTemplateToInterviewer" name="editTemplateToInterviewer" ng-required="eventSetting.editToInterviewer"></div>
                   <p class="text-danger"
                      ng-show="eventSettingForm.editTemplateToInterviewer.$error.required && !eventSettingForm.editTemplateToInterviewer.$pristine">
                     请输入邮件内容模板</p>
@@ -88,7 +88,7 @@
                     当取消面试邀请时，自动发送邮件提醒给应聘者
                   </label>
 
-                  <div text-angular ng-model="eventSetting.deleteTemplateToApplier"></div>
+                  <div text-angular ng-model="eventSetting.deleteTemplateToApplier" name="deleteTemplateToApplier" ng-required="eventSetting.deleteToApplier"></div>
                   <p class="text-danger"
                      ng-show="eventSettingForm.deleteTemplateToApplier.$error.required
                        && !eventSettingForm.deleteTemplateToApplier.$pristine">
@@ -101,7 +101,7 @@
                     当取消面试邀请时，自动发送邮件提醒给面试官
                   </label>
 
-                  <div text-angular ng-model="eventSetting.deleteTemplateToInterviewer"></div>
+                  <div text-angular ng-model="eventSetting.deleteTemplateToInterviewer" name="deleteTemplateToInterviewer" ng-required="eventSetting.deleteToInterviewer"></div>
                   <p class="text-danger"
                      ng-show="eventSettingForm.deleteTemplateToInterviewer.$error.required && !eventSettingForm.deleteTemplateToInterviewer.$pristine">
                     请输入邮件内容模板</p>

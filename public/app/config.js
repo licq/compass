@@ -136,6 +136,12 @@ angular.module('compass')
         authenticate: true,
         permissions: 'setEventSetting'
       })
+      .when('/settings/applicationSetting', {
+        templateUrl: '/app/applicationSetting/view.html',
+        controller: 'mvApplicationSettingCtrl',
+        authenticate: true,
+        permissions: 'setApplicationSetting'
+      })
       .when('/settings/evaluationCriterions', {
         templateUrl: '/app/evaluationCriterions/edit.html',
         controller: 'mvEvaluationCriterionEditCtrl',
@@ -322,7 +328,8 @@ angular.module('compass')
         {name: 'setUsers', cnName: '用户', enabled: false},
         {name: 'setRoles', cnName: '角色', enabled: false},
         {name: 'setPositions', cnName: '职位', enabled: false},
-        {name: 'setEvaluationCriterions', cnName: '面试评价设置', enabled: false},
+        {name: 'setEvaluationCriterions', cnName: '默认面试评价', enabled: false},
+        {name: 'setApplicationSetting', cnName: '应聘设置', enabled: false},
         {name: 'setEventSetting', cnName: '面试设置', enabled: false}
       ]}
 //    { name: 'systemSettings', cnName: '系统设置', enabled: false,
@@ -384,6 +391,15 @@ angular.module('compass')
       }]);
   })
   .run(function ($rootScope, mvMoment, $filter) {
+    $rootScope.applicationFilterOptions = [
+      {label: '不过滤', value: 0},
+      {label: '3个月内不允许重复投递', value: 3},
+      {label: '半年内不允许重复投递', value: 6},
+      {label: '一年内不允许重复投递', value: 12},
+      {label: '两年内不允许重复投递', value: 24},
+      {label: '永远不允许再投递', value: 999},
+    ];
+
     $rootScope.chartFunction = {
       convert: function (type, data) {
         var map = {

@@ -19,7 +19,10 @@ exports.sendSignupEmail = function sendSignupEmail(name, to, code) {
 };
 
 exports.createSendEmailJob = function (emails) {
-  emails.forEach(function (email) {
+  if (!Array.isArray(emails)) {
+    emails = [emails];
+  }
+  _.forEach(emails, function (email) {
     email.title = 'send Event Alert Email to ' + email.to;
     jobs.create('send email', email).save();
   });
@@ -35,7 +38,7 @@ exports.sendResetPasswordEmail = function sendResetPasswordEmail(name, to, token
 };
 
 exports.addFetchEmailJob = function addFetchEmailJob(email, minutes, done) {
-  if(!done && typeof minutes === 'function'){
+  if (!done && typeof minutes === 'function') {
     done = minutes;
     minutes = 0;
   }
@@ -43,7 +46,7 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, minutes, done) {
     id: email.id,
     title: 'fetch email from ' + email.address
   });
-  if(minutes) job.delay(1000 * 60 * minutes);
+  if (minutes) job.delay(1000 * 60 * minutes);
   job.save(function (err) {
     if (err) logger.error('job create failed because of ', err);
     done && done(err);

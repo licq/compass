@@ -1,13 +1,15 @@
 var
-  Resume = require('mongoose').model('Resume'),
-  User = require('mongoose').model('User'),
+  mongoose = require('mongoose'),
+  Resume = mongoose.model('Resume'),
+  User = mongoose.model('User'),
   helper = require('../testHelper'),
   expect = require('chai').expect,
+  moment = require('moment'),
   Factory = require('../factory');
 
 describe('Resume', function () {
   beforeEach(function (done) {
-    helper.clearCollections(Resume, 'Company', function () {
+    helper.clearCollections(Resume, 'Company', 'ApplicationSetting', function () {
       Resume.recreateIndex(function () {
         setTimeout(done, 500);
       });
@@ -36,7 +38,10 @@ describe('Resume', function () {
             degree: 'associate'
           }
         ],
-        birthday: birthday
+        birthday: birthday,
+        name: 'zhangsan',
+        email: 'zhangsan@zhangsan.com',
+        mobile: '13838383838'
       }, function (newResume) {
         mailId = newResume.mail;
         newResume.saveAndIndexSync(function (err, createdResume) {
@@ -66,6 +71,91 @@ describe('Resume', function () {
         expect(resumeInDb.id).to.equal(resume.id);
         expect(resumeInDb.applyPosition).to.equal('cio');
         done();
+      });
+    });
+
+    describe('remove resumes from same person', function () {
+      var resumeData;
+      beforeEach(function (done) {
+        var birthday = new Date();
+        birthday.setFullYear(birthday.getFullYear() - 20);
+        Factory.create('mail', {company: company}, function (mail) {
+          resumeData = {
+            applyPosition: 'cio',
+            educationHistory: [
+              {
+                degree: 'associate'
+              }
+            ],
+            birthday: birthday,
+            mail: mail._id,
+            company: company,
+            name: resume.name,
+            email: resume.email,
+            mobile: resume.mobile
+          };
+          done();
+        });
+      });
+
+      it('should set the new resume status to archive if there is a resume from the same person exist and the company does not allow duplication', function (done) {
+        mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 999}, function (err) {
+          expect(err).to.not.exist;
+          Resume.createOrUpdateAndIndex(resumeData, function (err, newResume) {
+            expect(err).to.not.exist;
+            expect(newResume.id).to.not.equal(resume.id);
+            expect(newResume.status).to.equal('archived');
+            done();
+          });
+        });
+      });
+
+      it('should set the new resume status to archive if there is a resume from the same person exist within 3 months and the company does not allow duplication in 3 months', function (done) {
+        resume.createdAt = moment().add('months', -2).toDate();
+        resume.save(function (err) {
+          expect(err).to.not.exist;
+          mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 3}, function (err) {
+            expect(err).to.not.exist;
+            Resume.createOrUpdateAndIndex(resumeData, function (err, newResume) {
+              expect(err).to.not.exist;
+              expect(newResume.id).to.not.equal(resume.id);
+              expect(newResume.status).to.equal('archived');
+              done();
+            });
+          });
+        });
+      });
+
+      it('should set the new resume status to new if there is a resume from the same person exist before 3 months and the company does not allow duplication in 3 months', function (done) {
+        resume.createdAt = moment().add('months', -4).toDate();
+        resume.save(function (err) {
+          expect(err).to.not.exist;
+          mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 3}, function (err) {
+            expect(err).to.not.exist;
+            Resume.createOrUpdateAndIndex(resumeData, function (err, newResume) {
+              expect(err).to.not.exist;
+              expect(newResume.id).to.not.equal(resume.id);
+              expect(newResume.status).to.equal('new');
+              done();
+            });
+          });
+        });
+      });
+
+      it('should set the new resume status to new if the company does allow duplication', function (done) {
+        resume.createdAt = moment().add('months', -1).toDate();
+        resume.save(function (err) {
+          expect(err).to.not.exist;
+          mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 0}, function (err) {
+            expect(err).to.not.exist;
+            Resume.createOrUpdateAndIndex(resumeData, function (err, newResume) {
+              expect(err).to.not.exist;
+              expect(newResume.id).to.not.equal(resume.id);
+              expect(newResume.status).to.equal('new');
+              done();
+            });
+          });
+        });
       });
     });
 
@@ -169,7 +259,6 @@ describe('Resume', function () {
           });
         });
       });
-
     });
 
     describe('using age filter', function () {
@@ -188,5 +277,4 @@ describe('Resume', function () {
       });
     });
   });
-})
-;
+}) ;
