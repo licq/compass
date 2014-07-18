@@ -21,7 +21,7 @@
           <thead>
           <tr>
             <th field-name="name" class="col-md-2" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
-            <th display-name="招聘负责人" enable-filtering="false" enable-sorting="false">招聘负责人</th>
+            <th enable-filtering="false" enable-sorting="false">招聘负责人</th>
             <th class="col-md-2" field-name="department" display-name="部门" enable-filtering="false" enable-sorting="false"></th>
             <th class="col-md-1">操作</th>
           </tr>
@@ -29,8 +29,8 @@
           <tbody>
           <tr>
             <td>
-              <p ng-show="settings.positionRightControlled" ng-class="{'text-danger': !gridItem.owners.length}">{{gridItem.owners | displayNames}}</p>
-              <p ng-show="!settings.positionRightControlled">所有用户</p>
+              <span ng-show="settings.positionRightControlled" ng-class="{'text-danger': !gridItem.owners.length}">{{gridItem.owners | displayNames:'position'}}</span>
+              <span ng-show="!settings.positionRightControlled">所有人</span>
             </td>
             <td>
               <edit-button action="edit(gridItem)"></edit-button>

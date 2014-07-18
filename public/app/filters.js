@@ -284,10 +284,12 @@ angular.module('compass')
     };
   })
   .filter('displayNames', function () {
-    return function (array) {
+    return function (array, typeName) {
       if (array.length)
         return _.map(array, 'name').join(', ');
-      else
+      else if(typeName === 'position')
         return '该职位没有招聘负责人';
+      else if (typeName === 'user')
+        return '该用户没有负责招聘岗位';
     };
   });

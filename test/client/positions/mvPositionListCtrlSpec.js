@@ -42,11 +42,10 @@ describe('mvPositionListCtrl', function () {
             }
           ]}
       ]
-
       ];
     });
 
-    $httpBackend.expectGET('/api/applicationSettings?fields=positionRightControlled').respond({positionRightControlled:false});
+    $httpBackend.expectGET('/api/applicationSettings?fields=positionRightControlled').respond({positionRightControlled: false});
 
     $scope = $rootScope.$new();
     mvPositionListCtrl = $controller('mvPositionListCtrl', {
@@ -55,7 +54,7 @@ describe('mvPositionListCtrl', function () {
     $httpBackend.flush();
   }));
   it('should post', function () {
-    $httpBackend.expectPOST('/api/applicationSettings', {positionRightControlled:true}).respond(200);
+    $httpBackend.expectPOST('/api/applicationSettings', {positionRightControlled: true}).respond(200);
     var notifySpy = sinon.spy($scope, 'checked');
     $scope.settings.positionRightControlled = true;
     $scope.checked();
