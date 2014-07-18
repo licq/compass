@@ -9,12 +9,13 @@ var app = require('../../../server'),
   Role = mongoose.model('Role'),
   User = mongoose.model('User'),
   EventSetting = mongoose.model('EventSetting'),
+  ApplicationSetting = mongoose.model('ApplicationSetting'),
   Company = mongoose.model('Company');
 
 
 describe('singups', function () {
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Role', 'Signup', 'EventSetting', done);
+    helper.clearCollections('User', 'Company', 'Role', 'Signup', 'EventSetting', 'ApplicationSetting', done);
   });
 
   describe('POST /api/signups', function () {
@@ -48,7 +49,11 @@ describe('singups', function () {
                   EventSetting.findOne({company: company._id}, function (err, es) {
                     expect(err).to.not.exist;
                     expect(es).to.exist;
-                    done();
+                    ApplicationSetting.findOne({company: company._id}, function (err, applicationSetting) {
+                      expect(err).to.not.exist;
+                      expect(applicationSetting).to.exist;
+                      done();
+                    });
                   });
                 });
               });

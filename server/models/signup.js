@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
   Role = mongoose.model('Role'),
   User = mongoose.model('User'),
   EventSetting = mongoose.model('EventSetting'),
+  ApplicationSetting = mongoose.model('ApplicationSetting'),
   validator = require('validator'),
   uuid = require('node-uuid'),
   timestamps = require('mongoose-timestamp'),
@@ -78,7 +79,10 @@ signupSchema.methods.activate = function (done) {
           if (err) return done(err);
           EventSetting.create({company: company._id}, function (err) {
             if (err) return done(err);
-            done(null, company, user);
+            ApplicationSetting.create({company: company._id}, function (err) {
+              if (err) return done(err);
+              done(null, company, user);
+            });
           });
         });
       });

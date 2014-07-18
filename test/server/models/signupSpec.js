@@ -1,7 +1,8 @@
 'use strict';
 
 var
-  Signup = require('mongoose').model('Signup'),
+  mongoose = require('mongoose'),
+  Signup = mongoose.model('Signup'),
   expect = require('chai').expect,
   Factory = require('../factory'),
   helper = require('../testHelper');
@@ -71,13 +72,21 @@ describe('Signup', function () {
   });
 
   describe('#activate', function () {
-    it('should create new company and admin use when activate', function (done) {
+    it('should create new company and admin user and eventSetting and applicationSetting when activate', function (done) {
       Factory.create('signup', function (signup) {
         signup.activate(function (err, company, user) {
           expect(err).to.not.exist;
           expect(company).to.exist;
           expect(user).to.exist;
-          done();
+          mongoose.model('EventSetting').findOne({company: company._id}, function (err, eventSetting) {
+            expect(err).to.not.exist;
+            expect(eventSetting).to.exist;
+            mongoose.model('ApplicationSetting').findOne({company: company._id}, function (err, applicationSetting) {
+              expect(err).to.not.exist;
+              expect(applicationSetting).to.exist;
+              done();
+            });
+          });
         });
       });
     });
