@@ -19,6 +19,7 @@ angular.module('compass')
           $scope.resume = result.hits.hits[0];
           $scope.title = $scope.resume.name;
           $scope.mailHtml = '/api/mails/' + $scope.resume.mail + '/html';
+          $scope.clicked = false;
         } else {
           $location.path('/applications/' + $routeParams.status);
         }

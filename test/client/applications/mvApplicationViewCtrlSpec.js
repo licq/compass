@@ -78,7 +78,7 @@ describe('mvApplicationViewCtrl', function () {
           $scope.pursue({_id: '7788'});
 
           $httpBackend.flush();
-          expect($scope.clicked).to.be.true;
+          expect($scope.clicked).to.be.false;
           expect($scope.resume).to.have.property('_id', '8899');
           expect(spy).to.have.been.called;
         }));
@@ -100,7 +100,7 @@ describe('mvApplicationViewCtrl', function () {
           $scope.undetermine({_id: '7788'});
 
           $httpBackend.flush();
-          expect($scope.clicked).to.be.true;
+          expect($scope.clicked).to.be.false;
           expect($scope.resume).to.have.property('_id', '8899');
           expect(spy).to.have.been.called;
         }));
@@ -122,7 +122,7 @@ describe('mvApplicationViewCtrl', function () {
           $scope.archive({_id: '7788'});
 
           $httpBackend.flush();
-          expect($scope.clicked).to.be.true;
+          expect($scope.clicked).to.be.false;
           expect($scope.resume).to.have.property('_id', '8899');
           expect(spy).to.have.been.called;
         }));
@@ -161,7 +161,7 @@ describe('mvApplicationViewCtrl', function () {
           $scope.newEvent();
           fakeModal.close('aabb');
           $httpBackend.flush();
-          expect($scope.clicked).to.be.true;
+          expect($scope.clicked).to.be.false;
         });
       });
 
