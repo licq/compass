@@ -334,7 +334,7 @@ function sendDeleteEventEmail(interview, event, cb) {
     } else {
       jobs.createSendEmailJob(emails);
     }
-    cb(null, interview);
+    cb();
   });
 }
 interviewSchema.statics.deleteEvent = function (id, cb) {
@@ -343,10 +343,10 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
     if (!interview) return cb('interview not found for event with id ' + id);
     var event = interview.events.id(id);
     event.remove();
-    if (interview.events.length === 0) {
-      interview.remove(function (err) {
-        if (err) return cb(err);
-        sendDeleteEventEmail(interview, event, function (err, interview) {
+    sendDeleteEventEmail(interview, event, function () {
+      if (interview.events.length === 0) {
+        interview.remove(function (err) {
+          if (err) return cb(err);
           mongoose.model('Resume').findOne({_id: interview.application}).exec(function (err, resume) {
             if (err) return cb(err);
             if (!resume) return cb();
@@ -357,13 +357,12 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
             });
           });
         });
-      });
-    } else {
-      interview.save(function (err) {
-        if (err) return cb(err);
-        sendDeleteEventEmail(interview, event, cb);
-      });
-    }
+      } else {
+        interview.save(function (err) {
+          cb(err);
+        });
+      }
+    });
   });
 };
 
