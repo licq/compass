@@ -4,11 +4,11 @@ describe('mvOnboardListCtrl', function () {
     $scope,
     oneInterview;
 
-  beforeEach(inject(function ($rootScope, _$httpBackend_, $controller, mvMoment) {
+  beforeEach(inject(function ($rootScope, _$httpBackend_, $controller) {
     $httpBackend = _$httpBackend_;
     $scope = $rootScope.$new();
-    var today = mvMoment().startOf('day').toISOString();
-    var oneMonthLater = mvMoment().add('months', 1).endOf('day').toISOString();
+    var today = moment().startOf('day').toISOString();
+    var oneMonthLater = moment().add('months', 1).endOf('day').toISOString();
     oneInterview = {
       _id: '7788',
       name: 'zhangsan',
@@ -32,9 +32,9 @@ describe('mvOnboardListCtrl', function () {
     expect($scope.applierRejectReasons).to.have.length(2);
   });
 
-  it('should use the query condition to search onboards', inject(function (mvMoment) {
-    var startDate = mvMoment().add('months', -1).startOf('month');
-    var endDate = mvMoment().add('months', -1).endOf('month');
+  it('should use the query condition to search onboards', inject(function () {
+    var startDate = moment().add('months', -1).startOf('month');
+    var endDate = moment().add('months', -1).endOf('month');
 
     $httpBackend.expectGET('/api/interviews?endDate=' + endDate.toISOString() +
       '&name=lisi&startDate=' + startDate.toISOString() + '&status=offer+accepted').respond(200);

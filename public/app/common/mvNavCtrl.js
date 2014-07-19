@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvNavCtrl', function ($scope, $interval, $timeout, mvNav, mvIdentity, mvPermission, mvMoment, mvReview, mvAuth, mvEvent, mvInterview, $location) {
+  .controller('mvNavCtrl', function ($scope, $interval, $timeout, mvNav, mvIdentity, mvPermission, mvReview, mvAuth, mvEvent, mvInterview, $location) {
     $scope.identity = mvIdentity;
     $scope.counts = {};
 
@@ -25,8 +25,8 @@ angular.module('compass')
       mvEvent.query(
         {
           user: mvIdentity.currentUser._id,
-          startTime: mvMoment().toISOString(),
-          endTime: mvMoment().endOf('day').toISOString(),
+          startTime: moment().toISOString(),
+          endTime: moment().endOf('day').toISOString(),
           pageSize: 3
         }, function (events) {
           $scope.eventsForHeader = events;
@@ -44,8 +44,8 @@ angular.module('compass')
     $scope.retrieveOnboards = function () {
       mvInterview.query({
         status: 'offer accepted',
-        startDate: mvMoment().startOf('day').toISOString(),
-        endDate: mvMoment().endOf('day').toISOString(),
+        startDate: moment().startOf('day').toISOString(),
+        endDate: moment().endOf('day').toISOString(),
         pageSize: 3
       }, function (onboards) {
         $scope.onboardsForHeader = onboards;
@@ -97,8 +97,8 @@ angular.module('compass')
 
     var refreshUnreviewed = null;
     $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime, countOfEvents) {
-      var today = mvMoment().startOf('day').toDate(),
-        endOfToday = mvMoment().endOf('day').toDate();
+      var today = moment().startOf('day').toDate(),
+        endOfToday = moment().endOf('day').toDate();
 
       $timeout.cancel(refreshUnreviewed);
       refreshUnreviewed = $timeout(function () {

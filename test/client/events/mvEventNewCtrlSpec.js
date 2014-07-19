@@ -62,9 +62,9 @@ describe('mvEventNewCtrl', function () {
     it('should set duration by default value', function () {
       expect($scope.event.duration).to.equal(90);
     });
-    it('should set today to today midnight', inject(function (mvMoment) {
+    it('should set today to today midnight', inject(function () {
       var today = $scope.today;
-      expect(mvMoment().diff(today, 'days')).to.equal(0);
+      expect(moment().diff(today, 'days')).to.equal(0);
     }));
 
     it('should initialize event', function () {
@@ -168,7 +168,7 @@ describe('mvEventNewCtrl', function () {
 
       var spy = sinon.spy(mvNotifier, 'notify');
       modalInstanceMock.expects('close').once().withExactArgs();
-      $scope.delete();
+      $scope.remove();
       $httpBackend.flush();
       modalInstanceMock.verify();
       expect(spy).to.have.been.called;

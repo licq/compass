@@ -7,8 +7,8 @@ angular.module('compass')
         .then(function () {
           $location.path('/today');
           mvNotifier.notify('登陆成功');
-        })
-        .catch(function (err) {
+        },
+        function (err) {
           $scope.errorMessage = err.data.message;
           mvNotifier.error('登陆失败');
         });
