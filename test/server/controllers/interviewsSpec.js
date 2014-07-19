@@ -55,55 +55,212 @@ describe('interviews', function () {
     });
   });
 
-  describe('get /api/interviews?status=new', function () {
-    it('should return interview list with one item', function (done) {
-      request.get('/api/interviews?status=new&page=1&pageSize=5')
-        .expect(200)
-        .expect('content-type', /json/)
-        .end(function (err, res) {
-          expect(err).to.not.exist;
-          expect(res.body).to.have.length(1);
-          expect(res.get('totalCount')).to.equal('1');
+  describe('when access is NOT controlled by positions the user owns', function () {
+
+    beforeEach(function (done) {
+      Factory.create('applicationSetting', {company: user.company}, function (setting) {
+        expect(setting.positionRightControlled).to.be.false;
+        helper.createPosition({owners: [user], company: user.company, name: '市场部经理'}, function () {
           done();
         });
+      });
     });
-  });
 
-  describe('get /api/interviews?status=offered', function () {
-    it('should return an interview list with one offered interview', function (done) {
-      Factory.create('interview', {
-        company: user.company,
-        applyPosition: '销售总监',
-        events: [
-          {
-            startTime: new Date(),
-            duration: 90,
-            interviewers: [user._id],
-            createdBy: user._id
-          }
-        ],
-        status: 'offered'
-      }, function () {
-        request.get('/api/interviews?status=offered')
+    describe('get /api/interviews?status=new', function () {
+      it('should return interview list with one item', function (done) {
+        request.get('/api/interviews?status=new&page=1&pageSize=5')
           .expect(200)
           .expect('content-type', /json/)
           .end(function (err, res) {
+            expect(err).to.not.exist;
             expect(res.body).to.have.length(1);
+            expect(res.get('totalCount')).to.equal('1');
+            done();
+          });
+      });
+    });
+
+    describe('get /api/interviews/ with status offer accepted', function () {
+      it('should get the interview list', function (done) {
+        var startDate = moment().startOf('day').toISOString(),
+          endDate = moment().endOf('day').toISOString();
+        Factory.create('interview', {
+          company: user.company,
+          applyPosition: '销售总监',
+          events: [
+            {
+              startTime: new Date(),
+              duration: 90,
+              interviewers: [user._id],
+              createdBy: user._id
+            }
+          ],
+          status: 'offer accepted'
+        }, function () {
+          request.get('/api/interviews?endDate=' + endDate + 'startDate=' + startDate + 'status=offer%20accpeted')
+            .expect(200)
+            .end(function (err, res) {
+              expect(err).to.not.exist;
+              expect(res.body).to.have.length(1);
+              done();
+            });
+        });
+      });
+    });
+
+    describe('get /api/interviews/ with status offered', function () {
+      it('should get the interview list', function (done) {
+        Factory.create('interview', {
+          company: user.company,
+          applyPosition: '销售总监',
+          events: [
+            {
+              startTime: new Date(),
+              duration: 90,
+              interviewers: [user._id],
+              createdBy: user._id
+            }
+          ],
+          status: 'offered'
+        }, function () {
+          request.get('/api/interviews?status=offered')
+            .expect(200)
+            .end(function (err, res) {
+              expect(err).to.not.exist;
+              expect(res.body).to.have.length(1);
+              done();
+            });
+        });
+      });
+    });
+
+    describe('get /api/applyPositions?for=company', function () {
+      it('should return one applyPosition', function (done) {
+        request.get('/api/applyPositions?for=company')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body).to.deep.equal(['销售总监']);
             done(err);
           });
       });
     });
+
+    describe('get /api/applyPositions', function () {
+      it('should return one applyPosition', function (done) {
+        request.get('/api/applyPositions')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body).to.deep.equal(['销售总监']);
+            done(err);
+          });
+      });
+    });
+
   });
 
-  describe('get /api/applyPositions', function () {
-    it('should return one applyPosition', function (done) {
-      request.get('/api/applyPositions')
-        .expect(200)
-        .expect('content-type', /json/)
-        .end(function (err, res) {
-          expect(res.body).to.deep.equal(['销售总监']);
-          done(err);
+  describe('when access IS controlled by positions the user owns', function () {
+
+    beforeEach(function (done) {
+      Factory.create('applicationSetting', {positionRightControlled: true, company: user.company}, function (setting) {
+        expect(setting.positionRightControlled).to.be.true;
+        helper.createPosition({owners: [user], company: user.company, name: '销售总监'}, function () {
+          done();
         });
+      });
+    });
+
+    describe('get /api/interviews?status=new', function () {
+      it('should return interview list with one item', function (done) {
+        request.get('/api/interviews?status=new&page=1&pageSize=5')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(err).to.not.exist;
+            expect(res.body).to.have.length(1);
+            expect(res.get('totalCount')).to.equal('1');
+            done();
+          });
+      });
+    });
+
+    describe('get /api/interviews/ with status offer accepted', function () {
+      it('should get the interview list', function (done) {
+        var startDate = moment().startOf('day').toISOString(),
+          endDate = moment().endOf('day').toISOString();
+        Factory.create('interview', {
+          company: user.company,
+          applyPosition: '销售总监',
+          events: [
+            {
+              startTime: new Date(),
+              duration: 90,
+              interviewers: [user._id],
+              createdBy: user._id
+            }
+          ],
+          status: 'offer accepted'
+        }, function () {
+          request.get('/api/interviews?endDate=' + endDate + 'startDate=' + startDate + 'status=offer%20accpeted')
+            .expect(200)
+            .end(function (err, res) {
+              expect(err).to.not.exist;
+              expect(res.body).to.have.length(1);
+              done();
+            });
+        });
+      });
+    });
+
+    describe('get /api/interviews/ with status offered', function () {
+      it('should get the interview list', function (done) {
+        Factory.create('interview', {
+          company: user.company,
+          applyPosition: '销售总监',
+          events: [
+            {
+              startTime: new Date(),
+              duration: 90,
+              interviewers: [user._id],
+              createdBy: user._id
+            }
+          ],
+          status: 'offered'
+        }, function () {
+          request.get('/api/interviews?status=offered')
+            .expect(200)
+            .end(function (err, res) {
+              expect(err).to.not.exist;
+              expect(res.body).to.have.length(1);
+              done();
+            });
+        });
+      });
+    });
+
+    describe('get /api/applyPositions?for=company', function () {
+      it('should return one applyPosition', function (done) {
+        request.get('/api/applyPositions?for=company')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body).to.deep.equal(['销售总监']);
+            done(err);
+          });
+      });
+    });
+
+    describe('get /api/applyPositions', function () {
+      it('should return one applyPosition', function (done) {
+        request.get('/api/applyPositions')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body).to.deep.equal(['销售总监']);
+            done(err);
+          });
+      });
     });
   });
 
@@ -120,6 +277,7 @@ describe('interviews', function () {
         });
     });
   });
+
   describe('put /api/interview/:id with status rejected', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)
@@ -136,6 +294,7 @@ describe('interviews', function () {
         });
     });
   });
+
   describe('put /api/interview/:id with status offer rejected', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)
@@ -170,57 +329,5 @@ describe('interviews', function () {
         });
     });
   });
-  describe('get /api/interviews/ with status offer accepted', function () {
-    it('should get the interview list', function (done) {
-      var startDate = moment().startOf('day').toISOString(),
-        endDate = moment().endOf('day').toISOString();
-      Factory.create('interview', {
-        company: user.company,
-        applyPosition: '销售总监',
-        events: [
-          {
-            startTime: new Date(),
-            duration: 90,
-            interviewers: [user._id],
-            createdBy: user._id
-          }
-        ],
-        status: 'offer accepted'
-      }, function () {
-        request.get('/api/interviews?endDate=' + endDate + 'startDate=' + startDate + 'status=offer%20accpeted')
-          .expect(200)
-          .end(function (err, res) {
-            expect(err).to.not.exist;
-            expect(res.body).to.have.length(1);
-            done();
-          });
-      });
-    });
-  });
 
-  describe('get /api/interviews/ with status offered', function () {
-    it('should get the interview list', function (done) {
-      Factory.create('interview', {
-        company: user.company,
-        applyPosition: '销售总监',
-        events: [
-          {
-            startTime: new Date(),
-            duration: 90,
-            interviewers: [user._id],
-            createdBy: user._id
-          }
-        ],
-        status: 'offered'
-      }, function () {
-        request.get('/api/interviews?status=offered')
-          .expect(200)
-          .end(function (err, res) {
-            expect(err).to.not.exist;
-            expect(res.body).to.have.length(1);
-            done();
-          });
-      });
-    });
-  });
 });
