@@ -7,14 +7,14 @@ var expect = require('chai').expect,
 
 
 describe('applications', function () {
-  var request,
-    resume;
+  var request, user, resume;
 
   beforeEach(function (done) {
     helper.clearCollections('User', 'Company', 'Resume', 'Role', function () {
-      helper.login(function (agent, user) {
+      helper.login(function (agent, u) {
         request = agent;
-        Factory.build('resume', {company: user.company}, function (newResume) {
+        user = u;
+        Factory.build('resume', {applyPosition: '财务总监', company: user.company}, function (newResume) {
           newResume.saveAndIndexSync(function () {
             resume = newResume;
             done();
@@ -39,6 +39,44 @@ describe('applications', function () {
           expect(result.facets.applyPosition).to.exist;
           done(err);
         });
+    });
+
+    it('should return 200 with json result when access not controlled by user owned positions', function (done) {
+      Factory.create('applicationSetting', {company: user.company}, function (setting) {
+        expect(setting.positionRightControlled).to.be.false;
+        request
+          .get('/api/applications?status=new&pageSize=10&page=1&applyPosition=财务总监')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            var result = res.body;
+            expect(result.hits.total).to.equal(1);
+            expect(result.hits.hits).to.have.length(1);
+            expect(result.facets.age).to.exist;
+            expect(result.facets.highestDegree).to.exist;
+            expect(result.facets.applyPosition).to.exist;
+            done(err);
+          });
+      });
+    });
+
+    it('should return 200 with json result when access not controlled by user owned positions', function (done) {
+      Factory.create('applicationSetting', {positionRightControlled:true,company: user.company}, function (setting) {
+        expect(setting.positionRightControlled).to.be.true;
+        request
+          .get('/api/applications?status=new&pageSize=10&page=1')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            var result = res.body;
+            expect(result.hits.total).to.equal(0);
+            expect(result.hits.hits).to.have.length(0);
+            expect(result.facets.age).to.exist;
+            expect(result.facets.highestDegree).to.exist;
+            expect(result.facets.applyPosition).to.exist;
+            done(err);
+          });
+      });
     });
   });
 
@@ -106,18 +144,5 @@ describe('applications', function () {
         });
     });
 
-
-//    it('should return no result', function (done) {
-//      helper.createPosition({company: resume.company, name: '财务总监', toCreateUser: true}, function (err, createdPosition, createdUser) {
-//        var position = createdPosition;
-//        user = createdUser;
-//        User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {
-//          Resume.query({positions: u.positions}, function (err, results) {
-//            expect(results.hits.total).to.equal(0);
-//            done(err);
-//          });
-//        });
-//      });
-//    });
   });
 });

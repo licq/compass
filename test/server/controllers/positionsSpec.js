@@ -22,7 +22,6 @@ describe('positions', function () {
               existPosition = position;
               User.findOne({_id: existUser._id}, function (err, u) {
                 expect(err).to.not.exist;
-                console.log(u);
                 expect(u.positions).to.have.length(1);
                 done();
               });
@@ -126,7 +125,6 @@ describe('positions', function () {
             expect(err).to.not.exist;
             expect(p).to.not.exist;
             User.findOne({_id: existUser._id}, function (err, u) {
-              console.log(u);
               expect(err).to.not.exist;
               expect(u.positions).to.have.length(0);
               done();

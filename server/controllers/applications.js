@@ -6,19 +6,18 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
-//  req.query.positions = req.user.positions;
-//  if (params.positions && params.positions.length > 0) {
-//    var positionsFilter = makeTermFilter(_.map(params.positions, 'name'), 'applyPosition.original');
-//    filters.push(positionsFilter);
-//  }
   req.query.sort = [
     {
       createdAt: {order: 'desc'}
     }
   ];
-  Resume.query(req.query, function (err, results) {
+  req.user.hasPositions(req.applyPosition, function (err, positions) {
     if (err) return next(err);
-    return res.json(results);
+    req.query.applyPosition = positions;
+    Resume.query(req.query, function (err, results) {
+      if (err) return next(err);
+      return res.json(results);
+    });
   });
 };
 
@@ -35,14 +34,8 @@ exports.update = function (req, res, next) {
 };
 
 exports.load = function (req, res, next) {
-  var query = Resume.findOne({_id: req.params.id});
-
-  if (req.user.positions && req.user.positions.length > 0) {
-    var positions = _.map(req.user.positions, 'name');
-    query.where('applyPosition').in(positions);
-  }
-
-  query.exec(function (err, resume) {
+  Resume.findOne({_id: req.params.id})
+    .exec(function (err, resume) {
     if (err) return next(err);
     if (!resume) return res.send(404, {message: 'not found'});
     req.resume = resume;

@@ -123,7 +123,7 @@ userSchema.methods = {
       .findOne({company: this.company})
       .select('positionRightControlled')
       .exec(function (err, res) {
-        var controlled = res.positionRightControlled;
+        var controlled = res && res.positionRightControlled;
         if (controlled) {
           model.populate('positions', 'name', function (err, user) {
             var outPositions = _.pluck(user.positions, 'name');
