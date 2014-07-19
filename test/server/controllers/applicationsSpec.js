@@ -44,38 +44,43 @@ describe('applications', function () {
     it('should return 200 with json result when access NOT controlled by user owned positions', function (done) {
       Factory.create('applicationSetting', {company: user.company}, function (setting) {
         expect(setting.positionRightControlled).to.be.false;
-        request
-          .get('/api/applications?status=new&pageSize=10&page=1&applyPosition=财务总监')
-          .expect(200)
-          .expect('content-type', /json/)
-          .end(function (err, res) {
-            var result = res.body;
-            expect(result.hits.total).to.equal(1);
-            expect(result.hits.hits).to.have.length(1);
-            expect(result.facets.age).to.exist;
-            expect(result.facets.highestDegree).to.exist;
-            expect(result.facets.applyPosition).to.exist;
-            done(err);
-          });
+        helper.createPosition({owners: [user], company: user.company, name: '客户经理'}, function () {
+          request
+            .get('/api/applications?status=new&pageSize=10&page=1&applyPosition=财务总监')
+            .expect(200)
+            .expect('content-type', /json/)
+            .end(function (err, res) {
+              var result = res.body;
+              expect(result.hits.total).to.equal(1);
+              expect(result.hits.hits).to.have.length(1);
+              expect(result.facets.age).to.exist;
+              expect(result.facets.highestDegree).to.exist;
+              expect(result.facets.applyPosition).to.exist;
+              done();
+            });
+        });
+
       });
     });
 
-    it('should return 200 with json result when access is controlled by user owned positions', function (done) {
+    it('should return 200 with json result when access IS controlled by user owned positions', function (done) {
       Factory.create('applicationSetting', {positionRightControlled: true, company: user.company}, function (setting) {
         expect(setting.positionRightControlled).to.be.true;
-        request
-          .get('/api/applications?status=new&pageSize=10&page=1')
-          .expect(200)
-          .expect('content-type', /json/)
-          .end(function (err, res) {
-            var result = res.body;
-            expect(result.hits.total).to.equal(0);
-            expect(result.hits.hits).to.have.length(0);
-            expect(result.facets.age).to.exist;
-            expect(result.facets.highestDegree).to.exist;
-            expect(result.facets.applyPosition).to.exist;
-            done(err);
-          });
+        helper.createPosition({owners: [user], company: user.company, name: '财务总监'}, function () {
+          request
+            .get('/api/applications?status=new&pageSize=10&page=1&applyPosition=财务总监')
+            .expect(200)
+            .expect('content-type', /json/)
+            .end(function (err, res) {
+              var result = res.body;
+              expect(result.hits.total).to.equal(1);
+              expect(result.hits.hits).to.have.length(1);
+              expect(result.facets.age).to.exist;
+              expect(result.facets.highestDegree).to.exist;
+              expect(result.facets.applyPosition).to.exist;
+              done(err);
+            });
+        });
       });
     });
   });

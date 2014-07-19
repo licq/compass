@@ -67,6 +67,7 @@ angular.module('compass')
 
     $scope.setApplyPosition = function (applyPosition) {
       $scope.queryOptions.applyPosition = applyPosition;
+      console.log('apply', applyPosition);
       $scope.queryOptions.page = 1;
       $scope.query();
     };

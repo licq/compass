@@ -11,7 +11,7 @@ exports.list = function (req, res, next) {
       createdAt: {order: 'desc'}
     }
   ];
-  req.user.hasPositions(req.applyPosition, function (err, positions) {
+  req.user.hasPositions(req.query.applyPosition, function (err, positions) {
     if (err) return next(err);
     req.query.applyPosition = positions;
     Resume.query(req.query, function (err, results) {

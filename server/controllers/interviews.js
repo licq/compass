@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume');
 
 exports.list = function (req, res, next) {
-  req.user.hasPositions(req.applyPosition, function (err, positions) {
+  req.user.hasPositions(req.query.applyPosition, function (err, positions) {
     if (err) return next(err);
     req.query.applyPosition = positions;
     if (req.query.status === 'offer accepted') {
