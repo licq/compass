@@ -41,7 +41,7 @@ describe('applications', function () {
         });
     });
 
-    it('should return 200 with json result when access not controlled by user owned positions', function (done) {
+    it('should return 200 with json result when access NOT controlled by user owned positions', function (done) {
       Factory.create('applicationSetting', {company: user.company}, function (setting) {
         expect(setting.positionRightControlled).to.be.false;
         request
@@ -60,8 +60,8 @@ describe('applications', function () {
       });
     });
 
-    it('should return 200 with json result when access not controlled by user owned positions', function (done) {
-      Factory.create('applicationSetting', {positionRightControlled:true,company: user.company}, function (setting) {
+    it('should return 200 with json result when access is controlled by user owned positions', function (done) {
+      Factory.create('applicationSetting', {positionRightControlled: true, company: user.company}, function (setting) {
         expect(setting.positionRightControlled).to.be.true;
         request
           .get('/api/applications?status=new&pageSize=10&page=1')

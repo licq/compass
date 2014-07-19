@@ -69,23 +69,15 @@ describe('counts', function () {
     });
   });
 
-  it('should get counts correctly for user without positions', function (done) {
-    request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
-      .expect(200)
-      .expect('content-type', /json/)
-      .end(function (err, res) {
-        expect(res.body.new).to.equal(1);
-        expect(res.body.pursued).to.equal(1);
-        expect(res.body.undetermined).to.equal(1);
-        expect(res.body.unreviewed).to.equal(0);
-        expect(res.body.eventsOfToday).to.equal(2);
-        expect(res.body.onboards).to.equal(1);
-        done(err);
+  describe('when access is NOT controlled by positions the user owns', function () {
+    beforeEach(function (done) {
+      Factory.create('applicationSetting', {company: user.company}, function (setting) {
+        expect(setting.positionRightControlled).to.be.false;
+        done();
       });
-  });
+    });
 
-  it('should get counts correctly for user with positions', function (done) {
-    helper.createPosition({owners: [user], name: '销售主管'}, function () {
+    it('should get counts correctly for user without positions', function (done) {
       request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
         .expect(200)
         .expect('content-type', /json/)
@@ -99,10 +91,52 @@ describe('counts', function () {
           done(err);
         });
     });
+
+    it('should get counts correctly for user with the same position', function (done) {
+      helper.createPosition({owners: [user], company: user.company, name: '销售主管'}, function () {
+        request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body.new).to.equal(1);
+            expect(res.body.pursued).to.equal(1);
+            expect(res.body.undetermined).to.equal(1);
+            expect(res.body.unreviewed).to.equal(0);
+            expect(res.body.eventsOfToday).to.equal(2);
+            expect(res.body.onboards).to.equal(1);
+            done(err);
+          });
+      });
+    });
+
+    it('should get counts correctly should get counts correctly for user with different position', function (done) {
+      helper.createPosition({owners: [user], company: user.company, name: '财务总监cfo'}, function () {
+        request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body.new).to.equal(1);
+            expect(res.body.pursued).to.equal(1);
+            expect(res.body.undetermined).to.equal(1);
+            expect(res.body.unreviewed).to.equal(0);
+            expect(res.body.eventsOfToday).to.equal(2);
+            expect(res.body.onboards).to.equal(1);
+            done(err);
+          });
+      });
+    });
+
   });
 
-  it('should get counts correctly', function (done) {
-    helper.createPosition({owners: [user],company:user.company, name: '财务总监cfo'}, function () {
+  describe('when access IS controlled by positions the user owns', function () {
+    beforeEach(function (done) {
+      Factory.create('applicationSetting', {positionRightControlled: true, company: user.company}, function (setting) {
+        expect(setting.positionRightControlled).to.be.true;
+        done();
+      });
+    });
+
+    it('should get counts correctly for user without positions', function (done) {
       request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
         .expect(200)
         .expect('content-type', /json/)
@@ -115,6 +149,40 @@ describe('counts', function () {
           expect(res.body.onboards).to.equal(0);
           done(err);
         });
+    });
+
+    it('should get counts correctly for user with the same position', function (done) {
+      helper.createPosition({owners: [user], company: user.company, name: '销售主管'}, function () {
+        request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body.new).to.equal(1);
+            expect(res.body.pursued).to.equal(1);
+            expect(res.body.undetermined).to.equal(1);
+            expect(res.body.unreviewed).to.equal(0);
+            expect(res.body.eventsOfToday).to.equal(2);
+            expect(res.body.onboards).to.equal(1);
+            done(err);
+          });
+      });
+    });
+
+    it('should get counts correctly should get counts correctly for user with different position', function (done) {
+      helper.createPosition({owners: [user], company: user.company, name: '财务总监cfo'}, function () {
+        request.get('/api/counts?counts=new&counts=pursued&counts=undetermined&counts=unreviewed&counts=interviews&counts=eventsOfToday&counts=onboards')
+          .expect(200)
+          .expect('content-type', /json/)
+          .end(function (err, res) {
+            expect(res.body.new).to.equal(0);
+            expect(res.body.pursued).to.equal(0);
+            expect(res.body.undetermined).to.equal(0);
+            expect(res.body.unreviewed).to.equal(0);
+            expect(res.body.eventsOfToday).to.equal(2);
+            expect(res.body.onboards).to.equal(0);
+            done(err);
+          });
+      });
     });
   });
 });
