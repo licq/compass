@@ -462,9 +462,9 @@ function constructQueryNew(model, company, options) {
   }
 
   if (options.applyPosition) {
-    query.where('applyPosition').regex(new RegExp(options.applyPosition));
-  } else if (options.positions) {
-    query.where('applyPosition').in(options.positions);
+    if (!Array.isArray(options.applyPosition))
+      options.applyPosition = [options.applyPosition];
+    query.where('applyPosition').in(options.applyPosition);
   }
 
   if (options.startDate) {
@@ -505,8 +505,10 @@ interviewSchema.statics.queryOffered = function (company, options, cb) {
   var query = this.find({company: company, status: 'offered'});
   if (options.name)
     query.where('name').regex(new RegExp(options.name));
-  if (options.positions) {
-    query.where('applyPosition').in(options.positions);
+  if (options.applyPosition) {
+    if (!Array.isArray(options.applyPosition))
+      options.applyPosition = [options.applyPosition];
+    query.where('applyPosition').in(options.applyPosition);
   }
   query.select('name applyPosition onboardDate').sort('updatedAt').exec(cb);
 };
@@ -518,8 +520,10 @@ interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
   if (options.startDate && options.endDate) {
     query.where('onboardDate').lte(options.endDate).gte(options.startDate);
   }
-  if (options.positions) {
-    query.where('applyPosition').in(options.positions);
+  if (options.applyPosition) {
+    if (!Array.isArray(options.applyPosition))
+      options.applyPosition = [options.applyPosition];
+    query.where('applyPosition').in(options.applyPosition);
   }
 
   query.select('name applyPosition onboardDate application');
@@ -530,15 +534,10 @@ interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
   }
 };
 
-interviewSchema.statics.applyPositionsForCompany = function (user, cb) {
-  var company = user.company, positions;
-  var query = this.distinct('applyPosition');
-  query.where('company', company);
-  if (user.positions && user.positions.length > 0) {
-    positions = _.map(user.positions, 'name');
-    query.where('applyPosition').in(positions);
-  }
-  query.exec(cb);
+interviewSchema.statics.applyPositionsForCompany = function (company, cb) {
+  this.distinct('applyPosition')
+    .where('company', company)
+    .exec(cb);
 };
 
 interviewSchema.statics.applyPositionsForUser = function (user, cb) {

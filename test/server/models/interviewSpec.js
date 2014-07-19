@@ -14,7 +14,7 @@ describe('interview', function () {
 
   beforeEach(function (done) {
     helper.clearCollections('Company', 'User', Resume, Interview, function () {
-      Factory.create('user',function (createdUser) {
+      Factory.create('user', function (createdUser) {
         Factory.create('resume', function (createdResume) {
           user = createdUser;
           resume = createdResume;
@@ -423,9 +423,10 @@ describe('interview', function () {
       });
     });
 
-    it('should return interviews', function (done) {
+    it('should return interviews with status new', function (done) {
       Factory.create('interview', {
         company: user.company,
+        applyPosition: '人力总监',
         events: [
           {
             startTime: new Date(),
@@ -437,11 +438,13 @@ describe('interview', function () {
         var options = {
           page: 1,
           pageSize: 50,
-          status: 'new'
+          status: 'new',
+          applyPosition: ['人力总监','市场总监']
         };
         Interview.queryNew(user.company, options, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
+          expect(interviews[0].applyPosition).to.be.equal('人力总监');
           expect(interviews[0].reviews).to.have.length(0);
           expect(interviews[0].events).to.have.length(1);
           Interview.countNew(user.company, options, function (err, count) {
@@ -449,6 +452,77 @@ describe('interview', function () {
             expect(count).to.equal(1);
             done();
           });
+        });
+      });
+    });
+
+    it('should return interviews with status offer accepted', function (done) {
+      Factory.create('interview', {
+        name: user.name,
+        company: user.company,
+        applyPosition: '销售总监',
+        application: resume._id,
+        onboardDate: new Date(),
+        status: 'offer accepted',
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]}, function () {
+        var options = {
+          page: 1,
+          pageSize: 50,
+          status: 'offer accepted',
+          applyPosition: ['销售总监']
+        };
+        Interview.queryOfferAccepted(user.company, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
+          expect(interviews[0].name).to.equal(user.name);
+          expect(interviews[0].applyPosition).to.equal('销售总监');
+          expect(interviews[0].onboardDate).to.be.exist;
+          expect(interviews[0].application).to.deep.equal(resume._id);
+          expect(interviews[0].company).to.not.exist;
+          expect(interviews[0].events).to.not.exist;
+          done();
+        });
+      });
+    });
+
+    it('should return interviews with status offered', function (done) {
+      Factory.create('interview', {
+        name: user.name,
+        company: user.company,
+        applyPosition: '市场总监',
+        application: resume._id,
+        onboardDate: new Date(),
+        status: 'offered',
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]}, function () {
+        var options = {
+          page: 1,
+          pageSize: 50,
+          status: 'offered',
+          applyPosition: '市场总监'
+        };
+        Interview.queryOffered(user.company, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
+          expect(interviews[0].name).to.equal(user.name);
+          expect(interviews[0].applyPosition).to.equal('市场总监');
+          expect(interviews[0].onboardDate).to.be.exist;
+          expect(interviews[0].application).to.not.exist;
+          expect(interviews[0].events).to.not.exist;
+          done();
         });
       });
     });
@@ -466,7 +540,7 @@ describe('interview', function () {
           }
         ]}, function () {
 
-        Interview.applyPositionsForCompany(user, function (err, positions) {
+        Interview.applyPositionsForCompany(user.company, function (err, positions) {
           expect(err).to.not.exist;
           expect(positions).to.deep.equal(['销售总监']);
           done();

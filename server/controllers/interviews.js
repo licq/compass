@@ -6,57 +6,54 @@ var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume');
 
 exports.list = function (req, res, next) {
-  if (req.user.positions && req.user.positions.length > 0) {
-    req.query.positions = _.map(req.user.positions, 'name');
-  }
-
-  if (req.query.status === 'offer accepted') {
-    Interview.queryOfferAccepted(req.user.company, req.query, function (err, interviews) {
-      if (err) return next(err);
-      res.json(interviews);
-    });
-  }
-  else if (req.query.status === 'offered') {
-    Interview.queryOffered(req.user.company, req.query, function (err, interviews) {
-      if (err) return next(err);
-      res.json(interviews);
-    });
-  } else {
-    Interview.queryNew(req.user.company, req.query, function (err, interviews) {
-      if (err) return next(err);
-      if (req.query.pageSize) {
-        Interview.countNew(req.user.company, req.query, function (err, count) {
-          res.header('totalCount', count).json(interviews);
-        });
-      } else {
+  req.user.hasPositions(req.applyPosition, function (err, positions) {
+    if (err) return next(err);
+    req.query.applyPosition = positions;
+    if (req.query.status === 'offer accepted') {
+      Interview.queryOfferAccepted(req.user.company, req.query, function (err, interviews) {
+        if (err) return next(err);
         res.json(interviews);
-      }
-    });
-  }
+      });
+    }
+    else if (req.query.status === 'offered') {
+      Interview.queryOffered(req.user.company, req.query, function (err, interviews) {
+        if (err) return next(err);
+        res.json(interviews);
+      });
+    } else {
+      Interview.queryNew(req.user.company, req.query, function (err, interviews) {
+        if (err) return next(err);
+        if (req.query.pageSize) {
+          Interview.countNew(req.user.company, req.query, function (err, count) {
+            res.header('totalCount', count).json(interviews);
+          });
+        } else {
+          res.json(interviews);
+        }
+      });
+    }
+  });
 };
 
 exports.get = function (req, res, next) {
-var query = Interview.findOne({_id: req.params.id, company: req.user.company})
-  .populate('events.interviewers', 'name')
-  .populate('reviews.interviewer', 'name');
-
-  if (req.user.positions && req.user.positions.length > 0) {
-    var positions = _.map(req.user.positions, 'name');
-    query.where('applyPosition').in(positions);
-  }
+  var query = Interview.findOne({_id: req.params.id, company: req.user.company})
+    .populate('events.interviewers', 'name')
+    .populate('reviews.interviewer', 'name');
 
   query.exec(function (err, interview) {
-      if (err) return next(err);
-      if (!interview) return res.json(404, {message: 'not found'});
-      res.json(interview);
-    });
+    if (err) return next(err);
+    if (!interview) return res.json(404, {message: 'not found'});
+    res.json(interview);
+  });
 };
 
 exports.applyPositions = function (req, res, next) {
   if (req.query.for === 'company') {
-    Interview.applyPositionsForCompany(req.user, function (err, positions) {
-      if (err) return next(err);
-      res.json(positions);
+    Interview.applyPositionsForCompany(req.user.company, function (err, allPositions) {
+      req.user.hasPositions(allPositions, function (err, positions) {
+        if (err) return next(err);
+        res.json(positions);
+      });
     });
   } else {
     Interview.applyPositionsForUser(req.user, function (err, positions) {
