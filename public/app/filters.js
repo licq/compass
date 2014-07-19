@@ -285,7 +285,7 @@ angular.module('compass')
   })
   .filter('displayNames', function () {
     return function (array, typeName) {
-      if (array.length)
+      if (array && array.length)
         return _.map(array, 'name').join(', ');
       else if(typeName === 'position')
         return '该职位没有招聘负责人';

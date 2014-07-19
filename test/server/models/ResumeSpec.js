@@ -246,19 +246,6 @@ describe('Resume', function () {
           });
         });
       });
-
-      it('should return no result', function (done) {
-        helper.createPosition({company: resume.company, name: '财务总监', toCreateUser: true}, function (err, createdPosition, createdUser) {
-          position = createdPosition;
-          user = createdUser;
-          User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {
-            Resume.query({positions: u.positions}, function (err, results) {
-              expect(results.hits.total).to.equal(0);
-              done(err);
-            });
-          });
-        });
-      });
     });
 
     describe('using age filter', function () {

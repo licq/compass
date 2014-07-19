@@ -92,7 +92,7 @@ angular.module('compass')
 
     $scope.$on('applicationStatusUpdated', function (event, from, to) {
       if ($scope.counts.hasOwnProperty(to)) $scope.counts[to]++;
-      if ($scope.counts.hasOwnProperty(from)) $scope.counts[from]--;
+      if ($scope.counts.hasOwnProperty(from) && $scope.counts[from] > 0) $scope.counts[from]--;
     });
 
     var refreshUnreviewed = null;

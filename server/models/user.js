@@ -3,8 +3,9 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   _ = require('lodash'),
-  Role = require('mongoose').model('Role'),
-  Company = require('mongoose').model('Company'),
+  Role = mongoose.model('Role'),
+  Company = mongoose.model('Company'),
+  ApplicationSetting = mongoose.model('ApplicationSetting'),
   timestamps = require('mongoose-timestamp'),
   crypto = require('crypto'),
   validator = require('validator'),
@@ -114,6 +115,34 @@ userSchema.methods = {
     this.populate('role', 'name permissions', cb);
   },
 
+  hasPositions: function (inPositions, cb) {
+    if (inPositions && !Array.isArray(inPositions))
+      inPositions = [inPositions];
+    var model = this;
+    ApplicationSetting
+      .findOne({company: this.company})
+      .select('positionRightControlled')
+      .exec(function (err, res) {
+        var controlled = res.positionRightControlled;
+        if (controlled) {
+          model.populate('positions', 'name', function (err, user) {
+            var outPositions = _.pluck(user.positions, 'name');
+            if (inPositions) {
+              outPositions = _.intersection(inPositions, outPositions);
+              cb(err, outPositions);
+            }
+            else {
+              cb(err, outPositions);
+            }
+          });
+        }
+        else {
+          cb(err, inPositions);
+        }
+      }
+    );
+  },
+
   isSystemAdmin: function (cb) {
     Role.findOne({_id: this.role}).exec(function (err, role) {
       if (err) return cb(err, false);
@@ -158,7 +187,7 @@ function updatePositions(positionsOfUser, user, operation, cb) {
 userSchema.statics.createUser = function (user, cb) {
   user.save(function (err, savedUser) {
     if (err)  return cb(err);
-    updatePositions(savedUser.positions, savedUser, 'add', function(err){
+    updatePositions(savedUser.positions, savedUser, 'add', function (err) {
       cb(err, savedUser);
     });
   });
@@ -168,7 +197,7 @@ userSchema.statics.deleteUser = function (user, cb) {
   user.deleted = true;
   user.save(function (err, deletedUser) {
     if (err)  return cb(err);
-    updatePositions(deletedUser.positions, deletedUser, 'remove', function(err){
+    updatePositions(deletedUser.positions, deletedUser, 'remove', function (err) {
       cb(err, deletedUser);
     });
   });
@@ -184,7 +213,7 @@ userSchema.statics.updateUser = function (user, cb) {
       if (err)  return cb(err);
       updatePositions(oldPositions, savedUser, 'remove', function (err) {
         if (err) return cb(err);
-        updatePositions(newPositions, savedUser, 'add', function(err){
+        updatePositions(newPositions, savedUser, 'add', function (err) {
           cb(err, savedUser);
         });
       });

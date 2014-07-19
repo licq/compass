@@ -318,11 +318,6 @@ resumeSchema.statics.query = function (params, callback) {
     filters.push(applyPositionFilter);
   }
 
-  if (params.positions && params.positions.length > 0) {
-    var positionsFilter = makeTermFilter(_.map(params.positions, 'name'), 'applyPosition.original');
-    filters.push(positionsFilter);
-  }
-
   var statusFilter = makeTermFilter(params.status, 'status');
   if (statusFilter) {
     filters.push(statusFilter);

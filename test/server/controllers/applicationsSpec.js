@@ -11,7 +11,7 @@ describe('applications', function () {
     resume;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Resume', 'Role',function () {
+    helper.clearCollections('User', 'Company', 'Resume', 'Role', function () {
       helper.login(function (agent, user) {
         request = agent;
         Factory.build('resume', {company: user.company}, function (newResume) {
@@ -105,5 +105,19 @@ describe('applications', function () {
           });
         });
     });
+
+
+//    it('should return no result', function (done) {
+//      helper.createPosition({company: resume.company, name: '财务总监', toCreateUser: true}, function (err, createdPosition, createdUser) {
+//        var position = createdPosition;
+//        user = createdUser;
+//        User.findOne({_id: user._id}).populate('positions', 'name').exec(function (err, u) {
+//          Resume.query({positions: u.positions}, function (err, results) {
+//            expect(results.hits.total).to.equal(0);
+//            done(err);
+//          });
+//        });
+//      });
+//    });
   });
 });

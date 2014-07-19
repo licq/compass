@@ -17,13 +17,13 @@ module.exports = function (config) {
   });
 
   require('../models/company');
+  require('../models/applicationSetting');
   require('../models/role');
   require('../models/position');
   require('../models/user');
   require('../models/email');
   require('../models/mail');
   require('../models/eventSetting');
-  require('../models/applicationSetting');
   require('../models/signup');
   require('../models/token');
   require('../models/resume');

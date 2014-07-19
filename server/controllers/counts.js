@@ -18,7 +18,6 @@ exports.get = function (req, res, next) {
   function resumeCount(options) {
     return function (cb) {
       var query = Resume.count({company: req.user.company, status: options.status});
-      console.log(options);
       if (positions) {
         query.where('applyPosition').in(positions);
       }

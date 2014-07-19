@@ -290,9 +290,21 @@ describe('filters', function () {
     it('should return 该职位没有招聘负责人 when length is 0 when type is position', inject(function (displayNamesFilter) {
       expect(displayNamesFilter([], 'position')).to.equal('该职位没有招聘负责人');
     }));
+    it('should return 该职位没有招聘负责人 when length is 0 when type is position', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter(null, 'position')).to.equal('该职位没有招聘负责人');
+    }));
+    it('should return 该职位没有招聘负责人 when length is 0 when type is position', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter(undefined, 'position')).to.equal('该职位没有招聘负责人');
+    }));
 
     it('should return 该用户没有负责招聘岗位 when length is 0', inject(function (displayNamesFilter) {
       expect(displayNamesFilter([], 'user')).to.equal('该用户没有负责招聘岗位');
+    }));
+    it('should return 该用户没有负责招聘岗位 when length is 0', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter(undefined, 'user')).to.equal('该用户没有负责招聘岗位');
+    }));
+    it('should return 该用户没有负责招聘岗位 when length is 0', inject(function (displayNamesFilter) {
+      expect(displayNamesFilter(null, 'user')).to.equal('该用户没有负责招聘岗位');
     }));
   });
 });

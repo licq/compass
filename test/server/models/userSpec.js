@@ -9,7 +9,7 @@ var
 
 describe('User', function () {
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Role', 'Position', done);
+    helper.clearCollections('User', 'Company', 'Role', 'Position', 'ApplicationSetting', done);
   });
 
   describe('#validate', function () {
@@ -42,7 +42,10 @@ describe('User', function () {
               .where('name').ne('systemadmin')
               .exec(function (err, count) {
                 expect(count).to.be.equal(1);
-                done(err);
+                Position.findById(position._id, function (err, p) {
+                  expect(p.owners[0]).to.deep.equal(user._id);
+                  done(err);
+                });
               });
           });
         });
@@ -69,19 +72,14 @@ describe('User', function () {
 
     it('should update position and users', function (done) {
       helper.createPosition({toCreateUser: true}, function (err, position1, user) {
-        expect(err).to.not.exist;
         helper.createPosition({company: user.company}, function (err, position2) {
           user.positions = [position2._id];
-          User.updateUser(user, function (err) {
-            expect(err).to.not.exist;
+          User.updateUser(user, function () {
             User.findOne({_id: user._id}, function (err, u) {
-              expect(err).to.not.exist;
               expect(u.positions[0]).to.deep.equal(position2._id);
               Position.findOne({_id: position1._id}, function (err, p1) {
-                //expect(err).to.not.exist;
                 expect(p1.owners).to.have.length(0);
                 Position.findOne({_id: position2._id}, function (err, p2) {
-                  //expect(err).to.not.exist;
                   expect(p2.owners).to.have.length(1);
                   done(err);
                 });
@@ -157,5 +155,89 @@ describe('User', function () {
       });
     });
   });
-})
-;
+
+  describe('hasPositions', function () {
+    var user, position;
+    beforeEach(function (done) {
+      helper.createPosition({name: '技术总监'}, function (err, p) {
+        expect(err).to.not.exist;
+        position = p;
+        Factory.build('user', {positions: position._id, company: position.company}, function (u) {
+          User.createUser(u, function (err, createdUser) {
+            expect(err).to.not.exist;
+            user = createdUser;
+            expect(user.positions).to.have.length(1);
+            done(err);
+          });
+        });
+      });
+    });
+
+    describe('should return positions correctly', function () {
+      describe(' when access by positions is NOT controlled', function () {
+        beforeEach(function (done) {
+          Factory.create('applicationSetting', {company: user.company}, function (setting) {
+            expect(setting.positionRightControlled).to.be.false;
+            done();
+          });
+        });
+
+        it('should return the same input positions when query for nothing', function (done) {
+          User.findOne({company: position.company}, function (err, user) {
+            var inPositions;
+            user.hasPositions(inPositions, function (err, ps) {
+              expect(ps).to.not.exist;
+              inPositions = null;
+              user.hasPositions(inPositions, function (err, ps) {
+                expect(ps).to.not.exist;
+                inPositions = [];
+                user.hasPositions(inPositions, function (err, ps) {
+                  expect(ps).to.deep.equal(inPositions);
+                  inPositions = ['财务总监，技术总监'];
+                  user.hasPositions(inPositions, function (err, ps) {
+                    expect(ps).to.deep.equal(inPositions);
+                    done();
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+
+      describe(' when access by positions is controlled', function () {
+        beforeEach(function (done) {
+          Factory.create('applicationSetting', {positionRightControlled: true, company: user.company}, function (setting) {
+            expect(setting.positionRightControlled).to.be.true;
+            done();
+          });
+        });
+
+        it('should return the positions the user owns when query for nothing', function (done) {
+          User.findOne({company: position.company}, function (err, user) {
+            var inPositions;
+            user.hasPositions(inPositions, function (err, ps) {
+              expect(ps).to.deep.equal(['技术总监']);
+              done();
+            });
+          });
+        });
+
+        it('should return the intersectioned positions', function (done) {
+          User.findOne({company: position.company}, function (err, user) {
+            var inPositions = ['财务总监', '技术总监'];
+            user.hasPositions(inPositions, function (err, ps) {
+              expect(ps).to.deep.equal(['技术总监']);
+              inPositions = [];
+              user.hasPositions(inPositions, function (err, ps) {
+                expect(ps).to.deep.equal([]);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+
+  });
+});

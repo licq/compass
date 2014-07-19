@@ -6,7 +6,11 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
-  req.query.positions = req.user.positions;
+//  req.query.positions = req.user.positions;
+//  if (params.positions && params.positions.length > 0) {
+//    var positionsFilter = makeTermFilter(_.map(params.positions, 'name'), 'applyPosition.original');
+//    filters.push(positionsFilter);
+//  }
   req.query.sort = [
     {
       createdAt: {order: 'desc'}

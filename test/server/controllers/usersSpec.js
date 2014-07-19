@@ -19,7 +19,6 @@ describe('users', function () {
           existPosition = position;
           expect(position.owners).to.have.length(1);
           helper.createPosition({name: 'cfo', company: user.company}, function (err, p2) {
-            console.log(p2.owners);
             expect(p2.owners).to.have.length(0);
             position2 = p2;
             done();
