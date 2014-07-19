@@ -27,8 +27,8 @@ angular.module('compass')
       });
     };
 
-    $scope.delete = function () {
-      mvEvent.delete({_id: $scope.event._id}, function () {
+    $scope.remove = function () {
+      mvEvent.remove({_id: $scope.event._id}, function () {
         $rootScope.$broadcast('changeOfEvent', 'delete', null, oldStartTime, $scope.event.countOfEvents);
         $modalInstance.close();
         mvNotifier.notify('已删除面试邀请!');

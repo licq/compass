@@ -4,7 +4,7 @@ angular.module('compass')
     $scope.title = applicationStatusMap[$routeParams.status];
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
       queryOptions: {
-        pageSize: 50,
+        pageSize: 10,
         page: 1,
         status: $routeParams.status
       }

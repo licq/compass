@@ -52,8 +52,8 @@ describe('mvInterviewReportViewCtrl', function () {
       expect($scope.applyPositions).to.deep.equal(['java工程师', '市场总监']);
     });
 
-    it('should get the interviewCounts', inject(function (mvMoment) {
-      expect($scope.interviewCounts[0].values).to.have.length(mvMoment().add('months', -1).endOf('month').date());
+    it('should get the interviewCounts', inject(function () {
+      expect($scope.interviewCounts[0].values).to.have.length(moment().add('months', -1).endOf('month').date());
     }));
 
     it('should retrieve the applyPositionSummary', function () {

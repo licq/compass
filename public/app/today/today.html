@@ -6,15 +6,15 @@
           <strong>今日</strong>
         </div>
         <div class="panel-body">
-          <accordion close-others="false">
-            <accordion-group is-open="isopen.eventsOfToday">
-              <accordion-heading>
+          <div accordion close-others="false">
+            <div accordion-group is-open="isopen.eventsOfToday">
+              <div accordion-heading>
                 <span>今日面试</span>
                 <i class="fa fa-user fa-lg"></i>
                 <span class="badge badge-info">{{counts.eventsOfToday}}</span>
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': isopen.eventsOfToday, 'glyphicon-chevron-right': !isopen.eventsOfToday}"></i>
-              </accordion-heading>
+              </div>
               <div ng-repeat="event in eventsOfToday">
                 <a href="#/resumes/{{event.application}}" class="media">
                                 <span class="pull-left media-icon">
@@ -27,16 +27,16 @@
                   </div>
                 </a>
               </div>
-            </accordion-group>
+            </div>
 
-            <accordion-group has-permission="intOnboards" is-open="isopen.onboardsOfToday">
-              <accordion-heading>
+            <div accordion-group has-permission="intOnboards" is-open="isopen.onboardsOfToday">
+              <div accordion-heading>
                 <span>今日入职</span>
                 <i class="fa fa-child fa-lg"></i>
                 <span class="badge badge-info">{{counts.onboards}}</span>
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': isopen.onboardsOfToday, 'glyphicon-chevron-right': !isopen.onboardsOfToday}"></i>
-              </accordion-heading>
+              </div>
               <div ng-repeat="onboard in onboardsOfToday ">
                 <a href="#/resumes/{{onboard.application}}" class="media">
                                 <span class="pull-left media-icon">
@@ -49,15 +49,15 @@
                   </div>
                 </a>
               </div>
-            </accordion-group>
-            <accordion-group is-open="isopen.unreviewed">
-              <accordion-heading>
+            </div>
+            <div accordion-group is-open="isopen.unreviewed">
+              <div accordion-heading>
                 <span>待评面试</span>
                 <i class="fa fa-pencil fa-lg"></i>
                 <span class="badge badge-info">{{counts.unreviewed}}</span>
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': isopen.unreviewed, 'glyphicon-chevron-right': !isopen.unreviewed}"></i>
-              </accordion-heading>
+              </div>
               <div ng-repeat="unreviewed in unreviewedOfDays">
                 <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">
                                 <span class="pull-left media-icon">
@@ -70,8 +70,8 @@
                   </div>
                 </a>
               </div>
-            </accordion-group>
-          </accordion>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -81,15 +81,15 @@
           <strong>未来三天</strong>
         </div>
         <div class="panel-body">
-          <accordion close-others="false">
-            <accordion-group is-open="isopen.eventsOfNextDays">
-              <accordion-heading>
+          <div accordion close-others="false">
+            <div accordion-group is-open="isopen.eventsOfNextDays">
+              <div accordion-heading>
                 <span>未来三天面试</span>
                 <i class="fa fa-user fa-lg"></i>
                 <span class="badge badge-info">{{isopen.eventsOfNextDays}}</span>
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': isopen.eventsOfNextDays, 'glyphicon-chevron-right': !isopen.eventsOfNextDays}"></i>
-              </accordion-heading>
+              </div>
               <div ng-repeat="event in eventsOfNextDays ">
                 <a href="#/resumes/{{event.application}}" class="media">
                                 <span class="pull-left media-icon">
@@ -102,15 +102,15 @@
                   </div>
                 </a>
               </div>
-            </accordion-group>
-            <accordion-group has-permission="intOnboards" is-open="isopen.onboardsOfNextDays">
-              <accordion-heading>
+            </div>
+            <div accordion-group has-permission="intOnboards" is-open="isopen.onboardsOfNextDays">
+              <div accordion-heading>
                 <span>未来三天入职</span>
                 <i class="fa fa-child fa-lg"></i>
                 <span class="badge badge-info">{{isopen.onboardsOfNextDays}}</span>
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': isopen.onboardsOfNextDays, 'glyphicon-chevron-right': !isopen.onboardsOfNextDays}"></i>
-              </accordion-heading>
+              </div>
               <div ng-repeat="onboard in onboardsOfNextDays ">
                 <a href="#/resumes/{{onboard.application}}" class="media">
                                 <span class="pull-left media-icon">
@@ -123,8 +123,8 @@
                   </div>
                 </a>
               </div>
-            </accordion-group>
-          </accordion>
+            </div>
+          </div>
         </div>
       </section>
     </div>

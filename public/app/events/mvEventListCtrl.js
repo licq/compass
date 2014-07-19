@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvEventListCtrl', function ($scope, $rootScope, mvEvent, mvIdentity, mvMoment, $modal, $filter, mvUser) {
+  .controller('mvEventListCtrl', function ($scope, $rootScope, mvEvent, mvIdentity, $modal, $filter, mvUser) {
     $scope.eventsForCalendar = [];
     $scope.eventSources = [$scope.eventsForCalendar];
     $scope.selectedUserId = mvIdentity.currentUser._id;
@@ -14,11 +14,11 @@ angular.module('compass')
     function convertCalendarEvent(evt) {
       return {
         id: evt._id,
-        start: mvMoment(evt.startTime).toDate(),
-        end: mvMoment(evt.startTime).add('minutes', evt.duration).toDate(),
+        start: moment(evt.startTime).toDate(),
+        end: moment(evt.startTime).add('minutes', evt.duration).toDate(),
         title: evt.name + '面试(' + evt.applyPosition + ')',
         allDay: false,
-        backgroundColor: mvMoment(evt.startTime).isBefore(new Date()) ? 'rgb(128,128,128)' : 'rgb(219,173,255)',
+        backgroundColor: moment(evt.startTime).isBefore(new Date()) ? 'rgb(128,128,128)' : 'rgb(219,173,255)',
         textColor: 'black',
         editable: true
       };
@@ -87,7 +87,7 @@ angular.module('compass')
       });
       var oldStartTime = new Date(event.startTime), newStartTime = new Date(calendarEvent.start);
       event.startTime = calendarEvent.start;
-      event.duration = mvMoment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
+      event.duration = moment(calendarEvent.end).diff(calendarEvent.start, 'minutes');
       mvEvent.update(event, function () {
         $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime);
         $scope.eventsForCalendar[index] = convertCalendarEvent(event);

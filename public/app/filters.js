@@ -276,10 +276,10 @@ angular.module('compass')
       return input > 0 ? ('总共有' + input + '个') : '没有';
     };
   })
-  .filter('eventTimeRange', function (mvMoment) {
+  .filter('eventTimeRange', function () {
     return function (event) {
-      var start = mvMoment(event.startTime).format('H:mm'),
-        end = mvMoment(event.startTime).add('minutes', event.duration).format('H:mm');
+      var start = moment(event.startTime).format('H:mm'),
+        end = moment(event.startTime).add('minutes', event.duration).format('H:mm');
       return start + '-' + end;
     };
   })

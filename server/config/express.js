@@ -78,6 +78,13 @@ module.exports = function (app, config) {
     }
   });
 
+  app.use(function (req, res, next) {
+    res.setHeader('Cache-Control', 'nocache, nostore, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', 0);
+    next();
+  });
+
   require('./routes')(app);
 
   app.use(expressWinston.errorLogger({

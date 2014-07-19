@@ -18,7 +18,7 @@ describe('mvApplicationListCtrl', function () {
         failed: 0
       },
       hits: {
-        total: 20,
+        total: 10,
         max_score: 0.39723808,
         hits: [
           {
@@ -1431,7 +1431,7 @@ describe('mvApplicationListCtrl', function () {
   ['new', 'undertimined', 'pursued'].forEach(function (status) {
     describe('/applications/' + status, function () {
       beforeEach(inject(function ($controller) {
-        $httpBackend.expectGET('/api/applications?page=1&pageSize=50&status=' + status).respond(result);
+        $httpBackend.expectGET('/api/applications?page=1&pageSize=10&status=' + status).respond(result);
         mvApplicationListCtrl = $controller('mvApplicationListCtrl', {
           $scope: $scope,
           $routeParams: {
@@ -1441,27 +1441,27 @@ describe('mvApplicationListCtrl', function () {
         $httpBackend.flush();
       }));
 
-      it('should invoke the /api/applications', inject(function () {
+      it('should invoke the /api/applications', function () {
         $scope.queryOptions = {
           q: 'hello',
           age: 20,
           applyPosition: 'cio',
           highestDegree: 'master',
           page: 1,
-          pageSize: 50,
+          pageSize: 10,
           status: status
         };
 
-        $httpBackend.expectGET('/api/applications?age=20&applyPosition=cio&highestDegree=master&page=1&pageSize=50&q=hello&status=' + status).respond(result);
+        $httpBackend.expectGET('/api/applications?age=20&applyPosition=cio&highestDegree=master&page=1&pageSize=10&q=hello&status=' + status).respond(result);
         $scope.query();
         $httpBackend.flush();
         expect($scope.applications).to.have.length(10);
-        expect($scope.totalApplicationCount).to.equal(20);
-      }));
+        expect($scope.totalApplicationCount).to.equal(10);
+      });
 
       it('should get the application list', function () {
         expect($scope.applications).to.have.length(10);
-        expect($scope.totalApplicationCount).to.equal(20);
+        expect($scope.totalApplicationCount).to.equal(10);
         expect($scope.facets.age.entries).to.have.length(4);
         expect($scope.facets.applyPosition.terms).to.have.length(4);
         expect($scope.facets.highestDegree.terms).to.have.length(4);
@@ -1519,14 +1519,14 @@ describe('mvApplicationListCtrl', function () {
 
       describe('showPagination', function () {
         it('should show pagination bar when totalCount bigger than pageSize', function () {
-          $scope.queryOptions.pageSize = 50;
-          $scope.totalApplicationCount = 51;
+          $scope.queryOptions.pageSize = 10;
+          $scope.totalApplicationCount = 11;
           expect($scope.showPagination()).to.be.true;
         });
 
         it('should show pagination bar when totalCount smaller than or equal to pageSize', function () {
-          $scope.queryOptions.pageSize = 50;
-          $scope.totalApplicationCount = 49;
+          $scope.queryOptions.pageSize = 10;
+          $scope.totalApplicationCount = 9;
           expect($scope.showPagination()).to.be.false;
         });
       });
@@ -1553,7 +1553,7 @@ describe('mvApplicationListCtrl', function () {
           expect($scope.applications).to.have.length(9);
         });
         it('should get back one application', function () {
-          $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=' + status).respond({
+          $httpBackend.expectGET('/api/applications?page=10&pageSize=1&status=' + status).respond({
             hits: {
               hits: [
                 {
@@ -1591,7 +1591,7 @@ describe('mvApplicationListCtrl', function () {
           expect($scope.applications).to.have.length(9);
         });
         it('should get back one application', function () {
-          $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=' + status).respond({
+          $httpBackend.expectGET('/api/applications?page=10&pageSize=1&status=' + status).respond({
             hits: {
               hits: [
                 {
@@ -1629,7 +1629,7 @@ describe('mvApplicationListCtrl', function () {
           expect($scope.applications).to.have.length(9);
         });
         it('should get back one application', function () {
-          $httpBackend.expectGET('/api/applications?page=50&pageSize=1&status=' + status).respond({
+          $httpBackend.expectGET('/api/applications?page=10&pageSize=1&status=' + status).respond({
             hits: {
               hits: [
                 {

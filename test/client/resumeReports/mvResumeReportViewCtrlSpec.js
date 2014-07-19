@@ -67,8 +67,8 @@ describe('mvResumeReportViewCtrl', function () {
       expect($scope.channels).to.deep.equal(['智联招聘', '前程无忧']);
     });
 
-    it('should retrieve the resume count list', inject(function (mvMoment) {
-      expect($scope.resumeCounts[0].values).to.have.length(mvMoment().add('months', -1).endOf('month').date());
+    it('should retrieve the resume count list', inject(function () {
+      expect($scope.resumeCounts[0].values).to.have.length(moment().add('months', -1).endOf('month').date());
     }));
 
     it('should retrieve the channelSummary', function () {

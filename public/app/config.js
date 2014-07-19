@@ -294,7 +294,7 @@ angular.module('compass')
     };
   })
   .value('applicationStatusMap', {
-    new: '新应聘',
+    'new': '新应聘',
     archived: '归档',
     pursued: '通过',
     undetermined: '待定'
@@ -338,7 +338,6 @@ angular.module('compass')
 //        {name: 'sysSetOperations', cnName: '系统操作', enabled: false}
 //      ]}
   ])
-  .value('mvMoment', moment)
   .constant('uiCalendarConfig', {
     monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
     monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
@@ -390,7 +389,7 @@ angular.module('compass')
         return taOptions;
       }]);
   })
-  .run(function ($rootScope, mvMoment, $filter) {
+  .run(function ($rootScope, $filter) {
     $rootScope.applicationFilterOptions = [
       {label: '不过滤', value: 0},
       {label: '3个月内不允许重复投递', value: 3},
@@ -404,43 +403,43 @@ angular.module('compass')
       convert: function (type, data) {
         var map = {
           day: {
-            series: _.range(mvMoment().add('months', -1).add('days', 1).startOf('day').valueOf(),
-                mvMoment().startOf('day').valueOf() + 1,
+            series: _.range(moment().add('months', -1).add('days', 1).startOf('day').valueOf(),
+                moment().startOf('day').valueOf() + 1,
                 1000 * 60 * 60 * 24),
             lookup: function (d, t) {
-              var m = mvMoment(t);
+              var m = moment(t);
               return _.find(d, {year: m.year(), month: m.month() + 1, day: m.date()});
             },
             format: function (time) {
-              var m = mvMoment(time);
+              var m = moment(time);
               if (m.date() === 1) {
                 return m.format('M月');
               }
-              return mvMoment(time).format('D');
+              return moment(time).format('D');
             }
           },
           week: {
-            series: _.range(mvMoment().add('weeks', -11).startOf('week').valueOf(),
-                mvMoment().startOf('week').valueOf() + 1,
+            series: _.range(moment().add('weeks', -11).startOf('week').valueOf(),
+                moment().startOf('week').valueOf() + 1,
                 1000 * 60 * 60 * 24 * 7),
             lookup: function (d, t) {
-              var m = mvMoment(t);
+              var m = moment(t);
               return _.find(d, {year: m.year(), week: m.week()});
             },
             format: function (time) {
-              return mvMoment(time).format('第w周');
+              return moment(time).format('第w周');
             }
           },
           month: {
             series: _.map(_.range(-11, 1), function (i) {
-              return mvMoment().add('months', i).startOf('month').toDate();
+              return moment().add('months', i).startOf('month').toDate();
             }),
             lookup: function (d, t) {
-              var m = mvMoment(t);
+              var m = moment(t);
               return _.find(d, {year: m.year(), month: m.month() + 1});
             },
             format: function (time) {
-              var m = mvMoment(time);
+              var m = moment(time);
               if (m.month() === 0) {
                 return m.format('YYYY年');
               }

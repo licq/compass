@@ -39,8 +39,8 @@ describe('mvEventListCtrl', function () {
       expect($scope.users).to.have.length(2);
     });
 
-    it('should get /api/events/user=7788?startTime=:startTime&endTime=:endTime', inject(function (mvMoment) {
-      var now = mvMoment();
+    it('should get /api/events/user=7788?startTime=:startTime&endTime=:endTime', inject(function () {
+      var now = moment();
       $scope.start = now.startOf('week').toISOString();
       $scope.end = now.endOf('week').toISOString();
       $httpBackend.expectGET('/api/events?endTime=' + $scope.end + '&startTime=' + $scope.start + '&user=7788')
@@ -55,7 +55,7 @@ describe('mvEventListCtrl', function () {
             email: 'aa@aa.com',
             createdBy: '7788',
             createdByUserName: '王五',
-            startTime: mvMoment([2010, 0, 31, 14, 20, 0, 0]).toDate(),
+            startTime: moment([2010, 0, 31, 14, 20, 0, 0]).toDate(),
             duration: 90
           }
         ]);
@@ -66,8 +66,8 @@ describe('mvEventListCtrl', function () {
       expect($scope.events).to.have.length(1);
       expect($scope.eventsForCalendar).to.have.length(1);
       expect($scope.eventsForCalendar[0]).to.have.property('title', '李四面试(销售经理)');
-      expect($scope.eventsForCalendar[0].start.getTime()).to.equal(mvMoment([2010, 0, 31, 14, 20, 0, 0]).toDate().getTime());
-      expect($scope.eventsForCalendar[0].end.getTime()).to.equal(mvMoment([2010, 0, 31, 15, 50, 0, 0]).toDate().getTime());
+      expect($scope.eventsForCalendar[0].start.getTime()).to.equal(moment([2010, 0, 31, 14, 20, 0, 0]).toDate().getTime());
+      expect($scope.eventsForCalendar[0].end.getTime()).to.equal(moment([2010, 0, 31, 15, 50, 0, 0]).toDate().getTime());
     }));
   });
 
@@ -116,8 +116,8 @@ describe('mvEventListCtrl', function () {
       $scope.showModal($scope.eventsForCalendar[0]);
       expect(modalOpenStub).to.have.been.called;
     });
-    it('should update the local events', inject(function (mvMoment) {
-      var newTime = mvMoment([2014, 9, 10, 18, 0, 0, 0]).toDate();
+    it('should update the local events', inject(function () {
+      var newTime = moment([2014, 9, 10, 18, 0, 0, 0]).toDate();
       $scope.showModal($scope.eventsForCalendar[0]);
       fakeModal.close({
         _id: '7788',
@@ -125,7 +125,7 @@ describe('mvEventListCtrl', function () {
         startTime: newTime
       });
       expect($scope.eventsForCalendar[0].start.toString()).to.equal(newTime.toString());
-      expect($scope.eventsForCalendar[0].end.toString()).to.equal(mvMoment(newTime).add('minutes', 60).toDate().toString());
+      expect($scope.eventsForCalendar[0].end.toString()).to.equal(moment(newTime).add('minutes', 60).toDate().toString());
     }));
 
     it('should delete the event from the calendar and $scope.events', function () {
@@ -137,10 +137,10 @@ describe('mvEventListCtrl', function () {
   });
 
   describe('sync draganddrop and resize', function () {
-    it('should update /api/events/:id and update the events', inject(function (mvMoment) {
+    it('should update /api/events/:id and update the events', inject(function () {
       $httpBackend.expectPUT('/api/events/7788', {
         _id: '7788',
-        startTime: mvMoment([2019, 5, 5, 8, 0, 0, 0]).toISOString(),
+        startTime: moment([2019, 5, 5, 8, 0, 0, 0]).toISOString(),
         duration: 60
       }).respond(200);
 
@@ -148,23 +148,23 @@ describe('mvEventListCtrl', function () {
       $scope.events = [
         {
           _id: '7788',
-          startTime: mvMoment([2014, 5, 5, 0, 0, 0, 0]).toDate(),
+          startTime: moment([2014, 5, 5, 0, 0, 0, 0]).toDate(),
           duration: 90
         }
       ];
       $scope.sync({
         id: '7788',
-        start: mvMoment([2019, 5, 5, 8, 0, 0, 0]).toDate(),
-        end: mvMoment([2019, 5, 5, 9, 0, 0, 0]).toDate()
+        start: moment([2019, 5, 5, 8, 0, 0, 0]).toDate(),
+        end: moment([2019, 5, 5, 9, 0, 0, 0]).toDate()
       });
       $httpBackend.flush();
-      expect($scope.events[0].startTime.toString()).to.equal(mvMoment([2019, 5, 5, 8 , 0, 0, 0]).toDate().toString());
+      expect($scope.events[0].startTime.toString()).to.equal(moment([2019, 5, 5, 8 , 0, 0, 0]).toDate().toString());
     }));
   });
 
   describe('change selectedUserId', function () {
-    it('should retrieve events', inject(function (mvMoment) {
-      var now = mvMoment();
+    it('should retrieve events', inject(function () {
+      var now = moment();
       $scope.start = now.startOf('week').toISOString();
       $scope.end = now.endOf('week').toISOString();
       $httpBackend.expectGET('/api/events?endTime=' + $scope.end + '&startTime=' + $scope.start + '&user=1122')
