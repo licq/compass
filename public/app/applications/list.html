@@ -59,7 +59,7 @@
 
     <div class="panel-body">
       <div class="row callout callout-info" ng-repeat="application in applications" on-finish-render="scroll()">
-        <div  class="col-md-1 resume-name">
+        <div class="col-md-1 resume-name">
           <h4>{{application.name}}</h4>
           <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo">
         </div>
@@ -106,18 +106,18 @@
 
         </div>
         <div class="col-md-1 application-action-buttons">
-          <button ng-click="view($index)" class="btn btn-primary">详细</button>
-          <button class="btn btn-success" ng-click="newEvent(application)"
+          <button ng-disabled="application.clicked" ng-click="view($index)" class="btn btn-primary">详细</button>
+          <button ng-disabled="application.clicked" class="btn btn-success" ng-click="newEvent(application)"
                   ng-show="application | showInterviewButton">预约面试
           </button>
-          <button class="btn btn-success" ng-click="pursue(application._id)"
+          <button ng-disabled="application.clicked" class="btn btn-success" ng-click="pursue(application)"
                   ng-show="application | showPursueButton"> 通过
           </button>
-          <button class="btn btn-danger" ng-click="archive(application._id)"
+          <button ng-disabled="application.clicked" class="btn btn-danger" ng-click="archive(application)"
                   ng-show="application | showArchiveButton"> 归档
           </button>
-          <button class="btn btn-warning"
-                  ng-click="undetermine(application._id)"
+          <button ng-disabled="application.clicked" class="btn btn-warning"
+                  ng-click="undetermine(application)"
                   ng-show="application | showUndetermineButton">待定
           </button>
         </div>

@@ -2,7 +2,6 @@ angular.module('compass')
   .controller('mvApplicationListCtrl',
   function ($scope, states, $rootScope, mvApplication, $anchorScroll, $http, $location, $routeParams, applicationStatusMap, $modal, mvNotifier) {
     $scope.title = applicationStatusMap[$routeParams.status];
-
     states.defaults('mvApplicationListCtrl' + $routeParams.status, {
       queryOptions: {
         pageSize: 50,
@@ -25,11 +24,11 @@ angular.module('compass')
       });
     };
 
-    $scope.scroll = function() {
+    $scope.scroll = function () {
 
-      if($location.hash()){
+      if ($location.hash()) {
         var index = $location.hash() - ($scope.queryOptions.page - 1) * $scope.queryOptions.pageSize;
-       var item = '#item' + (index - 1);
+        var item = '#item' + (index - 1);
 
         var settings = {
           container: 'section',
@@ -102,31 +101,34 @@ angular.module('compass')
       }
     }
 
-    $scope.archive = function (id) {
-      mvApplication.archive({_id: id}, function () {
+    $scope.archive = function (application) {
+      application.clicked = true;
+      mvApplication.archive({_id: application._id}, function () {
           $rootScope.$broadcast('applicationStatusUpdated', $routeParams.status, 'archived');
           mvNotifier.notify('已归档该简历。归档后的简历可在人才库找到。');
-          removeLocal(id);
+          removeLocal(application._id);
           oneMore();
         }
       );
     };
 
-    $scope.pursue = function (id) {
-      mvApplication.pursue({_id: id}, function () {
+    $scope.pursue = function (application) {
+      application.clicked = true;
+      mvApplication.pursue({_id: application._id}, function () {
         var from = $routeParams.status, to = 'pursued';
         $rootScope.$broadcast('applicationStatusUpdated', from, to);
         mvNotifier.notify('已将该简历放入通过列表。');
-        removeLocal(id);
+        removeLocal(application._id);
         oneMore();
       });
     };
 
-    $scope.undetermine = function (id) {
-      mvApplication.undetermine({_id: id}, function () {
+    $scope.undetermine = function (application) {
+      application.clicked = true;
+      mvApplication.undetermine({_id: application._id}, function () {
         $rootScope.$broadcast('applicationStatusUpdated', $routeParams.status, 'undetermined');
         mvNotifier.notify('已将该简历放入待定列表。');
-        removeLocal(id);
+        removeLocal(application._id);
         oneMore();
       });
     };
@@ -158,7 +160,6 @@ angular.module('compass')
       newEventModal.result.then(function (event) {
         if (event) {
           $rootScope.$broadcast('applicationStatusUpdated', 'pursued', 'interview');
-
           removeLocal(event.application);
           oneMore();
         }

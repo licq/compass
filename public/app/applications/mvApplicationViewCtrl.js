@@ -1,6 +1,7 @@
 angular.module('compass')
   .controller('mvApplicationViewCtrl', function ($scope, mvApplication, $rootScope, $routeParams, states, $http, $window, $location, mvNotifier, applicationStatusMap, $modal) {
     $scope.index = $routeParams.index;
+    $scope.clicked = false;
     $scope.listQueryOptions = states.get('mvApplicationListCtrl' + $routeParams.status).queryOptions || {};
 
     function retrieveApplication() {
@@ -27,6 +28,7 @@ angular.module('compass')
     retrieveApplication();
 
     $scope.pursue = function () {
+      $scope.clicked = true;
       mvApplication.pursue({_id: $scope.resume._id}, function () {
         var from = $routeParams.status, to = 'pursued';
         $rootScope.$broadcast('applicationStatusUpdated', from, to);
@@ -36,6 +38,7 @@ angular.module('compass')
     };
 
     $scope.undetermine = function () {
+      $scope.clicked = true;
       mvApplication.undetermine({_id: $scope.resume._id}, function () {
         $rootScope.$broadcast('applicationStatusUpdated', $routeParams.status, 'undetermined');
         mvNotifier.notify('已将' + $scope.resume.name + '加入待定列表');
@@ -44,6 +47,7 @@ angular.module('compass')
     };
 
     $scope.archive = function () {
+      $scope.clicked = true;
       mvApplication.archive({_id: $scope.resume._id}, function () {
         $rootScope.$broadcast('applicationStatusUpdated', $routeParams.status, 'archived');
         mvNotifier.notify('已将' + $scope.resume.name + '归档到人才库中');
@@ -71,6 +75,8 @@ angular.module('compass')
 
       newEventModal.result.then(function (id) {
         if (id) {
+          $scope.clicked = true;
+          $rootScope.$broadcast('applicationStatusUpdated', 'pursued', 'interview');
           retrieveApplication();
         }
       });

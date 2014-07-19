@@ -1532,7 +1532,7 @@ describe('mvApplicationListCtrl', function () {
       });
 
       describe('archive', function () {
-        var confirmStub;
+        var confirmStub, application = {_id:'5355c145b5f85ce10e5aa596'};
         beforeEach(inject(function ($window) {
           $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=archived').respond(200);
           confirmStub = sinon.stub($window, 'confirm');
@@ -1543,9 +1543,10 @@ describe('mvApplicationListCtrl', function () {
           confirmStub.restore();
         });
 
-        it('should put /api/applicatioins/:id and delete from client', function () {
-          $scope.archive('5355c145b5f85ce10e5aa596');
+        it('should put /api/applications/:id and delete from client', function () {
+          $scope.archive(application);
           $httpBackend.flush();
+          expect(application.clicked).to.be.true;
           $scope.applications.forEach(function (application) {
             expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
           });
@@ -1562,14 +1563,14 @@ describe('mvApplicationListCtrl', function () {
             }
           });
           $scope.totalApplicationCount = 60;
-          $scope.archive('5355c145b5f85ce10e5aa596');
+          $scope.archive(application);
           $httpBackend.flush();
           expect($scope.applications).to.have.length(10);
         });
       });
 
       describe('pursued', function () {
-        var confirmStub;
+        var confirmStub,application = {_id:'5355c145b5f85ce10e5aa596'};
         beforeEach(inject(function ($window) {
           $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=pursued').respond(200);
           confirmStub = sinon.stub($window, 'confirm');
@@ -1581,8 +1582,9 @@ describe('mvApplicationListCtrl', function () {
         });
 
         it('should put /api/applicatioins/:id and delete from client', function () {
-          $scope.pursue('5355c145b5f85ce10e5aa596');
+          $scope.pursue(application);
           $httpBackend.flush();
+          expect(application.clicked).to.be.true;
           $scope.applications.forEach(function (application) {
             expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
           });
@@ -1599,14 +1601,14 @@ describe('mvApplicationListCtrl', function () {
             }
           });
           $scope.totalApplicationCount = 60;
-          $scope.pursue('5355c145b5f85ce10e5aa596');
+          $scope.pursue(application);
           $httpBackend.flush();
           expect($scope.applications).to.have.length(10);
         });
       });
 
       describe('undetermined', function () {
-        var confirmStub;
+        var confirmStub, application = {_id:'5355c145b5f85ce10e5aa596'};
         beforeEach(inject(function ($window) {
           $httpBackend.expectPUT('/api/applications/5355c145b5f85ce10e5aa596?status=undetermined').respond(200);
           confirmStub = sinon.stub($window, 'confirm');
@@ -1618,8 +1620,9 @@ describe('mvApplicationListCtrl', function () {
         });
 
         it('should put /api/applications/:id and delete from client', function () {
-          $scope.undetermine('5355c145b5f85ce10e5aa596');
+          $scope.undetermine(application);
           $httpBackend.flush();
+          expect(application.clicked).to.be.true;
           $scope.applications.forEach(function (application) {
             expect(application._id).to.not.equal('5355c145b5f85ce10e5aa596');
           });
@@ -1636,7 +1639,7 @@ describe('mvApplicationListCtrl', function () {
             }
           });
           $scope.totalApplicationCount = 60;
-          $scope.undetermine('5355c145b5f85ce10e5aa596');
+          $scope.undetermine(application);
           $httpBackend.flush();
           expect($scope.applications).to.have.length(10);
           expect($scope.totalApplicationCount).to.equal(59);
