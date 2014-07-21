@@ -11,7 +11,7 @@ module.exports = function () {
   });
 
   passport.deserializeUser(function (id, done) {
-    User.findOne({ _id: id })
+    User.findOne({ _id: id, deleted: false })
       .populate('positions', 'name')
       .select('-hashed_password -salt')
       .exec(function (err, user) {
