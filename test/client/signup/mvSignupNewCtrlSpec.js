@@ -70,6 +70,22 @@ describe('mvSignupNewCtrl', function () {
       expect($scope.captchaValid).to.not.exist;
     });
 
+    describe('watch adminEmail', function () {
+      it('should delete adminEmail error when change adminEmail', function () {
+        $scope.adminEmail = 'hello@hello.com';
+        $scope.err = {
+          errors: {
+            adminEmail: {
+              message: '该邮箱已注册'
+            }
+          }
+        };
+        $scope.adminEmail = 'hello@hello.co';
+        $scope.$digest();
+        expect($scope.err.errors.adminEmail).to.not.exist;
+      });
+    });
+
     describe('changeCaptchaUrl', function () {
       it('should change captchaUrl', function () {
         var current = $scope.captchaUrl;

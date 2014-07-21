@@ -40,4 +40,8 @@ angular.module('compass')
         }
       });
     };
+
+    $scope.$watch('adminEmail', function(){
+      $scope.err && $scope.err.errors && delete $scope.err.errors.adminEmail;
+    });
   });
