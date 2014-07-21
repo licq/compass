@@ -38,7 +38,7 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res, next) {
-  User.deleteUser(req.user, function (err) {
+  User.deleteUser(req.loadedUser, function (err) {
     if (err) return next(err);
     res.end();
   });

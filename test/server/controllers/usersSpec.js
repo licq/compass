@@ -112,19 +112,23 @@ describe('users', function () {
 
   describe('DELETE /api/users/:id', function () {
     it('should return 200', function (done) {
-      request.del('/api/users/' + existUser._id)
-        .expect(200)
-        .end(function (err) {
-          expect(err).to.not.exist;
-          User.findOne({_id: existUser._id}, function (err, u) {
-            expect(u.deleted).to.be.true;
-            Position.findOne({_id: existPosition._id}, function (err, p) {
-              expect(p.owners).to.have.length(0);
+      Factory.create('user', {company: existUser.company, positions: [existPosition._id]}, function (userToDelete) {
+        existPosition.owners.push(userToDelete);
+        existPosition.save(function () {
+          request.del('/api/users/' + userToDelete._id)
+            .expect(200)
+            .end(function (err) {
+              expect(err).to.not.exist;
+              User.findOne({_id: userToDelete._id}, function (err, u) {
+                expect(u.deleted).to.be.true;
+                Position.findOne({_id: existPosition._id}, function (err, p) {
+                  expect(p.owners).to.have.length(1);
+                  done(err);
+                });
+              });
             });
-            expect(err).to.not.exist;
-            done();
-          });
         });
+      });
     });
   });
 
