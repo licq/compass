@@ -14,7 +14,7 @@ describe('roles', function () {
       helper.login(function (agent, user) {
         existUser = user;
         request = agent;
-        Role.findOne({_id:existUser.role}).exec(function (err, role) {
+        Role.findOne({_id: existUser.role}).exec(function (err, role) {
           existRole = role;
           done();
         });
@@ -108,6 +108,21 @@ describe('roles', function () {
           expect(res.body.message).to.be.equal('还有1个用户属于' + existRole.name + '这个角色,不能删除');
           done();
         });
+    });
+    it.only('should return 200 when the role is associated with deleted users', function (done) {
+      existUser.deleted = true;
+      existUser.save(function () {
+        request.del('/api/roles/' + existRole._id)
+          .expect(200)
+          .end(function (err) {
+            expect(err).to.not.exist;
+            Role.findById(existRole.id, function (err, role) {
+              expect(err).to.not.exist;
+              expect(role).to.not.exist;
+              done();
+            });
+          });
+      });
     });
   });
 });
