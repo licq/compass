@@ -21,5 +21,11 @@ angular.module('compass')
     $scope.cancel = function () {
       $location.path('/settings/emails');
     };
+
+    $scope.$watch('email.ssl', function(){
+      if($scope.email.ssl && $scope.email.port === 110){
+        $scope.email.port = 995;
+      }
+    });
   });
 

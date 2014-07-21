@@ -54,4 +54,19 @@ describe('mvEmailNewCtrl', function () {
       expect(notifySpy).to.have.been.calledWith('添加简历邮箱失败');
     }));
   });
+
+  describe('watch email.ssl', function () {
+    it('should change the default port from 110 to 995', function () {
+      $scope.email.ssl = true;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(995);
+    });
+
+    it('should not change the port if user changed port ', function () {
+      $scope.email.port = 465;
+      $scope.email.ssl = true;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(465);
+    });
+  });
 });
