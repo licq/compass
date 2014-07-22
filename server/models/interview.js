@@ -165,6 +165,7 @@ interviewSchema.statics.addEvent = function (event, cb) {
         Resume.findById(interview.application).select('status')
           .exec(function (err, resume) {
             if (err) return cb(err);
+            if(!resume) return cb(null,interview);
             resume.status = 'interview';
             resume.saveAndIndexSync(function (err) {
               if (err) return cb(err);
@@ -351,7 +352,7 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
             if (err) return cb(err);
             if (!resume) return cb();
             resume.status = 'pursued';
-            resume.save(function (err) {
+            resume.saveAndIndex(function (err) {
               if (err) return cb(err);
               return cb();
             });
