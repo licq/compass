@@ -165,7 +165,7 @@ interviewSchema.statics.addEvent = function (event, cb) {
         Resume.findById(interview.application).select('status')
           .exec(function (err, resume) {
             if (err) return cb(err);
-            if(!resume) return cb(null,interview);
+            if (!resume) return cb(null, interview);
             resume.status = 'interview';
             resume.saveAndIndexSync(function (err) {
               if (err) return cb(err);
@@ -370,7 +370,6 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
 function constructQueryForReview(model, user, options) {
   var query;
   if (options.startDate) {
-    options.startDate = options.startDate.replace(/"/g, '');
     var start = moment(options.startDate).startOf('day').toDate();
     var end = moment(options.startDate).endOf('day').toDate();
     query = model.where('events').elemMatch({startTime: {$lte: end, $gte: start}, interviewers: user._id});

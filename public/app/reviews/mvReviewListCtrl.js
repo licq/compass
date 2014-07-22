@@ -18,6 +18,9 @@ angular.module('compass')
     });
 
     $scope.query = function () {
+      if ($scope.queryOptions.startDate && typeof $scope.queryOptions.startDate !== 'string') {
+        $scope.queryOptions.startDate = $scope.queryOptions.startDate.toISOString();
+      }
       mvReview.query($scope.queryOptions,
         function (interviews, headers) {
           $scope.totalInterviewsCount = parseInt(headers('totalCount'), 10);
