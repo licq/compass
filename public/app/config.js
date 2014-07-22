@@ -267,8 +267,8 @@ angular.module('compass')
       };
     }]);
   })
-  .run(function ($rootScope, $location, mvIdentity, mvPermission) {
-    $rootScope.$on('$routeChangeStart', function (event, next) {
+  .run(function (states, $rootScope, $location, mvIdentity, mvPermission) {
+    $rootScope.$on('$routeChangeStart', function (event, next, current) {
       if (next.authenticate && !mvIdentity.isAuthenticated()) {
         $location.path('/login');
       }
@@ -276,6 +276,12 @@ angular.module('compass')
       var permissions = next.permissions;
       if (permissions && _.isString(permissions) && !mvPermission.hasPermission(permissions)) {
         $location.path('/today');
+      }
+
+      var applicationRegExp = /^\/applications\//;
+      if (applicationRegExp.test(current && current.originalPath) && (!applicationRegExp.test(next && next.originalPath) || (current.pathParams.status !== next.pathParams.status) ))
+      {
+        states.reset('mvApplicationListCtrl' + current.pathParams.status);
       }
     });
   })
@@ -287,6 +293,9 @@ angular.module('compass')
           states[key] = value;
         }
         return states[key];
+      },
+      reset: function (key) {
+        delete states[key];
       },
       get: function (key) {
         return states[key] || {};

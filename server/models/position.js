@@ -29,6 +29,8 @@ var positionSchema = mongoose.Schema({
   }
 });
 
+positionSchema.index({company: 1, name: 1}, {unique: true});
+
 function arrayToString(array) {
   return  _.map(array, function (element) {
     return element.toString();
@@ -97,8 +99,6 @@ positionSchema.statics.updatePosition = function (position, cb) {
     });
   });
 };
-
-positionSchema.index({company: 1, name: 1}, {unique: true});
 
 positionSchema.plugin(timestamps);
 

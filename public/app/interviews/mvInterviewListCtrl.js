@@ -18,6 +18,7 @@ function calculateQualifiedSummaries(interview) {
     return summary.name;
   });
 
+
   _.forEach(interview.reviews, function (review) {
     _.forEach(qualifiedSummaries, function (summary) {
       if (review.interviewer.name === summary.name) {
@@ -74,7 +75,7 @@ angular.module('compass')
     }
 
     $scope.query = function () {
-      if ($scope.queryOptions.startDate) {
+      if ($scope.queryOptions.startDate && typeof $scope.queryOptions.startDate !== 'string') {
         $scope.queryOptions.startDate = $scope.queryOptions.startDate.toISOString();
       }
       mvInterview.query($scope.queryOptions, function (interviews, headers) {
@@ -83,7 +84,6 @@ angular.module('compass')
         $scope.interviews.forEach(prepareForPage);
       });
     };
-
 
     $scope.query();
 
