@@ -47,8 +47,6 @@ angular.module('compass')
       $scope.applyPositions = applyPositions;
     });
 
-    $scope.today = new Date();
-
     states.defaults('mvInterviewListCtrl', {
       page: 1,
       pageSize: 20,

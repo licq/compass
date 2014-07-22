@@ -456,7 +456,7 @@ interviewSchema.statics.countForUnreviewed = function (user, options, cb) {
 };
 
 function constructQueryNew(model, company, options) {
-  var query = model.find({company: company, status: 'new'}).where('events.startTime').lte(moment().endOf('day').toDate());
+  var query = model.find({company: company, status: 'new'});
   if (options.name) {
     query.where('name').regex(new RegExp(options.name));
   }
@@ -468,10 +468,9 @@ function constructQueryNew(model, company, options) {
   }
 
   if (options.startDate) {
-    options.startDate = options.startDate.replace(/"/g, '');
     var start = moment(options.startDate).startOf('day').toDate();
     var end = moment(options.startDate).endOf('day').toDate();
-    query.where('events.startTime').lte(end).gte(start);
+    query.where('events').elemMatch({startTime: {$lte: end, $gte: start}});
   }
   return query;
 }
