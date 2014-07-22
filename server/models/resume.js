@@ -248,7 +248,10 @@ resumeSchema.statics.query = function (params, callback) {
           field: 'status'
         }
       }
-    }
+    },
+    sort: [
+      { "createdAt": {"order": "desc"}}
+    ]
   };
 
   if (params.q) {
