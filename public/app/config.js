@@ -279,14 +279,9 @@ angular.module('compass')
       }
 
       var applicationRegExp = /^\/applications\//;
-      if (applicationRegExp.test(current && current.originalPath)) {
-        if (applicationRegExp.test(next && next.originalPath)) {
-          if (current.pathParams.status !== next.pathParams.status) {
-            states.reset('mvApplicationListCtrl' + current.pathParams.status);
-          }
-        } else {
-          states.reset('mvApplicationListCtrl' + current.pathParams.status);
-        }
+      if (applicationRegExp.test(current && current.originalPath) && (!applicationRegExp.test(next && next.originalPath) || (current.pathParams.status !== next.pathParams.status) ))
+      {
+        states.reset('mvApplicationListCtrl' + current.pathParams.status);
       }
     });
   })
@@ -299,8 +294,8 @@ angular.module('compass')
         }
         return states[key];
       },
-      reset: function () {
-        states = {};
+      reset: function (key) {
+        delete states[key];
       },
       get: function (key) {
         return states[key] || {};
