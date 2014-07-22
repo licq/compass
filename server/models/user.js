@@ -12,7 +12,6 @@ var mongoose = require('mongoose'),
   logger = require('../config/winston').logger(),
   async = require('async');
 
-
 var userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -224,37 +223,42 @@ userSchema.statics.updateUser = function (user, cb) {
 userSchema.statics.createSystemAdmin = function (callback) {
   var model = this;
   async.waterfall([
-    function (cb) {
-      Company.findOneAndUpdate(
-        {name: 'CompassLtd'},
-        {name: 'CompassLtd'},
-        {upsert: true}, cb);
-    },
-    function (company, cb) {
-      Role.createRoleForSystemAdmin(company, cb);
-    },
-    function (role, company, cb) {
-      var salt = crypto.randomBytes(16).toString('base64');
-      var hashed_password = crypto.pbkdf2Sync('compass.123', new Buffer(salt, 'base64'), 10000, 64).toString('base64');
-      model.findOneAndUpdate(
-        { name: 'systemadmin',
-          email: 'sysadmin@compass.com',
-          company: company._id,
-          role: role._id},
-        { name: 'systemadmin',
-          email: 'sysadmin@compass.com',
-          salt: salt,
-          hashed_password: hashed_password,
-          company: company._id,
-          role: role._id,
-          title: 'system admin'
-        },
-        {upsert: true}, function (err, sysAdmin) {
-          cb(err, sysAdmin);
-        });
-    }], function (err, sysAdmin) {
-    if (callback) callback(err, sysAdmin);
-  });
+      function (cb) {
+        Company.findOneAndUpdate(
+          {name: 'CompassLtd'},
+          {name: 'CompassLtd'},
+          {upsert: true}, cb);
+      },
+      function (company, cb) {
+        Role.createRoleForSystemAdmin(company, cb);
+      },
+      function (role, company, cb) {
+        var salt = crypto.randomBytes(16).toString('base64');
+        model.findOne(
+          { name: 'systemadmin',
+            email: 'sysadmin@compass.com',
+            company: company._id,
+            role: role._id}, function (err, sysAdmin) {
+            if (!sysAdmin) {
+              model.create({ name: 'systemadmin',
+                email: 'sysadmin@compass.com',
+                password:'compass.123',
+                company: company._id,
+                role: role._id,
+                title: 'system admin'
+              }, function(err, sysAdmin){
+                cb(err,sysAdmin );
+              });
+            } else {
+              cb(err, sysAdmin);
+            }
+          });
+      }
+    ],
+    function (err, sysAdmin) {
+      if (callback) callback(err, sysAdmin);
+    }
+  );
 };
 
 mongoose.model('User', userSchema);

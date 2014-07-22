@@ -109,7 +109,7 @@ describe('roles', function () {
           done();
         });
     });
-    it.only('should return 200 when the role is associated with deleted users', function (done) {
+    it.skip('should return 200 when the role is associated with deleted users', function (done) {
       existUser.deleted = true;
       existUser.save(function () {
         request.del('/api/roles/' + existRole._id)
