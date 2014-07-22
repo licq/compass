@@ -341,11 +341,6 @@ angular.module('compass')
         {name: 'setApplicationSetting', cnName: '应聘设置', enabled: false},
         {name: 'setEventSetting', cnName: '面试设置', enabled: false}
       ]}
-//    { name: 'systemSettings', cnName: '系统设置', enabled: false,
-//      submenus: [
-//        {name: 'sysSetCompanies', cnName: '公司', enabled: false},
-//        {name: 'sysSetOperations', cnName: '系统操作', enabled: false}
-//      ]}
   ])
   .constant('uiCalendarConfig', {
     monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月', '一月'],
@@ -373,25 +368,59 @@ angular.module('compass')
     $provide.decorator('taOptions', ['taRegisterTool', '$delegate',
       function (taRegisterTool, taOptions) {
 
+        function insertText(html){
+            var sel, range;
+            if (window.getSelection) {
+              // IE9 and non-IE
+              sel = window.getSelection();
+              if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+
+                // Range.createContextualFragment() would be useful here but is
+                // non-standard and not supported in all browsers (IE9, for one)
+                var el = document.createElement('div');
+                el.innerHTML = html;
+                var frag = document.createDocumentFragment(), node, lastNode;
+                while ( (node = el.firstChild) ) {
+                  lastNode = frag.appendChild(node);
+                }
+                range.insertNode(frag);
+
+                // Preserve the selection
+                if (lastNode) {
+                  range = range.cloneRange();
+                  range.setStartAfter(lastNode);
+                  range.collapse(true);
+                  sel.removeAllRanges();
+                  sel.addRange(range);
+                }
+              }
+            } else if (document.selection && document.selection.type !== 'Control') {
+              // IE < 9
+              document.selection.createRange().pasteHTML(html);
+            }
+          }
+
         taRegisterTool('insertName', {
           buttontext: '插入姓名',
-          action: function () {
-            document.execCommand('insertText', false, '{{姓名}}');
+          action: function(){
+            insertText('{{姓名}}');
           }});
         taRegisterTool('applyPosition', {
           buttontext: '应聘职位',
           action: function () {
-            document.execCommand('insertText', false, '{{应聘职位}}');
+            insertText('{{应聘职位}}');
           }});
         taRegisterTool('startTime', {
           buttontext: '开始时间',
           action: function () {
-            document.execCommand('insertText', false, '{{开始时间}}');
+            insertText('{{开始时间}}');
           }});
         taRegisterTool('endTime', {
           buttontext: '结束时间',
           action: function () {
-            document.execCommand('insertText', false, '{{结束时间}}');
+            insertText('{{结束时间}}');
           }});
 
         taOptions.toolbar.push(['insertName', 'applyPosition', 'startTime', 'endTime']);
