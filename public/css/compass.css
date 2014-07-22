@@ -239,3 +239,7 @@ g.nv-series{
     font-family: inherit;
     font-size: 100%;
 }
+
+svg {
+    height: auto !important;
+}

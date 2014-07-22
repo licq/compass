@@ -6,7 +6,7 @@
           <strong>面试</strong>
         </div>
         <div class="panel-body">
-          <div class="col-md-10">
+          <div class="col-md-10" style="height: 300px">
             <nvd3-multi-bar-chart data="interviewCounts" id="counts"
                                   yAxisTickFormat="chartFunction.yAxisTickFormatFunction()"
                                   color="chartFunction.barColorFunction()"
@@ -51,14 +51,17 @@
           <strong>状态</strong>
         </div>
         <div class="panel-body">
-          <nvd3-pie-chart data="summaries.status" id="channelPie" showLabels="true" showLegend="true"
-                          height="450" x="chartFunction.pieX()" y="chartFunction.pieY()" interactive="true"
-                          tooltips="true"
-                          noData="没有可以显示的数据" labelType="percent"
-                          tooltipcontent="chartFunction.pieToolTipContentFunction()"
-                          margin="{left:0,top:0,bottom:0,right:0}" color="chartFunction.colorFunction()" legendcolor="chartFunction.colorFunction()">
-            <svg></svg>
-          </nvd3-pie-chart>
+          <div style="height: 450px">
+            <nvd3-pie-chart data="summaries.status" id="channelPie" showLabels="true" showLegend="true"
+                            height="450" x="chartFunction.pieX()" y="chartFunction.pieY()" interactive="true"
+                            tooltips="true"
+                            noData="没有可以显示的数据" labelType="percent"
+                            tooltipcontent="chartFunction.pieToolTipContentFunction()"
+                            margin="{left:0,top:0,bottom:0,right:0}" color="chartFunction.colorFunction()"
+                            legendcolor="chartFunction.colorFunction()">
+              <svg></svg>
+            </nvd3-pie-chart>
+          </div>
         </div>
       </section>
     </div>
@@ -69,14 +72,17 @@
           <strong>应聘职位</strong>
         </div>
         <div class="panel-body">
-          <nvd3-pie-chart data="summaries.applyPosition" id="applyPositionPie" showLabels="true" showLegend="true"
-                          height="450" interactive="true" tooltips="true" x="chartFunction.pieX()"
-                          y="chartFunction.pieY()"
-                          noData="没有可以显示的数据" labelType="percent"
-                          tooltipcontent="chartFunction.pieToolTipContentFunction()"
-                          margin="{left:0,top:0,bottom:0,right:0}" color="chartFunction.colorFunction()" legendcolor="chartFunction.colorFunction()">
-            <svg></svg>
-          </nvd3-pie-chart>
+          <div style="height: 450px">
+            <nvd3-pie-chart data="summaries.applyPosition" id="applyPositionPie" showLabels="true" showLegend="true"
+                            height="450" interactive="true" tooltips="true" x="chartFunction.pieX()"
+                            y="chartFunction.pieY()"
+                            noData="没有可以显示的数据" labelType="percent"
+                            tooltipcontent="chartFunction.pieToolTipContentFunction()"
+                            margin="{left:0,top:0,bottom:0,right:0}" color="chartFunction.colorFunction()"
+                            legendcolor="chartFunction.colorFunction()">
+              <svg></svg>
+            </nvd3-pie-chart>
+          </div>
         </div>
       </section>
     </div>
