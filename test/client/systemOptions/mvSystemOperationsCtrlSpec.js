@@ -66,11 +66,22 @@ describe('mvSystemOperationsCtrl', function () {
     });
   });
 
-  describe('synchronizeEsToDb', function () {
-    it('should post /sysAdminApi/synchronizeEsToDb', function () {
-      $httpBackend.expectPOST('/sysAdminApi/synchronizeEsToDb').respond(200);
+  describe('synchronizeToEs', function () {
+    it('should post /sysAdminApi/synchronizeToEs', function () {
+      $scope.query = '{"_id": "8899"}';
+      $httpBackend.expectPOST('/sysAdminApi/synchronizeToEs', {query: {_id: '8899'}}).respond(200);
       $httpBackend.expectGET('/sysAdminApi/resumeCounts').respond({mailCount: 200});
-      $scope.synchronizeEsToDb();
+      $scope.synchronizeToEs();
+      $httpBackend.flush();
+      expect($scope.mailCount).to.equal(200);
+    });
+  });
+
+  describe('recreateIndex', function () {
+    it('should post /sysAdminApi/recreateIndex', function () {
+      $httpBackend.expectPOST('/sysAdminApi/recreateIndex').respond(200);
+      $httpBackend.expectGET('/sysAdminApi/resumeCounts').respond({mailCount: 200});
+      $scope.recreateIndex();
       $httpBackend.flush();
       expect($scope.mailCount).to.equal(200);
     });

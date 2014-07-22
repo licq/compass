@@ -30,9 +30,23 @@ angular.module('compass')
       });
     };
 
-    $scope.synchronizeEsToDb = function () {
-      mvNotifier.notify('重建ES开始');
-      $http.post('/sysAdminApi/synchronizeEsToDb').success(function () {
+    $scope.synchronizeToEs = function () {
+      mvNotifier.notify('同步到ES开始');
+      var query;
+      try {
+        query = JSON.parse($scope.query);
+      } catch (e) {
+        query = {};
+      }
+      $http.post('/sysAdminApi/synchronizeToEs', {query: query}).success(function () {
+        $scope.refreshResumeCounts();
+        mvNotifier.notify('同步到ES完成');
+      });
+    };
+
+    $scope.recreateIndex = function () {
+      mvNotifier.notify('删除并重建Index和Mapping');
+      $http.post('/sysAdminApi/recreateIndex').success(function () {
         $scope.refreshResumeCounts();
         mvNotifier.notify('重建ES完成');
       });

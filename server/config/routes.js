@@ -93,7 +93,7 @@ module.exports = function (app) {
     .get(roles.get)
     .put(roles.update)
     .delete(roles.delete);
-  
+
   apiRouter.route('/positions')
     .post(positions.create)
     .get(positions.list);
@@ -181,24 +181,20 @@ module.exports = function (app) {
       stack: err.stack});
   });
 
-  systemApiRouter.use(sessions.requiresLogin);
-  systemApiRouter.use(users.isSystemAdmin);
-  systemApiRouter.use(function (err, req, res, next) {
-    if (!err) return next();
-    logger.error(err.stack);
-    res.send(500, {message: 'Internal Server Error',
-      stack: err.stack});
-  });
   tasksRouter.use(sessions.requiresLogin);
   tasksRouter.use(users.isSystemAdmin);
   tasksRouter.use(kue.app);
 
+  systemApiRouter.use(sessions.requiresLogin);
+  systemApiRouter.use(users.isSystemAdmin);
   systemApiRouter.route('/recreateAllJobs')
     .post(systemOperations.recreateAllJobs);
   systemApiRouter.route('/recreateFetchEmailJobs')
     .post(systemOperations.recreateFetchEmailJobs);
-  systemApiRouter.route('/synchronizeEsToDb')
-    .post(systemOperations.synchronizeEsToDb);
+  systemApiRouter.route('/recreateIndex')
+    .post(systemOperations.recreateIndex);
+  systemApiRouter.route('/synchronizeToEs')
+    .post(systemOperations.synchronizeToEs);
   systemApiRouter.route('/reparseMails')
     .post(systemOperations.reparseMails);
   systemApiRouter.route('/resumeCounts')
@@ -214,7 +210,14 @@ module.exports = function (app) {
   app.use('/sysAdminApi', systemApiRouter);
   app.use('/api', apiRouter);
   app.use('/publicApi', publicApiRouter);
-  app.use('/tasks',tasksRouter);
+  app.use('/tasks', tasksRouter);
+  app.use(function (err, req, res, next) {
+    if (!err) return next();
+    logger.error(err.stack);
+    res.send(500, {message: 'Internal Server Error',
+      stack: err.stack});
+  });
+
 
   app.get('/', function (req, res) {
     if (req.user) {
