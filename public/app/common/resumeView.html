@@ -15,8 +15,8 @@
           <td>{{resume.gender | gender}}</td>
           <td>出生年月</td>
           <td>{{resume.birthday | yearAndMonth}}</td>
-          <td>工作年限</td>
-          <td>{{resume.yearsOfExperience | yearsOfExperience}}</td>
+          <td>应聘职位</td>
+          <td>{{resume.applyPosition}}</td>
         </tr>
         <tr>
           <td>户口</td>
@@ -33,10 +33,10 @@
           <td>{{resume.mobile}}</td>
           <td>邮箱</td>
           <td>{{resume.email}}</td>
-          <td>渠道</td>
-          <td>{{resume.channel}}</td>
-          <td>应聘职位</td>
-          <td>{{resume.applyPosition}}</td>
+          <td>工作年限</td>
+          <td>{{resume.yearsOfExperience | yearsOfExperience}}</td>
+          <td>渠道/应聘日期</td>
+          <td>{{resume.channel}} / {{resume.createdAt | shortDate}}应聘</td>
         </tr>
       </table>
     </div>

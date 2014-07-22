@@ -14,8 +14,11 @@
         </div>
       </div>
       <div class="col-md-4 col-md-offset-4">
-        <div class="callout callout-info " ng-hide="interview">
+        <div class="callout callout-info " ng-show="resume.status==='archived'">
           初审阶段未通过
+        </div>
+        <div class="callout callout-info " ng-show="resume.status==='duplicate'">
+          重复投递
         </div>
       </div>
     </div>

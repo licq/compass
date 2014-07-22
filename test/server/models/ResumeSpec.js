@@ -104,7 +104,7 @@ describe('Resume', function () {
           Resume.createOrUpdateAndIndex(resumeData, function (err, newResume) {
             expect(err).to.not.exist;
             expect(newResume.id).to.not.equal(resume.id);
-            expect(newResume.status).to.equal('archived');
+            expect(newResume.status).to.equal('duplicate');
             done();
           });
         });
@@ -119,7 +119,7 @@ describe('Resume', function () {
             Resume.createOrUpdateAndIndex(resumeData, function (err, newResume) {
               expect(err).to.not.exist;
               expect(newResume.id).to.not.equal(resume.id);
-              expect(newResume.status).to.equal('archived');
+              expect(newResume.status).to.equal('duplicate');
               done();
             });
           });

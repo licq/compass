@@ -268,6 +268,8 @@ angular.module('compass')
       if (status === 'archived') return '初审拒绝';
       if (status === 'rejected') return '面试拒绝';
       if (status === 'offer rejected') return '应聘者拒绝';
+      if (status === 'not recruited') return '应聘者未入职';
+      if (status === 'duplicate') return '重复投递';
       return 'unknown';
     };
   })
