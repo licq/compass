@@ -510,7 +510,7 @@ interviewSchema.statics.queryOffered = function (company, options, cb) {
       options.applyPosition = [options.applyPosition];
     query.where('applyPosition').in(options.applyPosition);
   }
-  query.select('name applyPosition onboardDate').sort('updatedAt').exec(cb);
+  query.select('name applyPosition onboardDate status').sort('updatedAt').exec(cb);
 };
 
 interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
@@ -526,7 +526,7 @@ interviewSchema.statics.queryOfferAccepted = function (company, options, cb) {
     query.where('applyPosition').in(options.applyPosition);
   }
 
-  query.select('name applyPosition onboardDate application');
+  query.select('name applyPosition onboardDate application status');
   if (options.pageSize) {
     query.limit(options.pageSize).exec(cb);
   } else {

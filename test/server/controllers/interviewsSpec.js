@@ -329,5 +329,22 @@ describe('interviews', function () {
         });
     });
   });
+  describe('put /api/interview/:id with status recruited', function () {
+    it('should change the status of the interview and the status of the resume', function (done) {
+      request.put('/api/interviews/' + interview._id)
+        .send({status: 'recruited'})
+        .expect(200, function () {
+          Interview.findById(interview._id, function (err, newInterview) {
+            expect(newInterview.status).to.equal('recruited');
+            expect(newInterview.onboardDate).to.exist;
+            expect(newInterview.statusBy.toString()).to.equal(user.id);
+            Resume.findById(resume._id, function (err, newResume) {
+              expect(newResume.status).to.equal('recruited');
+              done(err);
+            });
+          });
+        });
+    });
+  });
 
 });

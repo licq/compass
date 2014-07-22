@@ -3,9 +3,11 @@ describe('mvInterviewViewCtrl', function () {
   beforeEach(module('compass'));
 
   var $httpBackend,
-    $scope;
+    $scope,
+    fakeModal,
+    modalOpenStub;
 
-  beforeEach(inject(function ($rootScope, _$httpBackend_, $controller) {
+  beforeEach(inject(function ($rootScope, _$httpBackend_, $controller, $modal) {
     $scope = $rootScope.$new();
     $httpBackend = _$httpBackend_;
     $controller('mvInterviewViewCtrl', {
@@ -37,7 +39,27 @@ describe('mvInterviewViewCtrl', function () {
         }
       ]
     });
+
     $httpBackend.flush();
+
+    fakeModal = {
+      result: {
+        then: function (confirmCallback, cancelCallback) {
+          this.confirmCallback = confirmCallback;
+          this.cancelCallback = cancelCallback;
+        }
+      },
+      close: function (item) {
+        this.result.confirmCallback(item);
+      },
+      dismiss: function (item) {
+        this.result.cancelCallback(item);
+      }
+    };
+
+    modalOpenStub = sinon.stub($modal, 'open');
+    modalOpenStub.returns(fakeModal);
+
   }));
 
   it('should return an interview', function () {
@@ -88,5 +110,25 @@ describe('mvInterviewViewCtrl', function () {
       expect(spyLocation).to.have.been.calledWith('/interviews/list');
       expect(spyNotifier).to.have.been.called;
     }));
+  });
+
+  describe('newEvent', function () {
+    it('should add one event to events', function () {
+      $scope.newEvent();
+      expect(modalOpenStub).to.be.called;
+    });
+
+    it('should add one new event the events', function () {
+      $scope.newEvent();
+      fakeModal.close({
+        name: 'user1',
+        startTime: new Date(),
+        interviewers: [
+          {_id: '7788', name: 'aabb'},
+          {_id: '8899', name: 'bbcc'}
+        ]
+      });
+      expect($scope.interview.events).to.have.length(1);
+    });
   });
 });

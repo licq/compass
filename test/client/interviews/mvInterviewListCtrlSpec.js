@@ -155,7 +155,10 @@ describe('mvInterviewListCtrl', function () {
       fakeModal.close({
         name: 'user1',
         startTime: new Date(),
-        interviewers: ['7788', '8899']
+        interviewers: [
+          {_id: '7788', name: 'aabb'},
+          {_id: '8899', name: 'bbcc'}
+        ]
       });
       expect($scope.interviews[0].events).to.have.length(2);
     });

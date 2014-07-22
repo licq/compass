@@ -50,7 +50,7 @@ describe('mvOnboardListCtrl', function () {
 
   describe('accept', function () {
     it('should set offer status to recruited', inject(function () {
-      $httpBackend.expectPUT('/api/interviews/7788', {status: 'recruited', onboardDate: '2014-01-02'}).respond(200);
+      $httpBackend.expectPUT('/api/interviews/7788', {status: 'recruited'}).respond(200);
       $scope.accept($scope.onboards[0]);
       $httpBackend.flush();
       expect($scope.onboards.length).to.equal(0);
@@ -61,7 +61,14 @@ describe('mvOnboardListCtrl', function () {
     it('should set offer status to not recruited', function () {
       $scope.reject(oneInterview);
       expect(oneInterview.status).to.equal('not recruited');
-      expect(oneInterview.onboardDate).to.be.undefined;
+    });
+  });
+
+  describe('cancel', function () {
+    it('should set offer status to not recruited', function () {
+      oneInterview.status = 'recruited';
+      $scope.cancel(oneInterview);
+      expect(oneInterview.status).to.equal('offer accepted');
     });
   });
 
@@ -71,7 +78,6 @@ describe('mvOnboardListCtrl', function () {
       $httpBackend.expectPUT('/api/interviews/7788', {status: 'not recruited', applierRejectReason: 'money'}).respond(200);
       $scope.onboards[0].status = 'not recruited';
       $scope.onboards[0].applierRejectReason = 'money';
-      $scope.onboards[0].onboardDate = undefined;
       $scope.save($scope.onboards[0]);
       $httpBackend.flush();
       expect(spy).to.have.been.called;

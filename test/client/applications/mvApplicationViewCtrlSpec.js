@@ -159,7 +159,9 @@ describe('mvApplicationViewCtrl', function () {
             }
           });
           $scope.newEvent();
-          fakeModal.close('aabb');
+          fakeModal.close({
+            _id: 'aabb'
+          });
           $httpBackend.flush();
           expect($scope.clicked).to.be.false;
         });

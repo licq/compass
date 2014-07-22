@@ -12,7 +12,7 @@ angular.module('compass')
       mvEvent.update($scope.event, function () {
           newStartTime = new Date($scope.event.startTime);
           $rootScope.$broadcast('changeOfEvent', 'update', newStartTime, oldStartTime);
-          $modalInstance.close($scope.event);
+          $modalInstance.close(withInterviewerName($scope.event));
           mvNotifier.notify('修改面试邀请成功!');
         }
       );
@@ -22,10 +22,20 @@ angular.module('compass')
       mvEvent.save($scope.event, function () {
         newStartTime = new Date($scope.event.startTime);
         $rootScope.$broadcast('changeOfEvent', 'create', newStartTime);
-        $modalInstance.close($scope.event);
+        $modalInstance.close(withInterviewerName($scope.event));
         mvNotifier.notify('创建面试邀请成功!');
       });
     };
+
+    function withInterviewerName(event){
+      event.interviewers = _.map(event.interviewers, function(id){
+        return {
+          _id: id,
+          name: _.find($scope.users,{_id: id}).name
+        };
+      });
+      return event;
+    }
 
     $scope.remove = function () {
       mvEvent.remove({_id: $scope.event._id}, function () {

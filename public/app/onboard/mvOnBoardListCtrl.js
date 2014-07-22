@@ -24,36 +24,34 @@ angular.module('compass')
     $scope.query();
 
     $scope.accept = function (onboard) {
-      onboard.status = 'recruited';
-      $scope.save(onboard);
+      mvInterview.update({ _id: onboard._id }, {status: 'recruited'}, function () {
+        onActionComplete(onboard);
+      });
     };
 
     $scope.reject = function (onboard) {
       onboard.status = 'not recruited';
-      onboard.onboardDate = undefined;
     };
 
     $scope.cancel = function (onboard) {
-      onboard.status = null;
+      onboard.status = 'offer accepted';
     };
-
 
     $scope.save = function (onboard) {
       mvInterview.update({ _id: onboard._id },
         {status: onboard.status,
-          applierRejectReason: onboard.applierRejectReason,
-          onboardDate: onboard.onboardDate
-        },
-        function () {
-          mvNotifier.notify('保存成功');
-          angular.forEach($scope.onboards, function (inOffer, index) {
-            if (inOffer._id === onboard._id) {
-              $scope.onboards.splice(index, 1);
-              return false;
-            }
-          });
+          applierRejectReason: onboard.applierRejectReason
+        }, function () {
+          onActionComplete(onboard);
         });
     };
-
-
+    function onActionComplete(onboard) {
+      mvNotifier.notify('保存成功');
+      angular.forEach($scope.onboards, function (inOffer, index) {
+        if (inOffer._id === onboard._id) {
+          $scope.onboards.splice(index, 1);
+          return false;
+        }
+      });
+    }
   });

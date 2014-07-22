@@ -61,7 +61,7 @@
       <div class="row callout callout-info" ng-repeat="application in applications" on-finish-render="scroll()">
         <div class="col-md-1 resume-name">
           <h4>{{application.name}}</h4>
-          <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo" ng-show="{{application.photoUrl}}">
+          <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo" ng-show="application.photoUrl">
         </div>
         <div class="col-md-10">
           <div class="table-responsive">

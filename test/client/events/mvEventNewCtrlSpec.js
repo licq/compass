@@ -11,10 +11,12 @@ describe('mvEventNewCtrl', function () {
     $httpBackend.expectGET('/api/eventSettings').respond({duration: 90});
     $httpBackend.expectGET('/api/users?fields=name').respond([
       {
-        _id: '7788'
+        _id: '7788',
+        name: 'aabb'
       },
       {
-        _id: '8899'
+        _id: '8899',
+        name: 'bbcc'
       }
     ]);
 
@@ -79,7 +81,7 @@ describe('mvEventNewCtrl', function () {
 
     describe('create', function () {
       it('should post /api/events and close the window and send notification', inject(function (mvNotifier) {
-        $scope.event.interviewers = ['aa', 'bb'];
+        $scope.event.interviewers = ['7788', '8899'];
         $scope.event.time = '2014/05/09 14:00';
         $scope.event.duration = 90;
 
@@ -88,7 +90,7 @@ describe('mvEventNewCtrl', function () {
             duration: 90,
             application: '9900',
             time: '2014/05/09 14:00',
-            interviewers: ['aa', 'bb'],
+            interviewers: ['7788', '8899'],
             name: 'aabb',
             email: 'aa@aa.com',
             mobile: '137838383838',
@@ -96,7 +98,18 @@ describe('mvEventNewCtrl', function () {
           .respond(200);
 
         var spy = sinon.spy(mvNotifier, 'notify');
-        modalInstanceMock.expects('close').once().withArgs($scope.event);
+        modalInstanceMock.expects('close').once().withArgs({
+          duration: 90,
+          application: '9900',
+          time: '2014/05/09 14:00',
+          interviewers: [
+            {_id: '7788', name: 'aabb'},
+            {_id: '8899', name: 'bbcc'}
+          ],
+          name: 'aabb',
+          email: 'aa@aa.com',
+          mobile: '137838383838',
+        });
         $scope.create();
         $httpBackend.flush();
         modalInstanceMock.verify();
@@ -122,7 +135,7 @@ describe('mvEventNewCtrl', function () {
         event: {
           _id: '9911',
           time: new Date(),
-          interviewers: ['222', '333'],
+          interviewers: ['7788', '8899'],
           duration: 60,
           application: '9900',
           name: 'aabb',
@@ -146,7 +159,7 @@ describe('mvEventNewCtrl', function () {
           duration: 90,
           application: '9900',
           time: '2014/05/09 14:00',
-          interviewers: ['222', '333'],
+          interviewers: ['7788', '8899'],
           name: 'aabb',
           email: 'aa@aa.com',
           mobile: '137838383838'
@@ -154,7 +167,19 @@ describe('mvEventNewCtrl', function () {
         .respond(200);
 
       var spy = sinon.spy(mvNotifier, 'notify');
-      modalInstanceMock.expects('close').once().withArgs($scope.event);
+      modalInstanceMock.expects('close').once().withArgs({
+        _id: '9911',
+        duration: 90,
+        application: '9900',
+        time: '2014/05/09 14:00',
+        interviewers: [
+          {_id: '7788', name: 'aabb'},
+          {_id: '8899', name: 'bbcc'}
+        ],
+        name: 'aabb',
+        email: 'aa@aa.com',
+        mobile: '137838383838'
+      });
       $scope.update();
       $httpBackend.flush();
       modalInstanceMock.verify();
