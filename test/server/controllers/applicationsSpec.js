@@ -10,7 +10,7 @@ describe('applications', function () {
   var request, user, resume;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Resume', 'Role', function () {
+    helper.clearCollections('User', 'Company', 'Resume', 'Role', 'ApplicationSetting', function () {
       helper.login(function (agent, u) {
         request = agent;
         user = u;
