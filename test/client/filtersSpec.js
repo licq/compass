@@ -276,6 +276,8 @@ describe('filters', function () {
       expect(resumeStatusFilter('archived')).to.equal('初审拒绝');
       expect(resumeStatusFilter('rejected')).to.equal('面试拒绝');
       expect(resumeStatusFilter('offer rejected')).to.equal('应聘者拒绝');
+      expect(resumeStatusFilter('not recruited')).to.equal('应聘者未入职');
+      expect(resumeStatusFilter('duplicate')).to.equal('重复投递');
     }));
   });
 

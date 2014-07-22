@@ -20,20 +20,26 @@ exports.recreateFetchEmailJobs = function (req, res, next) {
   });
 };
 
-exports.synchronizeEsToDb = function (req, res) {
+exports.recreateIndex = function (req, res) {
   Resume.recreateIndex(function (err) {
     if (err) {
       logger.error('recreate elasticsearch index failed: ', err);
+      return res.send(500, {err: err});
     }
-    Resume.synchronize(function (err, results) {
-      if (err) logger.error('synchronize error:', err);
-      logger.info('synchronize elasticsearch using ', results, 'ms');
-      res.send(200);
-    });
+    res.send(200);
   });
 };
 
-exports.reparseMails = function (req, res, next) {
+exports.synchronizeToEs = function (req, res) {
+  req.body.query = req.body.query || {};
+  Resume.synchronize(req.body.query, function (err, results) {
+    if (err) logger.error('synchronize error:', err);
+    logger.info('synchronize elasticsearch using ', results, 'ms');
+  });
+  res.send(200);
+};
+
+exports.reparseMails = function (req, res) {
   var stream = Mail.find().select('html subject company fromAddress createdAt').stream();
   stream.on('data', function (mail) {
     jobs.addParseResumeJob(mail);

@@ -202,7 +202,7 @@ var resumeSchema = mongoose.Schema({
     type: String,
     default: 'new',
     enum: ['new', 'undetermined', 'pursued', 'archived', 'offer accepted', 'interview', 'offered',
-      'rejected', 'offer rejected', 'recruited', 'not recruited']
+      'rejected', 'offer rejected', 'recruited', 'not recruited', 'duplicate']
   },
   createdAtLocaltime: Date,
   updatedAtLocaltime: Date
@@ -248,7 +248,10 @@ resumeSchema.statics.query = function (params, callback) {
           field: 'status'
         }
       }
-    }
+    },
+    sort: [
+      { "createdAt": {"order": "desc"}}
+    ]
   };
 
   if (params.q) {
@@ -395,7 +398,7 @@ resumeSchema.pre('save', function (next) {
       self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().add('months', 0 - as.filterSamePerson).toDate()}})
         .exec(function (err, resumeCount) {
           if (err || resumeCount === 0) return next();
-          self.status = 'archived';
+          self.status = 'duplicate';
           next();
         });
     });

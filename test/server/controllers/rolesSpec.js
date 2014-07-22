@@ -109,19 +109,20 @@ describe('roles', function () {
           done();
         });
     });
-    it.skip('should return 200 when the role is associated with deleted users', function (done) {
-      existUser.deleted = true;
-      existUser.save(function () {
-        request.del('/api/roles/' + existRole._id)
-          .expect(200)
-          .end(function (err) {
-            expect(err).to.not.exist;
-            Role.findById(existRole.id, function (err, role) {
+    it('should return 200 when the role is associated with deleted users', function (done) {
+      Factory.create('role', {company: existUser.company}, function (role) {
+        Factory.create('user', {deleted: true, role: role, company: existUser.company}, function (anotherUser) {
+          request.del('/api/roles/' + role.id)
+            .expect(200)
+            .end(function (err) {
               expect(err).to.not.exist;
-              expect(role).to.not.exist;
-              done();
+              Role.findById(anotherUser.role, function (err, found) {
+                expect(err).to.not.exist;
+                expect(found).to.not.exist;
+                done();
+              });
             });
-          });
+        });
       });
     });
   });

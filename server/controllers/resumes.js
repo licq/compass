@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
-  req.query.status = req.query.status || ['archived', 'rejected', 'offer rejected', 'not recruited'];
+  req.query.status = req.query.status || ['archived', 'rejected', 'offer rejected', 'not recruited', 'duplicate'];
   Resume.query(req.query, function (err, results) {
     if (err) return next(err);
     return res.json(results);
