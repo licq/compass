@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 
 var applierRejectReasonSchema = mongoose.Schema({
-  reason: String
+  reason:
+  {type: String,
+    unique: true}
 });
 
 mongoose.model('ApplierRejectReason', applierRejectReasonSchema);
