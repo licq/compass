@@ -96,7 +96,7 @@ angular.module('compass')
     });
 
     var refreshUnreviewed = null;
-    $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime, countOfEvents) {
+    $scope.$on('changeOfEvent', function (event, operation, newStartTime, oldStartTime) {
       var today = moment().startOf('day').toDate(),
         endOfToday = moment().endOf('day').toDate();
 
@@ -111,9 +111,6 @@ angular.module('compass')
             $scope.counts.eventsOfToday--;
           }
 
-          if (countOfEvents === 1) {
-            $scope.counts.interviews--;
-          }
           break;
 
         case 'create':

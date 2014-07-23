@@ -212,12 +212,8 @@ describe('interview', function () {
       ]}, function (createdInterview) {
         Interview.deleteEvent(createdInterview.events[0]._id, function (err, interview) {
           expect(err).to.not.exist;
-          expect(interview).to.not.exist;
-          Resume.findOne({_id: createdInterview.application}, function (err, resume) {
-            expect(err).to.not.exist;
-            expect(resume.status).to.equal('pursued');
-            done();
-          });
+          expect(interview.events).to.have.length(0);
+          done();
         });
       });
     });

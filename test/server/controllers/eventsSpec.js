@@ -127,7 +127,7 @@ describe('events', function () {
                 return done(err);
               }
               Interview.findById(interview.id, function (err, interview) {
-                expect(interview).to.not.exist;
+                expect(interview.events).to.have.length(0);
                 done(err);
               });
             });

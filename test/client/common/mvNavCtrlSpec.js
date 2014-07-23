@@ -55,7 +55,6 @@ describe('mvNavCtrl', function () {
       expect($scope.counts.undetermined).to.equal(2);
       expect($scope.counts.pursued).to.equal(3);
       expect($scope.counts.eventsOfToday).to.equal(4);
-      expect($scope.counts.interviews).to.equal(5);
       expect($scope.counts.unreviewed).to.equal(6);
       expect($scope.counts.onboard).to.equal(7);
     });

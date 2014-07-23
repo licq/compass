@@ -7,7 +7,96 @@
     </div>
     <div class="panel-body">
       <button class="btn btn-success btn-sm pull-right" ng-click="newEvent()">预约面试</button>
-      <div ng-include="'/app/interviews/detail.html'"></div>
+      <div>
+        <h5>面试安排</h5>
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tr>
+              <th class="col-md-3">开始时间</th>
+              <th class="col-md-2">时长</th>
+              <th class="col-md-5">面试官</th>
+              <th class="col-md-2">操作</th>
+            </tr>
+            <tr ng-repeat="event in interview.events | orderBy:startTime:false">
+              <td>{{event.startTime | longDate}}</td>
+              <td>{{event.duration}}分钟</td>
+              <td>{{event.interviewers | interviewers}}</td>
+              <td>
+                <edit-button action="editEvent(event)"></edit-button>
+                <delete-button action="removeEvent(event)"></delete-button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h5>评价</h5>
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>面试官</th>
+              <th ng-repeat="head in reviewHeader">{{head}}</th>
+              <th>总分</th>
+              <th>通过</th>
+              <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="review in interview.reviews">
+              <td>{{review.interviewer.name}}</td>
+              <td ng-repeat="head in reviewHeader">
+                <rating class="ui-rating" ng-model="reviewData[review.interviewer._id][head]"
+                        state-on="'fa fa-star'" state-off="'fa fa-star-o'" readonly="true">
+                </rating>
+              </td>
+              <td>{{review.totalScore}}</td>
+              <td>
+                <status-span value="!review.qualified">{{review.qualified | qualified}}</status-span>
+              </td>
+              <td>{{review.createdAt | shortDate}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-4" ng-repeat="review in interview.reviews | filter:{qualified:true}">
+            <div class="panel panel-default ui-ribbon-container ui-ribbon-success">
+              <div class="ui-ribbon-wrapper">
+                <div class="ui-ribbon">
+                  通过
+                </div>
+              </div>
+              <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>{{review.interviewer.name}}</div>
+              <div class="panel-body">
+                <p>{{review.comment}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" ng-repeat="review in interview.reviews | filter:{qualified:false}">
+            <div class="panel panel-default ui-ribbon-container ui-ribbon-danger">
+              <div class="ui-ribbon-wrapper">
+                <div class="ui-ribbon">
+                  拒绝
+                </div>
+              </div>
+              <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>{{review.interviewer.name}}</div>
+              <div class="panel-body">
+                <p>{{review.comment}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row callout callout-info" ng-show="interview.status !== 'new'">
+          <div class="col-md-2">
+            面试结果
+          </div>
+          <div class="col-md-4">
+            {{interview | interviewStatus}}
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div align="center">
           <button class="btn btn-success btn-lg" ng-click="offer()"> 接受</button>
