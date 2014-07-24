@@ -11,6 +11,7 @@
       <div>
         <label class="checkbox">
           <input type="checkbox" ng-change="checked()" ng-model="settings.positionRightControlled">
+
           <p>控制职位权限<span class="text-small text-danger">（如不勾选,所有人都可查看所有职位的应聘情况;否则,只有招聘负责人和该职位面试官才能查看)</span></p>
         </label>
       </div>
@@ -20,9 +21,11 @@
                items="positions" enable-filtering="false">
           <thead>
           <tr>
-            <th field-name="name" class="col-md-2" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
+            <th field-name="name" class="col-md-2" display-name="职位" enable-filtering="false"
+                enable-sorting="false"></th>
             <th enable-filtering="false" enable-sorting="false">招聘负责人</th>
-            <th class="col-md-2" field-name="department" display-name="部门" enable-filtering="false" enable-sorting="false"></th>
+            <th class="col-md-2" field-name="department" display-name="部门" enable-filtering="false"
+                enable-sorting="false"></th>
             <th class="col-md-1">操作</th>
           </tr>
           </thead>
@@ -39,6 +42,16 @@
           </tr>
           </tbody>
         </table>
+
+        <h5 class="text-warning">
+          系统检测到以下应聘职位尚未添加，如果您开启了职位权限，将没有用户可以查看应聘这些职位的简历。您可以直接点击以下职位进行添加。
+        </h5>
+
+        <div class="row">
+          <div class="col-md-3" ng-repeat="p in toBeAddedPositions">
+            <a href="#/settings/positions/new?name={{p}}">{{p}}</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>

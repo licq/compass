@@ -9,6 +9,7 @@ describe('mvPositionListCtrl', function () {
   beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
     $httpBackend = _$httpBackend_;
 
+    $httpBackend.expectGET('/api/positions/toBeAdded').respond(['咨询师','小秘']);
     $httpBackend.expectGET('/api/positions').respond(function () {
       return [200, [
         {
@@ -53,6 +54,10 @@ describe('mvPositionListCtrl', function () {
     });
     $httpBackend.flush();
   }));
+
+  it('should initialize toBeAddedPositions', function () {
+    expect($scope.toBeAddedPositions).to.have.length(2);
+  });
   it('should post', function () {
     $httpBackend.expectPOST('/api/applicationSettings', {positionRightControlled: true}).respond(200);
     var notifySpy = sinon.spy($scope, 'checked');

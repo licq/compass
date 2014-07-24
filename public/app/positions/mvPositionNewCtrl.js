@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier, $http) {
+  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier, $http, $routeParams) {
     $scope.dataReady = false;
 
     $http.get('/api/positions/toBeAdded').success(function (res) {
@@ -13,6 +13,7 @@ angular.module('compass')
         user.checked = false;
       });
       $scope.position = new mvPosition();
+      $scope.position.name = $routeParams.name;
       mvEvaluationCriterion.get({}, function (res) {
         if (res && res.items) {
           $scope.position.evaluationCriterions = res.items;
