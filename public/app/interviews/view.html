@@ -18,7 +18,7 @@
               <th class="col-md-5">面试官</th>
               <th class="col-md-2">操作</th>
             </tr>
-            <tr ng-repeat="event in interview.events | orderBy:startTime:false">
+            <tr ng-repeat="event in interview.events | orderBy:startTime:false" ng-class="{'active': (event.startTime | isPast)}" >
               <td>{{event.startTime | longDate}}</td>
               <td>{{event.duration}}分钟</td>
               <td>{{event.interviewers | interviewers}}</td>

@@ -243,3 +243,7 @@ g.nv-series{
 svg {
     height: auto !important;
 }
+
+.form-search .control-label{
+    padding-right: 0;
+}

@@ -97,5 +97,4 @@ angular.module('compass')
         $rootScope.$broadcast('changeOfEvent', 'delete', null, event.startTime);
       });
     };
-
   });

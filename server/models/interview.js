@@ -455,6 +455,15 @@ function constructQueryNew(model, company, options) {
     var end = moment(options.startDate).endOf('day').toDate();
     query.where('events').elemMatch({startTime: {$lte: end, $gte: start}});
   }
+
+  var now = moment().toDate();
+  if (options.interviewStatus === 'complete') {
+    query.find({'events.startTime': {$not: {$gte: now}}});
+  } else if (options.interviewStatus === 'some') {
+    query.find({'events.startTime': {$gte: now, $lt: now}});
+  } else if (options.interviewStatus === 'none') {
+    query.find({'events.startTime': {$not: {$lt: now}}});
+  }
   return query;
 }
 

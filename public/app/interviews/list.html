@@ -4,8 +4,8 @@
       <strong>面试中</strong>
     </div>
     <div class="panel-body">
-      <form class="form-horizontal">
-        <div class="col-md-3">
+      <form class="form-horizontal form-search">
+        <div class="col-md-2">
           <div class="row">
             <div class="form-group">
               <label class="control-label col-md-4">姓名</label>
@@ -48,6 +48,23 @@
         </div>
 
         <div class="col-md-2">
+          <div class="row">
+            <div class="form-group">
+              <label class="control-label col-md-5">面试状态</label>
+
+              <div class="col-md-7">
+                <select class="form-control" ng-model="queryOptions.interviewStatus">
+                  <option value=""></option>
+                  <option value="complete">全部完成</option>
+                  <option value="some">部分完成</option>
+                  <option value="none">未进行</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
           <button class="btn btn-primary" ng-click="search()">搜索</button>
           <button class="btn btn-default" ng-click="clearQueryOptions()">清空</button>
         </div>
@@ -58,8 +75,8 @@
           <tr class="info">
             <td class="col-md-2">{{interview.name}}</td>
             <td class="col-md-3">{{interview.applyPosition}}</td>
-            <td class="col-md-3">{{interview.events.length}}次面试</td>
-            <td class="col-md-4">最后面试时间:{{interview.events[interview.events.length - 1].startTime | longDate}}</td>
+            <td class="col-md-3">共{{interview.events.length}}次面试,已进行{{interview.events | eventCompleteCount}}次面试</td>
+            <td class="col-md-4">下次面试时间:{{interview.events | nextEventStartTime | longDate}}</td>
           </tr>
           <tr>
             <td>面试官评价</td>
@@ -90,7 +107,7 @@
       </div>
       <div class="col-md-12" ng-show="totalInterviewsCount">
         <div class="row">
-        <span class="col-md-3" >
+        <span class="col-md-3">
           共计{{totalInterviewsCount}}
         </span>
 

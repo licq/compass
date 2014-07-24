@@ -419,30 +419,137 @@ describe('interview', function () {
       });
     });
 
-    it('should return interviews with status new', function (done) {
-      Factory.create('interview', {
-        company: user.company,
-        applyPosition: '人力总监',
-        events: [
-          {
-            startTime: new Date(),
-            duration: 90,
-            interviewers: [user._id],
-            createdBy: user._id
-          }
-        ]}, function () {
+    describe('queryNew', function () {
+      beforeEach(function (done) {
+        Factory.create('interview', {
+          company: user.company,
+          applyPosition: '人力总监',
+          events: [
+            {
+              startTime: moment().add('days', -1).toDate(),
+              duration: 90,
+              interviewers: [user._id],
+              createdBy: user._id
+            },
+            {
+              startTime: moment().add('days', -2).toDate(),
+              duration: 90,
+              interviewers: [user._id],
+              createdBy: user._id
+            }
+          ]
+        }, function () {
+          Factory.create('interview', {
+            company: user.company,
+            applyPosition: '人力总监',
+            events: [
+              {
+                startTime: moment().add('days', -1).toDate(),
+                duration: 90,
+                interviewers: [user._id],
+                createdBy: user._id
+              },
+              {
+                startTime: moment().add('days', +2).toDate(),
+                duration: 90,
+                interviewers: [user._id],
+                createdBy: user._id
+              }
+            ]
+          }, function () {
+            Factory.create('interview', {
+              company: user.company,
+              applyPosition: '人力总监',
+              events: [
+                {
+                  startTime: moment().add('days', 1).toDate(),
+                  duration: 90,
+                  interviewers: [user._id],
+                  createdBy: user._id
+                },
+                {
+                  startTime: moment().add('days', 2).toDate(),
+                  duration: 90,
+                  interviewers: [user._id],
+                  createdBy: user._id
+                }
+              ]
+            }, function () {
+              done();
+            });
+          });
+        });
+      });
+
+
+      it('should return interviews with status new', function (done) {
         var options = {
           page: 1,
           pageSize: 50,
           status: 'new',
-          applyPosition: ['人力总监','市场总监']
+          applyPosition: ['人力总监', '市场总监']
+        };
+        Interview.queryNew(user.company, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(3);
+          expect(interviews[0].applyPosition).to.be.equal('人力总监');
+          expect(interviews[0].reviews).to.have.length(0);
+          expect(interviews[0].events).to.have.length(2);
+          Interview.countNew(user.company, options, function (err, count) {
+            expect(err).to.not.exist;
+            expect(count).to.equal(3);
+            done();
+          });
+        });
+      });
+
+      it('should return only one interview with interviewStatus complete', function (done) {
+        var options = {
+          page: 1,
+          pageSize: 50,
+          status: 'new',
+          applyPosition: ['人力总监', '市场总监'],
+          interviewStatus: 'complete'
         };
         Interview.queryNew(user.company, options, function (err, interviews) {
           expect(err).to.not.exist;
           expect(interviews).to.have.length(1);
-          expect(interviews[0].applyPosition).to.be.equal('人力总监');
-          expect(interviews[0].reviews).to.have.length(0);
-          expect(interviews[0].events).to.have.length(1);
+          Interview.countNew(user.company, options, function (err, count) {
+            expect(err).to.not.exist;
+            expect(count).to.equal(1);
+            done();
+          });
+        });
+      });
+      it('should return only one interview with interviewStatus some', function (done) {
+        var options = {
+          page: 1,
+          pageSize: 50,
+          status: 'new',
+          applyPosition: ['人力总监', '市场总监'],
+          interviewStatus: 'some'
+        };
+        Interview.queryNew(user.company, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
+          Interview.countNew(user.company, options, function (err, count) {
+            expect(err).to.not.exist;
+            expect(count).to.equal(1);
+            done();
+          });
+        });
+      });
+      it('should return only one interview with interviewStatus none', function (done) {
+        var options = {
+          page: 1,
+          pageSize: 50,
+          status: 'new',
+          applyPosition: ['人力总监', '市场总监'],
+          interviewStatus: 'none'
+        };
+        Interview.queryNew(user.company, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(1);
           Interview.countNew(user.company, options, function (err, count) {
             expect(err).to.not.exist;
             expect(count).to.equal(1);

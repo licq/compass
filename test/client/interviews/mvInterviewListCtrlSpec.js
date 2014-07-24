@@ -117,9 +117,10 @@ describe('mvInterviewListCtrl', function () {
 
   describe('search', function () {
     it('should retrieve the interviewlist again', function () {
-      $httpBackend.expectGET('/api/interviews?name=zhangsan&page=1&pageSize=20&status=new').respond(200);
+      $httpBackend.expectGET('/api/interviews?interviewStatus=complete&name=zhangsan&page=1&pageSize=20&status=new').respond(200);
       $scope.queryOptions.page = 1;
       $scope.queryOptions.name = 'zhangsan';
+      $scope.queryOptions.interviewStatus = 'complete';
       $scope.search();
       $httpBackend.flush();
     });
@@ -127,7 +128,7 @@ describe('mvInterviewListCtrl', function () {
 
   describe('clear queryOptions', function () {
     it('should clear the query condition and retrieve the interview list', function () {
-      $httpBackend.expectGET('/api/interviews?applyPosition=&name=&page=1&pageSize=20&startDate=&status=new').respond(200);
+      $httpBackend.expectGET('/api/interviews?applyPosition=&interviewStatus=&name=&page=1&pageSize=20&startDate=&status=new').respond(200);
       $scope.queryOptions.page = 3;
       $scope.queryOptions.name = 'beijing';
       $scope.clearQueryOptions();
@@ -139,7 +140,8 @@ describe('mvInterviewListCtrl', function () {
         name: '',
         applyPosition: '',
         startDate: '',
-        status: 'new'
+        status: 'new',
+        interviewStatus: ''
       });
     });
   });
