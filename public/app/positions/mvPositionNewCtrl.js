@@ -1,6 +1,11 @@
 angular.module('compass')
-  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier) {
+  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier, $http) {
     $scope.dataReady = false;
+
+    $http.get('/api/positions/toBeAdded').success(function (res) {
+      $scope.positions = res;
+    });
+
     mvUser.query({fields: 'name'}, function (users) {
       $scope.users = users;
       $scope.selectAll = false;

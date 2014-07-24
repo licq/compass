@@ -3,7 +3,7 @@
     <div class="col-md-7 col-md-offset-2">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <strong>修改职位</strong>
+          <strong>新增职位</strong>
         </div>
         <div class="panel-body">
           <form name="positionForm" novalidate="" class="form-validation">
@@ -15,6 +15,7 @@
                 <label>名称</label>
                 <input type="text" ng-model="position.name" name="name"
                        class="form-control"
+                       typeahead="position for position in positions | filter:$viewValue | limitTo:8"
                        placeholder="名称" required=""/>
 
                 <p class="text-danger"

@@ -16,10 +16,23 @@ exports.list = function (req, res, next) {
     });
 };
 
+exports.toBeAdded = function (req, res, next) {
+  mongoose.model('Resume').distinct('applyPosition')
+    .where({company: req.user.company})
+    .exec(function (err, applyPositions) {
+      if (err) return next(err);
+      Position.find({company: req.user.company})
+        .select('name').exec(function (err, createdPositions) {
+          if (err) return next(err);
+          createdPositions = _.pluck(createdPositions, 'name');
+          res.json(_.difference(applyPositions, createdPositions));
+        });
+    });
+};
+
 exports.create = function (req, res) {
-  var position = new Position(req.body);
-  position.company = req.user.company;
-  Position.createPosition(position, function (err) {
+  req.body.company = req.user.company;
+  Position.createPosition(req.body, function (err) {
     if (err) {
       if (err.code === 11000 || err.code === 11001) {
         return res.json(400, {message: '职位名已经存在'});

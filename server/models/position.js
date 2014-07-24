@@ -39,7 +39,7 @@ function arrayToString(array) {
 
 function updateUsers(owners, position, operation, cb) {
   var User = mongoose.model('User');
-  User.find({_id: {$in: owners}, company:position.company}, function (err, users) {
+  User.find({_id: {$in: owners}, company: position.company}, function (err, users) {
     if (err) return cb(err);
     async.each(users, function (user, callback) {
       var positions = arrayToString(user.positions || []);
@@ -64,10 +64,9 @@ function updateUsers(owners, position, operation, cb) {
 }
 
 positionSchema.statics.createPosition = function (position, cb) {
-  position.markModified('owners');
-  position.save(function (err, savedPosition) {
+  this.create(position, function (err, savedPosition) {
     if (err)  return cb(err);
-    updateUsers(savedPosition.owners, savedPosition, 'add', function(err){
+    updateUsers(savedPosition.owners, savedPosition, 'add', function (err) {
       cb(err, savedPosition);
     });
   });
@@ -76,7 +75,7 @@ positionSchema.statics.createPosition = function (position, cb) {
 positionSchema.statics.deletePosition = function (position, cb) {
   position.remove(function (err, deletedPosition) {
     if (err)  return cb(err);
-    updateUsers(deletedPosition.owners, deletedPosition, 'remove', function(err){
+    updateUsers(deletedPosition.owners, deletedPosition, 'remove', function (err) {
       cb(err, deletedPosition);
     });
   });
@@ -92,7 +91,7 @@ positionSchema.statics.updatePosition = function (position, cb) {
       if (err)  return cb(err);
       updateUsers(oldOwners, savedPosition, 'remove', function (err) {
         if (err) return cb(err);
-        updateUsers(newOwners, savedPosition, 'add', function(err){
+        updateUsers(newOwners, savedPosition, 'add', function (err) {
           cb(err, savedPosition);
         });
       });
