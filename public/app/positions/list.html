@@ -43,13 +43,18 @@
           </tbody>
         </table>
 
-        <h5 class="text-warning">
-          系统检测到以下应聘职位尚未添加，如果您开启了职位权限，将没有用户可以查看应聘这些职位的简历。您可以直接点击以下职位进行添加。
-        </h5>
+        <div ng-show="toBeAddedPositions.length > 0">
+          <h5 class="text-info" ng-hide="settings.positionRightControlled">
+            系统检测到以下应聘职位尚未添加，如果需要对职位使用单独的面试评价，请点击以下职位以创建面试职位评价。
+          </h5>
+          <h5 class="text-danger" ng-show="settings.positionRightControlled">
+            系统检测到以下应聘职位尚未添加，因为您开启了职位权限控制，所有用户将不能查看应聘以下职位的简历。请点击以下职位进行设置。
+          </h5>
 
-        <div class="row">
-          <div class="col-md-3" ng-repeat="p in toBeAddedPositions">
-            <a href="#/settings/positions/new?name={{p}}">{{p}}</a>
+          <div class="row">
+            <div class="col-md-3" ng-repeat="p in toBeAddedPositions">
+              <a href="#/settings/positions/new?name={{p}}">{{p}}</a>
+            </div>
           </div>
         </div>
       </div>
