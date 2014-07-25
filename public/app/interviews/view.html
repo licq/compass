@@ -8,6 +8,32 @@
     <div class="panel-body">
       <button class="btn btn-success btn-sm pull-right" ng-click="newEvent()">预约面试</button>
       <div>
+        <h5>基本信息</h5>
+        <table class="table table-bordered">
+          <tr>
+            <td class="col-md-2">姓名</td>
+            <td class="col-md-3">{{interview.name}}</td>
+            <td class="col-md-2">应聘职位</td>
+            <td class="col-md-4">
+              <div ng-hide="editing">
+                <span>{{interview.applyPosition}}</span>
+                <edit-button action="editApplyPosition()"></edit-button>
+              </div>
+              <div ng-show="editing">
+                <input type="text" ng-model="newApplyPosition" name="applyPosition"
+                       typeahead="position for position in positions | filter:$viewValue | limitTo:8"/>
+                <button class="btn btn-primary btn-sm" ng-click="updateApplyPosition()" ng-disabled="!newApplyPositionValid()">保存</button>
+                <button class="btn btn-default btn-sm" ng-click="cancelEditApplyPosition()">取消</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>手机</td>
+            <td>{{interview.mobile}}</td>
+            <td>邮箱</td>
+            <td>{{interview.email}}</td>
+          </tr>
+        </table>
         <h5>面试安排</h5>
 
         <div class="table-responsive">
@@ -18,7 +44,8 @@
               <th class="col-md-5">面试官</th>
               <th class="col-md-2">操作</th>
             </tr>
-            <tr ng-repeat="event in interview.events | orderBy:startTime:false" ng-class="{'active': (event.startTime | isPast)}" >
+            <tr ng-repeat="event in interview.events | orderBy:startTime:false"
+                ng-class="{'active': (event.startTime | isPast)}">
               <td>{{event.startTime | longDate}}</td>
               <td>{{event.duration}}分钟</td>
               <td>{{event.interviewers | interviewers}}</td>

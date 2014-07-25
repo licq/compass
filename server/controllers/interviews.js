@@ -68,22 +68,30 @@ exports.update = function (req, res, next) {
     .exec(function (err, interview) {
       if (err) return next(err);
       if (!interview) return res.json(404, {message: 'not found'});
-      interview.status = req.body.status;
-      interview.statusBy = req.user;
-      interview.applierRejectReason = req.body.applierRejectReason;
-      interview.onboardDate = req.body.onboardDate;
-      if (interview.status === 'recruited') interview.onboardDate = new Date();
-      interview.save(function (err) {
-        if (err) return next(err);
-        Resume.findById(interview.application, function (err, resume) {
+      if (req.body.status) {
+        interview.status = req.body.status;
+        interview.statusBy = req.user;
+        interview.applierRejectReason = req.body.applierRejectReason;
+        interview.onboardDate = req.body.onboardDate;
+        if (interview.status === 'recruited') interview.onboardDate = new Date();
+        interview.save(function (err) {
           if (err) return next(err);
-          if (!resume) return res.send(200);
-          resume.status = interview.status;
-          resume.saveAndIndex(function (err) {
+          Resume.findById(interview.application, function (err, resume) {
             if (err) return next(err);
-            res.send(200);
+            if (!resume) return res.send(200);
+            resume.status = interview.status;
+            resume.saveAndIndex(function (err) {
+              if (err) return next(err);
+              res.send(200);
+            });
           });
         });
-      });
+      } else if (req.body.applyPosition) {
+        interview.applyPosition = req.body.applyPosition;
+        interview.save(function (err) {
+          if (err) return next(err);
+          res.send(200);
+        });
+      }
     });
 };

@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvInterviewViewCtrl', function ($scope, $rootScope, $routeParams, mvInterview, $location, mvNotifier, $modal, mvEvent) {
+  .controller('mvInterviewViewCtrl', function ($scope, $rootScope, $routeParams, mvInterview, $location, mvNotifier, $modal, mvEvent, $http) {
     function retrieveInterview() {
       mvInterview.get({_id: $routeParams.id}, function (interview) {
         $scope.interview = interview;
@@ -96,5 +96,32 @@ angular.module('compass')
         mvNotifier.notify('删除面试邀请成功');
         $rootScope.$broadcast('changeOfEvent', 'delete', null, event.startTime);
       });
+    };
+
+    $scope.editApplyPosition = function () {
+      $scope.editing = true;
+      $scope.newApplyPosition = $scope.interview.applyPosition;
+      $http.get('/api/resumeReports/applyPositions').success(function (res) {
+        $scope.positions = res;
+      });
+    };
+
+    $scope.cancelEditApplyPosition = function () {
+      $scope.editing = false;
+    };
+
+    $scope.updateApplyPosition = function () {
+      mvInterview.update({_id: $scope.interview._id}, {applyPosition: $scope.newApplyPosition}, function () {
+        mvNotifier.notify('应聘职位修改成功');
+        $scope.interview.applyPosition = $scope.newApplyPosition;
+        $scope.editing = false;
+      }, function () {
+        mvNotifier.notify('应聘职位个性失败');
+      });
+    };
+
+    $scope.newApplyPositionValid = function () {
+      return !!$scope.newApplyPosition &&
+        ($scope.newApplyPosition !== $scope.interview.applyPosition);
     };
   });

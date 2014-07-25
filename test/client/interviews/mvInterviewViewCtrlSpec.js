@@ -263,4 +263,53 @@ describe('mvInterviewViewCtrl', function () {
       expect(notifySpy).to.have.been.calledWith('删除面试邀请成功');
     }));
   });
+
+  describe('editApplyPosition', function () {
+    it('should get positions and set editing to true', function () {
+      $httpBackend.expectGET('/api/resumeReports/applyPositions').respond(['销售经理','市场总监']);
+      $scope.editApplyPosition();
+      $httpBackend.flush();
+      expect($scope.editing).to.be.true;
+      expect($scope.positions).to.have.length(2);
+      expect($scope.newApplyPosition).to.equal($scope.interview.applyPosition);
+    });
+  });
+
+  describe('cancelEditApplyPosition', function () {
+    it('should set editing to false', function () {
+      $scope.editing = true;
+      $scope.cancelEditApplyPosition();
+      expect($scope.editing).to.be.false;
+    });
+  });
+
+  describe('updateApplyPosition', function () {
+    it('should put /api/interviews/:id and notify', inject(function (mvNotifier) {
+      var spy = sinon.spy(mvNotifier,'notify');
+      $httpBackend.expectPUT('/api/interviews/7788',{applyPosition: 'cio'}).respond(200);
+      $scope.newApplyPosition = 'cio';
+      $scope.updateApplyPosition();
+      $httpBackend.flush();
+      expect($scope.interview.applyPosition).to.equal('cio');
+      expect(spy).to.have.been.called;
+      expect($scope.editing).to.be.false;
+    }));
+  });
+
+  describe('newApplyPositionValid', function () {
+    it('should return false if newApplyPosition same with old one', function () {
+      $scope.newApplyPosition = 'cio';
+      expect($scope.newApplyPositionValid()).to.be.false;
+    });
+
+    it('should return false if newApplyPosition is blank', function () {
+      $scope.newApplyPosition = '';
+      expect($scope.newApplyPositionValid()).to.be.false;
+    });
+
+    it('should return true if newApplyPosition valid', function () {
+      $scope.newApplyPosition = '前台';
+      expect($scope.newApplyPositionValid()).to.be.true;
+    });
+  });
 });

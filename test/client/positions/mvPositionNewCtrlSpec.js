@@ -4,12 +4,10 @@ describe('mvPositionNewCtrl', function () {
     mvPositionNewCtrl;
 
   beforeEach(module('compass'));
-
-
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
     $httpBackend = _$httpBackend_;
     $scope = $rootScope.$new();
-    $httpBackend.expectGET('/api/positions/toBeAdded').respond(['JAVA工程师','市场总监']);
+    $httpBackend.expectGET('/api/positions/toBeAdded').respond(['JAVA工程师', '市场总监']);
     $httpBackend.expectGET('/api/users?fields=name').respond([
       {'_id': '4466', 'name': '张三'},
       {'_id': '5577', 'name': '李四'}
@@ -44,15 +42,6 @@ describe('mvPositionNewCtrl', function () {
         ]};
     });
 
-    it('should initialize successfully', function () {
-      expect($scope.users).to.have.length(2);
-      expect($scope.position.evaluationCriterions).to.have.length(1);
-    });
-
-    it('should initialize positions', function () {
-      expect($scope.positions).to.have.length(2);
-    });
-
     it('should go to success page when create success', inject(function ($location, mvNotifier) {
       $scope.selectAll = true;
       $scope.onSelectAll();
@@ -74,82 +63,91 @@ describe('mvPositionNewCtrl', function () {
       $httpBackend.flush();
       expect(notifySpy).to.have.been.calledWith('添加职位失败');
     }));
+  });
 
-    describe('remove', function () {
-      it('should remove the corresponding item', function () {
-        $scope.remove({
-          name: '英语',
-          rate: 0.5
-        });
-        expect($scope.position.evaluationCriterions).to.have.length(0);
+  it('should initialize successfully', function () {
+    expect($scope.users).to.have.length(2);
+    expect($scope.position.evaluationCriterions).to.have.length(1);
+  });
+
+  it('should initialize positions', function () {
+    expect($scope.positions).to.have.length(2);
+  });
+
+
+  describe('remove', function () {
+    it('should remove the corresponding item', function () {
+      $scope.remove({
+        name: '英语',
+        rate: 0.5
       });
+      expect($scope.position.evaluationCriterions).to.have.length(0);
+    });
+  });
+
+  describe('add', function () {
+    it('should add set adding to true', function () {
+      $scope.add();
+      expect($scope.adding).to.equal(true);
+    });
+  });
+
+  describe('save', function () {
+    it('should add one row to items', function () {
+      $scope.item = {
+        name: '学习能力',
+        rate: 3.5
+      };
+      $scope.save();
+      expect($scope.adding).to.equal(false);
+      expect($scope.item).to.be.empty;
+      expect($scope.position.evaluationCriterions).to.have.length(2);
+    });
+  });
+
+  describe('cancel', function () {
+    it('should change adding to false', function () {
+      $scope.adding = true;
+      $scope.cancel();
+      expect($scope.adding).to.false;
+      expect($scope.position.evaluationCriterions).to.have.length(1);
+    });
+  });
+
+  describe('onSelectAll', function () {
+    it('should not check all the users when init', function () {
+      expect($scope.selectAll).to.be.false;
     });
 
-    describe('add', function () {
-      it('should add set adding to true', function () {
-        $scope.add();
-        expect($scope.adding).to.equal(true);
-      });
+    it('should check all the users when select all is checked', function () {
+      $scope.selectAll = true;
+      $scope.onSelectAll();
+      expect(_.all($scope.users, 'checked')).to.be.true;
     });
 
-    describe('save', function () {
-      it('should add one row to items', function () {
-        $scope.item = {
-          name: '学习能力',
-          rate: 3.5
-        };
-        $scope.save();
-        expect($scope.adding).to.equal(false);
-        expect($scope.item).to.be.empty;
-        expect($scope.position.evaluationCriterions).to.have.length(2);
-      });
+    it('should check all the users when select all is not checked', function () {
+      $scope.selectAll = false;
+      $scope.onSelectAll();
+      expect(_.some($scope.users, 'checked')).to.be.false;
+    });
+  });
+
+  describe('onSelectUser', function () {
+    it('should set selectAll to true when one user is not checked', function () {
+      $scope.selectAll = true;
+      $scope.onSelectAll();
+      $scope.users[$scope.users.length - 1].checked = false;
+      $scope.onSelectUser();
+      expect($scope.selectAll).to.be.false;
     });
 
-    describe('cancel', function () {
-      it('should change adding to false', function () {
-        $scope.adding = true;
-        $scope.cancel();
-        expect($scope.adding).to.false;
-        expect($scope.position.evaluationCriterions).to.have.length(1);
-      });
-    });
-
-    describe('onSelectAll', function () {
-      it('should not check all the users when init', function () {
-        expect($scope.selectAll).to.be.false;
-      });
-
-      it('should check all the users when select all is checked', function () {
-        $scope.selectAll = true;
-        $scope.onSelectAll();
-        expect(_.all($scope.users, 'checked')).to.be.true;
-      });
-
-      it('should check all the users when select all is not checked', function () {
-        $scope.selectAll = false;
-        $scope.onSelectAll();
-        expect(_.some($scope.users, 'checked')).to.be.false;
-      });
-    });
-
-    describe('onSelectUser', function () {
-      it('should set selectAll to true when one user is not checked', function () {
-        $scope.selectAll = true;
-        $scope.onSelectAll();
-        $scope.users[$scope.users.length - 1].checked = false;
+    it('should set selectAll to true when all users are checked', function () {
+      $scope.selectAll = false;
+      _.forEach($scope.users, function (user) {
+        user.checked = true;
         $scope.onSelectUser();
-        expect($scope.selectAll).to.be.false;
       });
-
-      it('should set selectAll to true when all users are checked', function () {
-        $scope.selectAll = false;
-        _.forEach($scope.users, function (user) {
-          user.checked = true;
-          $scope.onSelectUser();
-        });
-        expect($scope.selectAll).to.be.true;
-      });
+      expect($scope.selectAll).to.be.true;
     });
-
   });
 });
