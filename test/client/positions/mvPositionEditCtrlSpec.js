@@ -9,6 +9,8 @@ describe('mvPositionEditCtrl', function () {
     beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
+
+      $httpBackend.expectGET('/api/positions/toBeAdded').respond(['市场总监','销售经理']);
       $httpBackend.expectGET('/api/users?fields=name').respond([
         {'_id': '4466', 'name': '张三'},
         {'_id': '5577', 'name': '李四'}
@@ -55,6 +57,10 @@ describe('mvPositionEditCtrl', function () {
         expect($scope.users).to.have.length(2);
         expect($scope.position.evaluationCriterions).to.have.length(1);
         expect($scope.position.owners[0]).to.equal('5577');
+      });
+
+      it('should initialize positions', function () {
+        expect($scope.positions).to.have.length(3);
       });
 
       it('should check users correctly', function () {

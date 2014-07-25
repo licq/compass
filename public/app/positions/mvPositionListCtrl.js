@@ -1,5 +1,9 @@
 angular.module('compass')
-  .controller('mvPositionListCtrl', function ($scope, mvApplicationSetting, mvPosition, $location, mvNotifier) {
+  .controller('mvPositionListCtrl', function ($scope, mvApplicationSetting, mvPosition, $location, mvNotifier, $http) {
+    $http.get('/api/positions/toBeAdded').success(function (res) {
+      $scope.toBeAddedPositions = res;
+    });
+
     mvPosition.query(function (positions) {
       $scope.positions = positions;
       mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
@@ -7,7 +11,7 @@ angular.module('compass')
       });
     });
 
-    $scope.checked = function(){
+    $scope.checked = function () {
       mvApplicationSetting.save($scope.settings);
     };
 

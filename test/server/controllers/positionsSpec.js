@@ -45,6 +45,29 @@ describe('positions', function () {
         });
     });
   });
+  describe('GET /api/positions/toBeAdded', function () {
+    it('should return one not created position', function (done) {
+      Factory.create('resume', {company: existUser.company, applyPosition: '市场总监'}, function () {
+        Factory.create('resume', {company: existUser.company, applyPosition: '销售经理'}, function () {
+          Position.createPosition({
+            company: existUser.company,
+            owners: [existUser._id],
+            name: '市场总监'
+          }, function (err) {
+            expect(err).to.not.exist;
+            request.get('/api/positions/toBeAdded')
+              .expect(200)
+              .expect('content-type', /json/)
+              .end(function (err, res) {
+                expect(res.body).to.have.length(1);
+                expect(res.body[0]).to.equal('销售经理');
+                done(err);
+              });
+          });
+        });
+      });
+    });
+  });
 
   describe('GET /api/positions/:id', function () {
     it('should return 200 with json result', function (done) {

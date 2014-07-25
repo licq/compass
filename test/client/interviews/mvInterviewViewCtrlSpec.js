@@ -25,6 +25,14 @@ describe('mvInterviewViewCtrl', function () {
       _id: '7788',
       name: '张三',
       applyPosition: 'cio',
+      events: [
+        {
+          _id: '7788',
+          startTime: new Date(),
+          duration: 90,
+          interviewers: ['112']
+        }
+      ],
       reviews: [
         {
           interviewer: {
@@ -120,6 +128,32 @@ describe('mvInterviewViewCtrl', function () {
 
     it('should add one new event the events', function () {
       $scope.newEvent();
+      $httpBackend.expectGET('/api/interviews/7788').respond({
+        _id: '7788',
+        name: '张三',
+        applyPosition: 'cio',
+        events: [
+          {
+            _id: '7788',
+            startTime: new Date(),
+            duration: 90,
+            interviewers: ['112']
+          }
+        ],
+        reviews: [
+          {
+            interviewer: {
+              _id: '112'
+            },
+            items: [
+              {name: '学习能力', rate: 1, score: 4},
+              {name: '工作态度', rate: 1, score: 3},
+              {name: '团队合作', rate: 1, score: 5},
+              {name: '沟通能力', rate: 1, score: 5}
+            ]
+          }
+        ]
+      });
       fakeModal.close({
         name: 'user1',
         startTime: new Date(),
@@ -128,7 +162,105 @@ describe('mvInterviewViewCtrl', function () {
           {_id: '8899', name: 'bbcc'}
         ]
       });
+      $httpBackend.flush();
       expect($scope.interview.events).to.have.length(1);
     });
+  });
+
+  describe('editEvent', function () {
+    it('should edit one event to events', function () {
+      $scope.editEvent({
+          _id: '7788',
+          startTime: new Date(),
+          duration: 90,
+          interviewers: ['112']
+        }
+      );
+      expect(modalOpenStub).to.be.called;
+    });
+
+    it('should retrieve the interview again', function () {
+      $scope.editEvent({
+          _id: '7788',
+          startTime: new Date(),
+          duration: 90,
+          interviewers: ['112']
+        }
+      );
+      $httpBackend.expectGET('/api/interviews/7788').respond({
+        _id: '7788',
+        name: '张三',
+        applyPosition: 'cio',
+        events: [
+          {
+            _id: '7788',
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [
+              {
+                _id: '7788',
+                name: 'aabb'
+              },
+              {
+                _id: '8899',
+                name: 'bbcc'
+              }
+            ]
+          }
+        ],
+        reviews: [
+          {
+            interviewer: {
+              _id: '112'
+            },
+            items: [
+              {name: '学习能力', rate: 1, score: 4},
+              {name: '工作态度', rate: 1, score: 3},
+              {name: '团队合作', rate: 1, score: 5},
+              {name: '沟通能力', rate: 1, score: 5}
+            ]
+          }
+        ]
+      });
+      fakeModal.close({
+        name: 'user1',
+        startTime: new Date(),
+        interviewers: [
+          {_id: '7788', name: 'aabb'},
+          {_id: '8899', name: 'bbcc'}
+        ]
+      });
+      $httpBackend.flush();
+      expect($scope.interview.events).to.have.length(1);
+    });
+  });
+
+  describe('removeEvent', function () {
+    it('should remove an existing event and broadcast the messsage', inject(function ($rootScope,mvNotifier) {
+      var spy = sinon.spy($rootScope, '$broadcast');
+      var notifySpy = sinon.spy(mvNotifier, 'notify');
+      $httpBackend.expectDELETE('/api/events/7788').respond(200);
+      var eventStartDate = new Date();
+      $scope.removeEvent({
+          _id: '7788',
+          startTime: eventStartDate,
+          duration: 90,
+          interviewers: [
+            {
+              _id: '7788',
+              name: 'aabb'
+            },
+            {
+              _id: '8899',
+              name: 'bbcc'
+            }
+          ]
+        }
+      );
+      $httpBackend.flush();
+      expect($scope.interview.events).to.have.length(0);
+      expect(spy).to.have.been.calledWith('changeOfEvent','delete',null, eventStartDate);
+      expect(notifySpy).to.have.been.calledWith('删除面试邀请成功');
+    }));
   });
 });

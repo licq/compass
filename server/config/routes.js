@@ -94,6 +94,8 @@ module.exports = function (app) {
     .put(roles.update)
     .delete(roles.delete);
 
+  apiRouter.route('/positions/toBeAdded')
+    .get(positions.toBeAdded);
   apiRouter.route('/positions')
     .post(positions.create)
     .get(positions.list);

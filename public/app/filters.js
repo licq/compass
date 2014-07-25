@@ -289,9 +289,34 @@ angular.module('compass')
     return function (array, typeName) {
       if (array && array.length)
         return _.map(array, 'name').join(', ');
-      else if(typeName === 'position')
+      else if (typeName === 'position')
         return '该职位没有招聘负责人';
       else if (typeName === 'user')
         return '该用户没有负责招聘岗位';
+    };
+  })
+  .filter('eventCompleteCount', function () {
+    return function (events) {
+      return _.filter(events, function (event) {
+        return moment(event.startTime).isBefore(moment());
+      }).length;
+    };
+  })
+  .filter('nextEventStartTime', function () {
+    return function (events) {
+      var result;
+      angular.forEach(events, function(event){
+        if(moment(event.startTime).isAfter(moment())){
+          if(!result || moment(event.startTime).isBefore(moment(result))){
+            result = event.startTime;
+          }
+        }
+      });
+      return result;
+    };
+  })
+  .filter('isPast', function(){
+    return function(time){
+      return moment(time).isBefore(moment());
     };
   });

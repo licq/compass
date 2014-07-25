@@ -42,21 +42,18 @@ exports.login = function (user, cb) {
   }
 };
 exports.createPosition = function (options, cb) {
-  var owners, fields = {};
   if (!cb && typeof options === 'function') {
     cb = options;
-  } else {
-    _.merge(fields, options);
+    options = {};
   }
 
   if (options.owners) {
-    owners = _.map(options.owners, '_id');
-    fields.owners = owners;
+    options.owners = _.map(options.owners, '_id');
   }
+
   if (options.toCreateUser) {
-    Factory.build('position', fields, function (p) {
+    Factory.build('position', options, function (p) {
       Factory.create('user', {positions: [p._id], company: p.company}, function (user) {
-        p.owners = fields.owners || [];
         p.owners.push(user._id);
         Position.create(p, function (err, position) {
           cb(err, position, user);
@@ -64,7 +61,7 @@ exports.createPosition = function (options, cb) {
       });
     });
   } else {
-    Factory.build('position', fields, function (p) {
+    Factory.build('position', options, function (p) {
       Position.createPosition(p, function (err, position) {
         cb(err, position);
       });

@@ -309,4 +309,55 @@ describe('filters', function () {
       expect(displayNamesFilter(null, 'user')).to.equal('该用户没有负责招聘岗位');
     }));
   });
+
+  describe('eventCompleteCountFilter', function () {
+    it('should return 0 if events is empty', inject(function (eventCompleteCountFilter) {
+      expect(eventCompleteCountFilter([])).to.equal(0);
+    }));
+
+    it('should return 2 if only 2 events completed', inject(function (eventCompleteCountFilter) {
+      var yesterday = moment().add('days', -1).toDate();
+      var oneHourBefore = moment().add('hours', -1).toDate();
+      var tomorrow = moment().add('days', 1).toDate();
+      expect(eventCompleteCountFilter([
+        {startTime: yesterday},
+        {startTime: oneHourBefore},
+        {startTime: tomorrow}
+      ])).to.equal(2);
+    }));
+  });
+
+  describe('nextEventStartTimeFilter', function () {
+    it('should return undefined if events is empty', inject(function (nextEventStartTimeFilter) {
+      expect(nextEventStartTimeFilter([])).to.not.exist;
+    }));
+
+    it('should return correct next event start time if there is one', inject(function (nextEventStartTimeFilter) {
+      var yesterday = moment().add('days', -1).toDate();
+      var oneHourAfter = moment().add('hours', 1).toDate();
+      var tomorrow = moment().add('days', 1).toDate();
+      expect(nextEventStartTimeFilter([
+        {startTime: yesterday},
+        {startTime: oneHourAfter},
+        {startTime: tomorrow}
+      ]).getTime()).to.equal(oneHourAfter.getTime());
+    }));
+
+    it('should return undefined if all events past', inject(function (nextEventStartTimeFilter) {
+      var yesterday = moment().add('days', -1).toDate();
+      var oneHoureBefore = moment().add('hours', -1).toDate();
+      expect(nextEventStartTimeFilter([
+        {startTime: yesterday},
+        {startTime: oneHoureBefore},
+      ])).to.not.exist;
+    }));
+  });
+
+  describe('isPast', function () {
+    it('should return correctly', inject(function (isPastFilter) {
+      expect(isPastFilter(moment().add('days', -1))).to.be.true;
+      expect(isPastFilter(moment().add('days', 1))).to.be.false;
+      expect(isPastFilter(moment())).to.be.false;
+    }));
+  });
 });

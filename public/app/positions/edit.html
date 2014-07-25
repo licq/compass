@@ -14,7 +14,7 @@
               <div class="form-group">
                 <label>名称</label>
                 <input type="text" ng-model="position.name" name="name"
-                       class="form-control"
+                       class="form-control" typeahead="position for position in positions | filter:$viewValue | limitTo:8"
                        placeholder="名称" required=""/>
 
                 <p class="text-danger"

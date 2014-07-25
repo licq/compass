@@ -1,10 +1,14 @@
 angular.module('compass')
-  .controller('mvInterviewViewCtrl', function ($scope, $routeParams, mvInterview, $location, mvNotifier,$modal) {
-    mvInterview.get({_id: $routeParams.id}, function (interview) {
-      $scope.interview = interview;
-      $scope.isShowDetail = true;
-      sync();
-    });
+  .controller('mvInterviewViewCtrl', function ($scope, $rootScope, $routeParams, mvInterview, $location, mvNotifier, $modal, mvEvent) {
+    function retrieveInterview() {
+      mvInterview.get({_id: $routeParams.id}, function (interview) {
+        $scope.interview = interview;
+        $scope.isShowDetail = true;
+        sync();
+      });
+    }
+
+    retrieveInterview();
 
     function sync() {
       $scope.reviewHeader = [];
@@ -57,10 +61,40 @@ angular.module('compass')
           }
         }});
 
-      modalInstance.result.then(function (event) {
-        event.startTime = event.startTime.toISOString();
-        interview.events =  interview.events || [];
-        interview.events.push(event);
+      modalInstance.result.then(retrieveInterview);
+    };
+
+    $scope.editEvent = function (event) {
+      var interview = $scope.interview;
+      var modalInstance = $modal.open({
+        templateUrl: '/app/events/new.html',
+        controller: 'mvEventNewCtrl',
+        resolve: {
+          event: function () {
+            return {
+              _id: event._id,
+              countsOfEvents: interview.events.length,
+              duration: event.duration,
+              application: interview._id,
+              startTime: event.startTime,
+              interviewers: _.map(event.interviewers, '_id'),
+              name: interview.name,
+              email: interview.email,
+              mobile: interview.mobile,
+              applyPosition: interview.applyPosition
+            };
+          }
+        }});
+
+      modalInstance.result.then(retrieveInterview);
+    };
+
+    $scope.removeEvent = function (event) {
+      mvEvent.remove({_id: event._id}, function () {
+        var index = _.find($scope.interview.events, {_id: event._id});
+        $scope.interview.events.splice(index, 1);
+        mvNotifier.notify('删除面试邀请成功');
+        $rootScope.$broadcast('changeOfEvent', 'delete', null, event.startTime);
       });
     };
   });

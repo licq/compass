@@ -208,7 +208,6 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       company: 1,
       events: 1,
       application: 1,
-      countOfEvents: {$size: '$events'}
     })
     .unwind('events')
     .project({
@@ -224,7 +223,6 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       duration: '$events.duration',
       interviewers: '$events.interviewers',
       application: 1,
-      countOfEvents: 1
     })
     .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } })
     .sort('startTime');
@@ -344,25 +342,11 @@ interviewSchema.statics.deleteEvent = function (id, cb) {
     if (!interview) return cb('interview not found for event with id ' + id);
     var event = interview.events.id(id);
     event.remove();
-    sendDeleteEventEmail(interview, event, function () {
-      if (interview.events.length === 0) {
-        interview.remove(function (err) {
-          if (err) return cb(err);
-          mongoose.model('Resume').findOne({_id: interview.application}).exec(function (err, resume) {
-            if (err) return cb(err);
-            if (!resume) return cb();
-            resume.status = 'pursued';
-            resume.saveAndIndex(function (err) {
-              if (err) return cb(err);
-              return cb();
-            });
-          });
-        });
-      } else {
-        interview.save(function (err) {
-          cb(err);
-        });
-      }
+    interview.save(function (err, saved) {
+      if (err) return cb(err);
+      sendDeleteEventEmail(interview, event, function () {
+        cb(null, saved);
+      });
     });
   });
 };
@@ -470,6 +454,15 @@ function constructQueryNew(model, company, options) {
     var start = moment(options.startDate).startOf('day').toDate();
     var end = moment(options.startDate).endOf('day').toDate();
     query.where('events').elemMatch({startTime: {$lte: end, $gte: start}});
+  }
+
+  var now = moment().toDate();
+  if (options.interviewStatus === 'complete') {
+    query.find({'events.startTime': {$not: {$gte: now}}});
+  } else if (options.interviewStatus === 'some') {
+    query.find({'events.startTime': {$gte: now, $lt: now}});
+  } else if (options.interviewStatus === 'none') {
+    query.find({'events.startTime': {$not: {$lt: now}}});
   }
   return query;
 }

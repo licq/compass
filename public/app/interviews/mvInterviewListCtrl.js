@@ -96,6 +96,7 @@ angular.module('compass')
       $scope.queryOptions.startDate = '';
       $scope.queryOptions.page = 1;
       $scope.queryOptions.pageSize = 20;
+      $scope.queryOptions.interviewStatus = '';
       $scope.query();
     };
 

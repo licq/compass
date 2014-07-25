@@ -1,9 +1,16 @@
 angular.module('compass')
-  .controller('mvPositionEditCtrl', function ($scope, $location, mvApplicationSetting, $routeParams, mvPosition, mvUser, mvNotifier) {
+  .controller('mvPositionEditCtrl', function ($scope, $location, mvApplicationSetting, $routeParams, mvPosition, mvUser, mvNotifier, $http) {
+
+    $scope.positions = [];
+    $http.get('/api/positions/toBeAdded').success(function (res) {
+      $scope.positions = $scope.positions.concat(res);
+    });
+
     mvUser.query({fields: 'name'}, function (users) {
       $scope.users = users;
       mvPosition.get({_id: $routeParams.id}, function (position) {
         $scope.position = position;
+        $scope.positions.push($scope.position.name);
         $scope.selectAll = $scope.position.owners.length === $scope.users.length;
         angular.forEach($scope.users, function (user) {
           user.checked = _.some($scope.position.owners, function (owner) {
