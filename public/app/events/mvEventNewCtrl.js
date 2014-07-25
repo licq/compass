@@ -27,11 +27,11 @@ angular.module('compass')
       });
     };
 
-    function withInterviewerName(event){
-      event.interviewers = _.map(event.interviewers, function(id){
+    function withInterviewerName(event) {
+      event.interviewers = _.map(event.interviewers, function (id) {
         return {
           _id: id,
-          name: _.find($scope.users,{_id: id}).name
+          name: _.find($scope.interviewers, {_id: id}).name
         };
       });
       return event;
@@ -52,14 +52,19 @@ angular.module('compass')
 
     mvEventSetting.get(function (res) {
       $scope.eventSetting = res;
-      mvUser.query({fields: 'name'}, function (res) {
-        $scope.users = res;
-        $scope.isNew = !event._id;
+      $scope.isNew = !event._id;
+      mvEvent.availableInterviewers({id: event._id, application: event.application}, function (res) {
+        $scope.interviewers = res;
         $scope.event = event;
         oldStartTime = new Date(event.startTime);
         if ($scope.isNew) {
           $scope.event.duration = $scope.eventSetting.duration;
-          $scope.event.interviewers = [mvIdentity.currentUser._id];
+          $scope.event.startTime = moment().hour(14).minute(0).second(0).millisecond(0).add('days', 1);
+          if (_.findIndex($scope.interviewers, function (interviewer) {
+            return mvIdentity.currentUser._id === interviewer._id;
+          }) > -1) {
+            $scope.event.interviewers = [mvIdentity.currentUser._id];
+          }
         }
       });
     });

@@ -10,7 +10,7 @@ describe('events', function () {
   var user, request;
 
   beforeEach(function (done) {
-    helper.clearCollections('Company', 'User', 'Role','Resume', 'Interview', 'EventSetting', function () {
+    helper.clearCollections('Company', 'User', 'Role', 'Resume', 'Interview', 'EventSetting', function () {
       helper.login(function (agent, createdUser) {
         request = agent;
         user = createdUser;
@@ -73,6 +73,68 @@ describe('events', function () {
         });
       });
     });
+  });
+
+  describe('get /api/events/availableInterviewers', function () {
+    it('should get back all users if id not specified', function (done) {
+      request
+        .get('/api/events/availableInterviewers')
+        .expect(200)
+        .expect('content-type', /json/)
+        .end(function (err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.have.length(1);
+          done();
+        });
+    });
+
+    it('should get back non users if application id specified and event id not specified', function (done) {
+      Factory.create('resume', {company: user.company}, function (resume) {
+        Interview.addEvent({application: resume,
+          interviewers: [user.id],
+          startTime: new Date(),
+          duration: 90,
+          company: user.company,
+          createdBy: user,
+          status: 'new'
+        }, function () {
+          request
+            .get('/api/events/availableInterviewers?application=' + resume.id)
+            .expect(200)
+            .expect('content-type', /json/)
+            .end(function (err, res) {
+              expect(err).to.not.exist;
+              expect(res.body).to.have.length(0);
+              done();
+            });
+        });
+      });
+    });
+
+    it('should get back all users if application id specified and event id specified', function (done) {
+      Factory.create('resume', {company: user.company}, function (resume) {
+        Interview.addEvent({application: resume,
+          interviewers: [user.id],
+          startTime: new Date(),
+          duration: 90,
+          company: user.company,
+          createdBy: user,
+          status: 'new'
+        }, function (err, interview) {
+          request
+            .get('/api/events/availableInterviewers?application=' + resume.id + '&id=' + interview.events[0].id)
+            .expect(200)
+            .expect('content-type', /json/)
+            .end(function (err, res) {
+              expect(err).to.not.exist;
+              expect(res.body).to.have.length(1);
+              done();
+            });
+        });
+      });
+    });
+
+
   });
 
   describe('put /api/events/:id', function () {

@@ -5,6 +5,11 @@ angular.module('compass')
         update: {
           method: 'PUT',
           isArray: false
+        },
+        availableInterviewers: {
+          url: '/api/events/availableInterviewers',
+          method: 'GET',
+          isArray: true
         }
       });
   });

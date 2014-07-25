@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
   Interview = mongoose.model('Interview'),
+  User = mongoose.model('User'),
   moment = require('moment'),
   _ = require('lodash');
 
@@ -47,5 +48,33 @@ exports.create = function (req, res) {
     } else {
       res.send(200);
     }
+  });
+};
+
+exports.availableInterviewers = function (req, res, next) {
+  Interview.findOne({application: req.query.application, company: req.user.company}).select('events').exec(function (err, interview) {
+    if (err) return next(err);
+    User.find({company: req.user.company, deleted: false}).select('name')
+      .exec(function (err, users) {
+        if (err) return next(err);
+        var takenUsers;
+        if (interview) {
+          takenUsers = _.reduce(interview.events, function (result, event) {
+            if (event.id !== req.query.id) {
+              return result.concat(event.interviewers);
+            } else {
+              return result;
+            }
+          }, []);
+        }
+
+        users = _.filter(users, function (user) {
+          return _.findIndex(takenUsers,function(t){
+            return t.toString() === user.id;
+          }) === -1;
+        });
+
+        res.json(users);
+      });
   });
 };

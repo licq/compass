@@ -55,7 +55,7 @@
       <div class="col-md-9">
         <select ui-select2 class="form-control" name="interviewers" ng-model="event.interviewers"
                 ng-required="true" data-placeholder="请选择面试官，可以多选" multiple="true">
-          <option ng-repeat="user in users" value="{{user._id}}">{{user.name}}</option>
+          <option ng-repeat="interviewer in interviewers" value="{{interviewer._id}}">{{interviewer.name}}</option>
         </select>
 
         <p class="text-danger"
@@ -76,7 +76,7 @@
   <button class="btn btn-info pull-left" ng-hide="isNew" ng-click="viewResume(event.application)">简历</button>
   <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-show="isNew" ng-click="create()">创建</button>
   <button class="btn btn-primary" ng-disabled="eventForm.$invalid" ng-hide="isNew" ng-click="update()">保存</button>
-  <button class="btn btn-warning"  ng-hide="isNew" ng-click="remove()">删除</button>
+  <button class="btn btn-warning" ng-hide="isNew" ng-click="remove()">删除</button>
   <button class="btn btn-default" ng-click="cancel()">取消</button>
 </div>
 

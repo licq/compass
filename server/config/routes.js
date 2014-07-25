@@ -136,6 +136,9 @@ module.exports = function (app) {
     .get(applications.get)
     .put(applications.update);
 
+  apiRouter.route('/events/availableInterviewers')
+    .get(events.availableInterviewers);
+
   apiRouter.route('/events')
     .get(events.list)
     .post(events.create);

@@ -9,16 +9,6 @@ describe('mvEventNewCtrl', function () {
   beforeEach(inject(function (_$httpBackend_, $rootScope) {
     $httpBackend = _$httpBackend_;
     $httpBackend.expectGET('/api/eventSettings').respond({duration: 90});
-    $httpBackend.expectGET('/api/users?fields=name').respond([
-      {
-        _id: '7788',
-        name: 'aabb'
-      },
-      {
-        _id: '8899',
-        name: 'bbcc'
-      }
-    ]);
 
     $scope = $rootScope.$new();
     modalInstanceAPI = {
@@ -32,6 +22,16 @@ describe('mvEventNewCtrl', function () {
 
   describe('new', function () {
     beforeEach(inject(function ($controller) {
+      $httpBackend.expectGET('/api/events/availableInterviewers?application=9900').respond([
+        {
+          _id: '7788',
+          name: 'aabb'
+        },
+        {
+          _id: '8899',
+          name: 'bbcc'
+        }
+      ]);
       $controller('mvEventNewCtrl', {
         $scope: $scope,
         $modalInstance: modalInstanceAPI,
@@ -43,7 +43,7 @@ describe('mvEventNewCtrl', function () {
         },
         mvIdentity: {
           currentUser: {
-            _id: 'zzz'
+            _id: '7788'
           }
         }
       });
@@ -54,9 +54,10 @@ describe('mvEventNewCtrl', function () {
       expect($scope.isNew).to.be.true;
     });
 
+
     it('should set currentUser to interviewers', function () {
       expect($scope.event.interviewers).to.have.length(1);
-      expect($scope.event.interviewers[0]).to.equal('zzz');
+      expect($scope.event.interviewers[0]).to.equal('7788');
     });
     it('should set $scope.eventSetting', function () {
       expect($scope.eventSetting).to.have.property('duration', 90);
@@ -73,23 +74,23 @@ describe('mvEventNewCtrl', function () {
       expect($scope.event.application).to.equal('9900');
     });
 
-    it('should set users ', function () {
-      expect($scope.users).to.have.length(2);
-      expect($scope.users[0]._id).to.equal('7788');
-      expect($scope.users[1]._id).to.equal('8899');
+    it('should set interviewers ', function () {
+      expect($scope.interviewers).to.have.length(2);
+      expect($scope.interviewers[0]._id).to.equal('7788');
+      expect($scope.interviewers[1]._id).to.equal('8899');
     });
 
     describe('create', function () {
       it('should post /api/events and close the window and send notification', inject(function (mvNotifier) {
         $scope.event.interviewers = ['7788', '8899'];
-        $scope.event.time = '2014/05/09 14:00';
+        $scope.event.startTime = '2014/05/09 14:00';
         $scope.event.duration = 90;
 
         $httpBackend.expectPOST('/api/events',
           {
             duration: 90,
             application: '9900',
-            time: '2014/05/09 14:00',
+            startTime: '2014/05/09 14:00',
             interviewers: ['7788', '8899'],
             name: 'aabb',
             email: 'aa@aa.com',
@@ -101,7 +102,7 @@ describe('mvEventNewCtrl', function () {
         modalInstanceMock.expects('close').once().withArgs({
           duration: 90,
           application: '9900',
-          time: '2014/05/09 14:00',
+          startTime: '2014/05/09 14:00',
           interviewers: [
             {_id: '7788', name: 'aabb'},
             {_id: '8899', name: 'bbcc'}
@@ -129,12 +130,23 @@ describe('mvEventNewCtrl', function () {
 
   describe('edit', function () {
     beforeEach(inject(function ($controller) {
+      $httpBackend.expectGET('/api/events/availableInterviewers?application=9900&id=9911').respond([
+        {
+          _id: '7788',
+          name: 'aabb'
+        },
+        {
+          _id: '8899',
+          name: 'bbcc'
+        }
+      ]);
+
       $controller('mvEventNewCtrl', {
         $scope: $scope,
         $modalInstance: modalInstanceAPI,
         event: {
           _id: '9911',
-          time: new Date(),
+          startTime: new Date(),
           interviewers: ['7788', '8899'],
           duration: 60,
           application: '9900',
@@ -150,15 +162,19 @@ describe('mvEventNewCtrl', function () {
       expect($scope.isNew).to.be.false;
     });
 
+    it('should initialize interviewers', function () {
+      expect($scope.interviewers).to.have.length(2);
+    });
+
     it('should PUT /api/events/:id and close the window and send notification', inject(function (mvNotifier) {
       $scope.event.duration = 90;
-      $scope.event.time = '2014/05/09 14:00';
+      $scope.event.startTime = '2014/05/09 14:00';
       $httpBackend.expectPUT('/api/events/9911',
         {
           _id: '9911',
           duration: 90,
           application: '9900',
-          time: '2014/05/09 14:00',
+          startTime: '2014/05/09 14:00',
           interviewers: ['7788', '8899'],
           name: 'aabb',
           email: 'aa@aa.com',
@@ -171,7 +187,7 @@ describe('mvEventNewCtrl', function () {
         _id: '9911',
         duration: 90,
         application: '9900',
-        time: '2014/05/09 14:00',
+        startTime: '2014/05/09 14:00',
         interviewers: [
           {_id: '7788', name: 'aabb'},
           {_id: '8899', name: 'bbcc'}
@@ -188,7 +204,7 @@ describe('mvEventNewCtrl', function () {
 
     it('should DELETE /api/events/:id and close the window and send notification', inject(function (mvNotifier) {
       $scope.event.duration = 90;
-      $scope.event.time = '2014/05/09 14:00';
+      $scope.event.startTime = '2014/05/09 14:00';
       $httpBackend.expectDELETE('/api/events/9911').respond(200);
 
       var spy = sinon.spy(mvNotifier, 'notify');
