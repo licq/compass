@@ -28,7 +28,7 @@ angular.module('compass')
     };
 
     $scope.cancel = function (offer) {
-      offer.status = null;
+      offer.status = 'offered';
     };
 
     $scope.save = function (offer) {

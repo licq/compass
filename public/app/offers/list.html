@@ -38,7 +38,7 @@
           <tbody>
           <tr>
             <td class="vert-align">
-              <div ng-show="!gridItem.status">
+              <div ng-show="gridItem.status === 'offered'">
                 <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者接受</button>
                 <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者拒绝</button>
               </div>
