@@ -25,6 +25,7 @@ describe('mvInterviewViewCtrl', function () {
       _id: '7788',
       name: '张三',
       applyPosition: 'cio',
+      application: 'aabbcc',
       events: [
         {
           _id: '7788',
@@ -311,5 +312,13 @@ describe('mvInterviewViewCtrl', function () {
       $scope.newApplyPosition = '前台';
       expect($scope.newApplyPositionValid()).to.be.true;
     });
+  });
+
+  describe('viewResume', function () {
+    it('should go to /resumes/7788', inject(function ($location) {
+      var spy = sinon.spy($location,'path');
+      $scope.viewResume();
+      expect(spy).to.have.been.calledWith('/resumes/aabbcc');
+    }));
   });
 });

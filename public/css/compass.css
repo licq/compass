@@ -247,3 +247,8 @@ svg {
 .form-search .control-label{
     padding-right: 0;
 }
+
+button.button-above-table{
+    margin-top: -5px;
+    margin-bottom: 5px;
+}

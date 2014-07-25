@@ -2,12 +2,11 @@
   <section class="panel panel-default">
     <div class="panel-heading">
       <strong>{{interview.name}}</strong>
-
       <span class="pull-right">{{interview.applyPosition}}</span>
     </div>
     <div class="panel-body">
-      <button class="btn btn-success btn-sm pull-right" ng-click="newEvent()">预约面试</button>
       <div>
+        <button class="btn btn-success btn-sm pull-right button-above-table" ng-click="viewResume()">完整简历</button>
         <h5>基本信息</h5>
         <table class="table table-bordered">
           <tr>
@@ -22,7 +21,9 @@
               <div ng-show="editing">
                 <input type="text" ng-model="newApplyPosition" name="applyPosition"
                        typeahead="position for position in positions | filter:$viewValue | limitTo:8"/>
-                <button class="btn btn-primary btn-sm" ng-click="updateApplyPosition()" ng-disabled="!newApplyPositionValid()">保存</button>
+                <button class="btn btn-primary btn-sm" ng-click="updateApplyPosition()"
+                        ng-disabled="!newApplyPositionValid()">保存
+                </button>
                 <button class="btn btn-default btn-sm" ng-click="cancelEditApplyPosition()">取消</button>
               </div>
             </td>
@@ -34,8 +35,8 @@
             <td>{{interview.email}}</td>
           </tr>
         </table>
+        <button class="btn btn-success btn-sm pull-right button-above-table" ng-click="newEvent()">预约面试</button>
         <h5>面试安排</h5>
-
         <div class="table-responsive">
           <table class="table table-bordered">
             <tr>

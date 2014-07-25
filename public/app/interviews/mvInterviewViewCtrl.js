@@ -124,4 +124,8 @@ angular.module('compass')
       return !!$scope.newApplyPosition &&
         ($scope.newApplyPosition !== $scope.interview.applyPosition);
     };
+
+    $scope.viewResume = function(){
+      $location.path('/resumes/' + $scope.interview.application);
+    };
   });
