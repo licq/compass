@@ -56,20 +56,28 @@
                   请输入邮件服务器地址</p>
 
               </div>
+
               <div class="form-group">
                 <label>服务器端号</label>
                 <input type="number" class="form-control placeholder"
                        ng-model="email.port" placeholder="服务器端口"/>
+                <label>
+                  <input type="checkbox" class="icheckbox_square-green"
+                         ng-model="email.ssl">
+                  使用ssl链接
+                </label>
               </div>
+
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
+
                   <label>
-                    <input type="checkbox" class="icheckbox_square-green"
-                           ng-model="email.ssl">
-                    使用ssl链接
+                  <input type="checkbox" class="icheckbox_square-green"
+                         ng-model="email.keepMails">
+                  在服务器上保留原始邮件<p ng-show="!email.keepMails" class="text-danger">注意：服务器上的邮件将会被删除</p>
                   </label>
                 </div>
-                <div class="col-md-6" ng-show="saving">
+                <div class="col-md-4" ng-show="saving">
                   <label>
                     验证所需时间稍长，请稍等...
                   </label>

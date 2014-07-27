@@ -3,7 +3,8 @@
 angular.module('compass')
   .controller('mvEmailNewCtrl', function ($scope, $location, mvEmail, mvNotifier) {
     $scope.email = new mvEmail({
-      port: 110
+      port: 110,
+      keepMails: true
     });
 
     $scope.create = function () {
@@ -22,9 +23,11 @@ angular.module('compass')
       $location.path('/settings/emails');
     };
 
-    $scope.$watch('email.ssl', function(){
-      if($scope.email.ssl && $scope.email.port === 110){
+    $scope.$watch('email.ssl', function () {
+      if ($scope.email.ssl && $scope.email.port === 110) {
         $scope.email.port = 995;
+      } else if (!$scope.email.ssl && $scope.email.port === 995) {
+        $scope.email.port = 110;
       }
     });
   });
