@@ -157,5 +157,4 @@ describe('users', function () {
         });
     });
   });
-})
-;
+});

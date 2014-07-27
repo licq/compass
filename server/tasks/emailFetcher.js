@@ -32,8 +32,14 @@ function parse(mailData, callback) {
 }
 
 exports.fetch = function (mailbox, callback) {
-  var correct = false;
-  var totalMails, current = 1;
+  var correct = false,
+    totalUnretrievedMails,
+    totalMails = 0,
+    toBeRetrieved = [],
+    retrievedMails = mailbox.retrievedMails || [],
+    keepMails = mailbox.keepMails,
+    current = 1,
+    msgnumbers = [], uids = [], newRetrievedMails = [];
 
   var client = new POPClient(mailbox.port, mailbox.server, {
     tlserrs: true,
@@ -62,35 +68,79 @@ exports.fetch = function (mailbox, callback) {
   client.on("login", function (status, data) {
     if (status) {
       correct = true;
-      client.list();
+      client.uidl();
     } else {
       logger.info("LOGIN/PASS failed");
       client.quit();
     }
   });
 
-  client.on("list", function (status, msgcount, msgnumber, data, rawdata) {
+  client.on('uidl', function (status, msgnumber, data, rawdata) {
     if (status === false) {
       logger.info("LIST failed");
       client.quit();
-    } else if (msgcount > 0) {
-      totalMails = msgcount;
-      client.retr(current);
+    } else if (data.length > 0) {
+      _.forEach(rawdata.split('\r\n'), function (item) {
+        if (item.length) {
+          var items = item.split(' ');
+          msgnumbers.push(parseInt(items[0]));
+          uids.push(items[1]);
+        }
+      });
+      totalMails = uids.length;
+      _.forEach(_.difference(uids, retrievedMails), function (item) {
+          var index = _.indexOf(uids, item);
+          if (index !== -1) {
+            toBeRetrieved.push({msgnum: msgnumbers[index], uid: uids[index]});
+          }
+        }
+      );
+      totalUnretrievedMails = toBeRetrieved.length;
+      if (totalUnretrievedMails > 0) {
+        client.retr(toBeRetrieved[current - 1].msgnum);
+      } else {
+        client.quit();
+      }
     } else {
       client.quit();
     }
   });
 
+//  client.on("list", function (status, msgcount, msgnumber, data, rawdata) {
+//    if (status === false) {
+//      logger.info("LIST failed");
+//      client.quit();
+//    } else if (msgcount > 0) {
+//      totalMails = msgcount;
+//      client.retr(current);
+//    } else {
+//      client.quit();
+//    }
+//  });
+
   client.on("retr", function (status, msgnumber, data, rawdata) {
     if (status === true) {
-      current += 1;
+      var next = current + 1;
 
       parse(data, function (mail) {
         saveToDB(mail, mailbox.address, function (err) {
           if (err) {
             logger.error('save resume to db failed because of', err);
             client.rset();
-          } else client.dele(msgnumber);
+          }
+          else if (keepMails) {
+            newRetrievedMails.push(toBeRetrieved[current - 1].uid);
+            current = next;
+            if (current > totalUnretrievedMails) {
+              client.quit();
+            } else {
+              client.retr(toBeRetrieved[current - 1].msgnum);
+            }
+          }
+          else {
+            current = next;
+            client.dele(msgnumber);
+          }
         });
       });
     } else {
@@ -101,10 +151,10 @@ exports.fetch = function (mailbox, callback) {
 
   client.on("dele", function (status, msgnumber, data, rawdata) {
     if (status === true) {
-      if (current > totalMails)
+      if (current > totalUnretrievedMails) {
         client.quit();
-      else
-        client.retr(current);
+      } else
+        client.retr(toBeRetrieved[current - 1].msgnum);
     } else {
       logger.info("DELE failed for msgnumber " + msgnumber);
       client.rset();
@@ -118,11 +168,15 @@ exports.fetch = function (mailbox, callback) {
   client.on("quit", function (status, rawdata) {
 //        if (status === true) logger.info("QUIT success");
 //        else logger.info("QUIT failed");
-    if (correct) {
-      callback(null, current - 1);
-    } else {
-      callback('login failed', 0);
-    }
+    mailbox.retrievedMails = mailbox.retrievedMails || [];
+    mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
+    mailbox.save(function () {
+      if (correct) {
+        callback(null, current - 1, totalMails);
+      } else {
+        callback('login failed', 0, totalMails);
+      }
+    });
   });
 };
 
