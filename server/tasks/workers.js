@@ -27,10 +27,10 @@ function handleFetchEmail(job, done) {
   Email.findById(job.data.id, function (err, email) {
     if (err) return done(err);
     if (!email) return done('email ' + job.data.id + ' not found');
-
+    var lastRetrieveTime = new Date();
     emailFetcher.fetch(email, function (err, count) {
       email.lastRetrieveCount = count;
-      email.lastRetrieveTime = new Date();
+      email.lastRetrieveTime = lastRetrieveTime;
       email.lastError = err;
       if (!err) {
         email.totalRetrieveCount += count;

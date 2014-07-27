@@ -22,7 +22,7 @@ var configs = {
         user: "compass_test@126.com",
         pass: "compass123"
       },
-      from: "compass_test@126.com",
+      from: "compass_test@126.com"
     },
     hostname: 'localhost',
     port: process.env.PORT || 3000,
@@ -50,7 +50,7 @@ var configs = {
       index: 'compass-test'
     },
     emailOptions: {
-      host: "smtp.1269.com",
+      host: "smtp.126.com",
       port: 25,
       auth: {
         user: "compass_test@126.com",

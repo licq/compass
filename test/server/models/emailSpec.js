@@ -81,6 +81,7 @@ describe('Email', function () {
           expect(email.createdAt).to.exist;
           expect(email.updatedAt).to.exist;
           expect(email.totalRetrieveCount).to.equal(0);
+          expect(email.keepMails).to.be.true;
           done();
         });
       });

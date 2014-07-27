@@ -53,7 +53,12 @@ var emailSchema = mongoose.Schema({
     default: 0
   },
   lastError: String,
-  lastRetrieveTime: Date
+  lastRetrieveTime: Date,
+  keepMails : {
+    type: Boolean,
+    default: true
+  },
+  retrievedMails: [String]
 });
 
 emailSchema.methods.verify = function (callback) {

@@ -16,6 +16,7 @@ describe('mvEmailNewCtrl', function () {
   it('should initialize a default email object', function () {
     expect($scope.email).to.exist;
     expect($scope.email.port).to.equal(110);
+    expect($scope.email.keepMails).to.be.true;
   });
 
   describe('create new email', function () {
@@ -26,7 +27,8 @@ describe('mvEmailNewCtrl', function () {
         account: 'aa',
         password: 'aa',
         server: 'aa.com',
-        port: 110
+        port: 110,
+        keepMails: true
       };
     });
 
@@ -60,11 +62,17 @@ describe('mvEmailNewCtrl', function () {
       $scope.email.ssl = true;
       $scope.$digest();
       expect($scope.email.port).to.equal(995);
+      $scope.email.ssl = false;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(110);
     });
 
     it('should not change the port if user changed port ', function () {
       $scope.email.port = 465;
       $scope.email.ssl = true;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(465);
+      $scope.email.ssl = false;
       $scope.$digest();
       expect($scope.email.port).to.equal(465);
     });
