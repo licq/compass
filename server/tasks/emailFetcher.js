@@ -90,6 +90,7 @@ exports.fetch = function (mailbox, callback) {
           uids.push(items[1]);
         }
       });
+
       totalMails = uids.length;
       _.forEach(_.difference(uids, retrievedMails), function (item) {
           var index = _.indexOf(uids, item);
@@ -112,16 +113,19 @@ exports.fetch = function (mailbox, callback) {
       toBeProcessed = toBeRetrieved.concat(toBeDeleted);
       totalUnretrievedMails = toBeRetrieved.length;
       totalToBeprocessedMails = toBeProcessed.length;
+      current = next;
+      next += 1;
+
       if (totalUnretrievedMails > 0) {
-        current = next;
-        next += 1;
         client.retr(toBeProcessed[current - 1].msgnum);
       } else if (totalToBeprocessedMails > 0) {
         client.dele(toBeProcessed[current - 1].msgnum);
       } else {
         client.quit();
       }
+
     } else {
+      current = next;
       client.quit();
     }
   });
@@ -139,7 +143,6 @@ exports.fetch = function (mailbox, callback) {
 //  });
 
   client.on("retr", function (status, msgnumber, data, rawdata) {
-
     if (status === true) {
       parse(data, function (mail) {
         saveToDB(mail, mailbox.address, function (err) {
@@ -149,19 +152,13 @@ exports.fetch = function (mailbox, callback) {
           }
           else if (keepMails) {
             newRetrievedMails.push(toBeProcessed[current - 1].uid);
-            if (next > totalUnretrievedMails) {
-              if (next > totalToBeprocessedMails)
-                client.quit();
-              else {
-                current = next;
-                next += 1;
-                client.dele(toBeProcessed[current - 1].msgnum);
-              }
-            } else {
-              current = next;
-              next += 1;
+            current = next;
+            next += 1;
+            if (current <= totalUnretrievedMails) {
               client.retr(toBeProcessed[current - 1].msgnum);
-            }
+            } else if (current > totalUnretrievedMails && current <= totalToBeprocessedMails) {
+              client.dele(toBeProcessed[current - 1].msgnum);
+            } else client.quit();
           }
           else {
             client.dele(msgnumber);
@@ -176,21 +173,16 @@ exports.fetch = function (mailbox, callback) {
 
   client.on("dele", function (status, msgnumber, data, rawdata) {
     if (status === true) {
-      if (next > totalUnretrievedMails) {
-        if (next > totalToBeprocessedMails) {
-          deleted.push(toBeProcessed[current - 1].uid);
-          client.quit();
-        }
-        else {
-          deleted.push(toBeProcessed[current - 1].uid);
-          current = next;
-          next += 1;
-          client.dele(toBeProcessed[current - 1].msgnum);
-        }
-      } else {
-        current = next;
-        next += 1;
+      current = next;
+      next += 1;
+      if (current <= totalUnretrievedMails) {
         client.retr(toBeProcessed[current - 1].msgnum);
+      } else if (current > totalUnretrievedMails && current <= totalToBeprocessedMails) {
+        deleted.push(toBeProcessed[current - 2].uid);
+        client.dele(toBeProcessed[current - 1].msgnum);
+      } else {
+        deleted.push(toBeProcessed[current - 2].uid);
+        client.quit();
       }
     } else {
       logger.info("DELE failed for msgnumber " + msgnumber);
@@ -211,7 +203,7 @@ exports.fetch = function (mailbox, callback) {
     else mailbox.retrievedMails = _.difference(mailbox.retrievedMails, deleted);
     mailbox.save(function () {
       if (correct) {
-        callback(null, current, totalMails);
+        callback(null, current - 1, totalMails);
       } else {
         callback('login failed', 0, totalMails);
       }
