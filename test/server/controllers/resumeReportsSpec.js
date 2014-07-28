@@ -38,7 +38,7 @@ describe('resumeReports', function () {
           done();
         });
     });
-    it.skip('should return array of resumecount of type week', function (done) {
+    it('should return array of resumecount of type week', function (done) {
       request.get('/api/resumeReports/counts?reportType=week')
         .expect(200)
         .expect('content-type', /json/)
