@@ -4,6 +4,10 @@ angular.module('compass')
       .when('/welcome', {
         templateUrl: '/app/common/welcome.html'
       })
+      .when('/tutorial', {
+        templateUrl: '/app/tutorial/tutorial.html',
+        controller: 'mvTutorialCtrl'
+      })
       .when('/login', {
         templateUrl: '/app/auth/login.html',
         controller: 'mvLoginCtrl'
@@ -243,7 +247,10 @@ angular.module('compass')
           load: ['mvIdentity', '$location', '$q', function (mvIdentity, $location, $q) {
             var defer = $q.defer();
             if (mvIdentity.isAuthenticated()) {
-              $location.path('/today');
+              if (mvIdentity.currentUser.firstRun)
+                $location.path('/tutorial');
+              else
+                $location.path('/today');
             } else {
               $location.path('/welcome');
             }
@@ -279,8 +286,7 @@ angular.module('compass')
       }
 
       var applicationRegExp = /^\/applications\//;
-      if (applicationRegExp.test(current && current.originalPath) && (!applicationRegExp.test(next && next.originalPath) || (current.pathParams.status !== next.pathParams.status) ))
-      {
+      if (applicationRegExp.test(current && current.originalPath) && (!applicationRegExp.test(next && next.originalPath) || (current.pathParams.status !== next.pathParams.status) )) {
         states.reset('mvApplicationListCtrl' + current.pathParams.status);
       }
     });
@@ -368,43 +374,43 @@ angular.module('compass')
     $provide.decorator('taOptions', ['taRegisterTool', '$delegate',
       function (taRegisterTool, taOptions) {
 
-        function insertText(html){
-            var sel, range;
-            if (window.getSelection) {
-              // IE9 and non-IE
-              sel = window.getSelection();
-              if (sel.getRangeAt && sel.rangeCount) {
-                range = sel.getRangeAt(0);
-                range.deleteContents();
+        function insertText(html) {
+          var sel, range;
+          if (window.getSelection) {
+            // IE9 and non-IE
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+              range = sel.getRangeAt(0);
+              range.deleteContents();
 
-                // Range.createContextualFragment() would be useful here but is
-                // non-standard and not supported in all browsers (IE9, for one)
-                var el = document.createElement('div');
-                el.innerHTML = html;
-                var frag = document.createDocumentFragment(), node, lastNode;
-                while ( (node = el.firstChild) ) {
-                  lastNode = frag.appendChild(node);
-                }
-                range.insertNode(frag);
-
-                // Preserve the selection
-                if (lastNode) {
-                  range = range.cloneRange();
-                  range.setStartAfter(lastNode);
-                  range.collapse(true);
-                  sel.removeAllRanges();
-                  sel.addRange(range);
-                }
+              // Range.createContextualFragment() would be useful here but is
+              // non-standard and not supported in all browsers (IE9, for one)
+              var el = document.createElement('div');
+              el.innerHTML = html;
+              var frag = document.createDocumentFragment(), node, lastNode;
+              while ((node = el.firstChild)) {
+                lastNode = frag.appendChild(node);
               }
-            } else if (document.selection && document.selection.type !== 'Control') {
-              // IE < 9
-              document.selection.createRange().pasteHTML(html);
+              range.insertNode(frag);
+
+              // Preserve the selection
+              if (lastNode) {
+                range = range.cloneRange();
+                range.setStartAfter(lastNode);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+              }
             }
+          } else if (document.selection && document.selection.type !== 'Control') {
+            // IE < 9
+            document.selection.createRange().pasteHTML(html);
           }
+        }
 
         taRegisterTool('insertName', {
           buttontext: '插入姓名',
-          action: function(){
+          action: function () {
             insertText('{{姓名}}');
           }});
         taRegisterTool('applyPosition', {

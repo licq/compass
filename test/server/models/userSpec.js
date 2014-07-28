@@ -128,6 +128,7 @@ describe('User', function () {
       Factory.create('user', function (user) {
         expect(user.createdAt).to.exist;
         expect(user.updatedAt).to.exist;
+        expect(user.firstRun).to.be.true;
         done();
       });
     });

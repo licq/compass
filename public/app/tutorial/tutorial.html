@@ -1,0 +1,65 @@
+<div>
+  <script type="text/ng-template" id="tutorialModalContent.html">
+    <div class="modal-header">
+      <h3 class="modal-title">指南</h3>
+    </div>
+    <div class="modal-body">
+      <wizard on-finish="close()" style="height: 350px;">
+        <wz-step title="欢迎使用">
+          <p class="callout callout-info">这是您第一次登陆领聘网，在正式使用之前，我们将为您介绍领聘网的工作原理，以帮助您更快地融入您的工作流程。</p>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+        <wz-step title="简历获取">
+          <div class="callout callout-info">
+            首先，领聘网需要您设置在各个招聘渠道的接受简历的邮箱。领聘网将自动收取这些邮箱中的简历，并将之放入系统的新应聘中。目前系统支持的渠道包括智联招聘，前程无忧，猎聘网，最佳东方。
+          </div>
+          <div class="callout callout-success">
+            您可以对重复简历进行过滤，可以在【设置->应聘设置】中调整简历过滤的期限。所有被过滤的简历将自动出现在人才库且被标记为重复投递。
+          </div>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+        <wz-step title="应聘">
+          <div class="callout callout-info">
+            您可以在新应聘中查看所有新收到的简历。在查看简历时，您可以对简历标记为待定或通过状态。在通过状态下，您可以开始跟应聘者预约面试时间。当与面试者预约完成后，简历进入面试状态，您可以在【面试->面试中】进行查看。
+          </div>
+          <div class="callout callout-success">
+            <p>
+              您可以在应聘管理中设置自动发送感谢信。当您拒绝该应聘者时，系统会自动发送您设置的感谢信模板给应聘者。同时您可以在面试管理中设置默认面试时长和面试邮件提醒。
+            </p>
+
+            <p>
+              如果您需要不同的人员负责不同的简历筛选工作，您可以在职位设置中打开职位权限控制并创建职位，并为职位设置面试负责人，这样只有面试负责人才能查看相应的简历。
+            </p>
+          </div>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+        <wz-step title="面试">
+          <div class="callout callout-info">
+            面试官在面试后，需要在系统中对应聘者给出面试评价。HR人员可以在【面试->面试中】查看针对该面试者所有的评价并再次预约面试，也可将该应聘者放入面试通过状态。
+          </div>
+          <div class="callout callout-success">
+            您首先可以到【设置->默认评价设置】中对评价标准进行设定。该标准将应用于所有没有单独设置的职位面试评价。然后，您可以在【设置->职位管理】创建各种不同职位，并设置面试负责人及不同的面试评价标准。
+          </div>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+        <wz-step title="面试通过及入职">
+          <div class="callout callout-info">
+            面试通过后，您需要与应聘者确认入职日期并记录在系统，如果应聘者拒绝，也可在系统中记录应聘者的拒绝原因。在入职列表中，您可以查看所有待入职的人员列表，如果该应聘者拒绝，可以记录拒绝原因。
+          </div>
+          <div class="callout callout-success">
+            所有您拒绝的简历都可以在人才库中检索，同时可以查看该应聘者的面试经过。
+          </div>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+
+        <wz-step title="恭喜您">
+          <div class="callout callout-info">
+            您已经完成了领聘网功能的概览，请您根据您的需求对所有设置项进行调整，开始您的领聘之旅吧！
+          </div>
+          <input type="submit" wz-next value="完成" class="btn btn-danger pull-right"/>
+        </wz-step>
+
+      </wizard>
+    </div>
+  </script>
+</div>
