@@ -92,5 +92,42 @@ describe.skip('emailFetcher', function () {
         });
       }, timeout);
     });
+
+    it('should retrieve new mails and delete all old emails', function (done) {
+      this.timeout(0);
+      setTimeout(function () {
+        mailbox.keepMails = true;
+        emailFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+          expect(err).to.not.exist;
+          expect(processedMails).to.be.equal(3);
+          expect(totalMails).to.be.equal(3);
+          async.eachSeries(_.range(3), function (i, callback) {
+            mailer.sendSignupEmail('applicant' + i, testmail.address, i, function (error) {
+              callback(error);
+            });
+          }, function () {
+            setTimeout(function () {
+              mailbox.keepMails = false;
+              emailFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+                expect(err).to.not.exist;
+                expect(processedMails).to.be.equal(6);
+                expect(totalMails).to.be.equal(6);
+                emailFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+                  expect(err).to.not.exist;
+                  expect(processedMails).to.be.equal(0);
+                  expect(totalMails).to.be.equal(0);
+                  Email.findOne({address: mailbox.address}, function (err, email) {
+                    expect(err).to.not.exist;
+                    expect(email.retrievedMails).to.have.length(0);
+                    expect(email.keepMails).to.be.false;
+                    done();
+                  });
+                });
+              });
+            }, timeout);
+          });
+        });
+      }, timeout);
+    });
   });
 });

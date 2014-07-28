@@ -33,12 +33,15 @@ function parse(mailData, callback) {
 
 exports.fetch = function (mailbox, callback) {
   var correct = false,
-    totalUnretrievedMails,
+    totalUnretrievedMails, totalToBeprocessedMails,
     totalMails = 0,
     toBeRetrieved = [],
+    toBeDeleted = [],
+    toBeProcessed = [],
+    deleted = [],
     retrievedMails = mailbox.retrievedMails || [],
     keepMails = mailbox.keepMails,
-    current = 1,
+    current = 0, next = current + 1,
     msgnumbers = [], uids = [], newRetrievedMails = [];
 
   var client = new POPClient(mailbox.port, mailbox.server, {
@@ -95,9 +98,26 @@ exports.fetch = function (mailbox, callback) {
           }
         }
       );
+
+      if (!keepMails) {
+        _.forEach(retrievedMails, function (item) {
+            var index = _.indexOf(uids, item);
+            if (index !== -1) {
+              toBeDeleted.push({msgnum: msgnumbers[index], uid: uids[index]});
+            }
+          }
+        );
+      }
+
+      toBeProcessed = toBeRetrieved.concat(toBeDeleted);
       totalUnretrievedMails = toBeRetrieved.length;
+      totalToBeprocessedMails = toBeProcessed.length;
       if (totalUnretrievedMails > 0) {
-        client.retr(toBeRetrieved[current - 1].msgnum);
+        current = next;
+        next += 1;
+        client.retr(toBeProcessed[current - 1].msgnum);
+      } else if (totalToBeprocessedMails > 0) {
+        client.dele(toBeProcessed[current - 1].msgnum);
       } else {
         client.quit();
       }
@@ -119,9 +139,8 @@ exports.fetch = function (mailbox, callback) {
 //  });
 
   client.on("retr", function (status, msgnumber, data, rawdata) {
-    if (status === true) {
-      var next = current + 1;
 
+    if (status === true) {
       parse(data, function (mail) {
         saveToDB(mail, mailbox.address, function (err) {
           if (err) {
@@ -129,16 +148,22 @@ exports.fetch = function (mailbox, callback) {
             client.rset();
           }
           else if (keepMails) {
-            newRetrievedMails.push(toBeRetrieved[current - 1].uid);
-            current = next;
-            if (current > totalUnretrievedMails) {
-              client.quit();
+            newRetrievedMails.push(toBeProcessed[current - 1].uid);
+            if (next > totalUnretrievedMails) {
+              if (next > totalToBeprocessedMails)
+                client.quit();
+              else {
+                current = next;
+                next += 1;
+                client.dele(toBeProcessed[current - 1].msgnum);
+              }
             } else {
-              client.retr(toBeRetrieved[current - 1].msgnum);
+              current = next;
+              next += 1;
+              client.retr(toBeProcessed[current - 1].msgnum);
             }
           }
           else {
-            current = next;
             client.dele(msgnumber);
           }
         });
@@ -151,10 +176,22 @@ exports.fetch = function (mailbox, callback) {
 
   client.on("dele", function (status, msgnumber, data, rawdata) {
     if (status === true) {
-      if (current > totalUnretrievedMails) {
-        client.quit();
-      } else
-        client.retr(toBeRetrieved[current - 1].msgnum);
+      if (next > totalUnretrievedMails) {
+        if (next > totalToBeprocessedMails) {
+          deleted.push(toBeProcessed[current - 1].uid);
+          client.quit();
+        }
+        else {
+          deleted.push(toBeProcessed[current - 1].uid);
+          current = next;
+          next += 1;
+          client.dele(toBeProcessed[current - 1].msgnum);
+        }
+      } else {
+        current = next;
+        next += 1;
+        client.retr(toBeProcessed[current - 1].msgnum);
+      }
     } else {
       logger.info("DELE failed for msgnumber " + msgnumber);
       client.rset();
@@ -169,10 +206,12 @@ exports.fetch = function (mailbox, callback) {
 //        if (status === true) logger.info("QUIT success");
 //        else logger.info("QUIT failed");
     mailbox.retrievedMails = mailbox.retrievedMails || [];
-    mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
+    if (keepMails)
+      mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
+    else mailbox.retrievedMails = _.difference(mailbox.retrievedMails, deleted);
     mailbox.save(function () {
       if (correct) {
-        callback(null, current - 1, totalMails);
+        callback(null, current, totalMails);
       } else {
         callback('login failed', 0, totalMails);
       }

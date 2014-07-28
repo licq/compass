@@ -49,7 +49,7 @@ describe('interviewReports', function () {
         });
     });
 
-    it.skip('should return array of interviewcount of type week', function (done) {
+    it('should return array of interviewcount of type week', function (done) {
       request.get('/api/interviewReports/counts?reportType=week')
         .expect(200)
         .expect('content-type', /json/)
