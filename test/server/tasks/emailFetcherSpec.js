@@ -9,7 +9,7 @@ var emailFetcher = require('../../../server/tasks/emailFetcher'),
   helper = require('../testHelper'),
   Email = require('mongoose').model('Email');
 
-describe('emailFetcher', function () {
+describe.skip('emailFetcher', function () {
   var mailbox,
     compass_test = {
       address: 'compass_test@126.com',
@@ -31,7 +31,6 @@ describe('emailFetcher', function () {
 
   var testmail = compass_test, timeout = 5000;
   beforeEach(function (done) {
-
     helper.clearCollections(Email, 'Company', 'User', function () {
       Factory.create('email', testmail, function (mb) {
         mailbox = mb;
