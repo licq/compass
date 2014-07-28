@@ -18,11 +18,11 @@
           </div>
           <div class="col-md-11">
             <ul class="list-inline">
-              <li>
-                <a ng-click="setApplyPosition()">全部</a>
-              </li>
-              <li ng-repeat="term in facets.applyPosition.terms">
+              <li ng-repeat="term in facets.applyPosition.terms" ng-hide="queryOptions.applyPosition">
                 <a ng-click="setApplyPosition(term.term)">{{term.term}}</a>
+              </li>
+              <li ng-show="queryOptions.applyPosition"><span class="text-danger">{{queryOptions.applyPosition}}<i
+                class="fa fa-times" ng-click="setApplyPosition()"></i></span>
               </li>
             </ul>
           </div>
@@ -33,12 +33,11 @@
           </div>
           <div class="col-md-11">
             <ul class="list-inline">
-              <li>
-                <a ng-click="setAge()">全部</a>
-              </li>
-              <li ng-repeat="entry in facets.age.entries">
+              <li ng-repeat="entry in facets.age.entries" ng-hide="queryOptions.age">
                 <a ng-click="setAge(entry.key)">{{entry.key | ageRange}}</a>
               </li>
+              <li ng-show="queryOptions.age"><span class="text-danger">{{queryOptions.age | ageRange}}<i
+                class="fa fa-times" ng-click="setAge()"></i></span></li>
             </ul>
           </div>
         </div>
@@ -48,12 +47,11 @@
           </div>
           <div class="col-md-11">
             <ul class="list-inline">
-              <li>
-                <a ng-click="setHighestDegree()">全部</a>
-              </li>
-              <li ng-repeat="term in facets.highestDegree.terms">
+              <li ng-repeat="term in facets.highestDegree.terms" ng-hide="queryOptions.highestDegree">
                 <a ng-click="setHighestDegree(term.term)">{{term.term | degree}}</a>
               </li>
+              <li ng-show="queryOptions.highestDegree"><span class="text-danger">{{queryOptions.highestDegree | degree}}<i
+                class="fa fa-times" ng-click="setHighestDegree()"></i></span></li>
             </ul>
           </div>
         </div>
@@ -63,11 +61,12 @@
           </div>
           <div class="col-md-11">
             <ul class="list-inline">
-              <li>
-                <a ng-click="setStatus()">全部</a>
-              </li>
-              <li ng-repeat="term in facets.status.terms">
+              <li ng-repeat="term in facets.status.terms" ng-hide="queryOptions.status">
                 <a ng-click="setStatus(term.term)">{{term.term | resumeStatus}}</a>
+              </li>
+              <li ng-show="queryOptions.status">
+                <span class="text-danger">{{queryOptions.status | resumeStatus}}<i
+                  class="fa fa-times" ng-click="setStatus()"></i></span>
               </li>
             </ul>
           </div>
