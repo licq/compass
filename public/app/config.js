@@ -4,6 +4,9 @@ angular.module('compass')
       .when('/welcome', {
         templateUrl: '/app/common/welcome.html'
       })
+      .when('/tutorial',{
+        templateUrl: '/app/tutorial/tutorial.html'
+      })
       .when('/login', {
         templateUrl: '/app/auth/login.html',
         controller: 'mvLoginCtrl'

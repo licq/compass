@@ -32,6 +32,7 @@
     "nvd3": "~1.1.15-beta",
     "angulartics": "~0.15.20",
     "angular-placeholder-shim": "~0.3.0",
-    "jquery-html5-placeholder-shim": "*"
+    "jquery-html5-placeholder-shim": "*",
+    "angular-wizard": "~0.4.0"
   }
 }
