@@ -3,7 +3,7 @@
 var emailChecker = require('../../../server/tasks/emailChecker'),
   expect = require('chai').expect;
 
-describe.skip('emailFetcher', function () {
+describe.skip('imapFetcher', function () {
   var mailbox;
 
   beforeEach(function () {

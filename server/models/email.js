@@ -3,6 +3,7 @@
 var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamp'),
   validator = require('validator'),
+  imapChecker = require('../tasks/imapChecker'),
   emailChecker = require('../tasks/emailChecker');
 
 var emailSchema = mongoose.Schema({
@@ -22,7 +23,7 @@ var emailSchema = mongoose.Schema({
   },
   server: {
     type: String,
-    required: [true, '请输入POP3服务器地址']
+    required: [true, '请输入服务器地址']
   },
   port: {
     type: Number,
@@ -30,6 +31,10 @@ var emailSchema = mongoose.Schema({
     required: [true, '请输入端口号']
   },
   ssl: {
+    type: Boolean,
+    default: false
+  },
+  tls: {
     type: Boolean,
     default: false
   },
@@ -54,7 +59,12 @@ var emailSchema = mongoose.Schema({
   },
   lastError: String,
   lastRetrieveTime: Date,
-  keepMails : {
+  protocol: {
+    type: String,
+    enum: ['imap', 'pop3'],
+    required: true
+  },
+  keepMails: {
     type: Boolean,
     default: true
   },
@@ -62,10 +72,17 @@ var emailSchema = mongoose.Schema({
 });
 
 emailSchema.methods.verify = function (callback) {
-  emailChecker.check(this, function (err) {
-    if (err) return callback({message: err});
-    callback();
-  });
+  if(this.protocol === 'imap'){
+    imapChecker.check(this, function(err){
+      if (err) return callback({message: err});
+      callback();
+    });
+  }else{
+    emailChecker.check(this, function (err) {
+      if (err) return callback({message: err});
+      callback();
+    });
+  }
 };
 
 emailSchema.plugin(timestamps);
