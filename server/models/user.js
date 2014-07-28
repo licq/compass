@@ -43,6 +43,11 @@ var userSchema = mongoose.Schema({
     }
   ]},
 
+  firstRun: {
+    type: Boolean,
+    default: true
+  },
+
   title: String,
   deleted: {
     type: Boolean,
@@ -242,12 +247,12 @@ userSchema.statics.createSystemAdmin = function (callback) {
             if (!sysAdmin) {
               model.create({ name: 'systemadmin',
                 email: 'sysadmin@compass.com',
-                password:'compass.123',
+                password: 'compass.123',
                 company: company._id,
                 role: role._id,
                 title: 'system admin'
-              }, function(err, sysAdmin){
-                cb(err,sysAdmin );
+              }, function (err, sysAdmin) {
+                cb(err, sysAdmin);
               });
             } else {
               cb(err, sysAdmin);
