@@ -1,8 +1,13 @@
+'use strict';
+
 var Imap = require('imap'),
   logger = require('../config/winston').logger();
 
 exports.check = function (mailbox, callback) {
-  var imap = new Imap(mailbox);
+ var email = mailbox.toObject();
+  email.user = email.address;
+  email.host = email.server;
+  var imap = new Imap(email);
   var correct = false;
   imap.connect();
   imap.once('ready', function () {
@@ -15,7 +20,7 @@ exports.check = function (mailbox, callback) {
     if (imap.state === 'connected' || (err.source && err.source === 'authentication')) {
       callback('login failed');
     } else if (imap.state === 'disconnected' || (err.source && err.source === 'socket') || err.code === 'ENOTFOUND') {
-      callback('connect failed')
+      callback('connect failed');
     }
   });
 

@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamp'),
   validator = require('validator'),
   imapChecker = require('../tasks/imapChecker'),
-  emailChecker = require('../tasks/emailChecker');
+  pop3Checker = require('../tasks/pop3Checker');
 
 var emailSchema = mongoose.Schema({
   address: {
@@ -62,6 +62,7 @@ var emailSchema = mongoose.Schema({
   protocol: {
     type: String,
     enum: ['imap', 'pop3'],
+    default: 'imap',
     required: true
   },
   keepMails: {
@@ -71,14 +72,22 @@ var emailSchema = mongoose.Schema({
   retrievedMails: [String]
 });
 
+//emailSchema.virtual('host').get(function(){
+//  return this.server;
+//});
+//
+//emailSchema.virtual('user').get(function(){
+//  return this.address;
+//});
+
 emailSchema.methods.verify = function (callback) {
-  if(this.protocol === 'imap'){
-    imapChecker.check(this, function(err){
+  if (this.protocol === 'imap') {
+    imapChecker.check(this, function (err) {
       if (err) return callback({message: err});
       callback();
     });
-  }else{
-    emailChecker.check(this, function (err) {
+  } else {
+    pop3Checker.check(this, function (err) {
       if (err) return callback({message: err});
       callback();
     });

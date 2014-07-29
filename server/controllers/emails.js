@@ -55,6 +55,7 @@ exports.update = function (req, res) {
   _.merge(req.email, req.body);
   req.email.verify(function (err) {
     if (err) return res.json(400, err);
+    req.email.lastError = err;
     req.email.save(function (err) {
       if (err) return res.json(400, err);
       res.end();

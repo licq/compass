@@ -5,7 +5,7 @@ var kue = require('kue'),
   mongoose = require('mongoose'),
   Email = mongoose.model('Email'),
   _ = require('lodash'),
-  emailFetcher = require('./emailFetcher'),
+  pop3Fetcher = require('./pop3Fetcher'),
   imapFetcher = require('./imapFetcher'),
   delayedJobs = require('./jobs'),
   logger = require('../config/winston').logger(),
@@ -30,12 +30,10 @@ function handleFetchEmail(job, done) {
     if (!email) return done('email ' + job.data.id + ' not found');
     var lastRetrieveTime = new Date();
     var fetcher;
-    if(email.protocol === 'imap'){
+    if (email.protocol === 'imap') {
       fetcher = imapFetcher;
-      fetcher.host = fetcher.server;
-      fetcher.user = fetcher.address;
     } else {
-      fetcher = emailFetcher
+      fetcher = pop3Fetcher;
     }
 
     fetcher.fetch(email, function (err, count) {

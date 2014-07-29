@@ -45,26 +45,42 @@
                   请输入密码</p>
               </div>
               <div class="form-group">
-                <label>POP3邮件服务器地址</label>
+                <label>请选择服务器类型</label>
+
+                <div class="row">
+                  <select class="col-md-3" ui-select2 ng-model="email.protocol" required="">
+                    <option value="imap">imap</option>
+                    <option value="pop3">pop3</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>邮件服务器地址</label>
                 <input type="text"
                        class="form-control placeholder"
-                       ng-model="email.server" placeholder="POP3邮件服务器地址"
+                       ng-model="email.server" placeholder="邮件服务器地址"
                        name="server" required=""/>
 
                 <p class="text-danger"
                    ng-show="emailForm.server.$error.required && !emailForm.server.$pristine">
                   请输入邮件服务器地址</p>
-
               </div>
 
               <div class="form-group">
                 <label>服务器端号</label>
                 <input type="number" class="form-control placeholder"
-                       ng-model="email.port" placeholder="服务器端口"/>
-                <label>
+                       required="" ng-model="email.port" placeholder="服务器端口"/>
+
+                <label ng-show="email.protocol == 'pop3'">
                   <input type="checkbox" class="icheckbox_square-green"
                          ng-model="email.ssl">
                   使用ssl链接
+                </label>
+
+                <label ng-show="email.protocol == 'imap'">
+                  <input type="checkbox" class="icheckbox_square-green"
+                         ng-model="email.tls">
+                  使用tls链接
                 </label>
               </div>
 
@@ -72,9 +88,9 @@
                 <div class="col-md-8">
 
                   <label>
-                  <input type="checkbox" class="icheckbox_square-green"
-                         ng-model="email.keepMails">
-                  在服务器上保留原始邮件<p ng-show="!email.keepMails" class="text-danger">注意：服务器上的邮件将会被删除</p>
+                    <input type="checkbox" class="icheckbox_square-green"
+                           ng-model="email.keepMails">
+                    在服务器上保留原始邮件<p ng-show="!email.keepMails" class="text-danger">注意：服务器上的邮件将会被删除</p>
                   </label>
                 </div>
                 <div class="col-md-4" ng-show="saving">

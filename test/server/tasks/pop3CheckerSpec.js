@@ -1,9 +1,9 @@
 'use strict';
 
-var emailChecker = require('../../../server/tasks/emailChecker'),
+var pop3Checker = require('../../../server/tasks/pop3Checker'),
   expect = require('chai').expect;
 
-describe.skip('emailFetcher', function () {
+describe.skip('pop3Checker', function () {
   var mailbox;
 
   beforeEach(function () {
@@ -21,7 +21,7 @@ describe.skip('emailFetcher', function () {
     it('should show server error if with invalid server address', function (done) {
       this.timeout(2000);
       mailbox.server = 'invalid.com.cbbb';
-      emailChecker.check(mailbox, function (err) {
+      pop3Checker.check(mailbox, function (err) {
         expect(err).to.be.equal('connect failed');
         done();
       });
@@ -29,7 +29,7 @@ describe.skip('emailFetcher', function () {
 
     it('should login successfully', function (done) {
       this.timeout(2000);
-      emailChecker.check(mailbox, function (err) {
+      pop3Checker.check(mailbox, function (err) {
         expect(err).to.not.exist;
         done();
       });
@@ -38,7 +38,7 @@ describe.skip('emailFetcher', function () {
     it('should show login error if account/password not correct', function (done) {
       this.timeout(60000);
       mailbox.password = 'invalid password';
-      emailChecker.check(mailbox, function (err) {
+      pop3Checker.check(mailbox, function (err) {
         expect(err).to.equal('login failed');
         done();
       });

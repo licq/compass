@@ -15,8 +15,9 @@ describe('mvEmailNewCtrl', function () {
 
   it('should initialize a default email object', function () {
     expect($scope.email).to.exist;
-    expect($scope.email.port).to.equal(110);
     expect($scope.email.keepMails).to.be.true;
+    expect($scope.email.protocol).to.equal('imap');
+    expect($scope.email.port).to.equal(143);
   });
 
   describe('create new email', function () {
@@ -27,7 +28,8 @@ describe('mvEmailNewCtrl', function () {
         account: 'aa',
         password: 'aa',
         server: 'aa.com',
-        port: 110,
+        protocol : 'imap',
+        port: 143,
         keepMails: true
       };
     });
@@ -57,8 +59,25 @@ describe('mvEmailNewCtrl', function () {
     }));
   });
 
+  describe('watch email.protocol', function () {
+    it('should change the default port to 143', function () {
+      $scope.email.protocol = 'pop3';
+      $scope.$digest();
+      expect($scope.email.port).to.equal(110);
+      expect($scope.email.tls).to.be.false;
+      expect($scope.email.ssl).to.be.false;
+      $scope.email.protocol = 'imap';
+      $scope.$digest();
+      expect($scope.email.port).to.equal(143);
+      expect($scope.email.tls).to.be.false;
+      expect($scope.email.ssl).to.be.false;
+    });
+  });
+
   describe('watch email.ssl', function () {
     it('should change the default port from 110 to 995', function () {
+      $scope.email.protocol = 'pop3';
+      $scope.$digest();
       $scope.email.ssl = true;
       $scope.$digest();
       expect($scope.email.port).to.equal(995);
@@ -68,11 +87,38 @@ describe('mvEmailNewCtrl', function () {
     });
 
     it('should not change the port if user changed port ', function () {
+      $scope.email.protocol = 'pop3';
+      $scope.$digest();
       $scope.email.port = 465;
       $scope.email.ssl = true;
       $scope.$digest();
       expect($scope.email.port).to.equal(465);
       $scope.email.ssl = false;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(465);
+    });
+  });
+
+  describe('watch email.tls', function () {
+    it('should change the default port from 110 to 995', function () {
+      $scope.email.protocol = 'imap';
+      $scope.$digest();
+      $scope.email.tls = true;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(993);
+      $scope.email.tls = false;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(143);
+    });
+
+    it('should not change the port if user changed port ', function () {
+      $scope.email.protocol = 'imap';
+      $scope.$digest();
+      $scope.email.port = 465;
+      $scope.email.tls = true;
+      $scope.$digest();
+      expect($scope.email.port).to.equal(465);
+      $scope.email.tls = false;
       $scope.$digest();
       expect($scope.email.port).to.equal(465);
     });

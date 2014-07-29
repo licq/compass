@@ -1,3 +1,5 @@
+'use strict';
+
 var Imap = require('imap'),
   inspect = require('util').inspect,
   _ = require('lodash'),
@@ -31,7 +33,11 @@ function parse(mailData, callback) {
 }
 
 exports.fetch = function fetch(mailbox, callback) {
-  var imap = new Imap(mailbox);
+  var email = mailbox.toObject();
+  email.user = email.address;
+  email.host = email.server;
+
+  var imap = new Imap(email);
   var newRetrievedMails = [], allMails = [];
   imap.connect();
   imap.once('ready', function () {
@@ -45,7 +51,7 @@ exports.fetch = function fetch(mailbox, callback) {
           allMails = _.map(uids, function (uid) {
             return uid.toString();
           });
-            var retrievedMails = mailbox.retrievedMails || [];
+          var retrievedMails = mailbox.retrievedMails || [];
           var toBeRetrieved = _.difference(allMails, retrievedMails);
 
           var count = 1;
@@ -83,7 +89,7 @@ exports.fetch = function fetch(mailbox, callback) {
             });
 
             fetcher.once('error', function (err) {
-             logger.error('IMAP Mails Fetch error: ' + err);
+              logger.error('IMAP Mails Fetch error: ' + err);
             });
 
             fetcher.once('end', function () {
@@ -108,7 +114,7 @@ exports.fetch = function fetch(mailbox, callback) {
             imap.end();
           }
         } else {
-          imap.end()
+          imap.end();
         }
       });
     });

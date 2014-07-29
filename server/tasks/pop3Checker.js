@@ -37,10 +37,11 @@ exports.check = function (mailbox, callback) {
   client.on("login", function (status, data) {
     if (status) {
       correct = true;
+      client.quit();
     } else {
       logger.info("LOGIN/PASS failed");
+      callback('login failed');
     }
-    client.quit();
   });
 
   client.on("rset", function (status, rawdata) {
@@ -48,7 +49,6 @@ exports.check = function (mailbox, callback) {
   });
 
   client.on("quit", function (status, rawdata) {
-
     if (status === true) logger.info("verify QUIT success");
     else logger.info("verify QUIT failed");
 

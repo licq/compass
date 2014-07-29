@@ -3,8 +3,9 @@
 angular.module('compass')
   .controller('mvEmailNewCtrl', function ($scope, $location, mvEmail, mvNotifier) {
     $scope.email = new mvEmail({
-      port: 110,
-      keepMails: true
+      keepMails: true,
+      protocol: 'imap',
+      port:143
     });
 
     $scope.create = function () {
@@ -23,11 +24,31 @@ angular.module('compass')
       $location.path('/settings/emails');
     };
 
+    $scope.$watch('email.protocol', function () {
+      if ($scope.email.protocol === 'pop3'){
+        $scope.email.ssl = false;
+        $scope.email.tls = false;
+        $scope.email.port = 110;
+      } else if ($scope.email.protocol === 'imap'){
+        $scope.email.tls = false;
+        $scope.email.ssl = false;
+        $scope.email.port = 143;
+      }
+    });
+
     $scope.$watch('email.ssl', function () {
       if ($scope.email.ssl && $scope.email.port === 110) {
         $scope.email.port = 995;
       } else if (!$scope.email.ssl && $scope.email.port === 995) {
         $scope.email.port = 110;
+      }
+    });
+
+    $scope.$watch('email.tls', function () {
+      if ($scope.email.tls && $scope.email.port === 143) {
+        $scope.email.port = 993;
+      } else if (!$scope.email.tls && $scope.email.port === 993) {
+        $scope.email.port = 143;
       }
     });
   });
