@@ -6,8 +6,6 @@ var Imap = require('imap'),
   Mail = mongoose.model('Mail'),
   logger = require('../config/winston').logger();
 
-var fs = require('fs'), fileStream;
-
 function saveToDB(mail, address, callback) {
   mail.mailbox = address;
   Mail.create(mail, function (err, created) {
@@ -33,19 +31,15 @@ function parse(mailData, callback) {
 }
 
 exports.fetch = function fetch(mailbox, callback) {
-  console.log('start fetching');
   var imap = new Imap(mailbox);
-  console.log('---to connect');
   var newRetrievedMails = [], allMails = [];
   imap.connect();
   imap.once('ready', function () {
-    console.log('ready');
     imap.openBox('INBOX', function (err, box) {
       if (err) imap.end();
 
       imap.search(['ALL'], function (err, uids) {
         if (err) imap.end();
-
 
         if (uids.length > 0) {
           console.log('uids', uids);
@@ -54,15 +48,7 @@ exports.fetch = function fetch(mailbox, callback) {
             return uid.toString();
           });
           console.log('all ', allMails);
-          var correct = false,
-            totalUnretrievedMails, totalToBeprocessedMails,
-            totalMails = 0,
-            toBeDeleted = [],
-            toBeProcessed = [],
-            deleted = [],
-            retrievedMails = mailbox.retrievedMails || [],
-            keepMails = mailbox.keepMails,
-            current = 0, next = current + 1;
+            var retrievedMails = mailbox.retrievedMails || [];
           console.log('retrieved mails', typeof allMails[0]);
           var toBeRetrieved = _.difference(allMails, retrievedMails);
 
@@ -85,19 +71,15 @@ exports.fetch = function fetch(mailbox, callback) {
                 });
 
                 stream.once('end', function () {
+                  console.log('processed ', count);
+                  count++;
                   parse(buffer, function (mail) {
-                    console.log('processed ', count);
-                    count++;
-//                  saveToDB(mail, mailbox.user, function (err) {
-//                    if (err) {
-//                      logger.error('save resume to db failed because of', err);
-//                    }
-//                  fs.writeFile('msg-' + seqno + '-body.txt', JSON.stringify(mail), function (err) {
-//                    if (err) {
-//                      imap.end();
-//                    }
-//                    console.log("File saved!");
-//                  });
+                    saveToDB(mail, mailbox.address, function (err) {
+                      if (err) {
+                        logger.error('save resume to db failed because of', err);
+                        imap.end();
+                      }
+                    });
                   });
                 });
               });
@@ -158,9 +140,8 @@ exports.fetch = function fetch(mailbox, callback) {
       console.log('end', newRetrievedMails.length, ' ', allMails.length);
       if (mailbox.retrievedMails.length === 0) {
         callback(null, allMails.length, allMails.length);
-      }else
-      callback(null, newRetrievedMails.length, allMails.length);
+      } else
+        callback(null, newRetrievedMails.length, allMails.length);
     });
-    // mailbox.save();
   });
 };

@@ -32,6 +32,8 @@ function handleFetchEmail(job, done) {
     var fetcher;
     if(email.protocol === 'imap'){
       fetcher = imapFetcher;
+      fetcher.host = fetcher.server;
+      fetcher.user = fetcher.address;
     } else {
       fetcher = emailFetcher
     }

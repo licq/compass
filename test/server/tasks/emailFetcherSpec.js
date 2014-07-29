@@ -9,7 +9,7 @@ var emailFetcher = require('../../../server/tasks/emailFetcher'),
   helper = require('../testHelper'),
   Email = require('mongoose').model('Email');
 
-describe.skip('imapFetcher', function () {
+describe.skip('emailFetcher', function () {
   var mailbox,
     compass_test = {
       address: 'compass_test@126.com',

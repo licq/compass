@@ -9,7 +9,7 @@ var imapFetcher = require('../../../server/tasks/imapFetcher'),
   helper = require('../testHelper'),
   Email = require('mongoose').model('Email');
 
-describe.only('imapFetcher', function () {
+describe('imapFetcher', function () {
   var mailbox,
     compass_test = {
       address: 'compass_test@126.com',
@@ -20,7 +20,6 @@ describe.only('imapFetcher', function () {
       port: 143,//993
       protocol: 'imap',
       keepMails: false};
-//    },
 //    lingpin = {'address': 'yuzhihang@lingpin.cc',
 //      'account': 'yuzhihang@lingpin.cc',
 //      'password': 'compass.123',
