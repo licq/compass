@@ -9,7 +9,7 @@ var imapFetcher = require('../../../server/tasks/imapFetcher'),
   helper = require('../testHelper'),
   Email = require('mongoose').model('Email');
 
-describe('imapFetcher', function () {
+describe.skip('imapFetcher', function () {
   var mailbox,
     compass_test = {
       address: 'compass_test@126.com',
@@ -31,19 +31,15 @@ describe('imapFetcher', function () {
 
   var testmail = compass_test, timeout = 5000;
   beforeEach(function (done) {
-    helper.clearCollections(Email, 'Company', 'User', function () {
-      console.log('clear done');
+    helper.clearCollections(Email, 'Company', 'User', 'Mail', 'Resume', function () {
       Factory.create('email', testmail, function (mb) {
         mailbox = mb;
         mailbox.host = mailbox.server;
         mailbox.user = mailbox.address;
-       // mailbox.debug = console.log;
-        console.log('mb ', mailbox);
         imapFetcher.fetch(mailbox, function (err) {
           expect(err).to.not.exist;
           async.eachSeries(_.range(3), function (i, callback) {
             mailer.sendSignupEmail('applicant' + i, testmail.address, i, function (error) {
-              console.log('send ', i);
               callback(error);
             });
           }, function () {
@@ -57,7 +53,6 @@ describe('imapFetcher', function () {
   describe('#fetch', function () {
     it('should retrieve and delete emails', function (done) {
       this.timeout(0);
-      console.log('----------------test1---------------');
       setTimeout(function () {
         imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
           expect(err).to.not.exist;
@@ -79,7 +74,6 @@ describe('imapFetcher', function () {
 
     it('should retrieve and keep emails', function (done) {
       this.timeout(0);
-      console.log('----------------test2---------------');
       setTimeout(function () {
         mailbox.keepMails = true;
         imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
@@ -103,7 +97,6 @@ describe('imapFetcher', function () {
 
     it('should retrieve new mails and delete all old emails', function (done) {
       this.timeout(0);
-      console.log('----------------test3---------------');
       setTimeout(function () {
         mailbox.keepMails = true;
         imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {

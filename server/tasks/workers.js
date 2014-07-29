@@ -37,6 +37,7 @@ function handleFetchEmail(job, done) {
     } else {
       fetcher = emailFetcher
     }
+
     fetcher.fetch(email, function (err, count) {
       email.lastRetrieveCount = count;
       email.lastRetrieveTime = lastRetrieveTime;

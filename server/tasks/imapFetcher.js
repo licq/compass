@@ -42,28 +42,19 @@ exports.fetch = function fetch(mailbox, callback) {
         if (err) imap.end();
 
         if (uids.length > 0) {
-          console.log('uids', uids);
           allMails = _.map(uids, function (uid) {
-            console.log(uid);
             return uid.toString();
           });
-          console.log('all ', allMails);
             var retrievedMails = mailbox.retrievedMails || [];
-          console.log('retrieved mails', typeof allMails[0]);
           var toBeRetrieved = _.difference(allMails, retrievedMails);
-
-          console.log('toberetrieved ', toBeRetrieved);
 
           var count = 1;
           if (toBeRetrieved.length > 0) {
             var fetcher = imap.fetch(toBeRetrieved, { bodies: '' });
 
             fetcher.on('message', function (msg, seqno) {
-              // console.log('Message #%d', seqno);
-              var prefix = '(#' + seqno + ') ';
 
               msg.on('body', function (stream, info) {
-                // console.log(prefix + 'Body');
                 var buffer = '';
 
                 stream.on('data', function (chunk) {
@@ -71,7 +62,6 @@ exports.fetch = function fetch(mailbox, callback) {
                 });
 
                 stream.once('end', function () {
-                  console.log('processed ', count);
                   count++;
                   parse(buffer, function (mail) {
                     saveToDB(mail, mailbox.address, function (err) {
@@ -86,36 +76,30 @@ exports.fetch = function fetch(mailbox, callback) {
 
               msg.once('attributes', function (attrs) {
                 newRetrievedMails.push(attrs.uid);
-                console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
               });
 
               msg.once('end', function () {
-                console.log(prefix + 'Finished');
               });
             });
 
             fetcher.once('error', function (err) {
-              console.log('Fetch error: ' + err);
+             logger.error('IMAP Mails Fetch error: ' + err);
             });
 
             fetcher.once('end', function () {
-              console.log('Done fetching all messages!');
 
               if (!mailbox.keepMails && /deleted/i.test(box.permFlags.join(''))) {
                 imap.addFlags(allMails, 'DELETED', function (err) {
-                  console.log(allMails);
                   if (err)
-                    console.log('Email Not Deleted', err);
+                    logger.error('Email Not Deleted', err);
                   else {
-                    console.log('Email Deleted');
+                    logger.error('Email Deleted');
 
                     mailbox.retrievedMails = [];
                   }
                 });
               } else if (mailbox.keepMails) {
-                console.log('new retrieve', newRetrievedMails, mailbox.retrievedMails);
                 mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
-                console.log('mailbox final ', mailbox);
               }
 
               imap.end();
@@ -131,13 +115,11 @@ exports.fetch = function fetch(mailbox, callback) {
   });
 
   imap.once('error', function (err) {
-    console.log(err);
+    logger.error(err);
   });
 
   imap.once('end', function () {
-    console.log('Connection ended');
     mailbox.save(function () {
-      console.log('end', newRetrievedMails.length, ' ', allMails.length);
       if (mailbox.retrievedMails.length === 0) {
         callback(null, allMails.length, allMails.length);
       } else

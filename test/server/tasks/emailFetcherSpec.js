@@ -31,7 +31,7 @@ describe.skip('emailFetcher', function () {
 
   var testmail = compass_test, timeout = 5000;
   beforeEach(function (done) {
-    helper.clearCollections(Email, 'Company', 'User', function () {
+    helper.clearCollections(Email, 'Company', 'User', 'Mail', 'Resume', function () {
       Factory.create('email', testmail, function (mb) {
         mailbox = mb;
         emailFetcher.fetch(mailbox, function (err) {
