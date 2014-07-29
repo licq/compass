@@ -20,7 +20,7 @@ function parse(mailData, callback) {
   var mailParser = new MailParser({
     debug: false,
     defaultCharset: 'gbk',
-    streamAttachments: true,
+    streamAttachments: false,
     showAttachmentLinks: true
   });
   mailParser.write(mailData);
