@@ -99,7 +99,7 @@ exports.fetch = function fetch(mailbox, callback) {
                   if (err)
                     logger.error('Email Not Deleted', err);
                   else {
-                    logger.error('Email Deleted');
+                    logger.info('Email Deleted');
 
                     mailbox.retrievedMails = [];
                   }
@@ -122,6 +122,7 @@ exports.fetch = function fetch(mailbox, callback) {
 
   imap.once('error', function (err) {
     logger.error(err);
+    callback(err, newRetrievedMails.length, allMails.length);
   });
 
   imap.once('end', function () {

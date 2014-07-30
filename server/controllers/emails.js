@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
 
 exports.list = function (req, res, next) {
   Email.find({company: req.user.company})
+    .select('-retrievedMails')
     .exec(function (err, emails) {
       if (err) return next(err);
       return res.json(emails);
@@ -65,6 +66,7 @@ exports.update = function (req, res) {
 
 exports.load = function (req, res, next) {
   Email.findOne({_id: req.params.id, company: req.user.company})
+    .select('-retrievedMails')
     .exec(function (err, email) {
       if (err) return next(err);
       if (!email) return res.send(404, {message: 'not found'});
