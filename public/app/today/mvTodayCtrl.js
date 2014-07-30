@@ -21,6 +21,7 @@ angular.module('compass')
           return !onToday(event, 'startTime');
         });
         angular.extend($scope.isopen, {eventsOfToday: $scope.eventsOfToday.length, eventsOfNextDays: $scope.eventsOfNextDays.length});
+        angular.extend($scope.counts, {eventsOfToday: $scope.eventsOfToday.length, eventsOfNextDays: $scope.eventsOfNextDays.length});
       });
     };
 
@@ -47,6 +48,7 @@ angular.module('compass')
         });
 
         angular.extend($scope.isopen, {onboardsOfToday: $scope.onboardsOfToday.length, onboardsOfNextDays: $scope.onboardsOfNextDays.length});
+        angular.extend($scope.counts, {onboardsOfToday: $scope.onboardsOfToday.length, onboardsOfNextDays: $scope.onboardsOfNextDays.length});
 
       });
     };
