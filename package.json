@@ -30,6 +30,7 @@
     "express": "~4.5.1",
     "express-session": "^1.6.4",
     "express-winston": "^0.2.6",
+    "imap": "^0.8.12",
     "kue": "^0.8.2",
     "lodash": "~2.4.1",
     "mailparser": "^0.4.4",

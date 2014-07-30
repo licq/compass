@@ -32,7 +32,7 @@ function parse(mailData, callback) {
 }
 
 exports.fetch = function (mailbox, callback) {
-  var correct = false,
+  var correct = false, resetted = false,
     totalUnretrievedMails, totalToBeprocessedMails,
     totalMails = 0,
     toBeRetrieved = [],
@@ -191,6 +191,7 @@ exports.fetch = function (mailbox, callback) {
   });
 
   client.on("rset", function (status, rawdata) {
+    resetted = true;
     client.quit();
   });
 
@@ -200,7 +201,9 @@ exports.fetch = function (mailbox, callback) {
     mailbox.retrievedMails = mailbox.retrievedMails || [];
     if (keepMails)
       mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
-    else mailbox.retrievedMails = _.difference(mailbox.retrievedMails, deleted);
+    else if (!resetted) {
+      mailbox.retrievedMails = _.difference(mailbox.retrievedMails, deleted);
+    }
     mailbox.save(function () {
       if (correct) {
         callback(null, current - 1, totalMails);
