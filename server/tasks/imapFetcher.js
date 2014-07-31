@@ -34,11 +34,12 @@ function parse(mailData, callback) {
 
 exports.fetch = function fetch(mailbox, callback) {
   var email = mailbox.toObject();
-  email.user = email.address;
+  email.user = email.account;
   email.host = email.server;
 
   var imap = new Imap(email);
   var newRetrievedMails = [], allMails = [];
+  var retrievedMails = mailbox.retrievedMails || [];
   imap.connect();
   imap.once('ready', function () {
     imap.openBox('INBOX', function (err, box) {
@@ -51,7 +52,7 @@ exports.fetch = function fetch(mailbox, callback) {
           allMails = _.map(uids, function (uid) {
             return uid.toString();
           });
-          var retrievedMails = mailbox.retrievedMails || [];
+
           var toBeRetrieved = _.difference(allMails, retrievedMails);
 
           var count = 1;
@@ -101,11 +102,11 @@ exports.fetch = function fetch(mailbox, callback) {
                   else {
                     logger.info('Email Deleted');
 
-                    mailbox.retrievedMails = [];
+                    retrievedMails = [];
                   }
                 });
               } else if (mailbox.keepMails) {
-                mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
+                retrievedMails = _.union(retrievedMails, newRetrievedMails);
               }
 
               imap.end();
@@ -122,15 +123,15 @@ exports.fetch = function fetch(mailbox, callback) {
 
   imap.once('error', function (err) {
     logger.error(err);
-    callback(err, newRetrievedMails.length, allMails.length);
+    callback(err, newRetrievedMails.length, allMails.length, retrievedMails);
   });
 
   imap.once('end', function () {
-    mailbox.save(function () {
-      if (mailbox.retrievedMails.length === 0) {
-        callback(null, allMails.length, allMails.length);
+   // mailbox.save(function () {
+      if (retrievedMails.length === 0) {
+        callback(null, allMails.length, allMails.length, retrievedMails);
       } else
-        callback(null, newRetrievedMails.length, allMails.length);
-    });
+        callback(null, newRetrievedMails.length, allMails.length, retrievedMails);
+    //});
   });
 };
