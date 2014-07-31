@@ -43,8 +43,8 @@
                 <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者拒绝</button>
               </div>
 
-              <form name="rejectForm" ng-show="gridItem.status==='offer rejected'">
-                <div class="form-group col-md-10">
+              <form name="rejectForm" ng-show="gridItem.status==='offer rejected'" class="form-horizontal">
+                <div class="form-group">
                   <label class="col-md-3">选择拒绝原因</label>
 
                   <div class="col-md-5">
@@ -64,9 +64,9 @@
                 </div>
               </form>
 
-              <form name="acceptForm" ng-show="gridItem.status==='offer accepted'">
-                <div class="form-group col-md-10">
-                  <label class="col-md-3">选择入职日期</label>
+              <form name="acceptForm" ng-show="gridItem.status==='offer accepted'" class="form-horizontal">
+                <div class="form-group">
+                  <label class="control-label col-md-3">选择入职日期</label>
 
                   <div class="col-md-5">
                     <div required name="dp" datetimepicker ng-model="gridItem.onboardDate" use-seconds="false" min-date="today"

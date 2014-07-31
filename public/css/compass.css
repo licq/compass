@@ -252,3 +252,25 @@ button.button-above-table{
     margin-top: -5px;
     margin-bottom: 5px;
 }
+
+.row.no-gutter {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.row.no-gutter [class*='col-']:not(:first-child),
+.row.no-gutter [class*='col-']:not(:last-child) {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.row.small-gutter {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.row.small-gutter [class*='col-']:not(:first-child),
+.row.small-gutter [class*='col-']:not(:last-child) {
+    padding-right: 5px;
+    padding-left: 5px;
+}

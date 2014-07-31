@@ -5,15 +5,15 @@
     </div>
     <div class="panel-body">
       <div class="col-md-12">
-        <form name="applicationSettingForm" novalidate="" class="form-horizontal form-validation">
+        <form name="applicationSettingForm" novalidate="" class="form-horizontal">
           <div class="well text-danger" ng-show="err">
             {{err.message | state}}
           </div>
           <fieldset>
             <div class="form-group">
-              <label class="col-md-1 control-label">过滤应聘者简历</label>
+              <label class="col-md-2 control-label">过滤相同应聘者简历</label>
 
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <select class="form-control" ng-model="applicationSetting.filterSamePerson"
                         ng-options="option.value as option.label for option in applicationFilterOptions">
                 </select>
