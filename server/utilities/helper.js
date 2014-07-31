@@ -23,8 +23,8 @@ exports.parseDate = function parseDate(input) {
   if (match) {
     var result = new Date();
     result.setYear(parseInt(match[0], 10));
-    result.setMonth(parseInt(match[1], 10) - 1);
     result.setDate(parseInt(match[2], 10) || 1);
+    result.setMonth(parseInt(match[1], 10) - 1);
     return result;
   } else if (input.indexOf('至今') > -1 || input.indexOf('现在') > -1) {
     var date = new Date();

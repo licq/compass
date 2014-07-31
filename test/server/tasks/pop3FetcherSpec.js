@@ -9,7 +9,7 @@ var pop3Fetcher = require('../../../server/tasks/pop3Fetcher'),
   helper = require('../testHelper'),
   Email = require('mongoose').model('Email');
 
-describe.only('pop3Fetcher', function () {
+describe.skip('pop3Fetcher', function () {
   var mailbox,
     compass_test = {
       address: 'compass_test@126.com',
