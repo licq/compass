@@ -54,19 +54,18 @@ describe.skip('imapFetcher', function () {
     it('should retrieve and delete emails', function (done) {
       this.timeout(0);
       setTimeout(function () {
-        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
           expect(totalMails).to.be.equal(3);
-          imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+          expect(retrievedMails).to.have.length(0);
+          mailbox.retrievedMails = retrievedMails;
+          imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
             expect(err).to.not.exist;
             expect(processedMails).to.be.equal(0);
             expect(totalMails).to.be.equal(0);
-            Email.findOne({address: mailbox.address}, function (err, email) {
-              expect(err).to.not.exist;
-              expect(email.retrievedMails).to.have.length(0);
-              done();
-            });
+            expect(retrievedMails).to.have.length(0);
+            done();
           });
         });
       }, timeout);
@@ -76,20 +75,18 @@ describe.skip('imapFetcher', function () {
       this.timeout(0);
       setTimeout(function () {
         mailbox.keepMails = true;
-        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
           expect(totalMails).to.be.equal(3);
-          imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+          expect(retrievedMails).to.have.length(3);
+          mailbox.retrievedMails = retrievedMails;
+          imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
             expect(err).to.not.exist;
             expect(processedMails).to.be.equal(0);
             expect(totalMails).to.be.equal(3);
-            Email.findOne({address: mailbox.address}, function (err, email) {
-              expect(err).to.not.exist;
-              expect(email.retrievedMails).to.have.length(3);
-              expect(email.keepMails).to.be.true;
-              done();
-            });
+            expect(retrievedMails).to.have.length(3);
+            done();
           });
         });
       }, timeout);
@@ -99,10 +96,11 @@ describe.skip('imapFetcher', function () {
       this.timeout(0);
       setTimeout(function () {
         mailbox.keepMails = true;
-        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
           expect(totalMails).to.be.equal(3);
+          expect(retrievedMails).to.have.length(3);
           async.eachSeries(_.range(3), function (i, callback) {
             mailer.sendSignupEmail('applicant' + i, testmail.address, i, function (error) {
               callback(error);
@@ -110,20 +108,18 @@ describe.skip('imapFetcher', function () {
           }, function () {
             setTimeout(function () {
               mailbox.keepMails = false;
-              imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+              imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
                 expect(err).to.not.exist;
                 expect(processedMails).to.be.equal(6);
                 expect(totalMails).to.be.equal(6);
-                imapFetcher.fetch(mailbox, function (err, processedMails, totalMails) {
+                expect(retrievedMails).to.have.length(0);
+                mailbox.retrievedMails = retrievedMails;
+                imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
                   expect(err).to.not.exist;
                   expect(processedMails).to.be.equal(0);
                   expect(totalMails).to.be.equal(0);
-                  Email.findOne({address: mailbox.address}, function (err, email) {
-                    expect(err).to.not.exist;
-                    expect(email.retrievedMails).to.have.length(0);
-                    expect(email.keepMails).to.be.false;
-                    done();
-                  });
+                  expect(retrievedMails).to.have.length(0);
+                  done();
                 });
               });
             }, timeout);

@@ -36,10 +36,11 @@ function handleFetchEmail(job, done) {
       fetcher = pop3Fetcher;
     }
 
-    fetcher.fetch(email, function (err, count) {
+    fetcher.fetch(email, function (err, count, totalMails, retrievedMails) {
       email.lastRetrieveCount = count;
       email.lastRetrieveTime = lastRetrieveTime;
       email.lastError = err;
+      email.retrievedMails = retrievedMails;
       if (!err) {
         email.totalRetrieveCount += count;
       }

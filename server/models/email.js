@@ -62,7 +62,6 @@ var emailSchema = mongoose.Schema({
   protocol: {
     type: String,
     enum: ['imap', 'pop3'],
-    default: 'imap',
     required: true
   },
   keepMails: {

@@ -198,19 +198,19 @@ exports.fetch = function (mailbox, callback) {
   client.on("quit", function (status, rawdata) {
 //        if (status === true) logger.info("QUIT success");
 //        else logger.info("QUIT failed");
-    mailbox.retrievedMails = mailbox.retrievedMails || [];
+    retrievedMails = retrievedMails || [];
     if (keepMails)
-      mailbox.retrievedMails = _.union(mailbox.retrievedMails, newRetrievedMails);
+      retrievedMails = _.union(retrievedMails, newRetrievedMails);
     else if (!resetted) {
-      mailbox.retrievedMails = _.difference(mailbox.retrievedMails, deleted);
+      retrievedMails = _.difference(retrievedMails, deleted);
     }
-    mailbox.save(function () {
-      if (correct) {
-        callback(null, current - 1, totalMails);
-      } else {
-        callback('login failed', 0, totalMails);
-      }
-    });
+    //mailbox.save(function () {
+    if (correct) {
+      callback(null, current - 1, totalMails, retrievedMails);
+    } else {
+      callback('login failed', 0, totalMails, retrievedMails);
+    }
+    //});
   });
 };
 
