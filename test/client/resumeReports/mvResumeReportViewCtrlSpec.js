@@ -68,7 +68,7 @@ describe('mvResumeReportViewCtrl', function () {
     });
 
     it('should retrieve the resume count list', inject(function () {
-      expect($scope.resumeCounts[0].values).to.have.length(moment().add('months', -1).endOf('month').date());
+      expect($scope.resumeCounts[0].values).to.have.length(moment().endOf('day').diff(moment().add('months', -1).endOf('day'),'days'));
     }));
 
     it('should retrieve the channelSummary', function () {

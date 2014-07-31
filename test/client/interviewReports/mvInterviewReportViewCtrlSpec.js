@@ -53,7 +53,7 @@ describe('mvInterviewReportViewCtrl', function () {
     });
 
     it('should get the interviewCounts', inject(function () {
-      expect($scope.interviewCounts[0].values).to.have.length(moment().add('months', -1).endOf('month').date());
+      expect($scope.interviewCounts[0].values).to.have.length(moment().endOf('day').diff(moment().add('months', -1).endOf('day'), 'days'));
     }));
 
     it('should retrieve the applyPositionSummary', function () {
