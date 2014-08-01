@@ -34,7 +34,7 @@ function parse(mailData, callback) {
 
 exports.fetch = function fetch(mailbox, callback) {
   var email = mailbox.toObject();
-  email.user = email.address;
+  email.user = email.account;
   email.host = email.server;
 
   var imap = new Imap(email);

@@ -58,7 +58,7 @@
     </div>
 
     <div class="panel-body">
-      <div class="row callout callout-info" ng-repeat="application in applications" on-finish-render="scroll()">
+      <div class="row callout callout-info no-gutter" ng-repeat="application in applications" on-finish-render="scroll()">
         <div class="col-md-1 resume-name">
           <h4>{{application.name}}</h4>
           <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo" ng-show="application.photoUrl">
@@ -67,32 +67,32 @@
           <div class="table-responsive">
             <table class="table table-no-border">
               <tbody>
-              <tr>
-                <td>应聘职位</td>
+              <tr class="row small-gutter">
+                <td class="col-md-1">应聘职位</td>
                 <td class="col-md-3">{{application.applyPosition}}</td>
-                <td class="col-md-3">{{application.gender | gender}}</td>
-                <td class="col-md-3">{{application.birthday | yearAndMonth}}</td>
-                <td class="col-md-2">{{application.createdAt | shortDate}}应聘</td>
+                <td class="col-md-3">{{application.createdAt | shortDate}}应聘</td>
+                <td class="col-md-3">{{application.birthday | yearAndMonth}}生日</td>
+                <td class="col-md-2">{{application.gender | gender}}</td>
               </tr>
-              <tr>
-                <td>最高学历</td>
-                <td>{{application.educationHistory[0].from |
+              <tr class="row small-gutter">
+                <td class="col-md-1">最高学历</td>
+                <td class="col-md-3">{{application.educationHistory[0].from |
                   yearAndMonth}}
                   -- {{application.educationHistory[0].to | yearAndMonth}}
                 </td>
-                <td>{{application.educationHistory[0].school}}</td>
-                <td>{{application.educationHistory[0].major}}</td>
-                <td>{{application.educationHistory[0].degree | degree}}</td>
+                <td class="col-md-3">{{application.educationHistory[0].school}}</td>
+                <td class="col-md-3">{{application.educationHistory[0].major}}</td>
+                <td class="col-md-2">{{application.educationHistory[0].degree | degree}}</td>
               </tr>
-              <tr>
-                <td>最近工作</td>
-                <td>{{application.workExperience[0].from |
+              <tr class="row small-gutter">
+                <td class="col-md-1">最近工作</td>
+                <td class="col-md-3">{{application.workExperience[0].from |
                   yearAndMonth}}
                   -- {{application.workExperience[0].to | yearAndMonth}}
                 </td>
-                <td>{{application.workExperience[0].company}}</td>
-                <td>{{application.workExperience[0].department}}</td>
-                <td>{{application.workExperience[0].jobTitle}}</td>
+                <td class="col-md-3">{{application.workExperience[0].company}}</td>
+                <td class="col-md-3">{{application.workExperience[0].department}}</td>
+                <td class="col-md-2">{{application.workExperience[0].jobTitle}}</td>
               </tr>
               </tbody>
             </table>
