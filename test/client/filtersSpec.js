@@ -271,6 +271,12 @@ describe('filters', function () {
     }));
   });
 
+  describe('todayTimeRangeFilter', function () {
+    it('should return correctly', inject(function (todayTimeRangeFilter) {
+      expect(todayTimeRangeFilter({startTime: '2014-06-13T12:05:00.000Z', duration: 90})).to.equal('6月13日 20:05-21:35');
+    }));
+  });
+
   describe('resumeStatusFilter', function () {
     it('should return correctly', inject(function (resumeStatusFilter) {
       expect(resumeStatusFilter('archived')).to.equal('初审拒绝');
