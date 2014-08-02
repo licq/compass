@@ -5,62 +5,76 @@
     </div>
     <div class="modal-body">
       <wizard on-finish="close()" style="height: 350px;">
-        <wz-step class="text-danger"title="欢迎使用">
-          <p class="callout callout-info">这是您第一次登陆领聘网，在正式使用之前，我们将为您介绍领聘网的工作原理，以帮助您更快地融入您的工作流程。</p>
-          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
-        </wz-step>
         <wz-step title="欢迎使用">
-          <p class="callout callout-info">这是您第一次登陆领聘网，在正式使用之前，我们将为您介绍领聘网的工作原理，以帮助您更快地融入您的工作流程。</p>
-          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
-        </wz-step>
-        <wz-step title="简历获取">
-          <div class="callout callout-info">
-            首先，领聘网需要您设置在各个招聘渠道的接受简历的邮箱。领聘网将自动收取这些邮箱中的简历，并将之放入系统的新应聘中。目前系统支持的渠道包括智联招聘，前程无忧，猎聘网，最佳东方。
-          </div>
           <div class="callout callout-success">
-            您可以对重复简历进行过滤，可以在【设置->应聘设置】中调整简历过滤的期限。所有被过滤的简历将自动出现在人才库且被标记为重复投递。
-          </div>
-          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
-        </wz-step>
-        <wz-step title="应聘">
-          <div class="callout callout-info">
-            您可以在新应聘中查看所有新收到的简历。在查看简历时，您可以对简历标记为待定或通过状态。在通过状态下，您可以开始跟应聘者预约面试时间。当与面试者预约完成后，简历进入面试状态，您可以在【面试->面试中】进行查看。
-          </div>
-          <div class="callout callout-success">
-            <p>
-              您可以在应聘管理中设置自动发送感谢信。当您拒绝该应聘者时，系统会自动发送您设置的感谢信模板给应聘者。同时您可以在面试管理中设置默认面试时长和面试邮件提醒。
-            </p>
+            <h4>欢迎使用领聘</h4>
 
-            <p>
-              如果您需要不同的人员负责不同的简历筛选工作，您可以在职位设置中打开职位权限控制并创建职位，并为职位设置面试负责人，这样只有面试负责人才能查看相应的简历。
-            </p>
+            <p>请用5分钟的时间跟着我们一起浏览，开启领聘之旅，成为领聘“专家”！</p>
           </div>
           <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
         </wz-step>
+        <wz-step title="准备">
+          <div class="callout callout-success">
+            <h4>设置简历自动转发的统一邮箱</h4>
+
+            <p>请申请一个容量较大的邮箱，在各招聘网站的各岗位中将此邮箱作为统一的简历收取邮箱。</p>
+
+            <p>在设置-简历邮箱中将统一邮箱设置为领聘专用邮箱</p>
+
+            <p><i class="fa fa-smile-o"></i> 领聘目前已支持前程无忧、智联招聘、猎聘网和最佳东方的简历解析和优化整理。更多网站，随时联系我们，三天搞定！</p>
+
+            <p><i class="fa fa-smile-o"></i> 重复简历太多？在设置->应聘设置中，可设置同一个应聘者的简历过滤期限，不必要的不用看啦！</p>
+          </div>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+
+        <wz-step title="应聘">
+          <div class="callout callout-success">
+            <h4>删选简历预约面试</h4>
+
+            <p>所有新收到的简历都收录到新应聘的文件夹中，可通过简要信息进行删选，也可查看完整信息后再做决定。</p>
+
+            <p>通过筛选的简历可进行线下预约，并在领聘中确认时间和面试官。</p>
+
+            <p><i class="fa fa-smile-o"></i>
+              在应聘管理中可设置感谢信，拒绝应聘者时，领聘会自动发送设置好的感谢信模板。领聘还支持您设置面试时长和面试确认邮件，第一时间发给应聘者和面试官。省力省心!</p>
+
+            <p><i class="fa fa-smile-o"></i>
+              领聘支持不同人员按应聘岗位删选简历。在设置->职位中可选用控制职位权限按钮，指定招聘负责人负责特定职位的筛选。小心啊，一键选择，所有职位都要指定了，要不简历找不到家人！</p>
+          </div>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
+
         <wz-step title="面试">
-          <div class="callout callout-info">
-            面试官在面试后，需要在系统中对应聘者给出面试评价。HR人员可以在【面试->面试中】查看针对该面试者所有的评价并再次预约面试，也可将该应聘者放入面试通过状态。
-          </div>
           <div class="callout callout-success">
-            您首先可以到【设置->默认评价设置】中对评价标准进行设定。该标准将应用于所有没有单独设置的职位面试评价。然后，您可以在【设置->职位管理】创建各种不同职位，并设置面试负责人及不同的面试评价标准。
-          </div>
-          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
-        </wz-step>
-        <wz-step title="面试通过及入职">
-          <div class="callout callout-info">
-            面试通过后，您需要与应聘者确认入职日期并记录在系统，如果应聘者拒绝，也可在系统中记录应聘者的拒绝原因。在入职列表中，您可以查看所有待入职的人员列表，如果该应聘者拒绝，可以记录拒绝原因。
-          </div>
-          <div class="callout callout-success">
-            所有您拒绝的简历都可以在人才库中检索，同时可以查看该应聘者的面试经过。
+            <h4>面试评价、录用决定、入职通知</h4>
+
+            <p>领聘支持每一个面试官在面试后独立进行评价，作出合格与否的决定</p>
+
+            <p>HR可在面试中安排新面试，查看面试官的评价，并最终做出录用决定。</p>
+
+            <p>在通过和入职模块中可及时记录应聘人是否接受录用以及入职情况。</p>
+
+            <p><i class="fa fa-smile-o"></i>
+              领聘在设置->默认面试评价中提供了公司统一的评价模板的设置功能，各位面试官就可在系统上打分并给出是否通过的评价，HR不用拿着申请表兜兜转转了。</p>
+
+            <p><i class="fa fa-smile-o"></i>
+              如果一个职位引入特殊的打分要求，领聘也提供了这个功能，在设置->职位中可修改该职位的评价标准，让HR和招聘部门可以更好地合作！</p>
           </div>
           <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
         </wz-step>
 
         <wz-step title="恭喜您">
-          <div class="callout callout-info">
-            您已经完成了领聘网功能的概览，请您根据您的需求对所有设置项进行调整，开始您的领聘之旅吧！
+          <div class="callout callout-success">
+            <h4>谢谢您的浏览</h4>
+
+            <p>最后，在设置->用户中加入工作伙伴，指定角色，一起体验最简单的招聘软件吧! </p>
+
+            <p><i class="fa fa-smile-o"></i>
+              恭喜您，您已经完成了领聘网功能的概览，请您根据您的需求对所有设置项进行调整，开始您的领聘之旅吧！</p>
+
           </div>
-          <input type="submit" wz-next value="完成" class="btn btn-danger pull-right"/>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
         </wz-step>
 
       </wizard>
