@@ -116,8 +116,13 @@
               }
               $this = $(this);
               $parent = $this.parent('li');
+
               $lists.not($parent).removeClass('open').find('ul').slideUp();
+
               $parent.toggleClass('open').find('ul').slideToggle();
+              setTimeout(function () {
+                $('#nav').trigger('mouseover');
+              }, 300);
               return event.preventDefault();
             });
             $aRest.on('click', function () {
@@ -183,7 +188,9 @@
           restrict: 'A',
           link: function (scope, ele, attrs) {
             return ele.slimScroll({
-              height: attrs.scrollHeight || '100%'
+              height: attrs.scrollHeight || '100%',
+              color: '#31c0be',
+              opacity: 0.7
             });
           }
         };
@@ -230,12 +237,12 @@
       }
     ]).directive('scrollTo', ['$timeout', function ($timeout) {
 
-      function scroll (settings) {
+      function scroll(settings) {
         return function () {
           var scrollPane = angular.element(settings.container);
           var scrollTo = (typeof settings.scrollTo === 'number') ? settings.scrollTo : angular.element(settings.scrollTo);
           var scrollY = (typeof scrollTo === 'number') ? scrollTo : scrollTo.offset().top - settings.offset;
-          scrollPane.animate({scrollTop : scrollY }, settings.duration, settings.easing, function(){
+          scrollPane.animate({scrollTop: scrollY }, settings.duration, settings.easing, function () {
           });
         };
       }
@@ -255,16 +262,16 @@
           });
         }
       };
-    }]).directive('scrollToSectionTop', function() {
-    return {
-      restrict: 'A',
-      link: function(scope, $elm) {
-        $elm.on('click', function() {
-          $('section').animate({scrollTop: $('section').offset().top}, 5);
-        });
-      }
-    };
-  }).directive('onFinishRender', function () {
+    }]).directive('scrollToSectionTop', function () {
+      return {
+        restrict: 'A',
+        link: function (scope, $elm) {
+          $elm.on('click', function () {
+            $('section').animate({scrollTop: $('section').offset().top}, 5);
+          });
+        }
+      };
+    }).directive('onFinishRender', function () {
       return {
         restrict: 'A',
         link: function (scope, element, attr) {

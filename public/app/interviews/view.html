@@ -1,12 +1,12 @@
-<div class="page" ng-show="isShowDetail">
+<div id="printable" class="page" ng-if="isShowDetail">
   <section class="panel panel-default">
-    <div class="panel-heading">
+    <div class="panel-heading no-print">
       <strong>{{interview.name}}</strong>
       <span class="pull-right">{{interview.applyPosition}}</span>
     </div>
     <div class="panel-body">
       <div>
-        <button class="btn btn-success btn-sm pull-right button-above-table" ng-click="viewResume()">完整简历</button>
+        <button class="no-print btn btn-success btn-sm pull-right button-above-table" ng-click="viewResume()">完整简历</button>
         <h5>基本信息</h5>
         <table class="table table-bordered">
           <tr>
@@ -16,9 +16,9 @@
             <td class="col-md-4">
               <div ng-hide="editing">
                 <span>{{interview.applyPosition}}</span>
-                <edit-button action="editApplyPosition()"></edit-button>
+                <edit-button class="no-print" action="editApplyPosition()"></edit-button>
               </div>
-              <div ng-show="editing">
+              <div ng-if="editing" >
                 <input type="text" ng-model="newApplyPosition" name="applyPosition"
                        typeahead="position for position in positions | filter:$viewValue | limitTo:8"/>
                 <button class="btn btn-primary btn-sm" ng-click="updateApplyPosition()"
@@ -35,7 +35,7 @@
             <td>{{interview.email}}</td>
           </tr>
         </table>
-        <button class="btn btn-success btn-sm pull-right button-above-table" ng-click="newEvent()">预约面试</button>
+        <button class="btn btn-success btn-sm pull-right button-above-table no-print" ng-click="newEvent()">预约面试</button>
         <h5>面试安排</h5>
         <div class="table-responsive">
           <table class="table table-bordered">
@@ -43,14 +43,14 @@
               <th class="col-md-3">开始时间</th>
               <th class="col-md-2">时长</th>
               <th class="col-md-5">面试官</th>
-              <th class="col-md-2">操作</th>
+              <th class="no-print" class="col-md-2">操作</th>
             </tr>
             <tr ng-repeat="event in interview.events | orderBy:startTime:false"
                 ng-class="{'active': (event.startTime | isPast)}">
               <td>{{event.startTime | longDate}}</td>
               <td>{{event.duration}}分钟</td>
               <td>{{event.interviewers | interviewers}}</td>
-              <td>
+              <td class="no-print">
                 <edit-button action="editEvent(event)"></edit-button>
                 <delete-button action="removeEvent(event)"></delete-button>
               </td>
@@ -79,7 +79,7 @@
                 </rating>
               </td>
               <td>{{review.totalScore}}</td>
-              <td>
+              <td >
                 <status-span value="!review.qualified">{{review.qualified | qualified}}</status-span>
               </td>
               <td>{{review.createdAt | shortDate}}</td>
@@ -87,7 +87,7 @@
             </tbody>
           </table>
         </div>
-        <div class="row">
+        <div class="row no-print">
           <div class="col-md-4" ng-repeat="review in interview.reviews | filter:{qualified:true}">
             <div class="panel panel-default ui-ribbon-container ui-ribbon-success">
               <div class="ui-ribbon-wrapper">
@@ -116,7 +116,7 @@
           </div>
         </div>
 
-        <div class="row callout callout-info" ng-show="interview.status !== 'new'">
+        <div class="row callout callout-info" ng-if="interview.status !== 'new'">
           <div class="col-md-2">
             面试结果
           </div>
@@ -125,15 +125,16 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row no-print">
         <div align="center">
           <button class="btn btn-success btn-lg" ng-click="offer()"> 接受</button>
           <button class="btn btn-danger btn-lg" ng-click="reject()"> 拒绝</button>
         </div>
       </div>
     </div>
-    <div class="panel-footer">
+    <div class="panel-footer no-print">
       <button class="btn btn-primary btn-sm" ng-click="cancel()">返回列表</button>
+      <button class="btn btn-info btn-sm" ng-click="print()">打印评分表</button>
     </div>
   </section>
 </div>

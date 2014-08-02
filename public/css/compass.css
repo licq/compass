@@ -140,7 +140,7 @@ table.table.tr-ng-grid td, table.table.tr-ng-grid th {
     margin-top: -4px;
 }
 
-.select2-choice .select2-arrow{
+.select2-choice .select2-arrow {
     z-index: 1;
 }
 
@@ -173,11 +173,12 @@ table.table.tr-ng-grid td, table.table.tr-ng-grid th {
 .page-chart .page-body {
     padding: 0 0 0 0;
 }
-.page-chart .panel .panel-body .col-md-3{
+
+.page-chart .panel .panel-body .col-md-3 {
     padding: 0 0 0 0;
 }
 
-g.nv-series{
+g.nv-series {
     margin-right: 20px;
     width: 80px;
 }
@@ -195,28 +196,33 @@ g.nv-series{
     display: inline-block;
     vertical-align: middle;
 }
+
 .angular-ui-tree-nodes .angular-ui-tree-nodes .angular-ui-tree-handle {
     background: #fff;
 
 }
+
 .angular-ui-tree-nodes .angular-ui-tree-nodes {
     padding-left: 35px;
 }
 
-.captcha-group .row div.col-md-4{
+.captcha-group .row div.col-md-4 {
     padding: 0 0 0 15px;
 }
-.captcha-group .row div.col-md-1{
+
+.captcha-group .row div.col-md-1 {
     padding: 0 0 0 0;
 }
-.captcha-group .row div.col-md-7{
+
+.captcha-group .row div.col-md-7 {
     padding: 0 15px 0 0;
 }
 
-.captcha-group .row div.col-md-1 span{
+.captcha-group .row div.col-md-1 span {
     margin-top: 15px;
 }
-.captcha-group .row div input, .captcha-group .row div img{
+
+.captcha-group .row div input, .captcha-group .row div img {
     height: 46px;
 }
 
@@ -244,11 +250,11 @@ svg {
     height: auto !important;
 }
 
-.form-search .control-label{
+.form-search .control-label {
     padding-right: 0;
 }
 
-button.button-above-table{
+button.button-above-table {
     margin-top: -5px;
     margin-bottom: 5px;
 }
@@ -273,4 +279,8 @@ button.button-above-table{
 .row.small-gutter [class*='col-']:not(:last-child) {
     padding-right: 5px;
     padding-left: 5px;
+}
+
+#nav ul li{
+    padding-right: 5px;
 }

@@ -5,6 +5,10 @@
     </div>
     <div class="modal-body">
       <wizard on-finish="close()" style="height: 350px;">
+        <wz-step class="text-danger"title="欢迎使用">
+          <p class="callout callout-info">这是您第一次登陆领聘网，在正式使用之前，我们将为您介绍领聘网的工作原理，以帮助您更快地融入您的工作流程。</p>
+          <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>
+        </wz-step>
         <wz-step title="欢迎使用">
           <p class="callout callout-info">这是您第一次登陆领聘网，在正式使用之前，我们将为您介绍领聘网的工作原理，以帮助您更快地融入您的工作流程。</p>
           <input type="submit" wz-next value="继续" class="btn btn-primary pull-right"/>

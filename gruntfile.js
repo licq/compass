@@ -236,6 +236,12 @@ module.exports = function (grunt) {
             cwd: '<%= project.app %>/app',
             dest: '<%= project.dist %>/public/app',
             src: '**/*.html'
+          },{
+            expand: true,
+            dot: true,
+            cwd: '<%= project.app %>/css',
+            dest: '<%= project.dist %>/public/css',
+            src: '**/*.css'
           },
           {
             expand: true,
@@ -249,7 +255,7 @@ module.exports = function (grunt) {
             src: [
               'package.json',
               'server.js',
-              'server/**/*',
+              'server/**/*'
             ]
           }
         ]
