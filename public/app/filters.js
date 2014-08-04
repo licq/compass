@@ -285,6 +285,13 @@ angular.module('compass')
       return start + '-' + end;
     };
   })
+  .filter('todayTimeRange', function () {
+    return function (event) {
+      var start = moment(event.startTime).format('M月D日 H:mm'),
+        end = moment(event.startTime).add('minutes', event.duration).format('H:mm');
+      return start + '-' + end;
+    };
+  })
   .filter('displayNames', function () {
     return function (array, typeName) {
       if (array && array.length)

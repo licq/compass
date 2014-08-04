@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvInterviewViewCtrl', function ($scope, $rootScope, $routeParams, mvInterview, $location, mvNotifier, $modal, mvEvent, $http) {
+  .controller('mvInterviewViewCtrl', function ($scope, $window, $rootScope, $routeParams, mvInterview, $location, mvNotifier, $modal, mvEvent, $http) {
     function retrieveInterview() {
       mvInterview.get({_id: $routeParams.id}, function (interview) {
         $scope.interview = interview;
@@ -125,7 +125,23 @@ angular.module('compass')
         ($scope.newApplyPosition !== $scope.interview.applyPosition);
     };
 
-    $scope.viewResume = function(){
+    $scope.viewResume = function () {
       $location.path('/resumes/' + $scope.interview.application);
+    };
+
+
+    $scope.print = function () {
+
+      setTimeout(function () {
+        var printContents = $('#printable').clone().find('div').removeClass('table-responsive').end().html();
+
+        var popupWin = window.open('', '_blank', 'width=400,height=400');
+        popupWin.document.open();
+        popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="/css/main.css" /><link rel="stylesheet" type="text/css" href="/css/compass.css" /></head><body class="print-body" onload="window.print()">' + printContents + '</body></html>');
+        popupWin.document.close();
+        setTimeout(function () {
+          popupWin.close();
+        }, 200);
+      }, 500);
     };
   });
