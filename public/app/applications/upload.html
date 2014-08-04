@@ -1,0 +1,121 @@
+<div class="page">
+  <section class="panel panel-default">
+    <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>上传简历</strong></div>
+    <div class="panel-body">
+      <form name="uploadResumeForm" novalidate="" class="form-horizontal">
+        <div class="well text-danger col-md-8 col-md-offset-2" ng-show="err">
+          {{err.message}}
+        </div>
+        <fieldset class="row">
+          <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">姓名</label>
+
+            <div class="col-md-3">
+              <input class="form-control" type="text" name="name" ng-model="name" required=""/>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.name.$error.required && !uploadResumeForm.name.$pristine">
+                请输入姓名</p>
+            </div>
+            <label class="col-md-2 control-label">应聘职位</label>
+
+            <div class="col-md-3">
+              <input type="text" ng-model="applyPosition" name="applyPosition" class="form-control"
+                     typeahead="position for position in positions | filter:$viewValue | limitTo:8" required=""/>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.applyPosition.$error.required && !uploadResumeForm.applyPosition.$pristine">
+                请输入姓名</p>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">手机号</label>
+
+            <div class="col-md-3">
+              <input class="form-control" type="text" name="mobile" ng-model="mobile" required=""
+                     ng-pattern="/\d{11}/"/>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.mobile.$error.required && !uploadResumeForm.mobile.$pristine">
+                请输入手机号</p>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.mobile.$error.pattern && !uploadResumeForm.mobile.$pristine">
+                手机号格式不正确</p>
+            </div>
+            <label class="col-md-2 control-label">邮箱</label>
+
+            <div class="col-md-3">
+              <input class="form-control" type="email" name="email" ng-model="email" required=""/>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.email.$error.required && !uploadResumeForm.email.$pristine">
+                请输入邮箱</p>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.email.$error.email && !uploadResumeForm.name.$pristine">
+                邮箱格式不正确</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">性别</label>
+
+            <div class="col-md-3">
+              <select class="form-control" name="gender" ng-model="gender">
+                <option value="male">男</option>
+                <option value="male">女</option>
+              </select>
+            </div>
+            <label class="col-md-2 control-label">出生日期</label>
+
+            <div class="col-md-3">
+              <div class="row no-gutter">
+                <div class="col-md-5">
+                  <select class="form-control" name="birthday-year" ng-model="birthdayYear"
+                          ng-options="value for value in years" required> </select>
+                  <p class="text-danger"
+                     ng-show="uploadResumeForm.birthday-year.$error.required && !uploadResumeForm.birthday-year.$pristine">
+                    请选择出生日期</p>
+                </div>
+                <span class="col-md-1 control-label">年</span>
+
+                <div class="col-md-5">
+                  <select class="form-control" name="birthday-month" ng-model="birthdayMonth"
+                          ng-options="value for value in months" required=""> </select>
+                  <p class="text-danger"
+                     ng-show="uploadResumeForm.birthday-year.$error.required && !uploadResumeForm.birthday-year.$pristine">
+                    请选择出生日期</p>
+
+                </div>
+                <span class="col-md-1 control-label">月</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">简历</label>
+
+            <div class="col-md-3">
+              <input type="file" ng-file-select="onFileSelect($files)" onclick="this.value=null" required=""
+                     name="resumeFile"/>
+              <p class="text-danger" ng-show="resumeFileRequired"> 请选择简历文件 </p>
+            </div>
+            <div class="col-md-2 control-label">
+              状态
+            </div>
+            <div class="col-md-3">
+              <select class="form-control" name="status" ng-model="status">
+                <option value="new">新应聘</option>
+                <option value="pursued">通过</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-2 col-md-offset-4">
+            <button class="btn btn-primary" ng-click="submit()" ng-disabled="uploadResumeForm.$invalid || resumeFileRequired">提交</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </section>
+</div>

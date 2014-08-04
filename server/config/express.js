@@ -36,6 +36,7 @@ module.exports = function (app, config) {
     });
   }
   app.use(express.static(config.rootPath + '/public'));
+  app.use('/assets',express.static(config.rootPath + '/assets'));
   app.route('/app/*', function (req, res) {
     res.send(404);
   });

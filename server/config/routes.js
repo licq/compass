@@ -26,6 +26,7 @@ var express = require('express'),
   resumeReports = require('../controllers/resumeReports'),
   interviewReports = require('../controllers/interviewReports'),
   applierRejectReasons = require('../controllers/applierRejectReasons'),
+  multipart = require('connect-multiparty'),
   _ = require('lodash');
 
 module.exports = function (app) {
@@ -129,6 +130,9 @@ module.exports = function (app) {
   apiRouter.route('/evaluationCriterions/forReview')
     .get(evaluationCriterions.forReview);
 
+  apiRouter.route('/applications/uploadResume')
+    .all(multipart({ uploadDir: '/tmp' }))
+    .post (applications.uploadResume);
   apiRouter.route('/applications')
     .get(applications.list);
   apiRouter.route('/applications/:id')

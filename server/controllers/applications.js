@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume'),
+  path = require('path'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
@@ -36,10 +37,22 @@ exports.update = function (req, res, next) {
 exports.load = function (req, res, next) {
   Resume.findOne({_id: req.params.id})
     .exec(function (err, resume) {
-    if (err) return next(err);
-    if (!resume) return res.send(404, {message: 'not found'});
-    req.resume = resume;
-    next();
-  });
+      if (err) return next(err);
+      if (!resume) return res.send(404, {message: 'not found'});
+      req.resume = resume;
+      next();
+    });
 };
 
+exports.uploadResume = function (req, res, next) {
+  var resume = new Resume(req.body);
+  resume.company = req.user.company;
+  resume.channel = '导入简历';
+  resume.attach('resumeFile', req.files.resumeFile, function(err){
+    if(err) return next(err);
+    resume.saveAndIndex(function (err) {
+      if (err) return next(err);
+      res.json({_id: resume._id});
+    });
+  });
+};

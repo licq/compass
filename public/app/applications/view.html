@@ -22,7 +22,7 @@
     </div>
     <div class="panel-footer">
       <button class="btn btn-primary" ng-click="cancel()">返回</button>
-      <button class="btn btn-info" ng-click="print()">打印原始简历</button>
+      <button class="btn btn-info" ng-click="print()" ng-show="resume.isFromMail">打印原始简历</button>
     </div>
   </section>
 </div>

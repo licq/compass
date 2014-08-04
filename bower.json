@@ -33,6 +33,7 @@
     "angulartics": "~0.15.20",
     "angular-placeholder-shim": "~0.3.0",
     "jquery-html5-placeholder-shim": "*",
-    "angular-wizard": "~0.4.0"
+    "angular-wizard": "~0.4.0",
+    "ng-file-upload": "~1.6.4"
   }
 }

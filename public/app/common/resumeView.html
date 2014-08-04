@@ -44,7 +44,7 @@
 </div>
 
 
-<div class="panel panel-default" ng-if="resume.careerObjective">
+<div class="panel panel-default" ng-if="resume.careerObjective && resume.isFromMail">
   <div class="panel-heading">
     <strong>职业目标</strong>
   </div>
@@ -291,9 +291,17 @@
     </div>
   </div>
 </div>
+<div class="panel panel-default" ng-if="!resume.isFromMail">
+  <div class="panel-heading">
+    <strong>简历文件</strong>
+  </div>
+  <div class="panel-body">
+    <a href="/assets/{{resume.resumeFileName}}" target="_blank">{{resume.resumeFile.name}}</a>
+  </div>
+</div>
 </div>
 </tab>
-<tab heading="原始邮件" active="original">
+<tab heading="原始简历" active="original" ng-if="resume.isFromMail">
   <div class="center-block">
     <iframe name="mail-frame" class="mail-frame" ng-src="{{mailHtml}}"></iframe>
   </div>

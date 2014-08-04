@@ -40,6 +40,7 @@ module.exports = function (config) {
       'public/vendor/angular-ui-select2/src/select2.js',
       'public/vendor/textAngular/dist/textAngular-sanitize.min.js',
       'public/vendor/textAngular/dist/textAngular.min.js',
+      'public/vendor/ng-file-upload/angular-file-upload.min.js',
       'test/client/app.js',
       'public/app/config.js',
       'public/app/directives.js',
