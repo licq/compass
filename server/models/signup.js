@@ -66,7 +66,10 @@ signupSchema.methods.activate = function (done) {
   var self = this;
   Company.create({name: self.companyName}, function (err, company) {
     if (err) return done(err);
-    Role.create({name: '管理员', company: company._id, permissions: ['*']},
+    var roles = [{name: '管理员', company: company._id, permissions: ['*']},
+      {name: 'HR', company: company._id, permissions: ['events','applications','interviews','resumes','reports','appNew','appUndetermined','appPursued','intReviews','intList','intOffers','intOnboards','repResumes','repInterviews']},
+      {name: '面试官', company: company._id, permissions: ['events', 'intReviews']}];
+    Role.create(roles,
       function (err, role) {
         if (err) return done(err);
         User.create({

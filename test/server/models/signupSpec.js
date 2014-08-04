@@ -9,7 +9,7 @@ var
 
 describe('Signup', function () {
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', Signup, done);
+    helper.clearCollections('User', 'Company', 'Role', Signup, done);
   });
 
   describe('#validate', function () {
@@ -71,7 +71,7 @@ describe('Signup', function () {
     });
   });
 
-  describe('#activate', function () {
+  describe.only('#activate', function () {
     it('should create new company and admin user and eventSetting and applicationSetting when activate', function (done) {
       Factory.create('signup', function (signup) {
         signup.activate(function (err, company, user) {
@@ -84,7 +84,10 @@ describe('Signup', function () {
             mongoose.model('ApplicationSetting').findOne({company: company._id}, function (err, applicationSetting) {
               expect(err).to.not.exist;
               expect(applicationSetting).to.exist;
-              done();
+              mongoose.model('Role').count({company:company._id},function (err, count) {
+                expect(count).to.be.equal(3);
+                done();
+              });
             });
           });
         });
