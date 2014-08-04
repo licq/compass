@@ -14,9 +14,10 @@
     </tr>
   </table>
 </div>
-<h5>评价</h5>
+<h5 ng-show="interview.reviews.length > 0">评价</h5>
+<h5 ng-show="interview.reviews.length === 0" class="text-info">目前没有面试官做出评价</h5>
 
-<div class="table-responsive">
+<div class="table-responsive" ng-show="interview.reviews.length > 0">
   <table class="table table-bordered">
     <thead>
     <tr>

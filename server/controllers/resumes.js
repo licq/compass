@@ -20,7 +20,7 @@ exports.get = function (req, res) {
     .populate('reviews.interviewer')
     .exec(function (err, interview) {
       if (interview) {
-        req.resume = req.resume.toObject();
+        req.resume = req.resume.toJSON();
         req.resume.interview = interview;
       }
       return res.json(req.resume);

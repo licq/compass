@@ -26,7 +26,7 @@ module.exports = function (config) {
   require('../models/eventSetting');
   require('../models/signup');
   require('../models/token');
-  require('../models/resume');
+  require('../models/resume').setupUploadDir(config.uploadDir);
   require('../models/interview');
   require('../models/evaluationCriterion');
   require('../models/applierRejectReason');

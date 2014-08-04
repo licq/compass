@@ -10,7 +10,8 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var all = {
   rootPath: rootPath,
   templatePath: rootPath + 'server/templates/',
-  siteName: '领聘网'
+  siteName: '领聘网',
+  uploadDir: rootPath + 'assets'
 };
 
 var configs = {

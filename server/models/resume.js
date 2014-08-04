@@ -5,8 +5,13 @@ var mongoose = require('mongoose'),
   mongoosastic = require('mongoosastic'),
   config = require('../config/config'),
   _ = require('lodash'),
+  crate = require('mongoose-crate'),
+  LocalFS = require('mongoose-crate-localfs'),
   moment = require('moment'),
+  path = require('path'),
   timestamps = require('mongoose-timestamp');
+
+var baseDir;
 
 function makeTermFilter(queryValue, termKey) {
   if (queryValue) {
@@ -206,6 +211,8 @@ var resumeSchema = mongoose.Schema({
   },
   createdAtLocaltime: Date,
   updatedAtLocaltime: Date
+},{
+  toJSON: {virtuals: true}
 });
 
 resumeSchema.index({company: 1, name: 1, mobile: 1, email: 1, createdAt: 1 });
@@ -380,6 +387,7 @@ resumeSchema.post('remove', function () {
 
 
 resumeSchema.plugin(timestamps);
+
 resumeSchema.pre('save', function (next) {
   if (this.isNew) {
     this.createdAtLocaltime = moment(this.createdAt).add('hours', 8).toDate();
@@ -406,6 +414,24 @@ resumeSchema.pre('save', function (next) {
     next();
   }
 });
+
+resumeSchema.virtual('isFromMail').get(function () {
+  return this.channel !== '导入简历';
+});
+
+resumeSchema.virtual('resumeFileName').get(function () {
+  if (this.resumeFile && this.resumeFile.url) {
+    return path.basename(this.resumeFile.url);
+  }
+  return '';
+});
+
+if(!resumeSchema.options.toJSON) resumeSchema.options.toJSON = {};
+resumeSchema.options.toJSON.transform = function (doc, ret, options) {
+  if (ret.resumeFile && ret.resumeFile.url) {
+    delete ret.resumeFile.url;
+  }
+};
 
 resumeSchema.post('save', function () {
   if (this.statusChanged) {
@@ -438,6 +464,23 @@ resumeSchema.plugin(mongoosastic, {
             index: 'not_analyzed'
           }
         }
+      },
+      resumeFile: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            index: 'not_analyzed'
+          }
+        }
+      },
+      resumeFileName: {
+        type: 'string',
+        index: 'not_analyzed'
+      },
+      isFromMail: {
+        type: 'boolean',
+        index: 'not_analyzed'
       },
       birthday: {
         type: 'date',
@@ -817,4 +860,15 @@ resumeSchema.plugin(mongoosastic, {
   }
 });
 
-mongoose.model('Resume', resumeSchema);
+exports.setupUploadDir = function (dir) {
+  baseDir = dir;
+  resumeSchema.plugin(crate, {
+    storage: new LocalFS({
+      directory: dir
+    }),
+    fields: {
+      resumeFile: {}
+    }
+  });
+  mongoose.model('Resume', resumeSchema);
+};

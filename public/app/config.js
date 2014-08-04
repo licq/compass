@@ -6,7 +6,8 @@ angular.module('compass')
       })
       .when('/tutorial', {
         templateUrl: '/app/tutorial/tutorial.html',
-        controller: 'mvTutorialCtrl'
+        controller: 'mvTutorialCtrl',
+        authenticate: true
       })
       .when('/login', {
         templateUrl: '/app/auth/login.html',
@@ -206,6 +207,12 @@ angular.module('compass')
         authenticate: true,
         permissions: 'interviews'
       })
+      .when('/applications/uploadResume',{
+        templateUrl: '/app/applications/upload.html',
+        controller: 'mvApplicationUploadResumeCtrl',
+        authenticate: true,
+        permissions: 'applications'
+      })
       .when('/applications/:status', {
         templateUrl: '/app/applications/list.html',
         controller: 'mvApplicationListCtrl',
@@ -322,7 +329,8 @@ angular.module('compass')
       submenus: [
         {name: 'appNew', cnName: '新应聘', enabled: false},
         {name: 'appUndetermined', cnName: '待定', enabled: false},
-        {name: 'appPursued', cnName: '通过', enabled: false}
+        {name: 'appPursued', cnName: '通过', enabled: false},
+        {name: 'uploadResume', cnName: '上传简历', enabled: false}
       ]},
     {name: 'interviews', cnName: '面试', enabled: false,
       submenus: [
