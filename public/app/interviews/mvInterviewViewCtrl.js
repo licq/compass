@@ -131,22 +131,17 @@ angular.module('compass')
 
 
     $scope.print = function () {
-//      var modalInstance = $modal.open({
-//        templateUrl: '/app/interviews/view.html',
-//        controller: 'mvInterviewViewPrintCtrl',
-//        keyboard: false,
-//        size:'lg'
-//      });
 
       setTimeout(function () {
-        var printContents = document.getElementById('printable').innerHTML;
-        var popupWin = window.open('', '_blank', 'width=300,height=300');
+        var printContents = $('#printable').clone().find('div').removeClass('table-responsive').end().html();
+
+        var popupWin = window.open('', '_blank', 'width=400,height=400');
         popupWin.document.open();
-        popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="/css/main.css" /><link rel="stylesheet" type="text/css" href="/css/compass.css" /></head><body onload="window.print()">' + printContents + '</html>');
+        popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="/css/main.css" /><link rel="stylesheet" type="text/css" href="/css/compass.css" /></head><body class="print-body" onload="window.print()">' + printContents + '</body></html>');
         popupWin.document.close();
         setTimeout(function () {
           popupWin.close();
-        }, 100);
+        }, 200);
       }, 500);
     };
   });

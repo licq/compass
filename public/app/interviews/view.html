@@ -1,5 +1,5 @@
-<div id="printable" class="page" ng-if="isShowDetail">
-  <section class="panel panel-default">
+<div  class="page" ng-if="isShowDetail">
+  <section id="printable" class="panel panel-default">
     <div class="panel-heading no-print">
       <strong>{{interview.name}}</strong>
       <span class="pull-right">{{interview.applyPosition}}</span>
@@ -70,17 +70,19 @@
               <th>时间</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody >
             <tr ng-repeat="review in interview.reviews">
               <td>{{review.interviewer.name}}</td>
               <td ng-repeat="head in reviewHeader">
-                <rating class="ui-rating" ng-model="reviewData[review.interviewer._id][head]"
+                <rating class="ui-rating no-print" ng-model="reviewData[review.interviewer._id][head]"
                         state-on="'fa fa-star'" state-off="'fa fa-star-o'" readonly="true">
                 </rating>
+                <div class="only-print" align="center">{{reviewData[review.interviewer._id][head]}}</div>
               </td>
-              <td>{{review.totalScore}}</td>
+              <td align="center">{{review.totalScore}}</td>
               <td >
-                <status-span value="!review.qualified">{{review.qualified | qualified}}</status-span>
+                <status-span class="no-print" value="!review.qualified">{{review.qualified | qualified}}</status-span>
+                <div class="only-print">{{review.qualified | qualified}}</div>
               </td>
               <td>{{review.createdAt | shortDate}}</td>
             </tr>

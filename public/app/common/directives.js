@@ -190,7 +190,8 @@
             return ele.slimScroll({
               height: attrs.scrollHeight || '100%',
               color: '#31c0be',
-              opacity: 0.7
+              opacity: 0.7,
+              alwaysVisible: true
             });
           }
         };

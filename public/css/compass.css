@@ -281,6 +281,23 @@ button.button-above-table {
     padding-left: 5px;
 }
 
-#nav ul li{
+#nav ul li {
     padding-right: 5px;
+}
+
+.only-print {
+    display: none;
+}
+
+@media print {
+    .only-print {
+        display: block;
+    }
+
+    .table .table-bordered {
+        border-spacing: 0;
+        right: 0;
+        overflow: auto;
+        display: inline;
+    }
 }
