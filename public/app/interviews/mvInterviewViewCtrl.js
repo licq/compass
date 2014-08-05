@@ -132,7 +132,6 @@ angular.module('compass')
     };
 
     $scope.print = function () {
-
       setTimeout(function () {
         var printContents = $('#printable').clone().find('div').removeClass('table-responsive').end().html();
 
