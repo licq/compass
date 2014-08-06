@@ -3,6 +3,8 @@
 var cheerio = require('cheerio'),
   _ = require('lodash'),
   helper = require('../utilities/helper'),
+  mhtml = require('mhtml'),
+  mailParser = require('mailparser').MailParser,
   logger = require('../config/winston').logger();
 
 function parseCertifications(table, errors) {
@@ -314,10 +316,11 @@ exports.parse = function (data) {
   };
 
   var resume = parseBasicInfo($('table tr:nth-child(2) table'));
-  resume.name = $('strong').text().trim();
+  resume.name = $('strong').text().trim() || $('b').first().text().trim();
   var errors = [];
   resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
-  resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text());
+  resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text()) || findTable('自我评价').text();
+  console.log('table',findTable('自我评价').html());
   resume.workExperience = parseWorkExperience(findTable('工作经验'), errors);
   resume.projectExperience = parseProjectExperience(findTable('项目经验'), errors);
   resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
@@ -330,7 +333,6 @@ exports.parse = function (data) {
   resume.inSchoolStudy = parseInSchoolStudy(findTable('所获奖项'), errors);
   resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
   resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
-  resume.matchRate = helper.parseMatchRate($('font b').text());
   resume.channel = '前程无忧';
   resume.mail = data.mailId;
   resume.company = data.company;

@@ -34,7 +34,7 @@ exports.getHtml = function (req, res, next) {
 
 exports.parse = function (req, res, next) {
   Mail.findOne({_id: req.params.id, company: req.user.company})
-    .select('html subject company fromAddress createdAt')
+    .select('html subject company fromAddress createdAt attachments')
     .exec(function (err, mail) {
       if (err) return next(err);
       if (!mail) return res.send(404, {message: req.params.id + 'not found'});

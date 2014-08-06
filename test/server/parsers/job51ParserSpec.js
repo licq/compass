@@ -32,5 +32,17 @@ describe('job51Parser', function () {
         done(err);
       });
     });
+
+    it.only('should parse 51job download resume correctly', function (done) {
+      fs.readFile(__dirname + '/51jobdownloadresume.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
+//                expect(resume.name).to.equal('顾欢');
+//                expect(resume.projectExperience).to.have.length(2);
+        console.log(resume);
+        done(err);
+      });
+    });
   });
 });
