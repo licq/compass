@@ -212,7 +212,7 @@ userSchema.statics.updateUser = function (user, cb) {
     if (err) return cb(err);
     var oldPositions = _.difference(arrayToString(oldUser.positions), arrayToString(user.positions));
     var newPositions = _.difference(arrayToString(user.positions), arrayToString(oldUser.positions));
-    user.markModified('positions');
+   // user.markModified('positions');
     user.save(function (err, savedUser) {
       if (err)  return cb(err);
       updatePositions(oldPositions, savedUser, 'remove', function (err) {
