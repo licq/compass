@@ -33,8 +33,8 @@ describe('mvOnboardListCtrl', function () {
   });
 
   it('should use the query condition to search onboards', inject(function () {
-    var startDate = moment().add('months', -1).startOf('month');
-    var endDate = moment().add('months', -1).endOf('month');
+    var startDate = moment().subtract(1, 'months').startOf('month');
+    var endDate = moment().subtract(1, 'months').endOf('month');
 
     $httpBackend.expectGET('/api/interviews?endDate=' + endDate.toISOString() +
       '&name=lisi&startDate=' + startDate.toISOString() + '&status=offer+accepted').respond(200);

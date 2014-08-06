@@ -139,7 +139,7 @@ describe('events', function () {
 
   describe('put /api/events/:id', function () {
     it('should update event', function (done) {
-      var startTime = moment().add('h', -1).toISOString();
+      var startTime = moment().subtract(1, 'h').toISOString();
       Factory.create('resume', {company: user.company}, function (resume) {
         Interview.addEvent({application: resume,
           interviewers: [user.id],

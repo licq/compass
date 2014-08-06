@@ -38,7 +38,7 @@ angular.module('compass')
       mvInterview.query({
         status: 'offer accepted',
         startDate: moment().startOf('day').toISOString(),
-        endDate: moment().add('day', $scope.nextNdays).endOf('day').toISOString()}, function (interviews) {
+        endDate: moment().add( $scope.nextNdays, 'day').endOf('day').toISOString()}, function (interviews) {
 
         $scope.onboardsOfToday = _.filter(interviews, function (interview) {
           return onToday(interview, 'onboardDate');

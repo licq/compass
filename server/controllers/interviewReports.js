@@ -10,7 +10,7 @@ exports.counts = function (req, res, next) {
   var match = {company: req.user.company};
   if (req.query.applyPosition) match.applyPosition = req.query.applyPosition;
   if (req.query.reportType === 'day') {
-    match.createdAt = {$gt: moment().subtract(1,'M').endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(1, 'M').endOf('day').toDate()};
     aggregate.match(match);
     aggregate.group({
         _id: {
@@ -30,7 +30,7 @@ exports.counts = function (req, res, next) {
         _id: 0
       });
   } else if (req.query.reportType === 'week') {
-    match.createdAt = {$gt: moment().add('weeks', -12).endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(12, 'weeks').endOf('day').toDate()};
     aggregate.match(match).group({
       _id: {
         year: {$year: '$createdAtLocaltime'},
@@ -46,7 +46,7 @@ exports.counts = function (req, res, next) {
       count: 1
     });
   } else {
-    match.createdAt = {$gt: moment().add('years', -1).endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(1, 'years').endOf('day').toDate()};
     aggregate.match(match).group({
       _id: {
         year: {$year: '$createdAtLocaltime'},
@@ -73,7 +73,7 @@ exports.summaries = function (req, res, next) {
   if (!Array.isArray(groupBys)) groupBys = [groupBys];
   async.mapSeries(groupBys, function (groupBy, cb) {
     Interview.aggregate()
-      .match({company: req.user.company, createdAt: {$gte: moment().subtract(1,'M').startOf('day').toDate()}})
+      .match({company: req.user.company, createdAt: {$gte: moment().subtract(1, 'M').startOf('day').toDate()}})
       .group({_id: '$' + groupBy, count: {$sum: 1}}).project({name: '$_id', _id: 0, count: 1})
       .exec(cb);
   }, function (err, results) {

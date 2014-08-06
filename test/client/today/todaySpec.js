@@ -25,7 +25,7 @@ describe('Homepage', function () {
 
     $httpBackend.expectGET(/^\/api\/interviews\?endDate=\d.{22}Z&startDate=\d.{22}Z&status=offer\+accepted/)
       .respond(200, [
-        {'name': '张二', 'applyPosition': 'Java软件工程师-上海', 'onboardDate': moment().add('day', 2).endOf('day').toISOString()},
+        {'name': '张二', 'applyPosition': 'Java软件工程师-上海', 'onboardDate': moment().add(2, 'day').endOf('day').toISOString()},
         {'name': '张五', 'applyPosition': 'Java软件工程师-上海', 'onboardDate': moment().endOf('day').toISOString()}
       ]);
     $scope.counts = {};

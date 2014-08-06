@@ -46,7 +46,7 @@ exports.counts = function (req, res, next) {
       count: 1
     });
   } else {
-    match.createdAt = {$gt: moment().add('years', -1).endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(1, 'years').endOf('day').toDate()};
     aggregate.match(match).group({
       _id: {
         year: {$year: '$createdAtLocaltime'},
