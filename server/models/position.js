@@ -86,7 +86,7 @@ positionSchema.statics.updatePosition = function (position, cb) {
     if (err) return cb(err);
     var oldOwners = _.difference(arrayToString(oldPosition.owners), arrayToString(position.owners));
     var newOwners = _.difference(arrayToString(position.owners), arrayToString(oldPosition.owners));
-    position.markModified('owners');
+   // position.markModified('owners');
     position.save(function (err, savedPosition) {
       if (err)  return cb(err);
       updateUsers(oldOwners, savedPosition, 'remove', function (err) {

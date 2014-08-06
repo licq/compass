@@ -24,7 +24,7 @@ describe('mvLoginCtrl', function () {
 
     $scope.login();
     $httpBackend.flush();
-    expect(spy).to.have.been.calledWith('/today');
+    expect(spy).to.have.been.calledWith('/');
     expect(spy).to.have.been.calledOnce;
     expect(notifySpy).to.have.been.calledWith('登陆成功');
   }));

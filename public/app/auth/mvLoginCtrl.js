@@ -5,7 +5,7 @@ angular.module('compass')
     $scope.login = function () {
       mvAuth.login({email: $scope.email, password: $scope.password, remember_me: $scope.remember_me})
         .then(function () {
-          $location.path('/today');
+          $location.path('/');
           mvNotifier.notify('登陆成功');
         },
         function (err) {
