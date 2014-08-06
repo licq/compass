@@ -45,18 +45,6 @@
     width: auto !important;
 }
 
-/*.ngCellText.ng-scope {*/
-/*padding: 8px;*/
-/*}*/
-
-/*.selectedItems {*/
-/*float: left;*/
-/*}*/
-
-/*.ngCellText .btn {*/
-/*margin: 1px 3px 1px 0px;*/
-/*}*/
-
 .fc-header-title h2 {
     font-size: 20px;
 }
@@ -300,4 +288,14 @@ button.button-above-table {
         overflow: auto;
         display: inline;
     }
+}
+
+.bootstrap-datetimepicker-widget td.hour{
+    height: 24px;
+    line-height: 24px;
+    width: 24px;
+}
+
+.timepicker-picker span.timepicker-hour, .timepicker-picker span.timepicker-minute{
+    margin-left: 20px;
 }

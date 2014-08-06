@@ -442,7 +442,19 @@ angular.module('compass')
       }]);
   })
   .run(function ($rootScope, $filter) {
-    moment.locale('zh-cn');
+    moment.locale('zh-cn',{
+      longDateFormat : {
+        LT : 'H:mm',
+        L : 'YYYY-MM-DD',
+        LL : 'YYYY年MMMD日',
+        LLL : 'YYYY年MMMD日LT',
+        LLLL : 'YYYY年MMMD日ddddLT',
+        l : 'YYYY-MM-DD',
+        ll : 'YYYY年MMMD日',
+        lll : 'YYYY年MMMD日LT',
+        llll : 'YYYY年MMMD日ddddLT'
+      }
+    });
     $rootScope.applicationFilterOptions = [
       {label: '不过滤', value: 0},
       {label: '3个月内不允许重复投递', value: 3},
