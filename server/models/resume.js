@@ -870,7 +870,10 @@ exports.setupUploadDir = function (dir) {
   baseDir = dir;
   resumeSchema.plugin(crate, {
     storage: new LocalFS({
-      directory: dir
+      directory: dir,
+      path: function (attachment) {
+        return '/' + attachment.documentId + attachment.originalFilename;
+      }
     }),
     fields: {
       resumeFile: {}

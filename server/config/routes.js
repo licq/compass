@@ -132,13 +132,16 @@ module.exports = function (app) {
 
   apiRouter.route('/applications/uploadResume')
     .all(multipart({ uploadDir: '/tmp' }))
-    .post (applications.uploadResume);
+    .post(applications.uploadResume);
   apiRouter.route('/applications')
     .get(applications.list);
   apiRouter.route('/applications/:id')
     .all(applications.load)
     .get(applications.get)
     .put(applications.update);
+  apiRouter.route('/applications/:id/attachment')
+    .all(applications.load)
+    .get(applications.download);
 
   apiRouter.route('/events/availableInterviewers')
     .get(events.availableInterviewers);
