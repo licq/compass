@@ -25,7 +25,7 @@
           '今天': [moment().startOf('day'), moment().endOf('day')],
           '本周': [moment().startOf('week'), moment().endOf('week')],
           '本月': [moment().startOf('month'), moment().endOf('month')],
-          '下个月': [moment().startOf('month').add('months', 1), moment().endOf('month').add('months', 1)]
+          '下个月': [moment().startOf('month').add(1,'M'), moment().endOf('month').add(1,'M')]
         };
         options.locale = $attributes.locale && $parse($attributes.locale)($scope) || {
           cancelLabel: '取消',

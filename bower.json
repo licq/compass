@@ -15,7 +15,7 @@
     "toastr": "latest",
     "angular-bootstrap": "latest",
     "moment": "latest",
-    "eonasdan-bootstrap-datetimepicker": "latest",
+    "eonasdan-bootstrap-datetimepicker": "git://github.com/licq/bootstrap-datetimepicker.git#master",
     "angular-ui-select2": "latest",
     "lodash": "~2.4.1",
     "font-awesome": "~4.1.0",

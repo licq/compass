@@ -211,7 +211,7 @@ var resumeSchema = mongoose.Schema({
   },
   createdAtLocaltime: Date,
   updatedAtLocaltime: Date
-},{
+}, {
   toJSON: {virtuals: true}
 });
 
@@ -390,9 +390,9 @@ resumeSchema.plugin(timestamps);
 
 resumeSchema.pre('save', function (next) {
   if (this.isNew) {
-    this.createdAtLocaltime = moment(this.createdAt).add('hours', 8).toDate();
+    this.createdAtLocaltime = moment(this.createdAt).add(8, 'h').toDate();
   }
-  this.updatedAtLocaltime = moment(this.updatedAt).add('hours', 8).toDate();
+  this.updatedAtLocaltime = moment(this.updatedAt).add(8, 'h').toDate();
   this.statusChanged = this.isModified('status');
   next();
 });
@@ -403,7 +403,7 @@ resumeSchema.pre('save', function (next) {
     mongoose.model('ApplicationSetting').findOne({company: self.company}).select('filterSamePerson').exec(function (err, as) {
       if (err || !as) return next();
       if (as.filterSamePerson === 0) return next();
-      self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().subtract(as.filterSamePerson,'M').toDate()}})
+      self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().subtract(as.filterSamePerson, 'M').toDate()}})
         .exec(function (err, resumeCount) {
           if (err || resumeCount === 0) return next();
           self.status = 'duplicate';
@@ -426,7 +426,7 @@ resumeSchema.virtual('resumeFileName').get(function () {
   return '';
 });
 
-if(!resumeSchema.options.toJSON) resumeSchema.options.toJSON = {};
+if (!resumeSchema.options.toJSON) resumeSchema.options.toJSON = {};
 resumeSchema.options.toJSON.transform = function (doc, ret, options) {
   if (ret.resumeFile && ret.resumeFile.url) {
     delete ret.resumeFile.url;

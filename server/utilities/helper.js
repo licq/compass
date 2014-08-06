@@ -425,7 +425,7 @@ exports.render = function render(template, event) {
 };
 
 exports.calculateBirthday = function calculateBirthday(age, current) {
-  return moment(current).add('years', -exports.onlyNumber(age)).toDate();
+  return moment(current).subtract(exports.onlyNumber(age),'y').toDate();
 };
 
 exports.parseTargetAnnualSalary = function parseTargetAnnualSalary(input) {

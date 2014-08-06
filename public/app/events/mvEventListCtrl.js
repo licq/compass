@@ -15,7 +15,7 @@ angular.module('compass')
       return {
         id: evt._id,
         start: moment(evt.startTime).toDate(),
-        end: moment(evt.startTime).add('minutes', evt.duration).toDate(),
+        end: moment(evt.startTime).add(evt.duration, 'm').toDate(),
         title: evt.name + '面试(' + evt.applyPosition + ')',
         allDay: false,
         backgroundColor: moment(evt.startTime).isBefore(new Date()) ? 'rgb(128,128,128)' : 'rgb(219,173,255)',

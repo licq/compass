@@ -125,7 +125,7 @@ describe('mvEventListCtrl', function () {
         startTime: newTime
       });
       expect($scope.eventsForCalendar[0].start.toString()).to.equal(newTime.toString());
-      expect($scope.eventsForCalendar[0].end.toString()).to.equal(moment(newTime).add('minutes', 60).toDate().toString());
+      expect($scope.eventsForCalendar[0].end.toString()).to.equal(moment(newTime).add(60,'m').toDate().toString());
     }));
 
     it('should delete the event from the calendar and $scope.events', function () {

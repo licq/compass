@@ -59,12 +59,14 @@ angular.module('compass')
         oldStartTime = new Date(event.startTime);
         if ($scope.isNew) {
           $scope.event.duration = $scope.eventSetting.duration;
-          $scope.event.startTime = moment().hour(14).minute(0).second(0).millisecond(0).add('days', 1);
+          $scope.event.startTime = moment().hour(14).minute(0).second(0).millisecond(0).add(1, 'd');
           if (_.findIndex($scope.interviewers, function (interviewer) {
             return mvIdentity.currentUser._id === interviewer._id;
           }) > -1) {
             $scope.event.interviewers = [mvIdentity.currentUser._id];
           }
+        } else {
+          $scope.event.startTime = moment($scope.event.startTime);
         }
       });
     });

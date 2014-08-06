@@ -118,9 +118,9 @@ interviewSchema.plugin(timestamps);
 interviewSchema.index({company: 1, application: 1}, {unique: true});
 interviewSchema.pre('save', function (next) {
   if (this.isNew) {
-    this.createdAtLocaltime = moment(this.createdAt).add('hours', 8).toDate();
+    this.createdAtLocaltime = moment(this.createdAt).add(8,'h').toDate();
   }
-  this.updatedAtLocaltime = moment(this.updatedAt).add('hours', 8).toDate();
+  this.updatedAtLocaltime = moment(this.updatedAt).add(8,'h').toDate();
   next();
 });
 
@@ -130,7 +130,7 @@ function createEmailContext(interview, event) {
     email: interview.email,
     applyPosition: interview.applyPosition,
     startTime: event.startTime,
-    endTime: moment(event.startTime).add('minutes', event.duration).toDate(),
+    endTime: moment(event.startTime).add(event.duration,'m').toDate(),
     company: interview.company,
     application: interview.application,
     interviewers: event.interviewers

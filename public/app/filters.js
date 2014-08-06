@@ -281,14 +281,14 @@ angular.module('compass')
   .filter('eventTimeRange', function () {
     return function (event) {
       var start = moment(event.startTime).format('H:mm'),
-        end = moment(event.startTime).add('minutes', event.duration).format('H:mm');
+        end = moment(event.startTime).add(event.duration, 'm').format('H:mm');
       return start + '-' + end;
     };
   })
   .filter('todayTimeRange', function () {
     return function (event) {
       var start = moment(event.startTime).format('M月D日 H:mm'),
-        end = moment(event.startTime).add('minutes', event.duration).format('H:mm');
+        end = moment(event.startTime).add(event.duration, 'm').format('H:mm');
       return start + '-' + end;
     };
   })
@@ -312,9 +312,9 @@ angular.module('compass')
   .filter('nextEventStartTime', function () {
     return function (events) {
       var result;
-      angular.forEach(events, function(event){
-        if(moment(event.startTime).isAfter(moment())){
-          if(!result || moment(event.startTime).isBefore(moment(result))){
+      angular.forEach(events, function (event) {
+        if (moment(event.startTime).isAfter(moment())) {
+          if (!result || moment(event.startTime).isBefore(moment(result))) {
             result = event.startTime;
           }
         }
@@ -322,8 +322,8 @@ angular.module('compass')
       return result;
     };
   })
-  .filter('isPast', function(){
-    return function(time){
+  .filter('isPast', function () {
+    return function (time) {
       return moment(time).isBefore(moment());
     };
   });
