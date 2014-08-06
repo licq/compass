@@ -50,6 +50,7 @@ exports.get = function (req, res) {
 
 exports.update = function (req, res, next) {
   req.loadedUser.merge(req.body);
+  if (req.body.password) req.loadedUser.password = req.body.password;
   User.updateUser(req.loadedUser, function (err) {
     if (err) return next(err);
     res.end();
