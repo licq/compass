@@ -10,7 +10,7 @@ exports.counts = function (req, res, next) {
   if (req.query.applyPosition) match.applyPosition = req.query.applyPosition;
   if (req.query.channel) match.channel = req.query.channel;
   if (req.query.reportType === 'day') {
-    match.createdAt = {$gt: moment().add('months', -1).endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(1, 'M').endOf('day').toDate()};
     aggregate.match(match);
     aggregate.group({
         _id: {
@@ -30,7 +30,7 @@ exports.counts = function (req, res, next) {
         _id: 0
       });
   } else if (req.query.reportType === 'week') {
-    match.createdAt = {$gt: moment().add('weeks', -12).endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(12, 'w').endOf('day').toDate()};
     aggregate.match(match).group({
       _id: {
         year: {$year: '$createdAtLocaltime'},
@@ -91,7 +91,7 @@ exports.summaries = function (req, res, next) {
   if (!Array.isArray(groupBys)) groupBys = [groupBys];
   async.mapSeries(groupBys, function (groupBy, cb) {
     var aggregate = Resume.aggregate()
-      .match({company: req.user.company, createdAt: {$gte: moment().add('months', -1).startOf('day').toDate()}});
+      .match({company: req.user.company, createdAt: {$gte: moment().subtract(1, 'M').startOf('day').toDate()}});
     if (groupBy === 'age') {
       aggregate.match({birthday: {$exists: true}})
         .group({_id: {$year: '$birthday'}, count: {$sum: 1}})

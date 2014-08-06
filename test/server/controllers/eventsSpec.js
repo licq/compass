@@ -50,8 +50,8 @@ describe('events', function () {
 
   describe('get /api/events', function () {
     it('should get back event list correctly', function (done) {
-      var startTime = moment().add('h', -1).toISOString();
-      var endTime = moment().add('h', 1).toISOString();
+      var startTime = moment().subtract(1, 'h').toISOString();
+      var endTime = moment().add(1, 'h').toISOString();
       Factory.create('resume', {company: user.company}, function (resume) {
         Interview.addEvent({application: resume,
           interviewers: [user.id],

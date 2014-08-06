@@ -5,7 +5,7 @@ angular.module('compass')
       $scope.resumeFileRequired = false;
     };
 
-    $scope.years = _.range(moment().add('years', -14).year(), moment().add('years', -60).year(), -1);
+    $scope.years = _.range(moment().subtract(14, 'y').year(), moment().subtract(60, 'y').year(), -1);
     $scope.months = _.range(1, 13);
     $scope.status = 'new';
     $scope.gender = 'male';

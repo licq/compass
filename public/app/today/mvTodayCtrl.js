@@ -11,7 +11,7 @@ angular.module('compass')
       mvEvent.query({
         user: mvIdentity.currentUser._id,
         startTime: moment().startOf('day').toISOString(),
-        endTime: moment().add('day', $scope.nextNdays).endOf('day').toISOString()
+        endTime: moment().add($scope.nextNdays,'d').endOf('day').toISOString()
       }, function (events) {
         $scope.eventsOfToday = _.filter(events, function (event) {
           return onToday(event, 'startTime');

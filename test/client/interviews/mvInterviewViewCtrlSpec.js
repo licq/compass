@@ -237,7 +237,7 @@ describe('mvInterviewViewCtrl', function () {
   });
 
   describe('removeEvent', function () {
-    it('should remove an existing event and broadcast the messsage', inject(function ($rootScope,mvNotifier) {
+    it('should remove an existing event and broadcast the messsage', inject(function ($rootScope, mvNotifier) {
       var spy = sinon.spy($rootScope, '$broadcast');
       var notifySpy = sinon.spy(mvNotifier, 'notify');
       $httpBackend.expectDELETE('/api/events/7788').respond(200);
@@ -260,19 +260,19 @@ describe('mvInterviewViewCtrl', function () {
       );
       $httpBackend.flush();
       expect($scope.interview.events).to.have.length(0);
-      expect(spy).to.have.been.calledWith('changeOfEvent','delete',null, eventStartDate);
+      expect(spy).to.have.been.calledWith('changeOfEvent', 'delete', null, eventStartDate);
       expect(notifySpy).to.have.been.calledWith('删除面试邀请成功');
     }));
   });
 
   describe('editApplyPosition', function () {
     it('should get positions and set editing to true', function () {
-      $httpBackend.expectGET('/api/resumeReports/applyPositions').respond(['销售经理','市场总监']);
+      $httpBackend.expectGET('/api/resumeReports/applyPositions').respond(['销售经理', '市场总监']);
       $scope.editApplyPosition();
       $httpBackend.flush();
       expect($scope.editing).to.be.true;
       expect($scope.positions).to.have.length(2);
-      expect($scope.newApplyPosition).to.equal($scope.interview.applyPosition);
+      expect($scope.newApplyPosition.name).to.equal($scope.interview.applyPosition);
     });
   });
 
@@ -286,9 +286,9 @@ describe('mvInterviewViewCtrl', function () {
 
   describe('updateApplyPosition', function () {
     it('should put /api/interviews/:id and notify', inject(function (mvNotifier) {
-      var spy = sinon.spy(mvNotifier,'notify');
-      $httpBackend.expectPUT('/api/interviews/7788',{applyPosition: 'cio'}).respond(200);
-      $scope.newApplyPosition = 'cio';
+      var spy = sinon.spy(mvNotifier, 'notify');
+      $httpBackend.expectPUT('/api/interviews/7788', {applyPosition: 'cio'}).respond(200);
+      $scope.newApplyPosition = {name: 'cio'};
       $scope.updateApplyPosition();
       $httpBackend.flush();
       expect($scope.interview.applyPosition).to.equal('cio');
@@ -299,24 +299,24 @@ describe('mvInterviewViewCtrl', function () {
 
   describe('newApplyPositionValid', function () {
     it('should return false if newApplyPosition same with old one', function () {
-      $scope.newApplyPosition = 'cio';
+      $scope.newApplyPosition = {name: 'cio'};
       expect($scope.newApplyPositionValid()).to.be.false;
     });
 
     it('should return false if newApplyPosition is blank', function () {
-      $scope.newApplyPosition = '';
+      $scope.newApplyPosition = {name: ''};
       expect($scope.newApplyPositionValid()).to.be.false;
     });
 
     it('should return true if newApplyPosition valid', function () {
-      $scope.newApplyPosition = '前台';
+      $scope.newApplyPosition = {name: '前台'};
       expect($scope.newApplyPositionValid()).to.be.true;
     });
   });
 
   describe('viewResume', function () {
     it('should go to /resumes/7788', inject(function ($location) {
-      var spy = sinon.spy($location,'path');
+      var spy = sinon.spy($location, 'path');
       $scope.viewResume();
       expect(spy).to.have.been.calledWith('/resumes/aabbcc');
     }));

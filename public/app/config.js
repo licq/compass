@@ -207,7 +207,7 @@ angular.module('compass')
         authenticate: true,
         permissions: 'interviews'
       })
-      .when('/applications/uploadResume',{
+      .when('/applications/uploadResume', {
         templateUrl: '/app/applications/upload.html',
         controller: 'mvApplicationUploadResumeCtrl',
         authenticate: true,
@@ -442,6 +442,7 @@ angular.module('compass')
       }]);
   })
   .run(function ($rootScope, $filter) {
+    moment.locale('zh-cn');
     $rootScope.applicationFilterOptions = [
       {label: '不过滤', value: 0},
       {label: '3个月内不允许重复投递', value: 3},
@@ -455,7 +456,7 @@ angular.module('compass')
       convert: function (type, data) {
         var map = {
           day: {
-            series: _.range(moment().add('months', -1).add('days', 1).startOf('day').valueOf(),
+            series: _.range(moment().add({months: -1, days: 1}).startOf('day').valueOf(),
                 moment().startOf('day').valueOf() + 1,
                 1000 * 60 * 60 * 24),
             lookup: function (d, t) {
@@ -471,7 +472,7 @@ angular.module('compass')
             }
           },
           week: {
-            series: _.range(moment().add('weeks', -11).startOf('week').valueOf(),
+            series: _.range(moment().subtract(11, 'w').startOf('week').valueOf(),
                 moment().startOf('week').valueOf() + 1,
                 1000 * 60 * 60 * 24 * 7),
             lookup: function (d, t) {
@@ -484,7 +485,7 @@ angular.module('compass')
           },
           month: {
             series: _.map(_.range(-11, 1), function (i) {
-              return moment().add('months', i).startOf('month').toDate();
+              return moment().add(i, 'M').startOf('month').toDate();
             }),
             lookup: function (d, t) {
               var m = moment(t);

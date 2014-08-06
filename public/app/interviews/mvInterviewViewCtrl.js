@@ -100,10 +100,12 @@ angular.module('compass')
 
     $scope.editApplyPosition = function () {
       $scope.editing = true;
-      $scope.newApplyPosition = $scope.interview.applyPosition;
-      $http.get('/api/resumeReports/applyPositions').success(function (res) {
-        $scope.positions = res;
-      });
+      $scope.newApplyPosition = {name: $scope.interview.applyPosition};
+      if (!$scope.positions) {
+        $http.get('/api/resumeReports/applyPositions').success(function (res) {
+          $scope.positions = res;
+        });
+      }
     };
 
     $scope.cancelEditApplyPosition = function () {
@@ -111,27 +113,25 @@ angular.module('compass')
     };
 
     $scope.updateApplyPosition = function () {
-      mvInterview.update({_id: $scope.interview._id}, {applyPosition: $scope.newApplyPosition}, function () {
+      mvInterview.update({_id: $scope.interview._id}, {applyPosition: $scope.newApplyPosition.name}, function () {
         mvNotifier.notify('应聘职位修改成功');
-        $scope.interview.applyPosition = $scope.newApplyPosition;
+        $scope.interview.applyPosition = $scope.newApplyPosition.name;
         $scope.editing = false;
       }, function () {
-        mvNotifier.notify('应聘职位个性失败');
+        mvNotifier.notify('应聘职位修改失败');
       });
     };
 
     $scope.newApplyPositionValid = function () {
-      return !!$scope.newApplyPosition &&
-        ($scope.newApplyPosition !== $scope.interview.applyPosition);
+      return !!$scope.newApplyPosition && !!$scope.newApplyPosition.name &&
+        ($scope.newApplyPosition.name !== $scope.interview.applyPosition);
     };
 
     $scope.viewResume = function () {
       $location.path('/resumes/' + $scope.interview.application);
     };
 
-
     $scope.print = function () {
-
       setTimeout(function () {
         var printContents = $('#printable').clone().find('div').removeClass('table-responsive').end().html();
 

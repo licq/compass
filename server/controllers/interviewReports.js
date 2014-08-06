@@ -10,7 +10,7 @@ exports.counts = function (req, res, next) {
   var match = {company: req.user.company};
   if (req.query.applyPosition) match.applyPosition = req.query.applyPosition;
   if (req.query.reportType === 'day') {
-    match.createdAt = {$gt: moment().add('months', -1).endOf('day').toDate()};
+    match.createdAt = {$gt: moment().subtract(1,'M').endOf('day').toDate()};
     aggregate.match(match);
     aggregate.group({
         _id: {
@@ -73,7 +73,7 @@ exports.summaries = function (req, res, next) {
   if (!Array.isArray(groupBys)) groupBys = [groupBys];
   async.mapSeries(groupBys, function (groupBy, cb) {
     Interview.aggregate()
-      .match({company: req.user.company, createdAt: {$gte: moment().add('months', -1).startOf('day').toDate()}})
+      .match({company: req.user.company, createdAt: {$gte: moment().subtract(1,'M').startOf('day').toDate()}})
       .group({_id: '$' + groupBy, count: {$sum: 1}}).project({name: '$_id', _id: 0, count: 1})
       .exec(cb);
   }, function (err, results) {

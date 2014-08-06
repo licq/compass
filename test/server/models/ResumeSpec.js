@@ -111,7 +111,7 @@ describe('Resume', function () {
       });
 
       it('should set the new resume status to archive if there is a resume from the same person exist within 3 months and the company does not allow duplication in 3 months', function (done) {
-        resume.createdAt = moment().add('months', -2).toDate();
+        resume.createdAt = moment().subtract(2,'M').toDate();
         resume.save(function (err) {
           expect(err).to.not.exist;
           mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 3}, function (err) {

@@ -403,7 +403,7 @@ resumeSchema.pre('save', function (next) {
     mongoose.model('ApplicationSetting').findOne({company: self.company}).select('filterSamePerson').exec(function (err, as) {
       if (err || !as) return next();
       if (as.filterSamePerson === 0) return next();
-      self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().add('months', 0 - as.filterSamePerson).toDate()}})
+      self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().subtract(as.filterSamePerson,'M').toDate()}})
         .exec(function (err, resumeCount) {
           if (err || resumeCount === 0) return next();
           self.status = 'duplicate';
