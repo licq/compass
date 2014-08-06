@@ -262,8 +262,8 @@ button.button-above-table {
     margin-right: 5px;
 }
 
-.row.small-gutter [class*='col-']:not(:first-child),
-.row.small-gutter [class*='col-']:not(:last-child) {
+.small-gutter [class*='col-']:not(:first-child),
+.small-gutter [class*='col-']:not(:last-child) {
     padding-right: 5px;
     padding-left: 5px;
 }
