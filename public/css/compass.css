@@ -299,3 +299,8 @@ button.button-above-table {
 .timepicker-picker span.timepicker-hour, .timepicker-picker span.timepicker-minute{
     margin-left: 20px;
 }
+
+.list-inline input[type="checkbox"]{
+    position: relative;
+    margin-left: 0;
+}

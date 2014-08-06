@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6 col-md-offset-3">
+  <div class="col-md-7 col-md-offset-3">
     <div class="page">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -31,7 +31,7 @@
             </table>
           </div>
 
-          <form class="form-inline" novalidate="" name="newForm" ng-show="adding">
+          <form class="form-inline" novalidate="" name="newForm" ng-if="adding">
             <label>名称</label>
             <input type="text" class="form-control" ng-model="item.name" required=""/>
             <label>系数</label>

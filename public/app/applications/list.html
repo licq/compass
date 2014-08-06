@@ -74,7 +74,7 @@
                 <td class="col-md-3">{{application.birthday | yearAndMonth}}生日</td>
                 <td class="col-md-2">{{application.gender | gender}}</td>
               </tr>
-              <tr class="row small-gutter">
+              <tr class="row small-gutter" ng-show="application.educationHistory.length > 0">
                 <td class="col-md-1">最高学历</td>
                 <td class="col-md-3">{{application.educationHistory[0].from |
                   yearAndMonth}}
@@ -84,7 +84,7 @@
                 <td class="col-md-3">{{application.educationHistory[0].major}}</td>
                 <td class="col-md-2">{{application.educationHistory[0].degree | degree}}</td>
               </tr>
-              <tr class="row small-gutter">
+              <tr class="row small-gutter" ng-show="application.workExperience.length > 0">
                 <td class="col-md-1">最近工作</td>
                 <td class="col-md-3">{{application.workExperience[0].from |
                   yearAndMonth}}
@@ -148,4 +148,3 @@
     </div>
   </section>
 </div>
-
