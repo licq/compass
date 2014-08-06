@@ -389,7 +389,7 @@ describe('interview', function () {
     });
 
     it('should return no interviews when current time is before event start time', function (done) {
-      var start = moment().add('days', 1).toDate();
+      var start = moment().add(1, 'd').toDate();
       Factory.create('interview', {
         events: [
           {
@@ -462,13 +462,13 @@ describe('interview', function () {
               applyPosition: '人力总监',
               events: [
                 {
-                  startTime: moment().add('days', 1).toDate(),
+                  startTime: moment().add(1, 'd').toDate(),
                   duration: 90,
                   interviewers: [user._id],
                   createdBy: user._id
                 },
                 {
-                  startTime: moment().add('days', 2).toDate(),
+                  startTime: moment().add(2, 'd').toDate(),
                   duration: 90,
                   interviewers: [user._id],
                   createdBy: user._id

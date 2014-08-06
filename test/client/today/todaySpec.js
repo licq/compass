@@ -10,13 +10,13 @@ describe('Homepage', function () {
     });
 
     $httpBackend.expectGET(/^\/api\/events\?endTime=\d.{22}Z&startTime=\d.{22}Z&user=7788/)
-      .respond(200,[
+      .respond(200, [
         {'name': '张三', 'applyPosition': 'Java软件工程师-上海', 'application': '5566', 'createdBy': '7788', 'startTime': moment().endOf('day').toISOString(), 'duration': 60, 'interviewers': ['7788']},
-        {'name': '张二', 'applyPosition': 'Java软件工程师-上海', 'application': '5566', 'createdBy': '7788', 'startTime': moment().add('day', 2).endOf('day').toISOString(), 'duration': 60, 'interviewers': ['7788']}
+        {'name': '张二', 'applyPosition': 'Java软件工程师-上海', 'application': '5566', 'createdBy': '7788', 'startTime': moment().add(2, 'd').endOf('day').toISOString(), 'duration': 60, 'interviewers': ['7788']}
       ]);
 
     $httpBackend.expectGET('/api/reviews?orderBy=events%5B0%5D.startTime&orderByReverse=false&unreviewed=true')
-      .respond(200,[
+      .respond(200, [
         {'_id': '1122', 'name': '张三', 'applyPosition': 'Java软件工程师-上海', 'reviews': [],
           'events': [
             {'duration': 60, 'startTime': '2014-06-06T15:55:00.000Z', 'createdBy': '7788', 'interviewers': ['7788']}
@@ -24,7 +24,7 @@ describe('Homepage', function () {
       ]);
 
     $httpBackend.expectGET(/^\/api\/interviews\?endDate=\d.{22}Z&startDate=\d.{22}Z&status=offer\+accepted/)
-      .respond(200,[
+      .respond(200, [
         {'name': '张二', 'applyPosition': 'Java软件工程师-上海', 'onboardDate': moment().add('day', 2).endOf('day').toISOString()},
         {'name': '张五', 'applyPosition': 'Java软件工程师-上海', 'onboardDate': moment().endOf('day').toISOString()}
       ]);

@@ -322,9 +322,9 @@ describe('filters', function () {
     }));
 
     it('should return 2 if only 2 events completed', inject(function (eventCompleteCountFilter) {
-      var yesterday = moment().add('days', -1).toDate();
-      var oneHourBefore = moment().add('hours', -1).toDate();
-      var tomorrow = moment().add('days', 1).toDate();
+      var yesterday = moment().subtract(1, 'd').toDate();
+      var oneHourBefore = moment().subtract(1, 'h').toDate();
+      var tomorrow = moment().add(1, 'd').toDate();
       expect(eventCompleteCountFilter([
         {startTime: yesterday},
         {startTime: oneHourBefore},
@@ -339,9 +339,9 @@ describe('filters', function () {
     }));
 
     it('should return correct next event start time if there is one', inject(function (nextEventStartTimeFilter) {
-      var yesterday = moment().add('days', -1).toDate();
-      var oneHourAfter = moment().add('hours', 1).toDate();
-      var tomorrow = moment().add('days', 1).toDate();
+      var yesterday = moment().subtract(1, 'd').toDate();
+      var oneHourAfter = moment().add(1, 'h').toDate();
+      var tomorrow = moment().add(1, 'd').toDate();
       expect(nextEventStartTimeFilter([
         {startTime: yesterday},
         {startTime: oneHourAfter},
@@ -350,8 +350,8 @@ describe('filters', function () {
     }));
 
     it('should return undefined if all events past', inject(function (nextEventStartTimeFilter) {
-      var yesterday = moment().add('days', -1).toDate();
-      var oneHoureBefore = moment().add('hours', -1).toDate();
+      var yesterday = moment().subtract(1, 'd').toDate();
+      var oneHoureBefore = moment().subtract(1, 'h').toDate();
       expect(nextEventStartTimeFilter([
         {startTime: yesterday},
         {startTime: oneHoureBefore},
@@ -361,8 +361,8 @@ describe('filters', function () {
 
   describe('isPast', function () {
     it('should return correctly', inject(function (isPastFilter) {
-      expect(isPastFilter(moment().add('days', -1))).to.be.true;
-      expect(isPastFilter(moment().add('days', 1))).to.be.false;
+      expect(isPastFilter(moment().subtract(1, 'd'))).to.be.true;
+      expect(isPastFilter(moment().add(1, 'd'))).to.be.false;
       expect(isPastFilter(moment())).to.be.false;
     }));
   });

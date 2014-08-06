@@ -8,7 +8,7 @@ describe('mvOnboardListCtrl', function () {
     $httpBackend = _$httpBackend_;
     $scope = $rootScope.$new();
     var today = moment().startOf('day').toISOString();
-    var oneMonthLater = moment().add('months', 1).endOf('day').toISOString();
+    var oneMonthLater = moment().add(1,'M').endOf('day').toISOString();
     oneInterview = {
       _id: '7788',
       name: 'zhangsan',

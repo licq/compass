@@ -2,7 +2,7 @@ angular.module('compass')
   .controller('mvOnboardListCtrl', function ($scope, $http, mvInterview, mvNotifier) {
     $scope.dateRange = {
       startDate: moment().startOf('day'),
-      endDate: moment().add('months', 1).endOf('day')
+      endDate: moment().add(1, 'M').endOf('day')
     };
 
     $http.get('/api/applierRejectReasons').success(function (result) {

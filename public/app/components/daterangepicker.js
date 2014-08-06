@@ -34,8 +34,8 @@
           toLabel: '到',
           weekLabel: '日期',
           customRangeLabel: '时间段',
-          daysOfWeek: moment()._lang._weekdaysMin.slice(),
-          monthNames: moment()._lang._monthsShort.slice(),
+          daysOfWeek: moment.weekdaysMin(),
+          monthNames: moment.monthsShort(),
           firstDay: 0
         };
         options.opens = $attributes.opens && $parse($attributes.opens)($scope);

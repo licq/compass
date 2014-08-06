@@ -7,14 +7,14 @@ describe('resumeReports', function () {
   var request;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company','Role', 'Mail', 'Resume', function () {
+    helper.clearCollections('User', 'Company', 'Role', 'Mail', 'Resume', function () {
       helper.login(function (agent, user) {
         request = agent;
         Factory.create('resume', {company: user.company,
           applyPosition: '市场总监',
           channel: '智联招聘',
           gender: 'male',
-          birthday: moment().add('years', -20).toDate()}, function () {
+          birthday: moment().subtract(20, 'y').toDate()}, function () {
           done();
         });
       });
