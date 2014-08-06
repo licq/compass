@@ -162,8 +162,7 @@ angular.module('compass')
       .when('/resumes/:id', {
         templateUrl: '/app/resumes/view.html',
         controller: 'mvResumeViewCtrl',
-        authenticate: true,
-        permissions: 'resumes'
+        authenticate: true
       })
       .when('/events', {
         templateUrl: '/app/events/list.html',
