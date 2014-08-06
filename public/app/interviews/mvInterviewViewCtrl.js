@@ -133,7 +133,7 @@ angular.module('compass')
 
     $scope.print = function () {
       setTimeout(function () {
-        var printContents = $('#printable').clone().find('div').removeClass('table-responsive').end().html();
+        var printContents = $('#printable').html();
 
         var popupWin = window.open('', '_blank', 'width=400,height=400');
         popupWin.document.open();
