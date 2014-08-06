@@ -59,7 +59,6 @@ var resumeSchema = mongoose.Schema({
   politicalStatus: {
     type: String,
     enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others'],
-    default: 'citizen'
   },
 
   careerObjective: {

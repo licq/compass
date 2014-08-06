@@ -28,7 +28,8 @@ angular.module('compass')
           mobile: $scope.mobile,
           email: $scope.email,
           status: $scope.status,
-          birthday: birthday
+          birthday: birthday,
+          gender: $scope.gender
         },
         file: $scope.file,
         fileFormDataName: 'resumeFile'
