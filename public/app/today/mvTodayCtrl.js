@@ -29,7 +29,8 @@ angular.module('compass')
       return mvReview.query({orderBy: 'events[0].startTime',
         orderByReverse: false, unreviewed: true}, function (unreviewed) {
         $scope.unreviewedOfDays = unreviewed;
-        angular.extend($scope.isopen, {unreviewed: $scope.unreviewedOfDays.length});
+        angular.extend($scope.isopen, {unreviewedOfDays: $scope.unreviewedOfDays.length});
+        angular.extend($scope.counts, {unreviewedOfDays: $scope.unreviewedOfDays.length});
       });
     };
 

@@ -2,7 +2,9 @@
 
 angular.module('compass')
   .controller('mvEmailListCtrl', function ($scope, mvEmail, $location) {
-    $scope.emails = mvEmail.query();
+    mvEmail.query(function (emails) {
+      $scope.emails = emails;
+    });
 
     $scope.remove = function (email) {
       if (confirm('真的要删除' + email.address + '吗？')) {

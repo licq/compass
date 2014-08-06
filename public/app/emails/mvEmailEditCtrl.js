@@ -3,7 +3,11 @@
 angular.module('compass')
   .controller('mvEmailEditCtrl', function ($scope, mvEmail, $routeParams, $location, mvNotifier) {
 
-    $scope.email = mvEmail.get({_id: $routeParams.id});
+    mvEmail.get({_id: $routeParams.id}, function (email) {
+      if (!email.protocol)
+        email.protocol = 'pop3';
+      $scope.email = email;
+    });
 
     $scope.update = function () {
       $scope.saving = true;

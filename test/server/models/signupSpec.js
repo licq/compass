@@ -71,7 +71,7 @@ describe('Signup', function () {
     });
   });
 
-  describe.only('#activate', function () {
+  describe('#activate', function () {
     it('should create new company and admin user and eventSetting and applicationSetting when activate', function (done) {
       Factory.create('signup', function (signup) {
         signup.activate(function (err, company, user) {
