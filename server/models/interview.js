@@ -80,24 +80,40 @@ var interviewSchema = mongoose.Schema({
   application: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Resume',
-    required: true
+    required: true,
+    index: true
   },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
-    required: true
+    required: true,
+    index: true,
   },
-  name: String,
-  email: String,
-  mobile: String,
-  applyPosition: String,
+  name: {
+    type: 'String',
+    index: true
+  },
+  email: {
+    type: 'String',
+    index: true
+  },
+  mobile: {
+    type: 'String',
+    index: true
+  },
+  applyPosition: {
+    type: 'String',
+    index: true
+  },
   status: {
     type: 'String',
     enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted', 'recruited', 'not recruited'],
-    default: 'new'
+    default: 'new',
+    index: true
   },
   onboardDate: {
-    type: Date
+    type: Date,
+    index: true
   },
   applierRejectReason: {
     type: String

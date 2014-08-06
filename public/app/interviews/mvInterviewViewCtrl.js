@@ -75,7 +75,7 @@ angular.module('compass')
               _id: event._id,
               countsOfEvents: interview.events.length,
               duration: event.duration,
-              application: interview._id,
+              application: interview.application,
               startTime: event.startTime,
               interviewers: _.map(event.interviewers, '_id'),
               name: interview.name,

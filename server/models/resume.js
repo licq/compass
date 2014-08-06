@@ -34,7 +34,10 @@ var resumeSchema = mongoose.Schema({
     type: String,
     enum: ['male', 'female']
   },
-  applyPosition: String,
+  applyPosition: {
+    type: 'String',
+    index: true
+  },
   applyDate: {
     type: Date,
     default: Date.now()
@@ -198,7 +201,10 @@ var resumeSchema = mongoose.Schema({
     ref: 'Company',
     index: true
   },
-  channel: String,
+  channel: {
+    type: 'String',
+    index: true
+  },
   mail: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Mail'
@@ -207,7 +213,8 @@ var resumeSchema = mongoose.Schema({
     type: String,
     default: 'new',
     enum: ['new', 'undetermined', 'pursued', 'archived', 'offer accepted', 'interview', 'offered',
-      'rejected', 'offer rejected', 'recruited', 'not recruited', 'duplicate']
+      'rejected', 'offer rejected', 'recruited', 'not recruited', 'duplicate'],
+    index: true
   },
   createdAtLocaltime: Date,
   updatedAtLocaltime: Date

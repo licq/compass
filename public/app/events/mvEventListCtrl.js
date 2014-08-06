@@ -63,6 +63,7 @@ angular.module('compass')
         if (newEvent) {
           newEvent.countsOfEvents = $scope.events[index].countsOfEvents + 1;
           $scope.events[index] = newEvent;
+          $scope.events[index].interviewers = _.map(newEvent.interviewers,'_id');
           $scope.eventsForCalendar[index] = convertCalendarEvent(newEvent);
         } else {
           angular.forEach($scope.events, function (e) {
