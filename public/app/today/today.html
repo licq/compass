@@ -33,7 +33,7 @@
               <div accordion-heading>
                 <span>今日入职</span>
                 <i class="fa fa-child fa-lg"></i>
-                <span class="badge badge-info">{{counts.onboards}}</span>
+                <span class="badge badge-info">{{counts.onboardsOfToday}}</span>
                 <i class="pull-right glyphicon"
                    ng-class="{'glyphicon-chevron-down': isopen.onboardsOfToday, 'glyphicon-chevron-right': !isopen.onboardsOfToday}"></i>
               </div>
@@ -50,13 +50,13 @@
                 </a>
               </div>
             </div>
-            <div accordion-group is-open="isopen.unreviewed">
+            <div accordion-group is-open="isopen.unreviewedOfDays">
               <div accordion-heading>
                 <span>待评面试</span>
                 <i class="fa fa-pencil fa-lg"></i>
-                <span class="badge badge-info">{{counts.unreviewed}}</span>
+                <span class="badge badge-info">{{counts.unreviewedOfDays}}</span>
                 <i class="pull-right glyphicon"
-                   ng-class="{'glyphicon-chevron-down': isopen.unreviewed, 'glyphicon-chevron-right': !isopen.unreviewed}"></i>
+                   ng-class="{'glyphicon-chevron-down': isopen.unreviewedOfDays, 'glyphicon-chevron-right': !isopen.unreviewedOfDays}"></i>
               </div>
               <div ng-repeat="unreviewed in unreviewedOfDays">
                 <a href="#/interviews/reviews/{{unreviewed._id}}" class="media">

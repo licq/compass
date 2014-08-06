@@ -426,13 +426,13 @@ describe('interview', function () {
           applyPosition: '人力总监',
           events: [
             {
-              startTime: moment().add('days', -1).toDate(),
+              startTime: moment().subtract(1, 'days').toDate(),
               duration: 90,
               interviewers: [user._id],
               createdBy: user._id
             },
             {
-              startTime: moment().add('days', -2).toDate(),
+              startTime: moment().subtract(2, 'days').toDate(),
               duration: 90,
               interviewers: [user._id],
               createdBy: user._id
@@ -444,13 +444,13 @@ describe('interview', function () {
             applyPosition: '人力总监',
             events: [
               {
-                startTime: moment().add('days', -1).toDate(),
+                startTime: moment().subtract(1, 'days').toDate(),
                 duration: 90,
                 interviewers: [user._id],
                 createdBy: user._id
               },
               {
-                startTime: moment().add('days', +2).toDate(),
+                startTime: moment().add(2, 'days').toDate(),
                 duration: 90,
                 interviewers: [user._id],
                 createdBy: user._id
@@ -521,6 +521,7 @@ describe('interview', function () {
           });
         });
       });
+
       it('should return only one interview with interviewStatus some', function (done) {
         var options = {
           page: 1,

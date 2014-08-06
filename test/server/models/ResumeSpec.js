@@ -111,7 +111,7 @@ describe('Resume', function () {
       });
 
       it('should set the new resume status to archive if there is a resume from the same person exist within 3 months and the company does not allow duplication in 3 months', function (done) {
-        resume.createdAt = moment().subtract(2,'M').toDate();
+        resume.createdAt = moment().subtract(2, 'M').toDate();
         resume.save(function (err) {
           expect(err).to.not.exist;
           mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 3}, function (err) {
@@ -127,7 +127,7 @@ describe('Resume', function () {
       });
 
       it('should set the new resume status to new if there is a resume from the same person exist before 3 months and the company does not allow duplication in 3 months', function (done) {
-        resume.createdAt = moment().add('months', -4).toDate();
+        resume.createdAt = moment().subtract(4, 'months').toDate();
         resume.save(function (err) {
           expect(err).to.not.exist;
           mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 3}, function (err) {
@@ -143,7 +143,7 @@ describe('Resume', function () {
       });
 
       it('should set the new resume status to new if the company does allow duplication', function (done) {
-        resume.createdAt = moment().add('months', -1).toDate();
+        resume.createdAt = moment().subtract(1, 'months').toDate();
         resume.save(function (err) {
           expect(err).to.not.exist;
           mongoose.model('ApplicationSetting').create({company: company, filterSamePerson: 0}, function (err) {
@@ -264,4 +264,4 @@ describe('Resume', function () {
       });
     });
   });
-}) ;
+});

@@ -29,7 +29,8 @@ angular.module('compass')
       return mvReview.query({orderBy: 'events[0].startTime',
         orderByReverse: false, unreviewed: true}, function (unreviewed) {
         $scope.unreviewedOfDays = unreviewed;
-        angular.extend($scope.isopen, {unreviewed: $scope.unreviewedOfDays.length});
+        angular.extend($scope.isopen, {unreviewedOfDays: $scope.unreviewedOfDays.length});
+        angular.extend($scope.counts, {unreviewedOfDays: $scope.unreviewedOfDays.length});
       });
     };
 
@@ -37,7 +38,7 @@ angular.module('compass')
       mvInterview.query({
         status: 'offer accepted',
         startDate: moment().startOf('day').toISOString(),
-        endDate: moment().add('day', $scope.nextNdays).endOf('day').toISOString()}, function (interviews) {
+        endDate: moment().add( $scope.nextNdays, 'day').endOf('day').toISOString()}, function (interviews) {
 
         $scope.onboardsOfToday = _.filter(interviews, function (interview) {
           return onToday(interview, 'onboardDate');

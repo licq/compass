@@ -11,7 +11,8 @@ describe('mvEmailEditCtrl', function () {
     password: 'aa',
     server: 'aa.com',
     port: 110,
-    _id: 7788
+    _id: 7788,
+    protocol: 'pop3'
   };
 
   beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
