@@ -182,7 +182,6 @@ g.nv-series {
 
 .to-inline {
     display: inline-block;
-    vertical-align: middle;
 }
 
 .angular-ui-tree-nodes .angular-ui-tree-nodes .angular-ui-tree-handle {
@@ -290,17 +289,21 @@ button.button-above-table {
     }
 }
 
-.bootstrap-datetimepicker-widget td.hour{
+.bootstrap-datetimepicker-widget td.hour {
     height: 24px;
     line-height: 24px;
     width: 24px;
 }
 
-.timepicker-picker span.timepicker-hour, .timepicker-picker span.timepicker-minute{
+.timepicker-picker span.timepicker-hour, .timepicker-picker span.timepicker-minute {
     margin-left: 20px;
 }
 
-.list-inline input[type="checkbox"]{
+.list-inline input[type="checkbox"], .ui-tree input[type="checkbox"] {
     position: relative;
     margin-left: 0;
+}
+
+.panel-default>.panel-heading .badge-info {
+    background-color: #66b5d7;
 }

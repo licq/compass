@@ -23,12 +23,12 @@
                   请输入角色名称</p>
 
               </div>
-              <label class="checkbox">
+              <label class="ui-tree checkbox">
                 <input type="checkbox" ng-change="onCheckAllChanged()" ng-model="allChecked">
-                <p>全部选择</p>
+                全部选择
               </label>
 
-              <div ui-tree>
+              <div class="ui-tree" ui-tree>
                 <ol ui-tree-nodes ng-model="menuPermissions">
                   <li ng-repeat="item in menuPermissions" ui-tree-node>
                     <div ui-tree-handle data-nodrag>
