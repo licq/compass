@@ -28,7 +28,17 @@ function parse(mailData, callback) {
   mailParser.end();
 
   mailParser.on('end', function (mail) {
-    callback(mail);
+    if (mail.subject.indexOf('导出简历') > 0 && mail.attachments.length > 0 && mail.attachments[0].fileName.indexOf('.mht') > 0) {
+      var b = new Buffer(mail.attachments[0].content, 'base64');
+      var newMailParser = new MailParser();
+      newMailParser.write(b);
+      newMailParser.end();
+      newMailParser.on('end', function (o) {
+        mail.html = o.html;
+        callback(mail);
+      });
+    } else
+      callback(mail);
   });
 }
 
@@ -127,11 +137,11 @@ exports.fetch = function fetch(mailbox, callback) {
   });
 
   imap.once('end', function () {
-   // mailbox.save(function () {
-      if (retrievedMails.length === 0) {
-        callback(null, allMails.length, allMails.length, retrievedMails);
-      } else
-        callback(null, newRetrievedMails.length, allMails.length, retrievedMails);
+    // mailbox.save(function () {
+    if (retrievedMails.length === 0) {
+      callback(null, allMails.length, allMails.length, retrievedMails);
+    } else
+      callback(null, newRetrievedMails.length, allMails.length, retrievedMails);
     //});
   });
 };
