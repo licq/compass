@@ -287,6 +287,12 @@ button.button-above-table {
         overflow: auto;
         display: inline;
     }
+
+    .ui-ribbon-container {
+        display: inline-block;
+        float: left;
+        margin: 5px;
+    }
 }
 
 .bootstrap-datetimepicker-widget td.hour {
@@ -304,6 +310,6 @@ button.button-above-table {
     margin-left: 0;
 }
 
-.panel-default>.panel-heading .badge-info {
+.panel-default > .panel-heading .badge-info {
     background-color: #66b5d7;
 }

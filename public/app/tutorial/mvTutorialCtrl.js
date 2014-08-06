@@ -1,6 +1,8 @@
 angular.module('compass')
   .controller('mvTutorialCtrl', function ($scope, $modal, $location, mvUser, mvIdentity) {
-    mvUser.update({_id: mvIdentity.currentUser._id}, {firstRun: false});
+    mvUser.update({_id: mvIdentity.currentUser._id}, {firstRun: false}, function(){
+      mvIdentity.currentUser.firstRun = false;
+    });
 
     function goEmailNew() {
       $location.path('/today');

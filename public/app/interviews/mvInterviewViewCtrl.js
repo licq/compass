@@ -135,7 +135,7 @@ angular.module('compass')
       setTimeout(function () {
         var printContents = $('#printable').html();
 
-        var popupWin = window.open('', '_blank', 'width=400,height=400');
+        var popupWin = window.open('', '_blank', 'width=800,height=600');
         popupWin.document.open();
         popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="/css/main.css" /><link rel="stylesheet" type="text/css" href="/css/compass.css" /></head><body class="print-body" onload="window.print()">' + printContents + '</body></html>');
         popupWin.document.close();

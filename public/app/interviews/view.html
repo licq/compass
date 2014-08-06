@@ -90,11 +90,11 @@
             </tbody>
           </table>
         </div>
-        <div class="row no-print">
+        <div class="row">
           <div class="col-md-4" ng-repeat="review in interview.reviews | filter:{qualified:true}">
             <div class="panel panel-default ui-ribbon-container ui-ribbon-success">
-              <div class="ui-ribbon-wrapper">
-                <div class="ui-ribbon">
+              <div class="no-print ui-ribbon-wrapper">
+                <div class="ui-ribbon" >
                   通过
                 </div>
               </div>
@@ -106,7 +106,7 @@
           </div>
           <div class="col-md-4" ng-repeat="review in interview.reviews | filter:{qualified:false}">
             <div class="panel panel-default ui-ribbon-container ui-ribbon-danger">
-              <div class="ui-ribbon-wrapper">
+              <div class="no-print ui-ribbon-wrapper">
                 <div class="ui-ribbon">
                   拒绝
                 </div>
