@@ -33,7 +33,7 @@ describe('job51Parser', function () {
       });
     });
 
-    it.only('should parse 51job download resume correctly', function (done) {
+    it('should parse 51job download resume correctly', function (done) {
       fs.readFile(__dirname + '/51jobdownloadresume.html', 'utf-8', function (err, data) {
         var resume = resumeParser.parse({
           html: data

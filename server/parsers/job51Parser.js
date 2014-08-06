@@ -3,8 +3,6 @@
 var cheerio = require('cheerio'),
   _ = require('lodash'),
   helper = require('../utilities/helper'),
-  mhtml = require('mhtml'),
-  mailParser = require('mailparser').MailParser,
   logger = require('../config/winston').logger();
 
 function parseCertifications(table, errors) {
@@ -35,7 +33,7 @@ function parseBasicInfo(table, errors) {
     var firstLineItems = tableData[0][0].split('|');
     resume.yearsOfExperience = helper.parseYearsOfExperience(firstLineItems[0]);
     resume.gender = helper.parseGender(firstLineItems[1]);
-    resume.birthday = helper.parseDate(firstLineItems[2].split('(')[1]);
+    resume.birthday = helper.parseDate(firstLineItems[2].split(/\(|（/)[1]);
     if (firstLineItems.length > 3) {
       resume.civilStatus = helper.parseCivilState(firstLineItems[3]);
     }
@@ -258,6 +256,7 @@ function parseLanguageCertificates(table, errors) {
   if (!table) return;
   try {
     var languageTable = table.find('table');
+    if (languageTable.length === 0) languageTable = table;
     var languageCertificates = {};
     _.forEach(_.filter(helper.parseTable(languageTable), function (line) {
       return line[0].indexOf('等级') > -1;
@@ -319,8 +318,8 @@ exports.parse = function (data) {
   resume.name = $('strong').text().trim() || $('b').first().text().trim();
   var errors = [];
   resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
-  resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text()) || findTable('自我评价').text();
-  console.log('table',findTable('自我评价').html());
+  resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text()) ||
+    $('td.cvtitle:contains(自我评价)').parent().next().next().next().text();
   resume.workExperience = parseWorkExperience(findTable('工作经验'), errors);
   resume.projectExperience = parseProjectExperience(findTable('项目经验'), errors);
   resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
