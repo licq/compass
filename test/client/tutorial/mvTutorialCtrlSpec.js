@@ -3,7 +3,7 @@ describe('mvTutorialCtrl', function () {
   var $httpBackend,
     $scope;
 
-  it('should PUT /api/users/:id', inject(function ($rootScope, _$httpBackend_, $controller, $modal,$location) {
+  it('should PUT /api/users/:id', inject(function ($rootScope, mvIdentity, _$httpBackend_, $controller, $modal, $location) {
     $scope = $rootScope.$new();
     $httpBackend = _$httpBackend_;
 
@@ -25,21 +25,21 @@ describe('mvTutorialCtrl', function () {
     var modalOpenStub = sinon.stub($modal, 'open');
     modalOpenStub.returns(fakeModal);
 
-    var spy = sinon.spy($location,'path');
+    var spy = sinon.spy($location, 'path');
+
+    mvIdentity.currentUser = {
+      _id: '112',
+      name: '包拯'
+    };
 
     $httpBackend.expectPUT('/api/users/112', {firstRun: false}).respond(200);
     $controller('mvTutorialCtrl', {
-      $scope: $scope,
-      mvIdentity: {
-        currentUser: {
-          _id: '112',
-          name: '包拯'
-        }
-      }
+      $scope: $scope
     });
 
     $httpBackend.flush();
     fakeModal.close();
     expect(spy).to.have.been.calledWith('/today');
+    expect(mvIdentity.currentUser.firstRun).to.be.false;
   }));
 });
