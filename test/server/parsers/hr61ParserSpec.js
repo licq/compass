@@ -15,7 +15,7 @@ describe('hr61Parser', function () {
       });
     });
 
-    it.only('should parse 61hr another resume correctly', function (done) {
+    it('should parse 61hr another resume correctly', function (done) {
       fs.readFile(__dirname + '/61hr2resume.html', 'utf-8', function (err, data) {
         var resume = resumeParser.parse({
           html: data,
