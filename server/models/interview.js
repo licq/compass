@@ -37,6 +37,10 @@ var eventSchema = {
     ref: 'User',
     required: true,
     index: true
+  },
+  version: {
+    type: Number,
+    default: 0
   }
 };
 
@@ -134,9 +138,9 @@ interviewSchema.plugin(timestamps);
 interviewSchema.index({company: 1, application: 1}, {unique: true});
 interviewSchema.pre('save', function (next) {
   if (this.isNew) {
-    this.createdAtLocaltime = moment(this.createdAt).add(8,'h').toDate();
+    this.createdAtLocaltime = moment(this.createdAt).add(8, 'h').toDate();
   }
-  this.updatedAtLocaltime = moment(this.updatedAt).add(8,'h').toDate();
+  this.updatedAtLocaltime = moment(this.updatedAt).add(8, 'h').toDate();
   next();
 });
 
@@ -146,10 +150,12 @@ function createEmailContext(interview, event) {
     email: interview.email,
     applyPosition: interview.applyPosition,
     startTime: event.startTime,
-    endTime: moment(event.startTime).add(event.duration,'m').toDate(),
+    endTime: moment(event.startTime).add(event.duration, 'm').toDate(),
     company: interview.company,
     application: interview.application,
-    interviewers: event.interviewers
+    interviewers: event.interviewers,
+    id: event.id,
+    version: event.version
   };
 }
 
@@ -176,7 +182,7 @@ interviewSchema.statics.addEvent = function (event, cb) {
           createdBy: event.createdBy
         }
       );
-      interview.save(function (err) {
+      interview.save(function (err, interview) {
         if (err) return cb(err);
         Resume.findById(interview.application).select('status')
           .exec(function (err, resume) {
@@ -184,8 +190,11 @@ interviewSchema.statics.addEvent = function (event, cb) {
             if (!resume) return cb(null, interview);
             resume.status = 'interview';
             resume.saveAndIndexSync(function (err) {
-              if (err) return cb(err);
-              mongoose.model('EventSetting').generateEmails('new', event, function (err, emails) {
+              if (err) {
+                logger.info('error in save and index resume', err);
+                return cb(err);
+              }
+              mongoose.model('EventSetting').generateEmails('new', createEmailContext(interview, interview.events[interview.events.length - 1]), function (err, emails) {
                 if (err) {
                   logger.error('create alert email failed ' + err);
                 } else {
@@ -321,14 +330,15 @@ interviewSchema.statics.eventsForCompany = function (company, start, end, cb) {
 };
 
 interviewSchema.statics.updateEvent = function (id, data, cb) {
-  this.findOne({'events._id': id}).exec(function (err, interview) {
+  this.findOne({'events._id': id, company: data.company}).exec(function (err, interview) {
     if (err) return cb(err);
     if (!interview) return cb('interview not found for event with id ' + id);
     var event = interview.events.id(id);
     event.startTime = data.startTime || event.startTime;
     event.duration = data.duration || event.startTime;
     event.interviewers = data.interviewers || event.interviewers;
-    interview.save(function (err) {
+    event.version = event.version + 1;
+    interview.save(function (err, interview) {
       if (err) return cb(err);
       mongoose.model('EventSetting').generateEmails('edit', createEmailContext(interview, event), function (err, emails) {
         if (err) {
@@ -352,8 +362,8 @@ function sendDeleteEventEmail(interview, event, cb) {
     cb();
   });
 }
-interviewSchema.statics.deleteEvent = function (id, cb) {
-  this.findOne({'events._id': id}).exec(function (err, interview) {
+interviewSchema.statics.deleteEvent = function (id, company, cb) {
+  this.findOne({'events._id': id, company: company, }).exec(function (err, interview) {
     if (err) return cb(err);
     if (!interview) return cb('interview not found for event with id ' + id);
     var event = interview.events.id(id);

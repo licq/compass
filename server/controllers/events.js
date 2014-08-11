@@ -26,6 +26,8 @@ exports.list = function (req, res, next) {
 };
 
 exports.update = function (req, res, next) {
+  req.body.createdBy = req.user;
+  req.body.company = req.user.company;
   Interview.updateEvent(req.params.id, req.body, function (err) {
     if (err) return next(err);
     res.send(200);
@@ -33,7 +35,7 @@ exports.update = function (req, res, next) {
 };
 
 exports.delete = function (req, res, next) {
-  Interview.deleteEvent(req.params.id, function (err) {
+  Interview.deleteEvent(req.params.id, req.user.company, function (err) {
     if (err) return next(err);
     res.send(200);
   });
@@ -69,7 +71,7 @@ exports.availableInterviewers = function (req, res, next) {
         }
 
         users = _.filter(users, function (user) {
-          return _.findIndex(takenUsers,function(t){
+          return _.findIndex(takenUsers, function (t) {
             return t.toString() === user.id;
           }) === -1;
         });
