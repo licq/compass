@@ -59,7 +59,7 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
     return -1;
   }
 
-  if (input.indexOf('工作经验') > -1) {
+  if (input.indexOf('工作经验') > -1 || input.indexOf('年以上') > -1) {
     if (/\d+/.test(input)) {
       return _.parseInt(exports.onlyNumber(input));
     } else {
@@ -79,6 +79,7 @@ var entryTimeMap = {
   '1-3个月': '1 to 3 months',
   '三个月后': 'after 3 months',
   '立即': 'immediately',
+  '目前已离职': 'immediately',
   '应届毕业生': 'immediately'
 };
 
@@ -196,13 +197,15 @@ exports.parseLanguageLevel = function parseLanguageLevel(input) {
 
 exports.parseLanguageSkill = function parseLanguageSkill(summary, detail) {
   var languageSkill = {};
-  var sumItems = summary.split(/（|）/);
+  var sumItems = summary.split(/（|）|:/);
   languageSkill.language = languageMap[sumItems[0].trim()];
   languageSkill.level = languageSkillMap[sumItems[1].trim()];
 
-  var detailItems = detail.split(/（|）/g);
-  languageSkill.readingAndWriting = languageSkillMap[detailItems[1]];
-  languageSkill.listeningAndSpeaking = languageSkillMap[detailItems[3]];
+  if(detail) {
+    var detailItems = detail.split(/（|）/g);
+    languageSkill.readingAndWriting = languageSkillMap[detailItems[1]];
+    languageSkill.listeningAndSpeaking = languageSkillMap[detailItems[3]];
+  }
   return languageSkill;
 };
 
@@ -268,6 +271,10 @@ exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
 
 exports.parseDateRange = function parseDateRange(input) {
   var parts = input.split(/-+|：|—|–/g);
+  if (parts.length === 4) {
+    parts[0] = parts[0] + '-' + parts[1];
+    parts[1] = parts[2] + '-' + parts[3];
+  }
   return {
     from: exports.parseDate(parts[0]),
     to: exports.parseDate(parts[1])
@@ -425,7 +432,7 @@ exports.render = function render(template, event) {
 };
 
 exports.calculateBirthday = function calculateBirthday(age, current) {
-  return moment(current).subtract(exports.onlyNumber(age),'y').toDate();
+  return moment(current).subtract(exports.onlyNumber(age), 'y').toDate();
 };
 
 exports.parseTargetAnnualSalary = function parseTargetAnnualSalary(input) {
