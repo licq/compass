@@ -28,16 +28,21 @@ function parseBasicInfo(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
+    var infoMap = {};
+    _.forEach(tableData, function (line) {
+      infoMap[line[0]] = line[1];
+      infoMap[line[2]] = line[3];
+    });
     var resume = {
-      name: tableData[0][1],
-      gender: helper.parseGender(tableData[0][3]),
-      birthday: helper.parseDate(tableData[1][1]),
-      residency: tableData[1][3],
-      civilStatus: helper.parseCivilState(tableData[2][1]),
-      hukou: tableData[4][3],
-      yearsOfExperience: helper.parseYearsOfExperience(tableData[6][1]),
-      email: tableData[7][3],
-      mobile: tableData[8][1],
+      name: infoMap['姓 名：'],
+      gender: helper.parseGender(infoMap['性 别：']),
+      birthday: helper.parseDate(infoMap['出生日期：']),
+      residency: infoMap['居 住 地：'],
+      civilState: helper.parseCivilState(infoMap['婚姻状况：']),
+      hukou: infoMap['户 口：'],
+      yearsOfExperience: helper.parseYearsOfExperience(infoMap['工作年限：']),
+      email: infoMap['电子邮件：'],
+      mobile: infoMap['移动电话：']
     };
     if (resume.mobile.indexOf('086-') === 0) {
       resume.mobile = resume.mobile.substr(4);
@@ -88,16 +93,16 @@ function parseWorkExperience(table, errors) {
       var firstLineData = tableData[index * 10][1];
       var splitIndex = _.lastIndexOf(firstLineData, ' ');
       var dateRange = helper.parseDateRange(firstLineData.substr(0, splitIndex));
-      var work = {
+      var job = tableData[index * 10 + 3][0].split(' ');
+      return {
         from: dateRange.from,
         to: dateRange.to,
         company: firstLineData.substr(splitIndex + 1),
         industry: tableData[index * 10 + 1][1],
-        department: tableData[index * 10 + 2][0],
-        jobTitle: tableData[index * 10 + 2][1],
+        department: job[0],
+        jobTitle: job[1],
         jobDescription: tableData[index * 10 + 6][1]
       };
-      return work;
     });
   } catch (e) {
     errors.push(e.message);

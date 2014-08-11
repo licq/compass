@@ -201,7 +201,7 @@ exports.parseLanguageSkill = function parseLanguageSkill(summary, detail) {
   languageSkill.language = languageMap[sumItems[0].trim()];
   languageSkill.level = languageSkillMap[sumItems[1].trim()];
 
-  if(detail) {
+  if (detail) {
     var detailItems = detail.split(/（|）/g);
     languageSkill.readingAndWriting = languageSkillMap[detailItems[1]];
     languageSkill.listeningAndSpeaking = languageSkillMap[detailItems[3]];
@@ -255,7 +255,9 @@ var civilStateMap = {
 };
 
 exports.parseCivilState = function parseCivilState(input) {
-  return civilStateMap[input.trim()];
+  if (input) {
+    return civilStateMap[input.trim()];
+  }
 };
 
 var politicalStatusMap = {
