@@ -25,5 +25,16 @@ describe('hr61Parser', function () {
         done(err);
       });
     });
+
+    it('should parse 61hr english resume correctly', function (done) {
+      fs.readFile(__dirname + '/61hrenresume.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data,
+          subject: 'wanglingyan0908 应聘贵公司 采购部主任 Purchasing Officer 职位'
+        });
+        console.log(resume);
+        done(err);
+      });
+    });
   });
 });

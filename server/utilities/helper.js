@@ -11,10 +11,13 @@ exports.onlyNumber = function onlyNumber(input) {
 var genderMap = {
   '男': 'male',
   '女': 'female',
+  'Male': 'male',
+  'Female': 'female'
 };
 
 exports.parseGender = function parseGender(input) {
-  return genderMap[input.trim()];
+  if (input)
+    return genderMap[input.trim()];
 };
 
 exports.parseDate = function parseDate(input) {
@@ -48,14 +51,28 @@ var chineseToNumberMap = {
   '七': 7,
   '八': 8,
   '九': 9,
-  '十': 10
+  '十': 10,
+};
+
+var englishToNumberMap = {
+  'one': 1,
+  'two': 2,
+  'three': 3,
+  'four': 4,
+  'five': 5,
+  'six': 6,
+  'seven': 7,
+  'eight': 8,
+  'nine': 9,
+  'ten': 10
 };
 
 exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
-  if (input.indexOf('应届') > -1) {
+  if (!input) return;
+  if (input.indexOf('应届') > -1 || input.indexOf('Graduates') > -1) {
     return 0;
   }
-  if (input.indexOf('学生') > -1) {
+  if (input.indexOf('学生') > -1 || input.indexOf('Student') > -1) {
     return -1;
   }
 
@@ -67,8 +84,11 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
       return chineseToNumberMap[first];
     }
   }
+
   var match = input.match(/^(\d+)\s*年$/);
   if (match) return Number(match[1]);
+  match = input.match(/More than (.+) year/);
+  if (match) return englishToNumberMap[match[1]];
 };
 
 var entryTimeMap = {
@@ -97,7 +117,11 @@ exports.parseEntryTime = function parseEntryTime(input) {
 var typeOfEmploymentMap = {
   '全职': 'fulltime',
   '兼职': 'parttime',
-  '实习': 'intern'
+  '实习': 'intern',
+  'Full-time': 'fulltime',
+  'Part-time': 'parttime',
+  'Internship': 'intern',
+  'Full / part-time': 'fulltime'
 };
 exports.parseTypeOfEmployment = function parseTypeOfEmployment(input) {
   return typeOfEmploymentMap[input.trim()];
@@ -108,7 +132,7 @@ exports.splitByCommas = function splitByCommas(input) {
 };
 
 exports.parseTargetSalary = function parseTargetSalary(input) {
-  if (input.match(/面议/)) return {from: 0, to: 0};
+  if (input.match(/面议/) || input.match(/Negotiable/)) return {from: 0, to: 0};
   var match = input.match(/(\d+).*?(\d+)/);
   if (match) {
     return {
@@ -166,7 +190,11 @@ var languageSkillMap = {
   '一般': 'average',
   '良好': 'good',
   '熟练': 'very good',
-  '精通': 'excellent'
+  '精通': 'excellent',
+  'Good': 'good',
+  'General': 'average',
+  'Skilled': 'very good',
+  'Proficient': 'excellent'
 };
 
 var languageMap = {
@@ -177,7 +205,8 @@ var languageMap = {
   '粤语': 'cantonese',
   '法语': 'french',
   '其它': 'other',
-  '其他': 'other'
+  '其他': 'other',
+  'English': 'english'
 };
 
 exports.parseLanguage = function parseLanguage(input) {
@@ -251,7 +280,11 @@ var civilStateMap = {
   '未婚': 'single',
   '已婚': 'married',
   '离异': 'divorced',
-  '保密': 'confidential'
+  '保密': 'confidential',
+  'Married': 'married',
+  'Unmarried': 'single',
+  'Divorce': 'divorced',
+  'Privacy': 'confidential'
 };
 
 exports.parseCivilState = function parseCivilState(input) {
@@ -293,7 +326,16 @@ var degreeMap = {
   'MBA': 'mba',
   '硕士': 'master',
   '博士': 'doctorate',
-  '其他': 'others'
+  '其他': 'others',
+  'Junior High School': 'junior high',
+  'High School': 'high school',
+  'CNTIC': 'technical school',
+  'Vocational': 'polytechnic',
+  'College': 'associate',
+  'Undergraduate': 'bachelor',
+  'Master': 'master',
+  'Dr.': 'doctorate',
+  'Other': 'others'
 };
 exports.parseDegree = function parseDegree(input) {
   if (input) {

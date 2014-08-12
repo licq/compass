@@ -30,21 +30,21 @@ function parseBasicInfo(table, errors) {
     var tableData = helper.parseTable(table);
     var infoMap = {};
     _.forEach(tableData, function (line) {
-      infoMap[line[0]] = line[1];
-      infoMap[line[2]] = line[3];
+      if (line[0]) infoMap[line[0].replace(/ |：/g, '')] = line[1];
+      if (line[2]) infoMap[line[2].replace(/ |：/g, '')] = line[3];
     });
     var resume = {
-      name: infoMap['姓 名：'],
-      gender: helper.parseGender(infoMap['性 别：']),
-      birthday: helper.parseDate(infoMap['出生日期：']),
-      residency: infoMap['居 住 地：'],
-      civilState: helper.parseCivilState(infoMap['婚姻状况：']),
-      hukou: infoMap['户 口：'],
-      yearsOfExperience: helper.parseYearsOfExperience(infoMap['工作年限：']),
-      email: infoMap['电子邮件：'],
-      mobile: infoMap['移动电话：']
+      name: infoMap['姓名'] || infoMap.Name,
+      gender: helper.parseGender(infoMap['性别'] || infoMap.Gender),
+      birthday: helper.parseDate(infoMap['出生日期'] || infoMap.DateofBirth),
+      residency: infoMap['居住地'] || infoMap['P.ofResidence'],
+      civilState: helper.parseCivilState(infoMap['婚姻状况'] || infoMap.Marry),
+      hukou: infoMap['户口'] || infoMap.Hukou,
+      yearsOfExperience: helper.parseYearsOfExperience(infoMap['工作年限'] || infoMap['Y.ofExperience']),
+      email: infoMap['电子邮件'] || infoMap.Email,
+      mobile: infoMap['移动电话'] || infoMap.MobilePhone
     };
-    if (resume.mobile.indexOf('086-') === 0) {
+    if (resume.mobile && resume.mobile.indexOf('086-') === 0) {
       resume.mobile = resume.mobile.substr(4);
     }
     return resume;
@@ -279,15 +279,18 @@ exports.parse = function (data) {
   };
 
   var errors = [];
-  var resume = parseBasicInfo(findTable('基本信息'), errors);
-  resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
+  var resume = parseBasicInfo(findTable('基本信息', 'Basic Info'), errors);
+  resume.careerObjective = parseCareerObjective(findTable('求职意向', 'Career Objective'), errors);
+  if (!resume.careerObjective) resume.careerObjective = {};
   resume.careerObjective.entryTime = helper.parseEntryTime($('font:contains(工作状态：)').text());
-  resume.careerObjective.selfAssessment = helper.replaceEmpty(findTable('自我评价').find('tbody').text());
-  resume.workExperience = parseWorkExperience(findTable('工作经验'), errors);
-  resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
+  var selfAssessmentTable = findTable('自我评价', 'Self Assessment');
+  if (!!selfAssessmentTable)
+    resume.careerObjective.selfAssessment = helper.replaceEmpty(selfAssessmentTable.find('tbody').text());
+  resume.workExperience = parseWorkExperience(findTable('工作经验', 'Work Experience'), errors);
+  resume.educationHistory = parseEducationHistory(findTable('教育经历', 'Education'), errors);
 //  resume.trainingHistory = parseTrainingHistory(findTable('培训经历'), errors);
 //  resume.certifications = parseCertifications(findTable('证'), errors);
-  resume.languageSkills = parseLanguageSkills(findTable('语言能力'), errors);
+  resume.languageSkills = parseLanguageSkills(findTable('语言能力', 'Language'), errors);
 //  resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'), errors);
 //  resume.itSkills = parseItSkills(findTable('IT'), errors);
 //  resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'), errors);
@@ -299,7 +302,9 @@ exports.parse = function (data) {
       resume.applyPosition = data.subject.substr(startIndex + 6, endIndex - startIndex - 7);
   }
 
-  resume.photoUrl = findTable('证件/图片').find('img').attr('src');
+  var pictureTable = findTable('证件/图片', 'Certificate/Image');
+  if (!!pictureTable)
+    resume.photoUrl = pictureTable.find('img').attr('src');
   resume.applyDate = data.createdAt;
   resume.channel = '乐聘';
   resume.mail = data.mailId;

@@ -29,7 +29,7 @@ describe('dongfangParser', function () {
       });
     });
 
-    it.only('should parse dongfang 3 resume correctly', function (done) {
+    it('should parse dongfang 3 resume correctly', function (done) {
       fs.readFile(__dirname + '/dongfang3resume.html', 'utf-8', function (err, data) {
         var resume = resumeParser.parse({
           html: data

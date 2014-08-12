@@ -82,6 +82,8 @@ describe('helper', function () {
       expect(helper.parseYearsOfExperience('一年以上工作经验')).to.equal(1);
       expect(helper.parseYearsOfExperience('10年')).to.equal(10);
       expect(helper.parseYearsOfExperience('10 年')).to.equal(10);
+      expect(helper.parseYearsOfExperience('Student')).to.equal(-1);
+      expect(helper.parseYearsOfExperience('More than ten year')).to.equal(10);
     });
   });
 
