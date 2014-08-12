@@ -22,7 +22,11 @@ var mailSchema = mongoose.Schema({
   subject: String,
   html: String,
   text: String,
-  date: Date,
+  date: {
+    type: Date,
+    index: true
+
+  },
   attachments: [
     {
       contentType: String,

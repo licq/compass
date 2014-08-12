@@ -221,7 +221,7 @@ exports.parseItSkillLevel = function parseItSkillLevel(input) {
 };
 
 exports.isProjectHeader = function isProjectHeader(input) {
-  return /\d+.+--.+：.+/.test(input);
+  return /\d+.+--.+：.*/.test(input);
 };
 
 exports.isSoftwareEnvironment = function isSoftwareEnvironment(input) {

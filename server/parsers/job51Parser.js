@@ -73,6 +73,9 @@ function parseCareerObjective(table, errors) {
     var careerObjective = {};
     var tableData = helper.parseTable(table);
     var items = _.map(tableData, function (line) {
+      if (line.length > 1) {
+        line[0] = line.join('');
+      }
       return helper.removeSpaces(line[0]);
     });
     _.forEach(items, function (item) {
@@ -108,7 +111,7 @@ function parseWorkExperience(table, errors) {
       var work = {
         from: dateRange.from,
         to: dateRange.to,
-        company: firstLineItems[1],
+        company: firstLineItems[1]
       };
       if (tableData[index * 5 + 1][0].indexOf('所属行业') > -1) {
         _.extend(work, {
@@ -140,6 +143,8 @@ function parseProjectExperience(table, errors) {
       var project = {};
       _.each(projectData, function (line) {
         if (helper.isProjectHeader(line[0])) {
+          if (line.length > 1)
+            line[0] = line.join('');
           var items = line[0].split(/--|：|（|）/);
           project.from = helper.parseDate(items[0]);
           project.to = helper.parseDate(items[1]);
@@ -298,25 +303,43 @@ function parseInSchoolPractices(table, errors) {
 
 exports.parse = function (data) {
   var $ = cheerio.load(data.html, {normalizeWhitespace: true});
+  var type = '.cvtitle';
+  if ($('style').text().indexOf('.v3_t') > -1) {
+    type = '.v3_t';
+  }
 
   var findTable = function () {
+
+    var tableTitle;
+    if (type === '.cvtitle') {
+      tableTitle = function (tableNames, i) {
+        var table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
+        while (table.find('table').length === 0 && table.next().length !== 0) {
+          table = table.next();
+        }
+        return table.find('table');
+      };
+    } else {
+      tableTitle = function (tableNames, i) {
+        return $('div.v3_t > table > tr > td:contains(' + tableNames[i] + ')').closest('div').next();
+      };
+    }
     var tableNames = Array.prototype.slice.call(arguments, 0);
     var table;
     for (var i = 0; i < tableNames.length; i++) {
-      table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
-      while (table.find('table').length === 0 && table.next().length !== 0) {
-        table = table.next();
-      }
+      table = tableTitle(tableNames, i);
       if (table.length > 0) {
-        return table.find('table');
+        return table;
       }
     }
   };
 
   var resume = parseBasicInfo($('table tr:nth-child(2) table'));
-  resume.name = $('strong').text().trim();
+  resume.name = $('strong').first().text().trim();
   var errors = [];
   resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
+  if (!resume.careerObjective)
+    resume.careerObjective = {};
   resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text());
   resume.workExperience = parseWorkExperience(findTable('工作经验'), errors);
   resume.projectExperience = parseProjectExperience(findTable('项目经验'), errors);
@@ -335,6 +358,7 @@ exports.parse = function (data) {
   resume.mail = data.mailId;
   resume.company = data.company;
   resume.parseErrors = errors;
+  console.log(resume);
   return resume;
 };
 
