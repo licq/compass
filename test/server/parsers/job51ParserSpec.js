@@ -11,12 +11,12 @@ describe('job51Parser', function () {
         var resume = resumeParser.parse({
           html: data
         });
-        console.log(resume);
         expect(resume.name).to.equal('蒋华辛');
         expect(resume.email).to.equal('jianghuaxin@live.cn');
         expect(resume.mobile).to.equal('18645149586');
         expect(resume.applyPosition).to.equal('Java开发实习生（上海）');
         expect(resume.yearsOfExperience).to.equal(0);
+        console.log(resume);
         done(err);
       });
     });

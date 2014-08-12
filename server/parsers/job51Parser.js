@@ -304,15 +304,11 @@ function parseInSchoolPractices(table, errors) {
 
 exports.parse = function (data) {
   var $ = cheerio.load(data.html, {normalizeWhitespace: true});
-  var type = '.cvtitle';
-  if ($('style').text().indexOf('.v3_t') > -1) {
-    type = '.v3_t';
-  }
 
   var findTable = function () {
 
     var tableTitle;
-    if (type === '.cvtitle') {
+    if ($('style').text().indexOf('.cvtitle') > -1) {
       tableTitle = function (tableNames, i) {
         var table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
         while (table.find('table').length === 0 && table.next().length !== 0) {
@@ -336,7 +332,7 @@ exports.parse = function (data) {
   };
 
   var errors = [];
-  var resume = parseBasicInfo($('table tr:nth-child(2) table'),errors);
+  var resume = parseBasicInfo($('table tr:nth-child(2) table'), errors);
   resume.name = $('strong').first().text().trim() || $('b').first().text().trim();
   resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
   if (!resume.careerObjective)
