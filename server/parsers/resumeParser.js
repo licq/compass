@@ -7,7 +7,8 @@ var parsers = [
   require('./job51Parser'),
   require('./zhaopinParser'),
   require('./liepinParser'),
-  require('./dongfangParser')
+  require('./dongfangParser'),
+  require('./hr61Parser')
 ];
 
 exports.parse = function (data) {

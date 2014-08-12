@@ -28,5 +28,17 @@ describe('dongfangParser', function () {
         done(err);
       });
     });
+
+    it('should parse dongfang 3 resume correctly', function (done) {
+      fs.readFile(__dirname + '/dongfang3resume.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
+        expect(resume.name).to.equal('王国花');
+        expect(resume.workExperience).to.have.length(6);
+        console.log(resume);
+        done(err);
+      });
+    });
   });
 });

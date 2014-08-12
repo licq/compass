@@ -43,7 +43,6 @@ var resumeSchema = mongoose.Schema({
     default: Date.now()
   },
   photoUrl: String,
-  matchRate: Number,
   yearsOfExperience: Number,
 
   birthday: Date,

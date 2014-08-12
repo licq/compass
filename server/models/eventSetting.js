@@ -3,7 +3,8 @@
 var mongoose = require('mongoose'),
   timestamps = require('mongoose-timestamp'),
   helper = require('../utilities/helper'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  icalendar = require('icalendar');
 
 var eventSettingSchema = mongoose.Schema({
   duration: {
@@ -71,13 +72,37 @@ eventSettingSchema.plugin(timestamps);
 
 eventSettingSchema.methods.generateEmails = function (status, event, cb) {
   var model = this,
-    emails = [];
+    emails = [],
+    vEvent = new icalendar.VEvent(event.id),
+    vCalendar = new icalendar.iCalendar();
+
   var statusForSubject = {new: '', edit: '变更', delete: '取消'};
+  vEvent.setSummary(event.name + '面试提醒');
+  vEvent.setDate(event.startTime, event.endTime);
+  vEvent.addProperty('ORGANIZER', 'service@lingpin.cc');
+
+  if (status === 'delete') {
+    vEvent.addProperty('STATUS', 'CANCELLED');
+    vEvent.addProperty('SEQUENCE', event.version + 1);
+    vEvent.addProperty('METHOD', 'CANCEL');
+    vCalendar.addProperty('METHOD', 'CANCEL');
+  } else {
+    vCalendar.addProperty('METHOD', 'REQUEST');
+    vEvent.addProperty('SEQUENCE', event.version);
+  }
+  vCalendar.addComponent(vEvent);
   if (model[status + 'ToApplier']) {
     emails.push({
       subject: '面试' + statusForSubject[status] + '提醒',
       to: [event.email],
-      html: helper.render(model[status + 'TemplateToApplier'], event)
+      html: helper.render(model[status + 'TemplateToApplier'], event),
+      attachments: [
+        {
+          contentType: 'text/calendar',
+          contents: vCalendar.toString(),
+          contentEncoding: 'utf8'
+        }
+      ]
     });
   }
 
@@ -85,12 +110,18 @@ eventSettingSchema.methods.generateEmails = function (status, event, cb) {
     mongoose.model('User').where('_id').in(event.interviewers).select('email')
       .exec(function (err, users) {
         if (err) return cb(err);
+        var interviewerEmails = _.map(users, 'email');
         emails.push({
-          subject: '面试' + statusForSubject[status] + '提醒',
-          to: _.map(users, function (user) {
-            return user.email;
-          }),
-          html: helper.render(model[status + 'TemplateToInterviewer'], event)
+          subject: event.name + '面试' + statusForSubject[status] + '提醒',
+          to: interviewerEmails,
+          html: helper.render(model[status + 'TemplateToInterviewer'], event),
+          attachments: [
+            {
+              contentType: 'text/calendar',
+              contents: vCalendar.toString(),
+              contentEncoding: 'utf8'
+            }
+          ]
         });
         cb(null, emails);
       }

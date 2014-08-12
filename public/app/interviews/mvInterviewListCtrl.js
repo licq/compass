@@ -122,7 +122,7 @@ angular.module('compass')
         }});
 
       modalInstance.result.then(function (event) {
-        event.startTime = event.startTime.toISOString();
+        event.startTime = event.startTime.toDate();
         interview.events.push(event);
         prepareForPage(interview);
       });

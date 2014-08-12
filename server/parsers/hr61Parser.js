@@ -27,24 +27,26 @@ function parseCertifications(table, errors) {
 function parseBasicInfo(table, errors) {
   if (!table) return;
   try {
-    var resume = {};
-
     var tableData = helper.parseTable(table);
-    var firstLineItems = tableData[0][0].split('|');
-    resume.yearsOfExperience = helper.parseYearsOfExperience(firstLineItems[0]);
-    resume.gender = helper.parseGender(firstLineItems[1]);
-    resume.birthday = helper.parseDate(firstLineItems[2].split(/\(|（/)[1]);
-    if (firstLineItems.length > 3) {
-      resume.civilStatus = helper.parseCivilState(firstLineItems[3]);
+    var infoMap = {};
+    _.forEach(tableData, function (line) {
+      if (line[0]) infoMap[line[0].replace(/ |：/g, '')] = line[1];
+      if (line[2]) infoMap[line[2].replace(/ |：/g, '')] = line[3];
+    });
+    var resume = {
+      name: infoMap['姓名'] || infoMap.Name,
+      gender: helper.parseGender(infoMap['性别'] || infoMap.Gender),
+      birthday: helper.parseDate(infoMap['出生日期'] || infoMap.DateofBirth),
+      residency: infoMap['居住地'] || infoMap['P.ofResidence'],
+      civilState: helper.parseCivilState(infoMap['婚姻状况'] || infoMap.Marry),
+      hukou: infoMap['户口'] || infoMap.Hukou,
+      yearsOfExperience: helper.parseYearsOfExperience(infoMap['工作年限'] || infoMap['Y.ofExperience']),
+      email: infoMap['电子邮件'] || infoMap.Email,
+      mobile: infoMap['移动电话'] || infoMap.MobilePhone
+    };
+    if (resume.mobile && resume.mobile.indexOf('086-') === 0) {
+      resume.mobile = resume.mobile.substr(4);
     }
-    resume.job51Id = helper.onlyNumber(tableData[0][1]);
-    resume.residency = tableData[1][1];
-    if (tableData.length >= 4) {
-      resume.hukou = tableData[1][3];
-    }
-    resume.mobile = helper.onlyNumber(tableData[2][1]);
-    resume.email = tableData[3][1];
-    resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
     return resume;
   } catch (e) {
     errors.push(e.message);
@@ -55,11 +57,9 @@ function parseBasicInfo(table, errors) {
 function parseLanguageSkills(table, errors) {
   if (!table) return;
   try {
-    var languageTable = table.find('tr td table');
-    return _.map(_.filter(helper.parseTable(languageTable), function (line) {
-      return line[0].indexOf('等级') < 0;
-    }), function (line) {
-      return helper.parseLanguageSkill(line[0], line[1]);
+    var tableData = helper.parseTable(table);
+    return _.map(tableData, function (line) {
+      return helper.parseLanguageSkill(line.join(':'));
     });
   } catch (e) {
     errors.push(e.message);
@@ -70,30 +70,14 @@ function parseLanguageSkills(table, errors) {
 function parseCareerObjective(table, errors) {
   if (!table) return;
   try {
-    var careerObjective = {};
     var tableData = helper.parseTable(table);
-    var items = _.map(tableData, function (line) {
-      if (line.length > 1) {
-        line[0] = line.join('');
-      }
-      return helper.removeSpaces(line[0]);
-    });
-    _.forEach(items, function (item) {
-      if (helper.isEntryTime(item)) {
-        careerObjective.entryTime = helper.parseEntryTime(item);
-      } else if (helper.isTypeOfEmployment(item)) {
-        careerObjective.typeOfEmployment = helper.parseTypeOfEmployment(helper.splitByColon(item)[1]);
-      } else if (helper.isIndustry(item)) {
-        careerObjective.industry = helper.splitByCommas(helper.splitByColon(item)[1]);
-      } else if (helper.isLocations(item)) {
-        careerObjective.locations = helper.splitByCommas(helper.splitByColon(item)[1]);
-      } else if (helper.isTargetSalary(item)) {
-        careerObjective.targetSalary = helper.parseTargetSalary(helper.splitByColon(item)[1]);
-      } else if (helper.isJobCategory(item)) {
-        careerObjective.jobCategory = helper.splitByCommas(helper.splitByColon(item)[1]);
-      }
-    });
-    return careerObjective;
+    return {
+      typeOfEmployment: helper.parseTypeOfEmployment(tableData[1][1]),
+      locations: tableData[2][1],
+      industry: tableData[3][1].split(' '),
+      targetSalary: helper.parseTargetSalary(tableData[4][1]),
+      jobCategory: tableData[5][1]
+    };
   } catch (e) {
     errors.push(e.message);
     logger.error(e.stack);
@@ -105,29 +89,20 @@ function parseWorkExperience(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
-    return _.times(Math.ceil((tableData.length + 1) / 5), function (index) {
-      var firstLineItems = tableData[index * 5][0].split(/：|（/);
-      var dateRange = helper.parseDateRange(firstLineItems[0]);
-      var work = {
+    return _.times(Math.ceil(tableData.length / 10), function (index) {
+      var firstLineData = tableData[index * 10][1];
+      var splitIndex = _.lastIndexOf(firstLineData, ' ');
+      var dateRange = helper.parseDateRange(firstLineData.substr(0, splitIndex));
+      var job = tableData[index * 10 + 3][0].split(' ');
+      return {
         from: dateRange.from,
         to: dateRange.to,
-        company: firstLineItems[1]
+        company: firstLineData.substr(splitIndex + 1),
+        industry: tableData[index * 10 + 1][1],
+        department: job[0],
+        jobTitle: job[1],
+        jobDescription: tableData[index * 10 + 6][1]
       };
-      if (tableData[index * 5 + 1][0].indexOf('所属行业') > -1) {
-        _.extend(work, {
-          industry: tableData[index * 5 + 1][1],
-          department: tableData[ index * 5 + 2][0],
-          jobTitle: tableData[index * 5 + 2][1],
-          jobDescription: tableData[index * 5 + 3][0]
-        });
-      } else {
-        _.extend(work, {
-          department: tableData[ index * 5 + 1][0],
-          jobTitle: tableData[index * 5 + 1][1],
-          jobDescription: tableData[index * 5 + 2][0]
-        });
-      }
-      return work;
     });
   } catch (e) {
     errors.push(e.message);
@@ -143,8 +118,6 @@ function parseProjectExperience(table, errors) {
       var project = {};
       _.each(projectData, function (line) {
         if (helper.isProjectHeader(line[0])) {
-          if (line.length > 1)
-            line[0] = line.join('');
           var items = line[0].split(/--|：|（|）/);
           project.from = helper.parseDate(items[0]);
           project.to = helper.parseDate(items[1]);
@@ -172,30 +145,19 @@ function parseProjectExperience(table, errors) {
 function parseEducationHistory(table, errors) {
   if (!table) return;
   try {
-    var tableData = _.filter(helper.parseTable(table), function (line) {
-      return line[0].trim().length !== 0;
+    var tableData = helper.parseTable(table);
+
+    return _.times(tableData.length / 3, function (index) {
+      return _.extend(
+        helper.parseDateRange(tableData[index * 3][0]),
+        {
+          school: tableData[index * 3][1],
+          major: tableData[index * 3][2],
+          degree: tableData[index * 3][3],
+          description: tableData[index * 3 + 1][1]
+        }
+      );
     });
-    var history = [],
-      education;
-
-    for (var i = 0; i < tableData.length; i++) {
-      if (tableData[i].length > 1) {
-        if (education) history.push(education);
-        var dateRange = helper.parseDateRange(tableData[i][0]);
-        education = {
-          from: dateRange.from,
-          to: dateRange.to,
-          school: tableData[i][1],
-          major: tableData[i][2],
-          degree: helper.parseDegree(tableData[i][3])
-        };
-      } else {
-        education.description = tableData[i][0];
-      }
-    }
-
-    if (education) history.push(education);
-    return history;
   } catch (e) {
     errors.push(e.message);
     logger.error(e.stack);
@@ -304,31 +266,12 @@ function parseInSchoolPractices(table, errors) {
 
 exports.parse = function (data) {
   var $ = cheerio.load(data.html, {normalizeWhitespace: true});
-  var type = '.cvtitle';
-  if ($('style').text().indexOf('.v3_t') > -1) {
-    type = '.v3_t';
-  }
 
   var findTable = function () {
-
-    var tableTitle;
-    if (type === '.cvtitle') {
-      tableTitle = function (tableNames, i) {
-        var table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
-        while (table.find('table').length === 0 && table.next().length !== 0) {
-          table = table.next();
-        }
-        return table.find('table');
-      };
-    } else {
-      tableTitle = function (tableNames, i) {
-        return $('div.v3_t > table > tr > td:contains(' + tableNames[i] + ')').closest('div').next();
-      };
-    }
     var tableNames = Array.prototype.slice.call(arguments, 0);
     var table;
     for (var i = 0; i < tableNames.length; i++) {
-      table = tableTitle(tableNames, i);
+      table = $('caption:contains(' + tableNames[i] + ')').parent();
       if (table.length > 0) {
         return table;
       }
@@ -336,26 +279,34 @@ exports.parse = function (data) {
   };
 
   var errors = [];
-  var resume = parseBasicInfo($('table tr:nth-child(2) table'),errors);
-  resume.name = $('strong').first().text().trim() || $('b').first().text().trim();
-  resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
-  if (!resume.careerObjective)
-    resume.careerObjective = {};
-  resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text()) ||
-    $('td.cvtitle:contains(自我评价)').parent().next().next().next().text();
-  resume.workExperience = parseWorkExperience(findTable('工作经验'), errors);
-  resume.projectExperience = parseProjectExperience(findTable('项目经验'), errors);
-  resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
-  resume.trainingHistory = parseTrainingHistory(findTable('培训经历'), errors);
-  resume.certifications = parseCertifications(findTable('证'), errors);
-  resume.languageSkills = parseLanguageSkills(findTable('语言能力'), errors);
-  resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'), errors);
-  resume.itSkills = parseItSkills(findTable('IT'), errors);
-  resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'), errors);
-  resume.inSchoolStudy = parseInSchoolStudy(findTable('所获奖项'), errors);
-  resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
-  resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
-  resume.channel = '前程无忧';
+  var resume = parseBasicInfo(findTable('基本信息', 'Basic Info'), errors);
+  resume.careerObjective = parseCareerObjective(findTable('求职意向', 'Career Objective'), errors);
+  if (!resume.careerObjective) resume.careerObjective = {};
+  resume.careerObjective.entryTime = helper.parseEntryTime($('font:contains(工作状态：)').text());
+  var selfAssessmentTable = findTable('自我评价', 'Self Assessment');
+  if (!!selfAssessmentTable)
+    resume.careerObjective.selfAssessment = helper.replaceEmpty(selfAssessmentTable.find('tbody').text());
+  resume.workExperience = parseWorkExperience(findTable('工作经验', 'Work Experience'), errors);
+  resume.educationHistory = parseEducationHistory(findTable('教育经历', 'Education'), errors);
+//  resume.trainingHistory = parseTrainingHistory(findTable('培训经历'), errors);
+//  resume.certifications = parseCertifications(findTable('证'), errors);
+  resume.languageSkills = parseLanguageSkills(findTable('语言能力', 'Language'), errors);
+//  resume.languageCertificates = parseLanguageCertificates(findTable('语言能力'), errors);
+//  resume.itSkills = parseItSkills(findTable('IT'), errors);
+//  resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'), errors);
+//  resume.inSchoolStudy = parseInSchoolStudy(findTable('所获奖项'), errors);
+  if (data.subject) {
+    var startIndex = data.subject.indexOf('应聘贵公司');
+    var endIndex = data.subject.indexOf('职位');
+    if (startIndex > -1 && endIndex > -1)
+      resume.applyPosition = data.subject.substr(startIndex + 6, endIndex - startIndex - 7);
+  }
+
+  var pictureTable = findTable('证件/图片', 'Certificate/Image');
+  if (!!pictureTable)
+    resume.photoUrl = pictureTable.find('img').attr('src');
+  resume.applyDate = data.createdAt;
+  resume.channel = '乐聘';
   resume.mail = data.mailId;
   resume.company = data.company;
   resume.parseErrors = errors;
@@ -363,5 +314,5 @@ exports.parse = function (data) {
 };
 
 exports.test = function (data) {
-  return data.fromAddress.indexOf('51job') > -1;
+  return data.fromAddress.indexOf('61hr') > -1;
 };

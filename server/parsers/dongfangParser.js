@@ -83,7 +83,7 @@ function parseWorkExperience(tr, errors) {
         to: dateRange.to,
         company: tableData[0][1],
         jobTitle: tableData[2][1],
-        jobDescription: tableData[7][1]
+        jobDescription: tableData.length > 7 ? tableData[7][1] : ''
       });
       tr = tr.next().next().next();
     }

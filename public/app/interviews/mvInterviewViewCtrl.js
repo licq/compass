@@ -91,7 +91,7 @@ angular.module('compass')
 
     $scope.removeEvent = function (event) {
       mvEvent.remove({_id: event._id}, function () {
-        var index = _.find($scope.interview.events, {_id: event._id});
+        var index = _.findIndex($scope.interview.events, {_id: event._id});
         $scope.interview.events.splice(index, 1);
         mvNotifier.notify('删除面试邀请成功');
         $rootScope.$broadcast('changeOfEvent', 'delete', null, event.startTime);

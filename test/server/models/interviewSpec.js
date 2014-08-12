@@ -181,13 +181,14 @@ describe('interview', function () {
           startTime: new Date(),
           duration: 90,
           interviewers: [user._id],
-          createdBy: user._id
+          createdBy: user._id,
         }
-      ]}, function (createdInterview) {
+      ],company: user.company}, function (createdInterview) {
         var updatedEventData = {
           startTime: new Date(),
           duration: 60,
-          interviewers: [user._id]
+          interviewers: [user._id],
+          company: user.company
         };
         Interview.updateEvent(createdInterview.events[0]._id, updatedEventData, function (err, interview) {
           expect(err).to.not.exist;
@@ -207,10 +208,11 @@ describe('interview', function () {
           startTime: new Date(),
           duration: 90,
           interviewers: [user._id],
-          createdBy: user._id
+          createdBy: user._id,
+          company: user.company
         }
-      ]}, function (createdInterview) {
-        Interview.deleteEvent(createdInterview.events[0]._id, function (err, interview) {
+      ],company: user.company}, function (createdInterview) {
+        Interview.deleteEvent(createdInterview.events[0]._id, user.company, function (err, interview) {
           expect(err).to.not.exist;
           expect(interview.events).to.have.length(0);
           done();

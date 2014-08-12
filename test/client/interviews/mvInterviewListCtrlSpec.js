@@ -156,7 +156,7 @@ describe('mvInterviewListCtrl', function () {
       $scope.newEvent($scope.interviews[0]);
       fakeModal.close({
         name: 'user1',
-        startTime: new Date(),
+        startTime: moment(),
         interviewers: [
           {_id: '7788', name: 'aabb'},
           {_id: '8899', name: 'bbcc'}

@@ -1,0 +1,1200 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1"><title>
+  61HR 乐聘网 -简历预览- 缔造中国酒店旅游业人才服务第一品牌!
+</title><link href="http://company.61hr.com/css/rdnew_21.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="http://company.61hr.com/js/jquery.js"></script>
+
+<script type="text/javascript" src="http://company.61hr.com/js/tipswindown.js"></script>
+
+<script type="text/javascript">
+  function ForwardResume(resumeid,resumetype)
+  {
+    window.open("ForwardResume.aspx?resumeid="+resumeid+"&resumetype="+resumetype,'newwindow','height=400,width=400');
+  }
+
+</script>
+
+<style type="text/css">
+  body
+  {
+    padding: 5px;
+    margin: 0px;
+    color: #3D3D3D;
+    font-family: Sans-Serif, "宋体";
+  }
+  .tds
+  {
+    border-bottom: 1px solid #ebebeb;
+    border-right: 1px solid #ebebeb;
+    background-color: #FCFCFC;
+    padding: 2px;
+    color: #18a6d6;
+  }
+  .bj
+  {
+    border: 1px solid Green;
+    background-color: Green;
+    color: White;
+    padding: 2px;
+    margin: 0px;
+  }
+  .sc
+  {
+    border: 1px solid #ff6600;
+    background-color: #ff6600;
+    color: White;
+    padding: 2px;
+    margin: 0px;
+  }
+</style>
+<style type="text/css">
+  table, td, p
+  {
+    font-size: 12px;
+    line-height: 150%;
+  }
+  .ResTitleFot
+  {
+    font-family: '宋体';
+    font-size: 14px;
+  }
+  .ResTitleTbBd
+  {
+    border: solid 1px #cccccc;
+  }
+  .ResTitleTbBd1
+  {
+    border: solid 1px #ffffff;
+  }
+  .ResTbLfPd
+  {
+    padding-left: 10px;
+  }
+  .SubTitleTbBd
+  {
+    padding-left: 10px;
+    border-top: solid 1px #cccccc;
+  }
+  .nshow
+  {
+    display: none;
+  }
+  .hshow
+  {
+    display: block;
+  }
+  .a1
+  {
+    color: #3D3D3D;
+    text-decoration: none;
+  }
+  .style1
+  {
+    width: 27%;
+  }
+  a
+  {
+    text-decoration: none;
+    color: #3D3D3D;
+  }
+  a:hover
+  {
+    text-decoration: underline;
+    color: #18a6d6;
+  }
+  #wrapR
+  {
+    display: block;
+    top: 120px;
+    right: 1px !important;
+    right: 18px;
+    width: 140px;
+    line-height: 22px;
+    position: fixed;
+    border: 0px solid #fff;
+    text-align: center;
+  }
+  .mainlist
+  {
+    padding: 0px;
+  }
+  .mainlist li
+  {
+    line-height: 30px;
+    font-size: 12px;
+  }
+  .mainlist li span
+  {
+    margin: 0 3px 0 0;
+    font-family: "宋体";
+    font-size: 12px;
+    font-weight: 400;
+    color: #ddd;
+  }
+  #windownbg
+  {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    top: 0;
+    left: 0;
+  }
+  #windown-box
+  {
+    position: fixed;
+    _position: absolute;
+    border: 5px solid #E9F3FD;
+    background: #FFF;
+    text-align: left;
+  }
+  #windown-title
+  {
+    position: relative;
+    height: 30px;
+    border: 1px solid #A6C9E1;
+    overflow: hidden;
+    background: url(http://company.61hr.com/images/tipbg.png) 0 0 repeat-x;
+  }
+  #windown-title h2
+  {
+    position: relative;
+    left: 10px;
+    top: 0px;
+    font-size: 14px;
+    color: #666;
+    line-height: 30px;
+  }
+  #windown-close
+  {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    width: 15px;
+    height: 16px;
+    text-indent: -10em;
+    overflow: hidden;
+    background: url(http://company.61hr.com/images/tipbg.png) 100% -49px no-repeat;
+    cursor: pointer;
+  }
+  #windown-content-border
+  {
+    position: relative;
+    top: -1px;
+    border: 1px solid #A6C9E1;
+    padding: 5px 0 5px 5px;
+  }
+  #windown-content img, #windown-content iframe
+  {
+    display: block;
+  }
+  #windown-content .loading
+  {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+  }
+</style>
+
+<script type="text/javascript">
+  /*
+   *弹出本页指定ID的内容于窗口
+   *id 指定的元素的id
+   *title:	window弹出窗的标题
+   *width:	窗口的宽,height:窗口的高
+   */
+  function showTipsWindown(title,id,width,height){
+    tipsWindown(title,"id:"+id,width,height,"true","","true",id);
+  }
+
+  function confirmTerm(s) {
+    parent.closeWindown();
+    if(s == 1) {
+      parent.document.getElementById("isread").checked = true;
+    }
+  }
+
+
+  //弹出层调用
+  function popTips(a,b,c,d){
+    if(a=="1")
+    {
+      tipsWindown("发通知Email","url:get?SendEmail.aspx?userid="+b+"&resumetype="+c+"&letterid="+d+"","550","450","true","","true","text");
+    }
+    if(a=="2")
+    {
+      tipsWindown("发手机短信","url:get?SMS.aspx?userid="+b+"&resumetype="+c+"&letterid="+d+"","400","255","true","","true","text");
+    }
+    if(a=="3")
+    {
+      tipsWindown("转发简历","url:get?ZhuanFa.aspx?userid="+b+"&resumetype="+c+"&letterid="+d+"","520","435","true","","true","text");
+    }
+  }
+</script>
+
+</head>
+<body>
+<form name="form1" method="post" action="ResumeViewBeta.aspx?userid=169989&amp;resumetype=1&amp;letterid=0&amp;jobid=138287&amp;nid=3389687" id="form1">
+<div>
+  <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+  <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+  <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTAxOTU3NzA1MA9kFgICAw9kFgJmD2QWCgICDw8WAh4HVmlzaWJsZWhkZAIDDw8WAh8AaGRkAg0PFgIeC18hSXRlbUNvdW50AgYWDGYPZBYCZg8VDAcyMDEyLTA0BzIwMTMtMDMLc3dpc3MgaG90ZWwfSW50ZXJuYXRpb25hbCBmaXZlLXN0YXIgaG90ZWxzIAAJQ2FmZSBzaG9wCnN1cGVydmlzb3IADDIwLTUwIHBlb3BsZRtjaGVjayBzdGFmZiAsaGVscCBtYW5hZ2VyIC4AAGQCAQ9kFgJmDxUMBzIwMTItMDMHMjAxMi0wNBFoYXl0dCBvbiB0aGUgaHVuZB9JbnRlcm5hdGlvbmFsIGZpdmUtc3RhciBob3RlbHMgAANSL1MLdGVhbSBsZWFkZXIADDIwLTUwIHBlb3BsZQR0ZWFtAABkAgIPZBYCZg8VDAcyMDA4LTA1BzIwMTAtMDEaUmFkaXNzb24gSG9uZ1F1YW4gU2hhbmdIYWkfSW50ZXJuYXRpb25hbCBmaXZlLXN0YXIgaG90ZWxzIAADRiZCFGNhZmUgc2hvcCBzdXBlcnZpc29yFEYmQiBBc3Npc3RhbnQgZGlyZWN0DDIwLTUwIHBlb3BsZQl0ZWFtIHdvcmsAAGQCAw9kFgJmDxUMBzIwMDctMDgHMjAwOC0wNRFyZW5pc3NhbmNlIHl1eXVhbh9JbnRlcm5hdGlvbmFsIGZpdmUtc3RhciBob3RlbHMgAA5hZGQgcmVzdGF1cmFudA9yL3MgdGVhbSBsZWFkZXIACzUtMTAgcGVvcGxlBHRlYW0AAGQCBA9kFgJmDxUMBzIwMDYtMDgHMjAwNy0wOBFMZSBSb3lhbCBNZXJpZGllbh9JbnRlcm5hdGlvbmFsIGZpdmUtc3RhciBob3RlbHMgAANGJkIKci9zIHdhaXRlcglhc3Npc3RhbnQKMy01IHBlb3BsZRRwcm92aWRlIGdvb2Qgc2VydmljZQAAZAIFD2QWAmYPFQwHMjAwNC0wNgcyMDA2LTA4Gkhvd2FyZCBKb2huc29uIFBsYXphIEhvdGVsH0ludGVybmF0aW9uYWwgZml2ZS1zdGFyIGhvdGVscyAAA0YmQhVBREQgci9zIHNlbmlvciB3YWl0ZXIHY2FwdGFpbgoxLTIgcGVvcGxlB3NlcnZpY2UAAGQCDg8WAh8BAgIWBGYPZBYCZg8VBgcxOTk4LTA5BzIwMDEtMDYZWmhvbmdTaGFuIFZvY2F0aW9uIFNjaG9vbBBIb3RlbCBtYW5hZ2VtZW50B0NvbGxlZ2UAZAIBD2QWAmYPFQYHMjAwMS0wOQcyMDA0LTA2E1NoYW5nSGFpIHVuaXZlcnNpdHkQSG90ZWwgTWFuYWdlbWVudAdDb2xsZWdlAGQCEg8WAh8BAgEWAmYPZBYCZg8VAgdFbmdsaXNoBEdvb2RkZOBQhqGTIoQwiwpQTV49ASbq6Mlt" />
+</div>
+
+<script type="text/javascript">
+  //<![CDATA[
+  var theForm = document.forms['form1'];
+  if (!theForm) {
+    theForm = document.form1;
+  }
+  function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+      theForm.__EVENTTARGET.value = eventTarget;
+      theForm.__EVENTARGUMENT.value = eventArgument;
+      theForm.submit();
+    }
+  }
+  //]]>
+</script>
+
+
+<div class="resume-preview-right">
+  <div class="resume-preview-button previewLayer2">
+    <span class="resume-preview-button-span preview-icon1"></span><a href="javascript://"
+                                                                     onclick="javascript:document.execCommand('SaveAs',true,'61hr.com(Martin).html')">
+    保存简历</a></div>
+  <div class="resume-preview-button previewLayer8">
+    <span class="resume-preview-button-span preview-icon8"></span><a href="javascript:window.print()">
+    打印简历</a></div>
+  <div class="resume-preview-button previewLayer3">
+    <span class="resume-preview-button-span preview-icon3"></span><a href="CompanyFolderInput.aspx?folderid=1556034"
+                                                                     target="_blank">移到人才夹</a></div>
+  <div class="resume-preview-button previewLayer5">
+    <span class="resume-preview-button-span preview-icon5"></span><a onclick="javascript:popTips(1,169989,1,0)">
+    发通知邮件</a></div>
+  <div class="resume-preview-button previewLayer5">
+    <span class="resume-preview-button-span preview-icon6"></span><a onclick="javascript:popTips(2,169989,1,0)">
+    发手机短信</a></div>
+  <div class="resume-preview-button previewLayer5">
+    <span class="resume-preview-button-span preview-icon2"></span><a onclick="javascript:popTips(3,169989,1,0)">
+    转发简历</a></div>
+
+  <div class="resume-preview-button previewLayer14">
+    <span class="resume-preview-button-span preview-icon13"></span><a href="#" onclick="window.close();">
+    关闭简历</a></div>
+  <div class="resume-preview-button previewLayer10">
+    <span class="resume-preview-button-span preview-icon10"></span><a href="#top">返回顶部</a></div>
+</div>
+<div id="resume">
+<table width="630px" align="center" border="0" cellpadding="" cellspacing="0">
+  <tbody>
+  <tr>
+    <td align="left" valign="middle">
+      <a href="http://www.61hr.com" target="_blank">
+        <img src="http://www.61hr.com/images/logo.jpg" alt="" style="border: none" /></a>
+    </td>
+    <td align="right" valign="top">
+      <div style="border: 1px solid #ebebeb; background-color: #FCFCFC; padding: 0px; padding-right: 4px;
+                            margin: 0px; word-break: break-all; word-wrap: break-word;">
+
+        Apply：<font color="#18a6d6">Executive Club Supervisor 行政酒廊主管</font><br />
+
+        ResumeNo：633899347011875000
+        <br />
+        Update Time：2014-01-06
+
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2" style="font-family: '宋体';">
+  <tbody>
+  <tr style="height: 25px">
+    <td width="55%" align="center">
+      <strong style="font-size: 13pt; color: #3D3D3D">
+
+        Resume
+
+      </strong>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Basic Info
+  </caption>
+  <tbody>
+  <tr>
+    <td width="23%" align="right">
+      Name：
+    </td>
+    <td width="21%">
+      Martin <a href="#Aen">
+      <img src="http://www.61hr.com/images/linq/imgFlag.jpg" alt="证件/图片" style="border: 0px;
+                                display: none;" title="证件/图片" /></a>
+    </td>
+    <td width="17%" align="right">
+      Gender：
+    </td>
+    <td width="21%">
+      Male
+    </td>
+    <td rowspan="5">
+
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Date of Birth：
+    </td>
+    <td>
+      1982-4-30
+    </td>
+    <td>
+    </td>
+    <td>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="right">
+      Marry：
+    </td>
+    <td>
+      Married
+    </td>
+
+    <td align="right">
+      Health：
+    </td>
+    <td>
+      Excellent
+    </td>
+
+  </tr>
+
+  <tr>
+    <td align="right">
+      Height：
+    </td>
+    <td>
+      178cm
+    </td>
+
+    <td align="right">
+      Weight：
+    </td>
+    <td>
+      75kg
+    </td>
+
+  </tr>
+
+  <tr>
+    <td align="right">
+      Nation/Region：
+    </td>
+    <td>
+      China
+    </td>
+    <td align="right">
+      Hukou：
+    </td>
+    <td>
+      Shanghai
+    </td>
+  </tr>
+
+  <tr>
+    <td align="right">
+      ID Number：
+    </td>
+    <td>
+      310109198204302011
+    </td>
+    <td align="right">
+      ID Type：
+    </td>
+    <td class="style1">
+      身份证
+    </td>
+  </tr>
+
+  <tr>
+    <td align="right">
+      Degree：
+    </td>
+    <td>
+      College
+    </td>
+    <td align="right">
+      Email：
+    </td>
+    <td>
+      dannyzhang333@163.com
+
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Y.of Experience：
+    </td>
+    <td colspan="4">
+      More than eight year
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Mobile Phone：
+    </td>
+    <td>
+      13818511030
+
+    </td>
+    <td align="right">
+
+      Home Tel：
+    </td>
+    <td>
+      086-021-55230981
+
+    </td>
+    <td>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="right">
+      P.of Residence：
+    </td>
+    <td colspan="5">
+      Shanghai&nbsp;&nbsp;&nbsp;Hongkou District
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Current Salary：
+    </td>
+    <td colspan="5">
+      Negotiable
+      Chinese Yuan Renminbi
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Self Assessment</caption>
+  <tbody>
+  <tr>
+    <td>
+      <div style="word-break: break-all; word-wrap: break-word; color: #3D3D3D; padding: 5px;
+                            margin: 0px;">
+        confidence and open personality</div>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Career Objective</caption>
+
+  <tr>
+    <td align="right">
+      Current posts：
+    </td>
+    <td>
+      manager or supervisor
+    </td>
+  </tr>
+
+  <tr>
+    <td align="right">
+      Type of Employment：
+    </td>
+    <td style="width: 75%">
+      Full-time
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Desired Location：
+    </td>
+    <td>
+      Shanghai Nanjing Suzhou City Hangzhou Fuzhou
+
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Desired Industry：
+    </td>
+    <td>
+      Others
+
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Desired Salary：
+    </td>
+    <td>
+      Negotiable
+      /Month
+    </td>
+  </tr>
+  <tr>
+    <td align="right">
+      Desired Position：
+    </td>
+    <td>
+      西餐厅经理
+
+    </td>
+  </tr>
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+<caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+  Work Experience</caption>
+
+<tr>
+  <td align="right">
+    Time：
+  </td>
+  <td>
+    2012-04
+    -
+    2013-03
+                            <span style="color: #18a6d6">
+                                swiss hotel</span>
+  </td>
+</tr>
+<tr>
+  <td width="25%" align="right">
+    Their Trades：
+  </td>
+  <td width="75%">
+    International five-star hotels
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Company Profile：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;">
+
+  </td>
+</tr>
+<tr>
+  <td colspan="2" style="color: #18a6d6; padding-left: 100px">
+    Cafe shop
+    supervisor
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Direct Superior：
+  </td>
+  <td>
+
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Lower The Number Of：
+  </td>
+  <td>
+    20-50 people
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Job Description：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+    check staff ,help manager .
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Performance：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Reason Causes Of ：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td style="border-top: 1px solid #ebebeb">
+  </td>
+</tr>
+
+<tr>
+  <td align="right">
+    Time：
+  </td>
+  <td>
+    2012-03
+    -
+    2012-04
+                            <span style="color: #18a6d6">
+                                haytt on the hund</span>
+  </td>
+</tr>
+<tr>
+  <td width="25%" align="right">
+    Their Trades：
+  </td>
+  <td width="75%">
+    International five-star hotels
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Company Profile：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;">
+
+  </td>
+</tr>
+<tr>
+  <td colspan="2" style="color: #18a6d6; padding-left: 100px">
+    R/S
+    team leader
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Direct Superior：
+  </td>
+  <td>
+
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Lower The Number Of：
+  </td>
+  <td>
+    20-50 people
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Job Description：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+    team
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Performance：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Reason Causes Of ：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td style="border-top: 1px solid #ebebeb">
+  </td>
+</tr>
+
+<tr>
+  <td align="right">
+    Time：
+  </td>
+  <td>
+    2008-05
+    -
+    2010-01
+                            <span style="color: #18a6d6">
+                                Radisson HongQuan ShangHai</span>
+  </td>
+</tr>
+<tr>
+  <td width="25%" align="right">
+    Their Trades：
+  </td>
+  <td width="75%">
+    International five-star hotels
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Company Profile：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;">
+
+  </td>
+</tr>
+<tr>
+  <td colspan="2" style="color: #18a6d6; padding-left: 100px">
+    F&B
+    cafe shop supervisor
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Direct Superior：
+  </td>
+  <td>
+    F&B Assistant direct
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Lower The Number Of：
+  </td>
+  <td>
+    20-50 people
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Job Description：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+    team work
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Performance：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Reason Causes Of ：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td style="border-top: 1px solid #ebebeb">
+  </td>
+</tr>
+
+<tr>
+  <td align="right">
+    Time：
+  </td>
+  <td>
+    2007-08
+    -
+    2008-05
+                            <span style="color: #18a6d6">
+                                renissance yuyuan</span>
+  </td>
+</tr>
+<tr>
+  <td width="25%" align="right">
+    Their Trades：
+  </td>
+  <td width="75%">
+    International five-star hotels
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Company Profile：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;">
+
+  </td>
+</tr>
+<tr>
+  <td colspan="2" style="color: #18a6d6; padding-left: 100px">
+    add restaurant
+    r/s team leader
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Direct Superior：
+  </td>
+  <td>
+
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Lower The Number Of：
+  </td>
+  <td>
+    5-10 people
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Job Description：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+    team
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Performance：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Reason Causes Of ：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td style="border-top: 1px solid #ebebeb">
+  </td>
+</tr>
+
+<tr>
+  <td align="right">
+    Time：
+  </td>
+  <td>
+    2006-08
+    -
+    2007-08
+                            <span style="color: #18a6d6">
+                                Le Royal Meridien</span>
+  </td>
+</tr>
+<tr>
+  <td width="25%" align="right">
+    Their Trades：
+  </td>
+  <td width="75%">
+    International five-star hotels
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Company Profile：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;">
+
+  </td>
+</tr>
+<tr>
+  <td colspan="2" style="color: #18a6d6; padding-left: 100px">
+    F&B
+    r/s waiter
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Direct Superior：
+  </td>
+  <td>
+    assistant
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Lower The Number Of：
+  </td>
+  <td>
+    3-5 people
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Job Description：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+    provide good service
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Performance：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Reason Causes Of ：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td style="border-top: 1px solid #ebebeb">
+  </td>
+</tr>
+
+<tr>
+  <td align="right">
+    Time：
+  </td>
+  <td>
+    2004-06
+    -
+    2006-08
+                            <span style="color: #18a6d6">
+                                Howard Johnson Plaza Hotel</span>
+  </td>
+</tr>
+<tr>
+  <td width="25%" align="right">
+    Their Trades：
+  </td>
+  <td width="75%">
+    International five-star hotels
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Company Profile：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;">
+
+  </td>
+</tr>
+<tr>
+  <td colspan="2" style="color: #18a6d6; padding-left: 100px">
+    F&B
+    ADD r/s senior waiter
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Direct Superior：
+  </td>
+  <td>
+    captain
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    Lower The Number Of：
+  </td>
+  <td>
+    1-2 people
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Job Description：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+    service
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Performance：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td align="right" valign="top">
+    Reason Causes Of ：
+  </td>
+  <td style="word-break: break-all; word-wrap: break-word;" valign="top">
+
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td style="border-top: 1px solid #ebebeb">
+  </td>
+</tr>
+
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Education</caption>
+
+  <tr>
+    <td width="20%" align="right">
+      1998-09
+      -
+      2001-06
+    </td>
+    <td width="40%" style="color: #18a6d6">
+      ZhongShan Vocation School
+    </td>
+    <td width="25%">
+      Hotel management
+    </td>
+    <td width="15%" align="center">
+      College
+    </td>
+  </tr>
+  <tr>
+    <td>
+    </td>
+    <td colspan="3" style="word-break: break-all; word-wrap: break-word;">
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+    </td>
+    <td colspan="3" style="border-top: 1px solid #ebebeb">
+    </td>
+  </tr>
+
+  <tr>
+    <td width="20%" align="right">
+      2001-09
+      -
+      2004-06
+    </td>
+    <td width="40%" style="color: #18a6d6">
+      ShangHai university
+    </td>
+    <td width="25%">
+      Hotel Management
+    </td>
+    <td width="15%" align="center">
+      College
+    </td>
+  </tr>
+  <tr>
+    <td>
+    </td>
+    <td colspan="3" style="word-break: break-all; word-wrap: break-word;">
+
+    </td>
+  </tr>
+  <tr>
+    <td>
+    </td>
+    <td colspan="3" style="border-top: 1px solid #ebebeb">
+    </td>
+  </tr>
+
+</table>
+
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Training</caption>
+
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Certifications</caption>
+
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Language</caption>
+
+  <tr>
+    <td width="50%" align="center">
+      English
+    </td>
+    <td align="center">
+      Good
+    </td>
+  </tr>
+
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    IT Skills</caption>
+
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Additional Info</caption>
+
+</table>
+<a name="Aen" id="Aen"></a>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2">
+  <caption style="border-bottom: 1px solid #ebebeb; background-color: #FCFCFC; padding: 3px;
+                font-size: 12px; color: #18a6d6; text-align: left; padding-left: 20px">
+    Certificate/Image</caption>
+
+</table>
+<table width="630px" align="center" border="0" cellpadding="3" cellspacing="2" style="border-top: 1px solid #ebebeb;
+            margin-top: 10px;">
+  <tr>
+    <td style="font-size: 12px; width: 50%">
+      <font color="#18a6d6">(www.61hr.com)</font>
+    </td>
+    <td style="font-size: 12px" align="right">
+      <font color="#18a6d6">Regist Time：2009-09-30</font>&nbsp;&nbsp;<font color="#18a6d6">Update
+      Time：2014-01-06</font>
+    </td>
+  </tr>
+</table>
+</div>
+<div style="text-align: center; display: none">
+
+  <script type="text/javascript" src="http://count22.51yes.com/click.aspx?id=224015484&logo=1"></script>
+
+</div>
+</form>
+</body>
+</html>
