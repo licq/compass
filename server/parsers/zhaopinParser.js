@@ -11,7 +11,8 @@ function parseBasicInfo(table, errors) {
   if (!table) return {};
   try {
     var resume = {};
-    resume.name = table.find('td:nth-child(1) span').text().trim();
+    resume.name = table.find('td:nth-child(1) span').text();
+    if(resume.name) resume.name = resume.name.trim();
     resume.email = table.find('a').text();
     if (table.find('img')) {
       resume.photoUrl = table.find('img').attr('src');

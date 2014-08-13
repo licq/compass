@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var POPClient = require('poplib'),
   logger = require('../config/winston').logger();
@@ -16,40 +16,41 @@ exports.check = function (mailbox, callback) {
     debug: false
   });
 
-  client.on("error", function (err) {
-    if (err.errno === 111) logger.info("Unable to connect to server, failed");
-    else logger.info("Server error occurred, failed");
+  client.on('error', function (err) {
+    if (err.errno === 111) logger.info('Unable to connect to server, failed');
+    else logger.info('Server error occurred, failed');
     callback('connect failed');
   });
 
-  client.on("connect", function () {
+  client.on('connect', function () {
     client.login(mailbox.account, mailbox.password);
   });
 
-  client.on("invalid-state", function (cmd) {
-    logger.info("Invalid state. You tried calling " + cmd);
+  client.on('invalid-state', function (cmd) {
+    logger.info('Invalid state. You tried calling ' + cmd);
   });
 
-  client.on("locked", function (cmd) {
-    logger.info("Current command has not finished yet. You tried calling " + cmd);
+  client.on('locked', function (cmd) {
+    logger.info('Current command has not finished yet. You tried calling ' + cmd);
   });
 
-  client.on("login", function (status, data) {
+  client.on('login', function (status, data) {
     if (status) {
       correct = true;
     } else {
-      logger.info("LOGIN/PASS failed");
+      logger.info('LOGIN/PASS failed');
+      callback('用户名/密码不正确');
     }
     client.quit();
   });
 
-  client.on("rset", function (status, rawdata) {
+  client.on('rset', function (status, rawdata) {
     client.quit();
   });
 
-  client.on("quit", function (status, rawdata) {
-    if (status === true) logger.info("verify QUIT success");
-    else logger.info("verify QUIT failed");
+  client.on('quit', function (status, rawdata) {
+    if (status === true) logger.info('verify QUIT success');
+    else logger.info('verify QUIT failed');
 
     if (correct) callback(null);
     else callback('login failed');

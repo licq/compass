@@ -8,6 +8,7 @@ var POPClient = require('poplib'),
   logger = require('../config/winston').logger();
 
 function saveToDB(mail, address, callback) {
+  logger.info('saveToDB',address);
   mail.mailbox = address;
   Mail.create(mail, function (err, created) {
     require('./jobs').addParseResumeJob(created, function () {
@@ -17,6 +18,7 @@ function saveToDB(mail, address, callback) {
 }
 
 function parse(mailData, callback) {
+  logger.info('parse');
   var mailParser = new MailParser({
     debug: false,
     defaultCharset: 'gbk',
@@ -42,6 +44,7 @@ function parse(mailData, callback) {
 }
 
 exports.fetch = function (mailbox, callback) {
+  logger.info('fetch',mailbox.address);
   var correct = false, resetted = false,
     totalUnretrievedMails, totalToBeprocessedMails,
     totalMails = 0,
@@ -60,37 +63,41 @@ exports.fetch = function (mailbox, callback) {
     debug: false
   });
 
-  client.on("error", function (err) {
-    if (err.errno === 111) logger.info("Unable to connect to server, failed");
-    else logger.info("Server error occurred, failed");
+  client.on('error', function (err) {
+    logger.info('error',mailbox.address);
+    if (err.errno === 111) logger.info('Unable to connect to server, failed');
+    else logger.info('Server error occurred, failed');
     callback('connect failed');
   });
 
-  client.on("connect", function () {
+  client.on('connect', function () {
+    logger.info('connect',mailbox.address);
     client.login(mailbox.account, mailbox.password);
   });
 
-  client.on("invalid-state", function (cmd) {
-    logger.info("Invalid state. You tried calling " + cmd);
+  client.on('invalid-state', function (cmd) {
+    logger.info('Invalid state. You tried calling ' + cmd);
   });
 
-  client.on("locked", function (cmd) {
-    logger.info("Current command has not finished yet. You tried calling " + cmd);
+  client.on('locked', function (cmd) {
+    logger.info('Current command has not finished yet. You tried calling ' + cmd);
   });
 
-  client.on("login", function (status, data) {
+  client.on('login', function (status, data) {
+    logger.info('login',mailbox.address);
     if (status) {
       correct = true;
       client.uidl();
     } else {
-      logger.info("LOGIN/PASS failed");
-      client.quit();
+      logger.info('LOGIN/PASS failed');
+      callback('用户名/密码不正确');
     }
   });
 
   client.on('uidl', function (status, msgnumber, data, rawdata) {
+    logger.info('uidl',mailbox.address);
     if (status === false) {
-      logger.info("LIST failed");
+      logger.info('LIST failed');
       client.quit();
     } else if (data.length > 0) {
       _.forEach(rawdata.split('\r\n'), function (item) {
@@ -152,7 +159,8 @@ exports.fetch = function (mailbox, callback) {
 //    }
 //  });
 
-  client.on("retr", function (status, msgnumber, data, rawdata) {
+  client.on('retr', function (status, msgnumber, data, rawdata) {
+    logger.info('retr',mailbox.address);
     if (status === true) {
       parse(data, function (mail) {
         saveToDB(mail, mailbox.address, function (err) {
@@ -176,12 +184,13 @@ exports.fetch = function (mailbox, callback) {
         });
       });
     } else {
-      logger.info("RETR failed for msgnumber " + msgnumber);
+      logger.info('RETR failed for msgnumber ' + msgnumber);
       client.rset();
     }
   });
 
-  client.on("dele", function (status, msgnumber, data, rawdata) {
+  client.on('dele', function (status, msgnumber, data, rawdata) {
+    logger.info('dele',mailbox.address);
     if (status === true) {
       current = next;
       next += 1;
@@ -195,19 +204,21 @@ exports.fetch = function (mailbox, callback) {
         client.quit();
       }
     } else {
-      logger.info("DELE failed for msgnumber " + msgnumber);
+      logger.info('DELE failed for msgnumber ' + msgnumber);
       client.rset();
     }
   });
 
-  client.on("rset", function (status, rawdata) {
+  client.on('rset', function (status, rawdata) {
+    logger.info('rset',mailbox.address);
     resetted = true;
     client.quit();
   });
 
-  client.on("quit", function (status, rawdata) {
+  client.on('quit', function (status, rawdata) {
 //        if (status === true) logger.info("QUIT success");
 //        else logger.info("QUIT failed");
+    logger.info('quit',mailbox.address);
     retrievedMails = retrievedMails || [];
     if (keepMails)
       retrievedMails = _.union(retrievedMails, newRetrievedMails);
