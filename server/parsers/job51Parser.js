@@ -36,7 +36,7 @@ function parseBasicInfo(table, errors) {
     resume.gender = helper.parseGender(firstLineItems[1]);
     resume.birthday = helper.parseDate(firstLineItems[2].split(/\(|（/)[1]);
     if (firstLineItems.length > 3) {
-      resume.civilStatus = helper.parseCivilState(firstLineItems[3]);
+      resume.civilState = helper.parseCivilState(firstLineItems[3]);
     }
     resume.job51Id = helper.onlyNumber(tableData[0][1]);
     resume.residency = tableData[1][1];
