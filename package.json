@@ -40,7 +40,7 @@
     "mocha": "^1.20.1",
     "moment": "^2.7.0",
     "mongoosastic": "licq/mongoosastic",
-    "mongoose": "~3.8.12",
+    "mongoose": "~3.8.14",
     "mongoose-crate": "^1.0.6",
     "mongoose-crate-localfs": "^1.1.1",
     "mongoose-merge-plugin": "0.0.4",
