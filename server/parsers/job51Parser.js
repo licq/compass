@@ -36,7 +36,7 @@ function parseBasicInfo(table, errors) {
     resume.gender = helper.parseGender(firstLineItems[1]);
     resume.birthday = helper.parseDate(firstLineItems[2].split(/\(|（/)[1]);
     if (firstLineItems.length > 3) {
-      resume.civilStatus = helper.parseCivilState(firstLineItems[3]);
+      resume.civilState = helper.parseCivilState(firstLineItems[3]);
     }
     resume.job51Id = helper.onlyNumber(tableData[0][1]);
     resume.residency = tableData[1][1];
@@ -130,7 +130,7 @@ function parseWorkExperience(table, errors) {
           var items = line[0].split(/--|：|（|）/);
           work.from = helper.parseDate(items[0]);
           work.to = helper.parseDate(items[1]);
-          work.name = items[2];
+          work.company = items[2];
         } else if (helper.isIndustry(line[0])) {
           work.industry = line[1];
           hasIndustry = true;
