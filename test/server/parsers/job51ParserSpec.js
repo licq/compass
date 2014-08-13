@@ -11,12 +11,45 @@ describe('job51Parser', function () {
         var resume = resumeParser.parse({
           html: data
         });
+        console.log(resume);
         expect(resume.name).to.equal('蒋华辛');
         expect(resume.email).to.equal('jianghuaxin@live.cn');
         expect(resume.mobile).to.equal('18645149586');
         expect(resume.applyPosition).to.equal('Java开发实习生（上海）');
         expect(resume.yearsOfExperience).to.equal(0);
+        expect(resume.projectExperience).to.be.exist;
+        done(err);
+      });
+    });
+
+    it('should parse 51job v3t resume correctly', function (done) {
+      fs.readFile(__dirname + '/51jobv3t.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
         console.log(resume);
+        expect(resume.name).to.equal('贾军柯');
+        expect(resume.email).to.equal('670566237@qq.com');
+        expect(resume.mobile).to.equal('18657370337');
+        expect(resume.applyPosition).to.equal('Java开发工程师（上海）');
+        expect(resume.yearsOfExperience).to.equal(-0);
+        done(err);
+      });
+    });
+
+    it('should parse 51job v2t resume correctly', function (done) {
+      fs.readFile(__dirname + '/51jobv2t.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
+        console.log(resume);
+        expect(resume.name).to.equal('穆克良');
+        expect(resume.email).to.equal('mukeliang@163.com');
+        expect(resume.mobile).to.equal('15026758640');
+        expect(resume.applyPosition).to.equal('技术总监（上海-卢湾区）');
+        expect(resume.yearsOfExperience).to.equal(8);
+        expect(resume.projectExperience).to.have.length(8);
+        expect(resume.workExperience).to.have.length(3);
         done(err);
       });
     });
@@ -39,7 +72,7 @@ describe('job51Parser', function () {
           html: data
         });
 //                expect(resume.name).to.equal('顾欢');
-//                expect(resume.projectExperience).to.have.length(2);
+                expect(resume.projectExperience).to.have.length(9);
         console.log(resume);
         done(err);
       });

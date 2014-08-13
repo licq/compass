@@ -282,6 +282,8 @@ describe('helper', function () {
   describe('#isMobile', function () {
     it('should return correctly', function () {
       expect(helper.isMobile('15721128797(手机')).to.be.true;
+      expect(helper.isMobile('15721128797(电话')).to.be.true;
+      expect(helper.isMobile('电话：')).to.be.true;
       expect(helper.isMobile('2年工作经验 | 团员 安徽省安庆市 246003')).to.be.false;
     });
   });
@@ -297,7 +299,14 @@ describe('helper', function () {
   describe('#isEmail', function () {
     it('should return correctly', function () {
       expect(helper.isEmail('Email: aa@bb.com')).to.be.true;
+      expect(helper.isEmail('e-mail: aa@bb.com')).to.be.true;
       expect(helper.isEmail('aa@bb.com')).to.be.false;
+    });
+  });
+
+  describe('#isAddress', function () {
+    it('should return correctly', function () {
+      expect(helper.isAddress('地址：陈春东路99号')).to.be.true;
     });
   });
 
@@ -442,6 +451,7 @@ describe('helper', function () {
     it('should return correctly', function () {
       expect(helper.isIndustry('希望行业： 实习')).to.be.true;
       expect(helper.isIndustry('期望从事行业：')).to.be.true;
+      expect(helper.isIndustry('所属行业：')).to.be.true;
       expect(helper.isIndustry('培训地点：北京化工大学主教学楼')).to.be.false;
     });
   });
@@ -453,9 +463,20 @@ describe('helper', function () {
     });
   });
 
+  describe('#isReportToOrHasStaffs', function () {
+    it('should return correctly', function () {
+      expect(helper.isReportToOrHasStaffs('汇报对象： ')).to.be.true;
+      expect(helper.isReportToOrHasStaffs('下属人数：')).to.be.true;
+      expect(helper.isReportToOrHasStaffs('汇报人数：')).to.be.false;
+    });
+  });
+
   describe('#isTargetSalary', function () {
     it('should return correctly', function () {
       expect(helper.isTargetSalary('期望月薪： 面议/月')).to.be.true;
+      expect(helper.isTargetSalary('期望薪水： 面议/月')).to.be.true;
+      expect(helper.isTargetSalary('期望工资： 面议/月')).to.be.true;
+      expect(helper.isTargetSalary('期望年薪： 面议/月')).to.be.true;
       expect(helper.isTargetSalary('培训地点：北京化工大学主教学楼')).to.be.false;
     });
   });
