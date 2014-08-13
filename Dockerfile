@@ -1,4 +1,4 @@
-FROM dockerfile/nodejs
+FROM lingpin/nodejs
 
 RUN npm install -g pm2
 ENV NODE_ENV production
