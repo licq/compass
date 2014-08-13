@@ -315,13 +315,12 @@ function parseInSchoolPractices(table, errors) {
     tableData = _.filter(tableData, function (line) {
       return line[0].trim().length !== 0;
     });
-    var practices = [],
-      practice;
+    var practices = [], practice;
     for (var i = 0; i < tableData.length; i++) {
-      if (tableData[i].length === 2) {
+      if (tableData[i].length >= 2) {
         if (practice) practices.push(practice);
         practice = helper.parseDateRange(tableData[i][0]);
-        practice.content = tableData[i][1];
+        practice.content = tableData[i][1] + tableData[i][2];
       } else {
         practice.content += tableData[i][0];
       }
