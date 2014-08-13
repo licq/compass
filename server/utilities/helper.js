@@ -172,6 +172,10 @@ exports.isEnglishCertificate = function isEnglishCertificate(input) {
   return /英语等级/.test(input);
 };
 
+exports.isAddress = function isAddress(input) {
+  return /地址/.test(input);
+};
+
 var englishCertificateMap = {
   '英语四级': 'cet4',
   '未参加': 'not participate',
@@ -256,6 +260,10 @@ exports.isProjectHeader = function isProjectHeader(input) {
   return /\d+.+--.+：.*/.test(input);
 };
 
+exports.isWorkHeader = function isWorkHeader(input) {
+  return /\d+.+--.+：.*/.test(input);
+};
+
 exports.isSoftwareEnvironment = function isSoftwareEnvironment(input) {
   return input.indexOf('软件环境') > -1;
 };
@@ -270,6 +278,10 @@ exports.isDevelopmentTools = function isDevelopmentTools(input) {
 
 exports.isDescription = function isDescription(input) {
   return input.indexOf('项目描述') > -1;
+};
+
+exports.isReportToOrHasStaffs = function isReportToOrHasStaffs(input) {
+  return /汇报对象|下属人数/.test(input);
 };
 
 exports.isResponsibility = function isResponsibility(input) {
@@ -376,11 +388,11 @@ exports.isPoliticalStatus = function isPoliticalStatus(input) {
 };
 
 exports.isMobile = function isMobile(input) {
-  return input.indexOf('手机') > -1 || (exports.onlyNumber(input) && exports.onlyNumber(input).length === 11);
+  return /手机|电话/.test(input) || (exports.onlyNumber(input) && exports.onlyNumber(input).length === 11);
 };
 
 exports.isEmail = function isEmail(input) {
-  return input.indexOf('Email') > -1;
+  return /Email|E-mail/i.test(input);
 };
 
 exports.parseEmail = function parseEmail(input) {
@@ -452,7 +464,7 @@ exports.isTypeOfEmployment = function isTypeOfEmployment(input) {
 };
 
 exports.isIndustry = function isIndustry(input) {
-  return input.indexOf('希望行业') > -1 || input.indexOf('期望从事行业') > -1;
+  return /希望行业|期望从事行业|所属行业/.test(input);
 };
 
 exports.isLocations = function isLocations(input) {
@@ -460,7 +472,7 @@ exports.isLocations = function isLocations(input) {
 };
 
 exports.isTargetSalary = function isTargetSalary(input) {
-  return input.indexOf('期望月薪') > -1 || input.indexOf('期望年薪') > -1;
+  return /期望月薪|期望年薪|期望工资|期望薪水/.test(input);
 };
 
 exports.isJobCategory = function isJobCategory(input) {

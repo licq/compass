@@ -30,6 +30,7 @@ function parseBasicInfo(table, errors) {
     var resume = {};
 
     var tableData = helper.parseTable(table);
+
     var firstLineItems = tableData[0][0].split('|');
     resume.yearsOfExperience = helper.parseYearsOfExperience(firstLineItems[0]);
     resume.gender = helper.parseGender(firstLineItems[1]);
@@ -42,11 +43,26 @@ function parseBasicInfo(table, errors) {
     if (tableData.length >= 4) {
       resume.hukou = tableData[1][3];
     }
-    resume.mobile = helper.onlyNumber(tableData[2][1]);
-    resume.email = tableData[3][1];
+
+    tableData.splice(0, 2);
+    _.forEach(tableData, function (line) {
+      if (line[0]) {
+        var title = helper.removeSpaces(line[0]);
+        if (helper.isMobile(title)) {
+          resume.mobile = helper.onlyNumber(line[1]);
+        } else if (helper.isAddress(title)) {
+          resume.address = line[1];
+        } else if (helper.isEmail(title)) {
+          resume.email = line[1];
+        }
+      }
+    });
+
     resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
     return resume;
-  } catch (e) {
+  }
+  catch
+    (e) {
     errors.push(e.message);
     logger.error(e.stack);
   }
@@ -100,33 +116,48 @@ function parseCareerObjective(table, errors) {
   }
 }
 
-
 function parseWorkExperience(table, errors) {
   if (!table) return;
   try {
-    var tableData = helper.parseTable(table);
-    return _.times(Math.ceil((tableData.length + 1) / 5), function (index) {
-      var firstLineItems = tableData[index * 5][0].split(/：|（/);
-      var dateRange = helper.parseDateRange(firstLineItems[0]);
-      var work = {
-        from: dateRange.from,
-        to: dateRange.to,
-        company: firstLineItems[1]
-      };
-      if (tableData[index * 5 + 1][0].indexOf('所属行业') > -1) {
-        _.extend(work, {
-          industry: tableData[index * 5 + 1][1],
-          department: tableData[ index * 5 + 2][0],
-          jobTitle: tableData[index * 5 + 2][1],
-          jobDescription: tableData[index * 5 + 3][0]
-        });
-      } else {
-        _.extend(work, {
-          department: tableData[ index * 5 + 1][0],
-          jobTitle: tableData[index * 5 + 1][1],
-          jobDescription: tableData[index * 5 + 2][0]
-        });
-      }
+    var workTableData = helper.parseTable(table);
+    return _.map(helper.chunkByEmptyArray(workTableData), function (workData) {
+      var work = {};
+      var description = ' ', hasIndustry = false;
+      _.each(workData, function (line, index) {
+        if (helper.isWorkHeader(line[0])) {
+          if (line.length > 1)
+            line[0] = line.join('');
+          var items = line[0].split(/--|：|（|）/);
+          work.from = helper.parseDate(items[0]);
+          work.to = helper.parseDate(items[1]);
+          work.name = items[2];
+        } else if (helper.isIndustry(line[0])) {
+          work.industry = line[1];
+          hasIndustry = true;
+        } else if (helper.isReportToOrHasStaffs(line[0])) {
+          if (line.length > 1)
+            line[0] = line.join('');
+          description += (line[0] + ' ');
+        } else if (hasIndustry) {
+          if (index === 2) {
+            if(line.length === 1)
+                line = line[0].split(/ |--|：|（|）/);
+              work.department = line[0];
+            work.jobTitle = line[1];
+          } else if (index === 3) {
+            work.jobDescription = line[0];
+          }
+        } else if(!hasIndustry){
+          if (index === 1) {
+            work.department = line[0];
+            work.jobTitle = line[1];
+          } else if (index === 2) {
+            work.jobDescription = line[0];
+          }
+        }
+      });
+
+      work.jobDescription += description;
       return work;
     });
   } catch (e) {
@@ -134,6 +165,7 @@ function parseWorkExperience(table, errors) {
     logger.error(e.stack);
   }
 }
+
 
 function parseProjectExperience(table, errors) {
   if (!table) return;
@@ -316,9 +348,13 @@ exports.parse = function (data) {
         }
         return table.find('table');
       };
-    } else {
+    } else if ($('style').text().indexOf('.v3_t') > -1) {
       tableTitle = function (tableNames, i) {
         return $('div.v3_t > table > tr > td:contains(' + tableNames[i] + ')').closest('div').next();
+      };
+    } else if ($('style').text().indexOf('.v2_t') > -1) {
+      tableTitle = function (tableNames, i) {
+        return $('p.v2_t:contains(' + tableNames[i] + ')').next();
       };
     }
     var tableNames = Array.prototype.slice.call(arguments, 0);
