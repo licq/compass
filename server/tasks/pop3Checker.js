@@ -11,15 +11,26 @@ exports.check = function (mailbox, callback) {
   var correct = false;
 
   var client = new POPClient(mailbox.port, mailbox.server, {
-    tlserrs: true,
+    ignoretlserrs: true,
     enabletls: mailbox.ssl,
     debug: false
   });
 
   client.on('error', function (err) {
     if (err.errno === 111) logger.info('Unable to connect to server, failed');
-    else logger.info('Server error occurred, failed');
+    else logger.info('Server error occurred, failed:', err);
     callback('connect failed');
+  });
+
+  client.on('capa', function(status,data){
+    console.log('capa',status,data);
+    client.stls();
+  });
+
+  client.on('stls', function(status,rawdata){
+    console.log('stls',status,rawdata);
+
+    client.login(mailbox.account,mailbox.password);
   });
 
   client.on('connect', function () {
@@ -37,11 +48,11 @@ exports.check = function (mailbox, callback) {
   client.on('login', function (status, data) {
     if (status) {
       correct = true;
+      client.quit();
     } else {
       logger.info('LOGIN/PASS failed');
-      callback('用户名/密码不正确');
+      return callback('用户名/密码不正确');
     }
-    client.quit();
   });
 
   client.on('rset', function (status, rawdata) {

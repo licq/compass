@@ -43,5 +43,20 @@ describe.skip('pop3Checker', function () {
         done();
       });
     });
+
+    it('should connect to jj-inn.com', function (done) {
+      mailbox = {
+        address: 'jinjianghr@jj-inn.com',
+        account: 'jinjianghr@jj-inn.com',
+        password: 'Pass@word1',
+        ssl: false,
+        port: 110,
+        server: 'mail.jj-inn.com'
+      };
+      pop3Checker.check(mailbox, function (err) {
+        expect(err).to.not.exist;
+        done();
+      });
+    });
   });
 });

@@ -8,7 +8,7 @@ var POPClient = require('poplib'),
   logger = require('../config/winston').logger();
 
 function saveToDB(mail, address, callback) {
-  logger.info('saveToDB',address);
+  logger.info('saveToDB', address);
   mail.mailbox = address;
   Mail.create(mail, function (err, created) {
     require('./jobs').addParseResumeJob(created, function () {
@@ -44,7 +44,7 @@ function parse(mailData, callback) {
 }
 
 exports.fetch = function (mailbox, callback) {
-  logger.info('fetch',mailbox.address);
+  logger.info('fetch', mailbox.address);
   var correct = false, resetted = false,
     totalUnretrievedMails, totalToBeprocessedMails,
     totalMails = 0,
@@ -58,20 +58,21 @@ exports.fetch = function (mailbox, callback) {
     msgnumbers = [], uids = [], newRetrievedMails = [];
 
   var client = new POPClient(mailbox.port, mailbox.server, {
-    tlserrs: true,
+    ignoretlserrs: true,
     enabletls: mailbox.ssl,
     debug: false
   });
 
   client.on('error', function (err) {
-    logger.info('error',mailbox.address);
+    logger.info('error', mailbox.address);
     if (err.errno === 111) logger.info('Unable to connect to server, failed');
     else logger.info('Server error occurred, failed');
+    logger.error('error info', err);
     callback('connect failed');
   });
 
   client.on('connect', function () {
-    logger.info('connect',mailbox.address);
+    logger.info('connect', mailbox.address);
     client.login(mailbox.account, mailbox.password);
   });
 
@@ -84,7 +85,7 @@ exports.fetch = function (mailbox, callback) {
   });
 
   client.on('login', function (status, data) {
-    logger.info('login',mailbox.address);
+    logger.info('login', mailbox.address);
     if (status) {
       correct = true;
       client.uidl();
@@ -95,7 +96,7 @@ exports.fetch = function (mailbox, callback) {
   });
 
   client.on('uidl', function (status, msgnumber, data, rawdata) {
-    logger.info('uidl',mailbox.address);
+    logger.info('uidl', mailbox.address);
     if (status === false) {
       logger.info('LIST failed');
       client.quit();
@@ -160,7 +161,7 @@ exports.fetch = function (mailbox, callback) {
 //  });
 
   client.on('retr', function (status, msgnumber, data, rawdata) {
-    logger.info('retr',mailbox.address);
+    logger.info('retr', mailbox.address);
     if (status === true) {
       parse(data, function (mail) {
         saveToDB(mail, mailbox.address, function (err) {
@@ -190,7 +191,7 @@ exports.fetch = function (mailbox, callback) {
   });
 
   client.on('dele', function (status, msgnumber, data, rawdata) {
-    logger.info('dele',mailbox.address);
+    logger.info('dele', mailbox.address);
     if (status === true) {
       current = next;
       next += 1;
@@ -210,7 +211,7 @@ exports.fetch = function (mailbox, callback) {
   });
 
   client.on('rset', function (status, rawdata) {
-    logger.info('rset',mailbox.address);
+    logger.info('rset', mailbox.address);
     resetted = true;
     client.quit();
   });
@@ -218,7 +219,7 @@ exports.fetch = function (mailbox, callback) {
   client.on('quit', function (status, rawdata) {
 //        if (status === true) logger.info("QUIT success");
 //        else logger.info("QUIT failed");
-    logger.info('quit',mailbox.address);
+    logger.info('quit', mailbox.address);
     retrievedMails = retrievedMails || [];
     if (keepMails)
       retrievedMails = _.union(retrievedMails, newRetrievedMails);
