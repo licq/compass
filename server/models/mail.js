@@ -51,7 +51,7 @@ var mailSchema = mongoose.Schema({
   parseErrors: [String]
 });
 
-mailSchema.index({subject: 1, date: -1}, {unique: true});
+mailSchema.index({subject: 1, date: -1, company: 1}, {unique: true});
 
 mailSchema.pre('save', function (next) {
   var self = this;

@@ -7,7 +7,7 @@ node_modules/
 public/vendor
 test/coverage
 compass.iml
-*.log
+*.log*
 .rebooted
 dist/
 .tmp/

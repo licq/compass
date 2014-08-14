@@ -11,18 +11,17 @@ exports.init = function (config) {
       level: 'debug',
       handleExceptions: true,
       colorize: true,
-      timestamp: function(){
+      timestamp: function () {
         return moment().format('YYYY/MM/DD HH:mm:ss:SSS');
       }
     }),
-    new (winston.transports.File)({
+    new winston.transports.DailyRotateFile({
       filename: config.logFileName,
-      level: 'info',
-      handleExceptions: true,
-      maxSize: 2 * 1024 * 1024,
-      timestamp: function(){
+      timestamp: function () {
         return moment().format('YYYY/MM/DD HH:mm:ss:SSS');
-      }
+      },
+      level: 'info',
+      handleExceptions: true
     })
   ];
 };
