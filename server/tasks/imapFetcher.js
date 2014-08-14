@@ -28,7 +28,8 @@ function parse(mailData, callback) {
   mailParser.end();
 
   mailParser.on('end', function (mail) {
-    if (mail.subject.indexOf('导出简历') > 0 && mail.attachments.length > 0 && mail.attachments[0].fileName.indexOf('.mht') > 0) {
+    if (mail.subject.indexOf('导出简历') > 0 && mail.attachments.length > 0 && mail.attachments[0].fileName.indexOf('.mht') > 0
+      && mail.attachments[0].content) {
       var b = new Buffer(mail.attachments[0].content, 'base64');
       var newMailParser = new MailParser();
       newMailParser.write(b);

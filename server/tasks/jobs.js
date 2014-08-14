@@ -93,18 +93,20 @@ exports.recreateAllJobs = function (done) {
 };
 
 exports.addParseResumeJob = function (mail, cb) {
-  logger.info('addParseResumeJob:', mail.subject);
-  var data = {
-    html: mail.html,
-    title: mail.subject,
-    subject: mail.subject,
-    company: mail.company,
-    mailId: mail._id,
-    fromAddress: mail.fromAddress,
-    createdAt: mail.createdAt,
-    attachments: mail.attachments
-  };
-  jobs.create('parse resume', data).attempts(3).save();
+  if (mail) {
+    logger.info('addParseResumeJob:', mail.subject);
+    var data = {
+      html: mail.html,
+      title: mail.subject,
+      subject: mail.subject,
+      company: mail.company,
+      mailId: mail._id,
+      fromAddress: mail.fromAddress,
+      createdAt: mail.createdAt,
+      attachments: mail.attachments
+    };
+    jobs.create('parse resume', data).attempts(3).save();
+  }
   cb && cb();
 };
 

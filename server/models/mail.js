@@ -23,9 +23,7 @@ var mailSchema = mongoose.Schema({
   html: String,
   text: String,
   date: {
-    type: Date,
-    index: true
-
+    type: Date
   },
   attachments: [
     {
@@ -53,6 +51,8 @@ var mailSchema = mongoose.Schema({
   parseErrors: [String]
 });
 
+mailSchema.index({subject: 1, date: -1}, {unique: true});
+
 mailSchema.pre('save', function (next) {
   var self = this;
 
@@ -70,6 +70,7 @@ mailSchema.pre('save', function (next) {
   }
   next();
 });
+
 
 mailSchema.plugin(timestamps);
 
