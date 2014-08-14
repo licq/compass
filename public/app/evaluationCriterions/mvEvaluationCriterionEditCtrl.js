@@ -4,6 +4,7 @@ angular.module('compass')
       $scope.evaluationCriterion = criterion;
     }, function (res) {
       $scope.err = res.data;
+      $scope.item = {};
     });
 
     $scope.gridOptions = angular.extend({
