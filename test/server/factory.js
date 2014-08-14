@@ -37,7 +37,7 @@ Factory.define('applicationSetting', ApplicationSetting, {
   name: function (cb) {
     cb('applicationSetting' + settingCounter++);
   },
-  positionRightControlled : false,
+  positionRightControlled: false,
   company: Factory.assoc('company', 'id')
 });
 
@@ -87,6 +87,7 @@ Factory.define('signup', Signup, {
   adminPassword: 'password'
 });
 
+var mailCounter = 1;
 Factory.define('mail', Mail, {
   from: [
     {address: 'aa@aa.com', name: 'aa'}
@@ -94,7 +95,9 @@ Factory.define('mail', Mail, {
   to: [
     {address: 'bb@bb.com', name: 'bb'}
   ],
-  subject: 'hello,this is from compass',
+  subject: function (cb) {
+    cb('hello,this is from compass' + mailCounter++);
+  },
   html: '<h1>hello</h1>',
   date: '2012-03-15',
   mailbox: 'bb@bb.com'
