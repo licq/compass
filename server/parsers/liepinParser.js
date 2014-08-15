@@ -6,7 +6,7 @@ var cheerio = require('cheerio'),
   entities = require('entities'),
   logger = require('../config/winston').logger();
 
-function parseBasicInfo(table,errors) {
+function parseBasicInfo(table, errors) {
   if (!table) return;
   try {
     var tableData = helper.parseTable(table);
@@ -26,7 +26,7 @@ function parseBasicInfo(table,errors) {
   }
 }
 
-function parseLanguageSkills(table,errors) {
+function parseLanguageSkills(table, errors) {
   if (!table) return;
   try {
     return table.find('td:nth-child(1)').text().split('、').map(function (language) {
@@ -40,7 +40,7 @@ function parseLanguageSkills(table,errors) {
   }
 }
 
-function parseCareerObjective(table,errors) {
+function parseCareerObjective(table, errors) {
   if (!table) return;
   try {
     var careerObjective = {};
@@ -66,13 +66,15 @@ function parseCareerObjective(table,errors) {
 }
 
 
-function parseWorkExperience(table,errors) {
+function parseWorkExperience(table, errors) {
   if (!table) return;
+
   try {
     var workExperience = [];
     var workTable = table.find('table');
     var tableData = helper.parseTable(workTable);
-    if (tableData[0].length === 2) {
+    var work, contents, items;
+    if (tableData.length > 1) {
       for (var i = 0; i < tableData.length; i++) {
         if (helper.isNewWork(tableData[i])) {
           var dateRange = helper.parseDateRange(tableData[i][0]);
@@ -85,15 +87,45 @@ function parseWorkExperience(table,errors) {
           });
         }
       }
+    } else if (tableData[0][0].indexOf('-------------------------') > -1) {
+      contents = workTable.find('td:nth-child(1)').contents();
+      var lines = _.map(_.filter(contents, function (item) {
+        return item.type === 'text';
+      }), function (item) {
+        return item.data.trim();
+      });
+      var works = helper.splitByDashDashDash(lines);
+      _.forEach(works, function (data) {
+        items = data[0].split(/：|\(/);
+        var dateRange = helper.parseDateRange(items[0]);
+        work = {
+          from: dateRange.from,
+          to: dateRange.to,
+          company: items[1]
+        };
+        items = data[1].split('：');
+        if (items.length > 1) work.industry = items[1].trim();
+        items = data[2].split(' ');
+        if (items.length > 1) {
+          work.department = items[0];
+          work.jobTitle = items[1];
+        }
+        if (data.length > 3) {
+          work.jobDescription = data.slice(3).join('');
+        }
+        workExperience.push(work);
+      });
     } else {
-      var work;
-      var contents = workTable.find('td:nth-child(1)').contents();
+      contents = workTable.find('td:nth-child(1)').contents();
       _.forEach(_.map(_.filter(contents, function (item) {
         return item.type === 'text';
       }), function (item) {
         return item.data.trim();
       }), function (data) {
-        var items = data.split(/ |：/);
+        var items = data.split(/：/);
+        if (items.length === 1) {
+          items = data.split(' ');
+        }
         if (helper.isNewWork(items)) {
           if (!!work) workExperience.push(work);
           var dateRange = helper.parseDateRange(items[0]);
@@ -121,7 +153,8 @@ function parseWorkExperience(table,errors) {
   }
 }
 
-function parseProjectExperience(table,errors) {
+function parseProjectExperience(table, errors) {
+  var project, contents, match;
   if (!table) return;
   try {
     var trs = table.find('table').find('tr');
@@ -143,16 +176,45 @@ function parseProjectExperience(table,errors) {
         });
         return project;
       });
-    } else {
-      var projects = [];
-      var project;
-      var match;
-      var contents = trs.find('td:nth-child(1)').contents();
-      contents = _.filter(contents, function (item) {
+    } else if (table.text().indexOf('--------------') > -1) {
+      contents = _.filter(trs.find('td:nth-child(1)').contents(), function (item) {
         return item.type === 'text';
       });
       contents = _.map(contents, function (item) {
-        return item.data;
+        return item.data.trim();
+      });
+      var datas = helper.splitByDashDashDash(contents);
+      return _.map(datas, function (data) {
+        var items = data[0].split('：');
+        var dateRange = helper.parseDateRange(items[0]);
+        project = {
+          from: dateRange.from,
+          to: dateRange.to,
+          name: items[1]
+        };
+        _.forEach(data.slice(1), function (line) {
+          if (line.indexOf('责任描述') === 0) {
+            project.responsibility = line.split('： ')[1].trim();
+          } else if (line.indexOf('软件环境') === 0) {
+            project.softwareEnvironment = line.split('：')[1].trim();
+          } else if (line.indexOf('开发工具') === 0) {
+            project.developmentTools = line.split('：')[1].trim();
+          } else if (line.indexOf('项目描述') === 0) {
+            project.description = line.split('：')[1].trim();
+          } else if (line.indexOf('团队人数') === 0) {
+          } else {
+            project.description = project.description + line;
+          }
+        });
+        return project;
+      });
+    } else {
+      var projects = [];
+      contents = _.filter(trs.find('td:nth-child(1)').contents(), function (item) {
+        return item.type === 'text';
+      });
+      contents = _.map(contents, function (item) {
+        return item.data.trim();
       });
       _.forEach(contents, function (data) {
         if ((match = data.match(/(\d{4}\/\d{1,2}\s?(?:–|—)\s?(?:\d{4}\/\d{1,2})?)\s+(.+)/))) {
@@ -184,8 +246,9 @@ function parseProjectExperience(table,errors) {
   }
 }
 
-function parseEducationHistory(table,errors) {
+function parseEducationHistory(table, errors) {
   if (!table) return;
+  var contents;
   try {
     var tableData = helper.parseTable(table.find('table'));
     if (tableData[0].length === 2) {
@@ -199,8 +262,25 @@ function parseEducationHistory(table,errors) {
           degree: helper.parseDegree(helper.splitByColon(tableData[index * 3 + 2][0])[1])
         };
       });
+    } else if (/^\d+\/\d+.+ .+ .+ .+/.test(tableData[0][0])) {
+      contents = table.find('table').find('td:nth-child(1)').contents();
+      contents = _.filter(contents, function (item) {
+        return item.type === 'text';
+      });
+      contents = _.map(contents, function (item) {
+        return item.data;
+      });
+      return _.map(contents, function (line) {
+        var items = line.split(' ');
+        var education = helper.parseDateRange(items[0]);
+        return _.extend(education, {
+          school: items[1],
+          major: items[2],
+          degree: items[3]
+        });
+      });
     } else {
-      var contents = table.find('table').find('td:nth-child(1)').contents();
+      contents = table.find('table').find('td:nth-child(1)').contents();
       contents = _.filter(contents, function (item) {
         return item.type === 'text';
       });
@@ -233,7 +313,7 @@ function parseEducationHistory(table,errors) {
   }
 }
 
-function parseFirstTdText(table,errors) {
+function parseFirstTdText(table, errors) {
   if (!table) return;
   try {
     return table.find('td:nth-child(1)').text();
@@ -258,15 +338,15 @@ exports.parse = function (data) {
   };
 
   var errors = [];
-  var resume = parseBasicInfo(findTable('基本信息'),errors);
+  var resume = parseBasicInfo(findTable('基本信息'), errors);
   resume.applyPosition = $('body > table table tr:nth-child(1) td div span').text();
-  resume.careerObjective = parseCareerObjective(findTable('求职意向'),errors);
-  resume.careerObjective.selfAssessment = parseFirstTdText(findTable('自我评价'),errors);
-  resume.workExperience = parseWorkExperience(findTable('工作经历'),errors);
-  resume.projectExperience = parseProjectExperience(findTable('项目经历'),errors);
-  resume.educationHistory = parseEducationHistory(findTable('教育经历'),errors);
-  resume.languageSkills = parseLanguageSkills(findTable('语言能力'),errors);
-  resume.additionalInformation = parseFirstTdText(findTable('附加信息'),errors);
+  resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
+  resume.careerObjective.selfAssessment = parseFirstTdText(findTable('自我评价'), errors);
+  resume.workExperience = parseWorkExperience(findTable('工作经历'), errors);
+  resume.projectExperience = parseProjectExperience(findTable('项目经历'), errors);
+  resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
+  resume.languageSkills = parseLanguageSkills(findTable('语言能力'), errors);
+  resume.additionalInformation = parseFirstTdText(findTable('附加信息'), errors);
   resume.channel = '猎聘网';
   resume.mail = data.mailId;
   resume.company = data.company;

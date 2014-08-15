@@ -30,5 +30,14 @@ describe('liepinParser', function () {
         done(err);
       });
     });
+    it('should parse liepin 3 resume correctly', function (done) {
+      fs.readFile(__dirname + '/liepin3resume.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
+        console.log(resume);
+        done(err);
+      });
+    });
   });
 });

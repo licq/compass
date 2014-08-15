@@ -29,7 +29,7 @@ exports.parseDate = function parseDate(input) {
     result.setDate(parseInt(match[2], 10) || 1);
     result.setMonth(parseInt(match[1], 10) - 1);
     return result;
-  } else if (input.indexOf('至今') > -1 || input.indexOf('现在') > -1) {
+  } else if (input.indexOf('今') > -1 || input.indexOf('现在') > -1) {
     var date = new Date();
     date.setFullYear(9999);
     return date;
@@ -507,5 +507,26 @@ exports.splitBySemiolon = function splitBySemiolon(input) {
 };
 
 exports.isNewWork = function isNewWork(input) {
-  return input.length === 2 && (!!input[0].match(/\d+\.\d+\.?\s?-\s?至今/) || !!input[0].match(/\d+\.\d+\.?\s?-\s?\d+\.\d+/) || !!input[0].match(/\d+\/\d+—\d+\/\d+/));
+  if (Array.isArray(input)) {
+    input = input[0];
+  }
+  return (!!input.match(/\d+\.\d+\.?\s?-\s?至今/) || !!/\d+ ?.?\d+\s?-+\s?至今/.test(input) || !!input.match(/\d+\.\d+\.?\s?-\s?\d+\.\d+/) || !!input.match(/\d+\/\d+—\d+\/\d+/));
 };
+
+exports.splitByDashDashDash = function splitByDashDashDash(lines) {
+  var works = [];
+  var workData = [];
+  _.forEach(lines, function (line) {
+    if (line.indexOf('----------------') === -1) {
+      if (line) workData.push(line);
+    } else {
+      works.push(workData);
+      workData = [];
+    }
+  });
+  if (workData.length !== 0) {
+    works.push(workData);
+  }
+  return works;
+};
+
