@@ -145,12 +145,25 @@ describe('helper', function () {
     it('should return correctly', function () {
       expect(helper.isEnglishCertificate('英语（良好）')).to.be.false;
       expect(helper.isEnglishCertificate('英语等级：')).to.be.true;
+      expect(helper.isEnglishCertificate('IELTS：')).to.be.true;
+      expect(helper.isEnglishCertificate('GMAT：')).to.be.true;
+      expect(helper.isEnglishCertificate('TOEFL：')).to.be.true;
     });
   });
 
   describe('#parseEnglishCertificate', function () {
     it('should parse correctly', function () {
       expect(helper.parseEnglishCertificate('英语四级')).to.equal('cet4');
+    });
+  });
+
+  describe('#parseLanguageTest', function () {
+    it('should parse correctly', function () {
+      expect(helper.parseLanguageTest('英语等级')).to.equal('english');
+      expect(helper.parseLanguageTest('日语等级')).to.equal('japanese');
+      expect(helper.parseLanguageTest('GMAT')).to.equal('gmat');
+      expect(helper.parseLanguageTest('gre')).to.equal('gre');
+      expect(helper.parseLanguageTest('france')).to.be.not.exist;
     });
   });
 

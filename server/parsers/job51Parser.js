@@ -68,21 +68,6 @@ function parseBasicInfo(table, errors) {
   }
 }
 
-function parseLanguageSkills(table, errors) {
-  if (!table) return;
-  try {
-    var languageTable = table.find('tr td table');
-    return _.map(_.filter(helper.parseTable(languageTable), function (line) {
-      return line[0].indexOf('等级') < 0;
-    }), function (line) {
-      return helper.parseLanguageSkill(line[0], line[1]);
-    });
-  } catch (e) {
-    errors.push(e.message);
-    logger.error(e.stack);
-  }
-}
-
 function parseCareerObjective(table, errors) {
   if (!table) return;
   try {
@@ -140,14 +125,14 @@ function parseWorkExperience(table, errors) {
           description += (line[0] + ' ');
         } else if (hasIndustry) {
           if (index === 2) {
-            if(line.length === 1)
-                line = line[0].split(/ |--|：|（|）/);
-              work.department = line[0];
+            if (line.length === 1)
+              line = line[0].split(/ |--|：|（|）/);
+            work.department = line[0];
             work.jobTitle = line[1];
           } else if (index === 3) {
             work.jobDescription = line[0];
           }
-        } else if(!hasIndustry){
+        } else if (!hasIndustry) {
           if (index === 1) {
             work.department = line[0];
             work.jobTitle = line[1];
@@ -289,6 +274,22 @@ function parseItSkills(table, errors) {
   }
 }
 
+function parseLanguageSkills(table, errors) {
+  if (!table) return;
+  try {
+    var languageTable = table.find('tr td table');
+    return _.map(_.filter(helper.parseTable(languageTable), function (line) {
+      return line[0].indexOf('等级') < 0 && !helper.isEnglishCertificate(line[0]) &&
+        /话|语/.test(line[0]);
+    }), function (line) {
+      return helper.parseLanguageSkill(line[0], line[1]);
+    });
+  } catch (e) {
+    errors.push(e.message);
+    logger.error(e.stack);
+  }
+}
+
 function parseLanguageCertificates(table, errors) {
   if (!table) return;
   try {
@@ -296,10 +297,12 @@ function parseLanguageCertificates(table, errors) {
     if (languageTable.length === 0) languageTable = table;
     var languageCertificates = {};
     _.forEach(_.filter(helper.parseTable(languageTable), function (line) {
-      return line[0].indexOf('等级') > -1;
+      return helper.isEnglishCertificate(line[0]);
     }), function (line) {
-      if (helper.isEnglishCertificate(line[0]))
-        languageCertificates.english = helper.parseEnglishCertificate(line[1]);
+      var test = helper.parseLanguageTest(line[0]);
+      if (test) {
+        languageCertificates[test] = helper.parseEnglishCertificate(line[1]);
+      }
     });
     return languageCertificates;
   } catch (e) {

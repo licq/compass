@@ -54,6 +54,23 @@ describe('job51Parser', function () {
       });
     });
 
+    it.skip('should parse 51job v1bt resume correctly', function (done) {
+      fs.readFile(__dirname + '/51jobv1bt.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
+        console.log(resume);
+        expect(resume.name).to.equal('巫章丽');
+        expect(resume.email).to.equal('mukeliang@163.com');
+        expect(resume.mobile).to.equal('15026758640');
+        expect(resume.applyPosition).to.equal('技术总监（上海-卢湾区）');
+        expect(resume.yearsOfExperience).to.equal(8);
+        expect(resume.projectExperience).to.have.length(8);
+        expect(resume.workExperience).to.have.length(3);
+        done(err);
+      });
+    });
+
     it('should parse 51job another resume correctly', function (done) {
       fs.readFile(__dirname + '/51jobanotherresume.html', 'utf-8', function (err, data) {
         var resume = resumeParser.parse({
@@ -72,9 +89,26 @@ describe('job51Parser', function () {
           html: data
         });
 //                expect(resume.name).to.equal('顾欢');
-                expect(resume.projectExperience).to.have.length(9);
+        expect(resume.projectExperience).to.have.length(9);
         console.log(resume);
         done(err);
+      });
+    });
+
+    it.skip('should parse 51job temp correctly', function (done) {
+      fs.readFile(__dirname + '/51jobtemp.html', 'utf-8', function (err, data) {
+        var resume = resumeParser.parse({
+          html: data
+        });
+        expect(resume.name).to.exist;
+        expect(resume.email).to.exist;
+        expect(resume.mobile).to.exist;
+        expect(resume.applyPosition).to.exist;
+
+        console.log(resume);
+//        require('mongoose').model('Resume').create(resume, function (err, r) {
+          done(err);
+//        });
       });
     });
   });

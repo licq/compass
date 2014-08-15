@@ -169,7 +169,7 @@ exports.parseTable = function parseTable(table) {
 };
 
 exports.isEnglishCertificate = function isEnglishCertificate(input) {
-  return /英语等级/.test(input);
+  return /等级|gmat|ielts|toeic|toefl|gre/i.test(input);
 };
 
 exports.isAddress = function isAddress(input) {
@@ -182,11 +182,17 @@ var englishCertificateMap = {
   '未通过': 'not passed',
   '英语六级': 'cet6',
   '专业四级': 'tem4',
-  '专业八级': 'tem8'
+  '专业八级': 'tem8',
+  '无': 'none'
 };
 
 exports.parseEnglishCertificate = function parseEnglishCertificate(input) {
-  return englishCertificateMap[input.trim()];
+  var result = englishCertificateMap[input.trim()];
+  if (!result) {
+    result = parseInt(input);
+    result = isNaN(result) ? 0 : result;
+  }
+  return result;
 };
 
 var languageSkillMap = {
@@ -213,6 +219,23 @@ var languageMap = {
   'English': 'english'
 };
 
+exports.parseLanguageTest = function parseLanguageTest(input) {
+  if (/英语等级/.test(input))
+    return 'english';
+  else if (/日语等级/.test(input))
+    return 'japanese';
+  else if (/toefl/i.test(input))
+    return 'toefl';
+  else if (/gre/i.test(input))
+    return 'gre';
+  else if (/ielts/i.test(input))
+    return 'ielts';
+  else if (/toeic/i.test(input))
+    return 'toeic';
+  else if (/gmat/i.test(input))
+    return 'gmat';
+};
+
 exports.parseLanguage = function parseLanguage(input) {
   return languageMap[input.trim()];
 };
@@ -232,9 +255,11 @@ exports.parseLanguageSkill = function parseLanguageSkill(summary, detail) {
   var languageSkill = {};
   var sumItems = summary.split(/（|）|:/);
   languageSkill.language = languageMap[sumItems[0].trim()];
-  languageSkill.level = languageSkillMap[sumItems[1].trim()];
+  if (sumItems[1])
+    languageSkill.level = languageSkillMap[sumItems[1].trim()];
 
   if (detail) {
+
     var detailItems = detail.split(/（|）/g);
     languageSkill.readingAndWriting = languageSkillMap[detailItems[1]];
     languageSkill.listeningAndSpeaking = languageSkillMap[detailItems[3]];

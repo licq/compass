@@ -250,7 +250,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.languageCertifications">
+<div class="panel panel-default" ng-if="resume.languageCertificates">
   <div class="panel-heading">
     <strong>语言成绩</strong>
   </div>
@@ -258,17 +258,20 @@
     <div class="table-responsive">
       <table class="table table-bordered ">
         <tr>
-          <td>英语能力</td>
-          <td>{{resume.languageCertifications.english | englishCertificate}}</td>
-          <td>日语能力</td>
-          <td>{{resume.languageCertifications.japanese | japaneseCertificate}}</td>
-        </tr>
-        <tr>
-          <td>{{resume.languageCertifications.toefl}}</td>
-          <td>{{resume.languageCertifications.gre}}</td>
-          <td>{{resume.languageCertifications.gmat}}</td>
-          <td>{{resume.languageCertifications.ielts}}</td>
-          <td>{{resume.languageCertifications.toeic}}</td>
+          <td ng-if="resume.languageCertificates.english">英语能力</td>
+          <td ng-if="resume.languageCertificates.english">{{resume.languageCertificates.english | englishCertificate}}</td>
+          <td ng-if="resume.languageCertificates.japanese">日语能力</td>
+          <td ng-if="resume.languageCertificates.japanese">{{resume.languageCertificates.japanese | japaneseCertificate}}</td>
+          <td ng-if="resume.languageCertificates.toefl">TOEFL</td>
+          <td ng-if="resume.languageCertificates.toefl">{{resume.languageCertificates.toefl}}</td>
+          <td ng-if="resume.languageCertificates.gre">GRE</td>
+          <td ng-if="resume.languageCertificates.gre">{{resume.languageCertificates.gre}}</td>
+          <td ng-if="resume.languageCertificates.gmat">GMAT</td>
+          <td ng-if="resume.languageCertificates.gmat">{{resume.languageCertificates.gmat}}</td>
+          <td ng-if="resume.languageCertificates.ielts">IELTS</td>
+          <td ng-if="resume.languageCertificates.ielts">{{resume.languageCertificates.ielts}}</td>
+          <td ng-if="resume.languageCertificates.toeic">TOEIC</td>
+          <td ng-if="toeis">{{resume.languageCertificates.toeic}}</td>
         </tr>
       </table>
     </div>
