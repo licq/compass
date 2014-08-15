@@ -39,6 +39,7 @@ describe('mvEvaluationCriterionEditCtrl', function () {
     it('should add set adding to true', function () {
       $scope.add();
       expect($scope.adding).to.equal(true);
+      expect($scope.item).to.be.empty;
     });
   });
 
@@ -50,7 +51,6 @@ describe('mvEvaluationCriterionEditCtrl', function () {
       };
       $scope.create();
       expect($scope.adding).to.equal(false);
-      expect($scope.item).to.be.empty;
       expect($scope.evaluationCriterion.items).to.have.length(2);
     });
   });

@@ -4,90 +4,96 @@
       <strong>通过列表</strong>
     </div>
     <div class="panel-body">
-      <form class="form-horizontal">
-        <div class="col-md-4 col-md-offset-3">
-          <div class="row">
-            <div class="form-group">
-              <label class="control-label col-md-4">姓名</label>
+      <div class="col-md-12">
+        <form class="form-horizontal">
+          <div class="col-md-4 col-md-offset-3">
+            <div class="row">
+              <div class="form-group">
+                <label class="control-label col-md-4">姓名</label>
 
-              <div class="col-md-8">
-                <input class="form-control" type="text" ng-model="name"/>
+                <div class="col-md-8">
+                  <input class="form-control" type="text" ng-model="name"/>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-2">
-          <button class="btn btn-primary" ng-click="query()">搜索</button>
-          <button class="btn btn-default" ng-click="clearQueryOptions()">清空</button>
-        </div>
-      </form>
+          <div class="col-md-2">
+            <button class="btn btn-primary" ng-click="query()">搜索</button>
+            <button class="btn btn-default" ng-click="clearQueryOptions()">清空</button>
+          </div>
+        </form>
+      </div>
 
-      <div class="table-responsive">
-        <table tr-ng-grid="" class="table table-bordered table-striped" items="offers"
-               enable-filtering="false" enable-selections="false">
-          <thead>
-          <tr>
-            <th field-name="name" display-name="应聘者" enable-filtering="false"
-                enable-sorting="true" class="col-md-3"></th>
-            <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
-                enable-sorting="true" class="col-md-3"></th>
-            <th class="col-md-6">操作</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="vert-align">
-              <div ng-show="gridItem.status === 'offered'">
-                <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者接受</button>
-                <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者拒绝</button>
-              </div>
-
-              <form name="rejectForm" ng-show="gridItem.status==='offer rejected'" class="form-horizontal">
-                <div class="form-group">
-                  <label class="col-md-3">选择拒绝原因</label>
-
-                  <div class="col-md-5">
-                    <select name="selectReason"required ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
-                            data-placeholder="选择拒绝原因">
-                      <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
-                    </select>
-
-                  </div>
-                  <div class="col-md-4">
-                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm"
-                            ng-disabled="rejectForm.$invalid">保存
-                    </button>
-                    <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
-                    </button>
-                  </div>
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table tr-ng-grid="" class="table table-bordered table-striped" items="offers"
+                 enable-filtering="false" enable-selections="false">
+            <thead>
+            <tr>
+              <th field-name="name" display-name="应聘者" enable-filtering="false"
+                  enable-sorting="true" class="col-md-3"></th>
+              <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
+                  enable-sorting="true" class="col-md-3"></th>
+              <th class="col-md-6">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="vert-align">
+                <div ng-show="gridItem.status === 'offered'">
+                  <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者接受</button>
+                  <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者拒绝</button>
                 </div>
-              </form>
 
-              <form name="acceptForm" ng-show="gridItem.status==='offer accepted'" class="form-horizontal">
-                <div class="form-group">
-                  <label class="control-label col-md-3">选择入职日期</label>
+                <form name="rejectForm" ng-show="gridItem.status==='offer rejected'" class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-3">选择拒绝原因</label>
 
-                  <div class="col-md-5">
-                    <div required name="dp" datetimepicker ng-model="gridItem.onboardDate" use-seconds="false" min-date="today"
-                         pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
-                      <input type='text' class="form-control"/>
-                      <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                    <div class="col-md-5">
+                      <select name="selectReason" required ui-select2 class="form-control "
+                              ng-model="gridItem.applierRejectReason"
+                              data-placeholder="选择拒绝原因">
+                        <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
+                      </select>
+
+                    </div>
+                    <div class="col-md-4">
+                      <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm"
+                              ng-disabled="rejectForm.$invalid">保存
+                      </button>
+                      <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
+                      </button>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm"
-                            ng-disabled="acceptForm.$invalid" >保存
-                    </button>
-                    <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
-                    </button>
+                </form>
+
+                <form name="acceptForm" ng-show="gridItem.status==='offer accepted'" class="form-horizontal">
+                  <div class="form-group">
+                    <label class="control-label col-md-3">选择入职日期</label>
+
+                    <div class="col-md-5">
+                      <div required name="dp" datetimepicker ng-model="gridItem.onboardDate" use-seconds="false"
+                           min-date="today"
+                           pick-time="false" class='input-group date' data-date-format="YYYY年MM月DD日">
+                        <input type='text' class="form-control"/>
+                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <button type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm"
+                              ng-disabled="acceptForm.$invalid">保存
+                      </button>
+                      <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+                </form>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>

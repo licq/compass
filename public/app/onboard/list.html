@@ -4,81 +4,86 @@
       <strong>入职列表</strong>
     </div>
     <div class="panel-body">
-      <form class="form-horizontal">
-        <div class="col-md-3 col-md-offset-1">
-          <div class="row">
-            <div class="form-group">
-              <label class="control-label col-md-4">姓名</label>
+      <div class="col-md-12">
+        <form class="form-horizontal">
+          <div class="col-md-3 col-md-offset-1">
+            <div class="row">
+              <div class="form-group">
+                <label class="control-label col-md-4">姓名</label>
 
-              <div class="col-md-8">
-                <input class="form-control" type="text" ng-model="name"/>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row">
-            <div class="form-group">
-              <label class="control-label col-md-3">入职时间</label>
-
-              <div class="col-md-9">
-                <input type="daterange" class="form-control" ng-model="dateRange">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <button class="btn btn-primary" ng-click="query()">搜索</button>
-        </div>
-      </form>
-
-      <div class="table-responsive">
-        <table tr-ng-grid="" class="table table-bordered table-striped" items="onboards"
-               enable-filtering="false" enable-selections="false">
-          <thead>
-          <tr>
-            <th field-name="name" display-name="应聘者" enable-filtering="false"
-                enable-sorting="false"></th>
-            <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
-                enable-sorting="true"></th>
-            <th field-name="onboardDate" display-name="入职时间" enable-filtering="false"
-                enable-sorting="true" display-format="shortDate"></th>
-            <th class="col-md-6">操作</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr>
-            <td class="vert-align">
-              <div ng-show="gridItem.status === 'offer accepted'">
-                <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者入职</button>
-                <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者未入职</button>
-              </div>
-
-              <form name="rejectForm" ng-show="gridItem.status==='not recruited'" class="form-horizontal">
-                <div class="form-group">
-                  <label class="col-md-3">选择拒绝原因</label>
-
-                  <div class="col-md-5">
-                    <select required ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
-                            data-placeholder="选择拒绝原因">
-                      <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
-                    </select>
-
-                  </div>
-                  <div class="col-md-4">
-                    <button ng-disabled="rejectForm.$invalid" type="submit" ng-click="save(gridItem)" class="btn btn-success btn-sm">保存
-                    </button>
-                    <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
-                    </button>
-                  </div>
+                <div class="col-md-8">
+                  <input class="form-control" type="text" ng-model="name"/>
                 </div>
-              </form>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row">
+              <div class="form-group">
+                <label class="control-label col-md-3">入职时间</label>
+
+                <div class="col-md-9">
+                  <input type="daterange" class="form-control" ng-model="dateRange">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <button class="btn btn-primary" ng-click="query()">搜索</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table tr-ng-grid="" class="table table-bordered table-striped" items="onboards"
+                 enable-filtering="false" enable-selections="false">
+            <thead>
+            <tr>
+              <th field-name="name" display-name="应聘者" enable-filtering="false"
+                  enable-sorting="false"></th>
+              <th field-name="applyPosition" display-name="应聘职位" enable-filtering="false"
+                  enable-sorting="true"></th>
+              <th field-name="onboardDate" display-name="入职时间" enable-filtering="false"
+                  enable-sorting="true" display-format="shortDate"></th>
+              <th class="col-md-6">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+              <td class="vert-align">
+                <div ng-show="gridItem.status === 'offer accepted'">
+                  <button ng-click="accept(gridItem)" class="btn btn-success btn-sm">应聘者入职</button>
+                  <button ng-click="reject(gridItem)" class="btn btn-danger btn-sm">应聘者未入职</button>
+                </div>
+
+                <form name="rejectForm" ng-show="gridItem.status==='not recruited'" class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-3">选择拒绝原因</label>
+
+                    <div class="col-md-5">
+                      <select required ui-select2 class="form-control " ng-model="gridItem.applierRejectReason"
+                              data-placeholder="选择拒绝原因">
+                        <option ng-repeat="reason in applierRejectReasons" value="{{reason}}">{{reason}}</option>
+                      </select>
+
+                    </div>
+                    <div class="col-md-4">
+                      <button ng-disabled="rejectForm.$invalid" type="submit" ng-click="save(gridItem)"
+                              class="btn btn-success btn-sm">保存
+                      </button>
+                      <button type="submit" ng-click="cancel(gridItem)" class="btn btn-default btn-sm">取消
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
