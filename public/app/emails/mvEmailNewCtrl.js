@@ -4,8 +4,8 @@ angular.module('compass')
   .controller('mvEmailNewCtrl', function ($scope, $location, mvEmail, mvNotifier) {
     $scope.email = new mvEmail({
       keepMails: false,
-      protocol: 'imap',
-      port:143
+      protocol: 'pop3',
+      port:110
     });
 
     $scope.create = function () {

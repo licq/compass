@@ -16,8 +16,8 @@ describe('mvEmailNewCtrl', function () {
   it('should initialize a default email object', function () {
     expect($scope.email).to.exist;
     expect($scope.email.keepMails).to.be.false;
-    expect($scope.email.protocol).to.equal('imap');
-    expect($scope.email.port).to.equal(143);
+    expect($scope.email.protocol).to.equal('pop3');
+    expect($scope.email.port).to.equal(110);
   });
 
   describe('create new email', function () {
