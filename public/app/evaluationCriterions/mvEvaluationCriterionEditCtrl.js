@@ -4,34 +4,20 @@ angular.module('compass')
       $scope.evaluationCriterion = criterion;
     }, function (res) {
       $scope.err = res.data;
-      $scope.item = {};
     });
-
-    $scope.gridOptions = angular.extend({
-      data: 'evaluationCriterion.items',
-      columnDefs: [
-        {field: 'name', displayName: '名称', width: 500, enableCellEdit: true},
-        {field: 'rate', displayName: '系数', width: 150, enableCellEdit: true,
-          editableCellTemplate: '<input ng-input="COL_FIELD" ng-model="COL_FIELD" valid-number=""></input>'},
-        {field: 'actions',
-          displayName: '操作',
-          sortable: false,
-          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
-            '<delete-button action="remove(row)"></delete-button>' +
-            '</div>'}
-      ]
-    }, $scope.gridDefaults, {showFooter: false});
 
     $scope.remove = function (entity) {
       angular.forEach($scope.evaluationCriterion.items, function (item, index) {
         if (item.name === entity.name) {
           $scope.evaluationCriterion.items.splice(index, 1);
+          return false;
         }
       });
     };
 
     $scope.add = function () {
       $scope.adding = true;
+      $scope.item = {};
     };
 
     $scope.cancel = function () {
@@ -41,7 +27,6 @@ angular.module('compass')
     $scope.create = function () {
       $scope.adding = false;
       $scope.evaluationCriterion.items.push($scope.item);
-      $scope.item = {};
     };
 
     $scope.save = function () {
