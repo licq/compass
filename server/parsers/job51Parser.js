@@ -11,11 +11,15 @@ function parseCertifications(table, errors) {
     return _.map(_.filter(helper.parseTable(table), function (element, index) {
       return index % 2 === 0;
     }), function (line) {
-      return {
+      var result = {
         date: helper.parseDate(line[0]),
-        subject: line[1],
-        score: parseInt(line[2], 10)
+        subject: line[1]
       };
+      var score = parseInt(line[2], 10);
+      if (!isNaN(score))
+        result.score = score;
+
+      return result;
     });
   } catch (e) {
     errors.push(e.message);

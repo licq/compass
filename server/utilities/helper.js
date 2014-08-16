@@ -214,6 +214,7 @@ var languageMap = {
   '普通话': 'mandarin',
   '粤语': 'cantonese',
   '法语': 'french',
+  '德语': 'germany',
   '其它': 'other',
   '其他': 'other',
   'English': 'english'

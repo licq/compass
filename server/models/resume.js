@@ -140,7 +140,7 @@ var resumeSchema = mongoose.Schema({
     {
       language: {
         type: String,
-        enum: ['english', 'japanese', 'mandarin', 'shanghaihua', 'cantonese', 'french', 'other']
+        enum: ['english', 'japanese', 'germany', 'mandarin', 'shanghaihua', 'cantonese', 'french', 'other']
       },
       level: {
         type: String,
@@ -708,6 +708,10 @@ resumeSchema.plugin(mongoosastic, {
           _id: {
             type: 'string',
             index: 'no'
+          },
+          level: {
+            type: 'string',
+            index:'no'
           },
           language: {
             type: 'string',

@@ -2,7 +2,6 @@ angular.module('compass')
   .controller('mvEvaluationCriterionEditCtrl', function ($scope, mvEvaluationCriterion, mvNotifier) {
     mvEvaluationCriterion.get(function (criterion) {
       $scope.evaluationCriterion = criterion;
-      $scope.item = {};
     }, function (res) {
       $scope.err = res.data;
     });

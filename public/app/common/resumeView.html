@@ -214,8 +214,8 @@
         <tr ng-repeat="skill in resume.languageSkills">
           <td>{{skill.language | language}}</td>
           <td ng-if="skill.level">{{skill.level | languageSkillLevel}}</td>
-          <td>读写能力{{skill.readingAndWriting | languageSkillLevel}}</td>
-          <td>听说能力{{skill.listeningAndSpeaking | languageSkillLevel}}</td>
+          <td ng-if="skill.readingAndWriting">读写能力: {{skill.readingAndWriting | languageSkillLevel}}</td>
+          <td ng-if="skill.listeningAndSpeaking">听说能力: {{skill.listeningAndSpeaking | languageSkillLevel}}</td>
         </tr>
       </table>
     </div>
@@ -250,7 +250,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.languageCertificates">
+<div class="panel panel-default" ng-show="resume.languageCertificates">
   <div class="panel-heading">
     <strong>语言成绩</strong>
   </div>

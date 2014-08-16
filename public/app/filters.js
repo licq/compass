@@ -144,6 +144,7 @@ angular.module('compass')
         'shanghaihua': '上海话',
         'cantonese': '粤语',
         'french': '法语',
+        'germany': '德语',
         'other': '其他'
       };
       return languageMap[input];
@@ -157,6 +158,7 @@ angular.module('compass')
         'good': '良好',
         'very good': '熟练',
         'excellent': '精通',
+        undefined: 'N/A'
       };
       return languageSkillMap[input];
     };

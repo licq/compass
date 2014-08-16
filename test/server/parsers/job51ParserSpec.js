@@ -95,7 +95,7 @@ describe('job51Parser', function () {
       });
     });
 
-    it.skip('should parse 51job temp correctly', function (done) {
+    it('should parse 51job temp correctly', function (done) {
       fs.readFile(__dirname + '/51jobtemp.html', 'utf-8', function (err, data) {
         var resume = resumeParser.parse({
           html: data
@@ -106,9 +106,9 @@ describe('job51Parser', function () {
         expect(resume.applyPosition).to.exist;
 
         console.log(resume);
-//        require('mongoose').model('Resume').create(resume, function (err, r) {
+        require('mongoose').model('Resume').create(resume, function (err, r) {
           done(err);
-//        });
+        });
       });
     });
   });
