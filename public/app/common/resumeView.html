@@ -198,7 +198,7 @@
         <tr ng-repeat="certification in resume.certifications">
           <td>{{certification.date | yearAndMonth}}</td>
           <td>{{certification.subject}}</td>
-          <td>{{certification.score}}</td>
+          <td ng-show="certification.score">{{certification.score}}</td>
         </tr>
       </table>
     </div>

@@ -58,7 +58,7 @@ describe('interviewReports', function () {
           expect(res.body).to.have.length(1);
           expect(res.body[0]).to.deep.equal({
             year: moment().year(),
-            week: moment().isoWeek(),
+            week: moment().week(),
             count: 1
           });
           done();

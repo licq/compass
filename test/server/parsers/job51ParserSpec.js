@@ -106,7 +106,7 @@ describe('job51Parser', function () {
         expect(resume.applyPosition).to.exist;
 
         console.log(resume);
-        require('mongoose').model('Resume').create(resume, function (err, r) {
+        require('mongoose').model('Resume').create(resume, function (err) {
           done(err);
         });
       });
