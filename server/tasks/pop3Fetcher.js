@@ -2,48 +2,11 @@
 
 var POPClient = require('poplib'),
   _ = require('lodash'),
-  MailParser = require('mailparser').MailParser,
+  mailParser = require('./mailParser'),
   mongoose = require('mongoose'),
   Mail = mongoose.model('Mail'),
   logger = require('../config/winston').logger();
 
-function saveToDB(mail, address, callback) {
-  logger.info('saveToDB', address);
-  mail.mailbox = address;
-  Mail.create(mail, function (err, created) {
-    require('./jobs').addParseResumeJob(created, function () {
-      callback(err);
-    });
-  });
-}
-
-function parse(mailData, callback) {
-  logger.info('parse');
-  var mailParser = new MailParser({
-    debug: false,
-    defaultCharset: 'gbk',
-    streamAttachments: true,
-    showAttachmentLinks: true
-  });
-  mailParser.write(mailData);
-  mailParser.end();
-
-  mailParser.on('end', function (mail) {
-    if (mail.subject.indexOf('导出简历') > -1 && mail.attachments.length > 0 &&
-      mail.attachments[0].fileName.indexOf('.mht') > -1 &&
-      mail.attachments[0].content) {
-      var b = new Buffer(mail.attachments[0].content, 'base64');
-      var newMailParser = new MailParser();
-      newMailParser.write(b);
-      newMailParser.end();
-      newMailParser.on('end', function (o) {
-        mail.html = o.html;
-        callback(mail);
-      });
-    } else
-      callback(mail);
-  });
-}
 
 exports.fetch = function (mailbox, callback) {
   logger.info('fetch', mailbox.address);
@@ -57,7 +20,7 @@ exports.fetch = function (mailbox, callback) {
   var client = new POPClient(mailbox.port, mailbox.server, {
     ignoretlserrs: true,
     enabletls: mailbox.ssl,
-    debug: true
+    debug: false
   });
 
   client.on('error', function (err) {
@@ -123,22 +86,20 @@ exports.fetch = function (mailbox, callback) {
   client.on('retr', function (status, msgnumber, data, rawdata) {
     logger.info('retr', mailbox.address);
     if (status === true) {
-      parse(data, function (mail) {
-        saveToDB(mail, mailbox.address, function (err) {
-          if (err && err.code !== 11000 && err.code !== 11001) {
-            logger.error('save resume to db failed because of', err);
-            client.quit();
-          } else {
-            retrievedMails.push(toBeRetrieved[0].uid);
-            toBeRetrieved.shift();
-            retrievedCount += 1;
-            if (toBeRetrieved.length > 0) {
-              client.retr(toBeRetrieved[0].msgnum);
-            } else if (!mailbox.keepMails) {
-              client.dele(deleteIndex);
-            } else client.quit();
-          }
-        });
+      mailParser.parseAndSave(data, mailbox.address, function (err) {
+        if (err && err.code !== 11000 && err.code !== 11001) {
+          logger.error('save resume to db failed because of', err);
+          client.quit();
+        } else {
+          retrievedMails.push(toBeRetrieved[0].uid);
+          toBeRetrieved.shift();
+          retrievedCount += 1;
+          if (toBeRetrieved.length > 0) {
+            client.retr(toBeRetrieved[0].msgnum);
+          } else if (!mailbox.keepMails) {
+            client.dele(deleteIndex);
+          } else client.quit();
+        }
       });
     } else {
       logger.info('RETR failed for msgnumber ' + msgnumber);

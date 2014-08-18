@@ -3,46 +3,10 @@
 var Imap = require('imap'),
   inspect = require('util').inspect,
   _ = require('lodash'),
-  MailParser = require('mailparser').MailParser,
+  mailParser = require('./mailParser'),
   mongoose = require('mongoose'),
   Mail = mongoose.model('Mail'),
   logger = require('../config/winston').logger();
-
-function saveToDB(mail, address, callback) {
-  mail.mailbox = address;
-  Mail.create(mail, function (err, created) {
-    require('./jobs').addParseResumeJob(created, function () {
-      callback(err);
-    });
-  });
-}
-
-function parse(mailData, callback) {
-  var mailParser = new MailParser({
-    debug: false,
-    defaultCharset: 'gbk',
-    streamAttachments: true,
-    showAttachmentLinks: true
-  });
-  mailParser.write(mailData);
-  mailParser.end();
-
-  mailParser.on('end', function (mail) {
-    if (mail.subject.indexOf('导出简历') > -1 && mail.attachments.length > 0 &&
-      mail.attachments[0].fileName.indexOf('.mht') > -1 &&
-      mail.attachments[0].content) {
-      var b = new Buffer(mail.attachments[0].content, 'base64');
-      var newMailParser = new MailParser();
-      newMailParser.write(b);
-      newMailParser.end();
-      newMailParser.on('end', function (o) {
-        mail.html = o.html;
-        callback(mail);
-      });
-    } else
-      callback(mail);
-  });
-}
 
 exports.fetch = function fetch(mailbox, callback) {
   var email = mailbox.toObject();
@@ -82,12 +46,10 @@ exports.fetch = function fetch(mailbox, callback) {
 
               stream.once('end', function () {
                 retrievedCount += 1;
-                parse(buffer, function (mail) {
-                  saveToDB(mail, mailbox.address, function (err) {
-                    if (err && err.code !== 11000 && err.code !== 11001) {
-                      logger.error('save resume to db failed because of', err);
-                    }
-                  });
+                mailParser.parseAndSave(buffer, mailbox.address, function (err) {
+                  if (err && err.code !== 11000 && err.code !== 11001) {
+                    logger.error('save resume to db failed because of', err);
+                  }
                 });
               });
             });
