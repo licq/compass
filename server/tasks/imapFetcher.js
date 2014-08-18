@@ -135,15 +135,15 @@ exports.fetch = function fetch(mailbox, callback) {
 
   imap.once('error', function (err) {
     logger.error(err);
-    callback(err, newRetrievedMails.length, allMails.length, retrievedMails);
+    callback(err, newRetrievedMails.length, retrievedMails);
   });
 
   imap.once('end', function () {
     // mailbox.save(function () {
     if (retrievedMails.length === 0) {
-      callback(null, allMails.length, allMails.length, retrievedMails);
+      callback(null, allMails.length, retrievedMails);
     } else
-      callback(null, newRetrievedMails.length, allMails.length, retrievedMails);
+      callback(null, newRetrievedMails.length, retrievedMails);
     //});
   });
 };

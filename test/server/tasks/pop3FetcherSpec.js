@@ -9,7 +9,7 @@ var pop3Fetcher = require('../../../server/tasks/pop3Fetcher'),
   helper = require('../testHelper'),
   Email = require('mongoose').model('Email');
 
-describe.skip('pop3Fetcher', function () {
+describe('pop3Fetcher', function () {
   var mailbox,
     compass_test = {
       address: 'compass_test@126.com',
@@ -52,16 +52,14 @@ describe.skip('pop3Fetcher', function () {
     it('should retrieve and delete emails', function (done) {
       this.timeout(0);
       setTimeout(function () {
-        pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+        pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
-          expect(totalMails).to.be.equal(3);
-          expect(retrievedMails).to.have.length(0);
+          expect(retrievedMails).to.have.length(3);
           mailbox.retrievedMails = retrievedMails;
-          pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+          pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
             expect(err).to.not.exist;
             expect(processedMails).to.be.equal(0);
-            expect(totalMails).to.be.equal(0);
             expect(retrievedMails).to.have.length(0);
             done();
           });
@@ -73,16 +71,14 @@ describe.skip('pop3Fetcher', function () {
       this.timeout(0);
       setTimeout(function () {
         mailbox.keepMails = true;
-        pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+        pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
-          expect(totalMails).to.be.equal(3);
           expect(retrievedMails).to.have.length(3);
           mailbox.retrievedMails = retrievedMails;
-          pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+          pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
             expect(err).to.not.exist;
             expect(processedMails).to.be.equal(0);
-            expect(totalMails).to.be.equal(3);
             expect(retrievedMails).to.have.length(3);
             done();
           });
@@ -90,14 +86,13 @@ describe.skip('pop3Fetcher', function () {
       }, timeout);
     });
 
-    it('should retrieve new mails and delete all old emails', function (done) {
+    it.only('should retrieve new mails and delete all old emails', function (done) {
       this.timeout(0);
       setTimeout(function () {
         mailbox.keepMails = true;
-        pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+        pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
-          expect(totalMails).to.be.equal(3);
           expect(retrievedMails).to.have.length(3);
           async.eachSeries(_.range(3), function (i, callback) {
             mailer.sendSignupEmail('applicant' + i, testmail.address, i, function (error) {
@@ -106,16 +101,15 @@ describe.skip('pop3Fetcher', function () {
           }, function () {
             setTimeout(function () {
               mailbox.keepMails = false;
-              pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+              mailbox.retrievedMails = retrievedMails;
+              pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
                 expect(err).to.not.exist;
-                expect(processedMails).to.be.equal(6);
-                expect(totalMails).to.be.equal(6);
-                expect(retrievedMails).to.have.length(0);
+                expect(processedMails).to.be.equal(3);
+                expect(retrievedMails).to.have.length(6);
                 mailbox.retrievedMails = retrievedMails;
-                pop3Fetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+                pop3Fetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
                   expect(err).to.not.exist;
                   expect(processedMails).to.be.equal(0);
-                  expect(totalMails).to.be.equal(0);
                   expect(retrievedMails).to.have.length(0);
                   done();
                 });

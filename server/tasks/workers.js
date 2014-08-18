@@ -28,7 +28,6 @@ function handleFetchEmail(job, done) {
   Email.findById(job.data.id, function (err, email) {
     if (err) return done(err);
     if (!email) return done('email ' + job.data.id + ' not found');
-    var lastRetrieveTime = new Date();
     var fetcher;
     if (email.protocol === 'imap') {
       fetcher = imapFetcher;
@@ -36,13 +35,14 @@ function handleFetchEmail(job, done) {
       fetcher = pop3Fetcher;
     }
 
-    fetcher.fetch(email, function (err, count, totalMails, retrievedMails) {
+    fetcher.fetch(email, function (err, count, retrievedMails) {
       email.lastRetrieveCount = count;
-      email.lastRetrieveTime = lastRetrieveTime;
+      email.lastRetrieveTime = new Date();
       email.lastError = err;
-      email.retrievedMails = retrievedMails;
       if (!err) {
         email.totalRetrieveCount += count;
+        email.retrievedMails = retrievedMails;
+        email.markModified('retrievedMails');
       }
       email.save(function (err) {
         if (err) logger.error('save email failed ', email.address, ' because ', err);
