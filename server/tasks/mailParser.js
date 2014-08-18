@@ -1,3 +1,5 @@
+'use strict';
+
 var MailParser = require('mailparser').MailParser,
   logger = require('../config/winston').logger(),
   Mail = require('mongoose').model('Mail');
