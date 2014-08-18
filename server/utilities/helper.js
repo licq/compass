@@ -76,7 +76,7 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
     return -1;
   }
 
-  if (input.indexOf('工作经验') > -1 || input.indexOf('年以上') > -1) {
+  if (input.indexOf('工作经验') > -1 || input.indexOf('年以上') > -1 || input.indexOf('年') > -1) {
     if (/\d+/.test(input)) {
       return _.parseInt(exports.onlyNumber(input));
     } else {
@@ -168,6 +168,39 @@ exports.parseTable = function parseTable(table) {
   return items;
 };
 
+exports.parseV1BTable = function parseV1BTable(table) {
+  var items = [];
+
+  function depthfirst(element) {
+    var contents = element.contents();
+    var i;
+    var child = element.children().eq(0);
+    var text;
+    for (i = 0; i < contents.length; i++) {
+      if (contents[i].type === 'text') {
+        text = exports.replaceEmpty(contents[i].data);
+        if (text.length > 0)
+          items.push(text);
+      } else {
+        if (child.find('div').length === 0) {
+          text = exports.replaceEmpty(child.text());
+          if (text.length > 0) {
+            items.push(text);
+          }
+        } else {
+          depthfirst(child);
+        }
+          child = child.next();
+      }
+    }
+  }
+
+  depthfirst(table);
+  return items;
+
+}
+;
+
 exports.isEnglishCertificate = function isEnglishCertificate(input) {
   return /等级|gmat|ielts|toeic|toefl|gre/i.test(input);
 };
@@ -183,6 +216,10 @@ var englishCertificateMap = {
   '英语六级': 'cet6',
   '专业四级': 'tem4',
   '专业八级': 'tem8',
+  '四级': 'level4',
+  '三级': 'level3',
+  '二级': 'level2',
+  '一级': 'level1',
   '无': 'none'
 };
 

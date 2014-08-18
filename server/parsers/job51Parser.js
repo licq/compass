@@ -27,42 +27,59 @@ function parseCertifications(table, errors) {
   }
 }
 
-
-function parseBasicInfo(table, errors) {
-  if (!table) return;
+function parseBasicInfo($, resumeType, errors) {
+  var table, tableData;
   try {
     var resume = {};
+    if (resumeType === 'v1b_t') {
+      table = $('table.v_table01').first();
+      if (!table) return;
+      tableData = helper.parseTable(table);
+      resume.name = tableData[0][1];
+      resume.gender = helper.parseGender(tableData[0][3]);
+      resume.birthday = helper.parseDate(tableData[1][1]);
+      resume.residency = tableData[1][3];
+      resume.yearsOfExperience = helper.parseYearsOfExperience(tableData[2][1]);
+      resume.email = tableData[2][3];
+      resume.degree = tableData[3][1];
+      resume.major = tableData[3][3];
+      resume.mobile = tableData[5][1];
+      resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
 
-    var tableData = helper.parseTable(table);
-
-    var firstLineItems = tableData[0][0].split('|');
-    resume.yearsOfExperience = helper.parseYearsOfExperience(firstLineItems[0]);
-    resume.gender = helper.parseGender(firstLineItems[1]);
-    resume.birthday = helper.parseDate(firstLineItems[2].split(/\(|（/)[1]);
-    if (firstLineItems.length > 3) {
-      resume.civilState = helper.parseCivilState(firstLineItems[3]);
-    }
-    resume.job51Id = helper.onlyNumber(tableData[0][1]);
-    resume.residency = tableData[1][1];
-    if (tableData.length >= 4) {
-      resume.hukou = tableData[1][3];
-    }
-
-    tableData.splice(0, 2);
-    _.forEach(tableData, function (line) {
-      if (line[0]) {
-        var title = helper.removeSpaces(line[0]);
-        if (helper.isMobile(title)) {
-          resume.mobile = helper.onlyNumber(line[1]);
-        } else if (helper.isAddress(title)) {
-          resume.address = line[1];
-        } else if (helper.isEmail(title)) {
-          resume.email = line[1];
-        }
+    } else {
+      table = $('table tr:nth-child(2) table');
+      if (!table) return;
+      tableData = helper.parseTable(table);
+      resume.name = $('strong').first().text().trim() || $('b').first().text().trim();
+      var firstLineItems = tableData[0][0].split('|');
+      resume.yearsOfExperience = helper.parseYearsOfExperience(firstLineItems[0]);
+      resume.gender = helper.parseGender(firstLineItems[1]);
+      resume.birthday = helper.parseDate(firstLineItems[2].split(/\(|（/)[1]);
+      if (firstLineItems.length > 3) {
+        resume.civilState = helper.parseCivilState(firstLineItems[3]);
       }
-    });
+      resume.job51Id = helper.onlyNumber(tableData[0][1]);
+      resume.residency = tableData[1][1];
+      if (tableData.length >= 4) {
+        resume.hukou = tableData[1][3];
+      }
 
-    resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
+      tableData.splice(0, 2);
+      _.forEach(tableData, function (line) {
+        if (line[0]) {
+          var title = helper.removeSpaces(line[0]);
+          if (helper.isMobile(title)) {
+            resume.mobile = helper.onlyNumber(line[1]);
+          } else if (helper.isAddress(title)) {
+            resume.address = line[1];
+          } else if (helper.isEmail(title)) {
+            resume.email = line[1];
+          }
+        }
+      });
+
+      resume.photoUrl = table.find('tr:nth-child(1) img').attr('src');
+    }
     return resume;
   }
   catch
@@ -70,13 +87,15 @@ function parseBasicInfo(table, errors) {
     errors.push(e.message);
     logger.error(e.stack);
   }
+
 }
 
-function parseCareerObjective(table, errors) {
-  if (!table) return;
+function parseCareerObjective(table, resumeType, errors) {
+  if (!table || resumeType === 'v1b_t') return;
   try {
     var careerObjective = {};
-    var tableData = helper.parseTable(table);
+    var tableData;
+    tableData = helper.parseTable(table);
     var items = _.map(tableData, function (line) {
       if (line.length > 1) {
         line[0] = line.join('');
@@ -105,50 +124,100 @@ function parseCareerObjective(table, errors) {
   }
 }
 
-function parseWorkExperience(table, errors) {
+function parseWorkExperience(table, resumeType, errors) {
   if (!table) return;
   try {
-    var workTableData = helper.parseTable(table);
-    return _.map(helper.chunkByEmptyArray(workTableData), function (workData) {
-      var work = {};
-      var description = ' ', hasIndustry = false;
-      _.each(workData, function (line, index) {
-        if (helper.isWorkHeader(line[0])) {
-          if (line.length > 1)
-            line[0] = line.join('');
-          var items = line[0].split(/--|：|（|）/);
-          work.from = helper.parseDate(items[0]);
-          work.to = helper.parseDate(items[1]);
-          work.company = items[2];
-        } else if (helper.isIndustry(line[0])) {
-          work.industry = line[1];
-          hasIndustry = true;
-        } else if (helper.isReportToOrHasStaffs(line[0])) {
-          if (line.length > 1)
-            line[0] = line.join('');
-          description += (line[0] + ' ');
-        } else if (hasIndustry) {
-          if (index === 2) {
-            if (line.length === 1)
-              line = line[0].split(/ |--|：|（|）/);
-            work.department = line[0];
-            work.jobTitle = line[1];
-          } else if (index === 3) {
-            work.jobDescription = line[0];
-          }
-        } else if (!hasIndustry) {
-          if (index === 1) {
-            work.department = line[0];
-            work.jobTitle = line[1];
-          } else if (index === 2) {
-            work.jobDescription = line[0];
+    if (resumeType === 'v1b_t') {
+      table = helper.parseV1BTable(table);
+      var head, tail, sections = [];
+      _.forEach(table, function (line, index) {
+        if (/工作经历/.test(line)) {
+          head = index;
+        }
+        else if (/教育&培训|个人资历|教育\/培训经历|外语\/计算机\/其他|期望薪资/.test(line)) {
+          tail = index;
+          return false;
+        } else if (index > head && /\d{4}\/\d{2}/.test(line))
+          sections.push(index);
+      });
+      if (!tail)
+        tail = table.length;
+      sections.push(tail);
+      var i, start, end, works = [], work;
+      for (i = 0; i < sections.length - 1; i++) {
+        work = {};
+        start = sections[i] - 2;
+        if (table[start][0] === '-') {
+          start -= 1;
+        }
+        end = sections[i + 1];
+        work.company = table[start];
+        var j;
+        work.jobDescription = '';
+
+        for (j = start; j < end; j++) {
+          work.jobDescription += table[j];
+          var items;
+          if (helper.isIndustry(table[j])) {
+            items = table[j].split(/：|\|/);
+            work.industry = items[1];
+          } else if (/职位/.test(table[j])) {
+            items = table[j].split(/：| /);
+            work.jobTitle = items[1];
           }
         }
-      });
+        var from = table[sections[i]].match(/\d{4}\/\d{2}|至今/);
+        work.from = helper.parseDate(from[0]);
+        var to = table[sections[i]].substr(from.index + 7).match(/\d{4}\/\d{2}|至今/);
+        work.to = helper.parseDate(to[0]);
+        works.push(work);
+      }
+      return works;
 
-      work.jobDescription += description;
-      return work;
-    });
+    } else {
+      var workTableData = helper.parseTable(table);
+      return _.map(helper.chunkByEmptyArray(workTableData), function (workData) {
+        var work = {};
+        var description = ' ', hasIndustry = false;
+        _.each(workData, function (line, index) {
+          if (helper.isWorkHeader(line[0])) {
+            if (line.length > 1)
+              line[0] = line.join('');
+            var items = line[0].split(/--|：|（|）/);
+            work.from = helper.parseDate(items[0]);
+            work.to = helper.parseDate(items[1]);
+            work.company = items[2];
+          } else if (helper.isIndustry(line[0])) {
+            work.industry = line[1];
+            hasIndustry = true;
+          } else if (helper.isReportToOrHasStaffs(line[0])) {
+            if (line.length > 1)
+              line[0] = line.join('');
+            description += (line[0] + ' ');
+          } else if (hasIndustry) {
+            if (index === 2) {
+              if (line.length === 1)
+                line = line[0].split(/ |--|：|（|）/);
+              work.department = line[0];
+              work.jobTitle = line[1];
+            } else if (index === 3) {
+              work.jobDescription = line[0];
+            }
+          } else if (!hasIndustry) {
+            if (index === 1) {
+              work.department = line[0];
+              work.jobTitle = line[1];
+            } else if (index === 2) {
+              work.jobDescription = line[0];
+            }
+          }
+        });
+
+        work.jobDescription += description;
+        return work;
+      });
+    }
+
   } catch (e) {
     errors.push(e.message);
     logger.error(e.stack);
@@ -190,33 +259,69 @@ function parseProjectExperience(table, errors) {
   }
 }
 
-function parseEducationHistory(table, errors) {
+function parseEducationHistory(table, resumeType, errors) {
   if (!table) return;
   try {
-    var tableData = _.filter(helper.parseTable(table), function (line) {
-      return line[0].trim().length !== 0;
-    });
-    var history = [],
-      education;
 
-    for (var i = 0; i < tableData.length; i++) {
-      if (tableData[i].length > 1) {
-        if (education) history.push(education);
-        var dateRange = helper.parseDateRange(tableData[i][0]);
-        education = {
-          from: dateRange.from,
-          to: dateRange.to,
-          school: tableData[i][1],
-          major: tableData[i][2],
-          degree: helper.parseDegree(tableData[i][3])
-        };
-      } else {
-        education.description = tableData[i][0];
+    var history = [],
+      education, i, tableData;
+    if (resumeType === 'v1b_t') {
+      tableData = helper.parseV1BTable(table);
+      var head, tail;
+      _.forEach(tableData, function (line, index) {
+        if (/教育&培训|教育\/培训经历/.test(line)) {
+          head = index + 1;
+        }
+        else if (/个人资历|外语\/计算机\/其他|期望薪资/.test(line)) {
+          tail = index;
+          return false;
+        }
+      });
+
+      for (i = head; i < tail; i++) {
+        var from = tableData[i].match(/\d{4}\/\d{1,2}|至今/);
+        if (from) {
+          education = {};
+          education.from = helper.parseDate(from[0]);
+        }
+        var to = tableData[i].substr(from.index + 7).match(/\d{4}\/\d{2}|至今/);
+        if (to && education)
+          education.to = helper.parseDate(to[0]);
+        if (to) {
+          education.school = tableData[i].substr(to.index + 7);
+        } else if (from) {
+          education.school = tableData[i].substr(from.index + 7);
+        }
+        if (education)
+          history.push(education);
       }
+      return history;
+    }
+    else {
+      tableData = _.filter(helper.parseTable(table), function (line) {
+        return line[0].trim().length !== 0;
+      });
+
+      for (i = 0; i < tableData.length; i++) {
+        if (tableData[i].length > 1) {
+          if (education) history.push(education);
+          var dateRange = helper.parseDateRange(tableData[i][0]);
+          education = {
+            from: dateRange.from,
+            to: dateRange.to,
+            school: tableData[i][1],
+            major: tableData[i][2],
+            degree: helper.parseDegree(tableData[i][3])
+          };
+        } else {
+          education.description = tableData[i][0];
+        }
+      }
+
+      if (education) history.push(education);
+      return history;
     }
 
-    if (education) history.push(education);
-    return history;
   } catch (e) {
     errors.push(e.message);
     logger.error(e.stack);
@@ -342,26 +447,46 @@ function parseInSchoolPractices(table, errors) {
 
 exports.parse = function (data) {
   var $ = cheerio.load(data.html, {normalizeWhitespace: true});
+  var style = $('style').text();
+  var resumeType;
+  if (style.indexOf('.cvtitle') > -1) {
+    resumeType = 'cvtitle';
+  } else if (style.indexOf('.v3_t') > -1) {
+    resumeType = 'v3_t';
+  } else if (style.indexOf('.v2_t') > -1) {
+    resumeType = 'v2_t';
+  } else if (style.indexOf('.v1b_t') > -1) {
+    resumeType = 'v1b_t';
+  }
 
   var findTable = function () {
 
     var tableTitle;
-    if ($('style').text().indexOf('.cvtitle') > -1) {
-      tableTitle = function (tableNames, i) {
-        var table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
-        while (table.find('table').length === 0 && table.next().length !== 0) {
-          table = table.next();
-        }
-        return table.find('table');
-      };
-    } else if ($('style').text().indexOf('.v3_t') > -1) {
-      tableTitle = function (tableNames, i) {
-        return $('div.v3_t > table > tr > td:contains(' + tableNames[i] + ')').closest('div').next();
-      };
-    } else if ($('style').text().indexOf('.v2_t') > -1) {
-      tableTitle = function (tableNames, i) {
-        return $('p.v2_t:contains(' + tableNames[i] + ')').next();
-      };
+
+    switch (resumeType) {
+      case 'cvtitle':
+        tableTitle = function (tableNames, i) {
+          var table = $('td.cvtitle:contains(' + tableNames[i] + ')').parent().next();
+          while (table.find('table').length === 0 && table.next().length !== 0) {
+            table = table.next();
+          }
+          return table.find('table');
+        };
+        break;
+      case 'v3_t':
+        tableTitle = function (tableNames, i) {
+          return $('div.v3_t > table > tr > td:contains(' + tableNames[i] + ')').closest('div').next();
+        };
+        break;
+      case 'v2_t':
+        tableTitle = function (tableNames, i) {
+          return $('p.v2_t:contains(' + tableNames[i] + ')').next();
+        };
+        break;
+      case 'v1b_t':
+        tableTitle = function () {
+          return $('p:contains(详细信息)').next();
+        };
     }
     var tableNames = Array.prototype.slice.call(arguments, 0);
     var table;
@@ -374,16 +499,16 @@ exports.parse = function (data) {
   };
 
   var errors = [];
-  var resume = parseBasicInfo($('table tr:nth-child(2) table'), errors);
-  resume.name = $('strong').first().text().trim() || $('b').first().text().trim();
-  resume.careerObjective = parseCareerObjective(findTable('求职意向'), errors);
+
+  var resume = parseBasicInfo($, resumeType, errors);
+  resume.careerObjective = parseCareerObjective(findTable('求职意向'), resumeType, errors);
   if (!resume.careerObjective)
     resume.careerObjective = {};
   resume.careerObjective.selfAssessment = helper.replaceEmpty($('#Cur_Val').first().text()) ||
     $('td.cvtitle:contains(自我评价)').parent().next().next().next().text();
-  resume.workExperience = parseWorkExperience(findTable('工作经验'), errors);
+  resume.workExperience = parseWorkExperience(findTable('工作经验'), resumeType, errors);
   resume.projectExperience = parseProjectExperience(findTable('项目经验'), errors);
-  resume.educationHistory = parseEducationHistory(findTable('教育经历'), errors);
+  resume.educationHistory = parseEducationHistory(findTable('教育经历'), resumeType, errors);
   resume.trainingHistory = parseTrainingHistory(findTable('培训经历'), errors);
   resume.certifications = parseCertifications(findTable('证'), errors);
   resume.languageSkills = parseLanguageSkills(findTable('语言能力'), errors);
@@ -395,6 +520,11 @@ exports.parse = function (data) {
   resume.channel = '前程无忧';
   resume.mail = data.mailId;
   resume.company = data.company;
+  if (resumeType === 'v1b_t' && resume.educationHistory[0]) {
+    resume.educationHistory[0].major = resume.major;
+    resume.educationHistory[0].degree = helper.parseDegree(resume.degree);
+  }
+
   resume.parseErrors = errors;
   return resume;
 };

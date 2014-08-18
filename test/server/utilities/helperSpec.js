@@ -131,13 +131,28 @@ describe('helper', function () {
       var html = '<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%"> <tbody> <tr> <td colspan="2" style="padding:0cm 0cm 0cm 0cm"><p class="MsoNormal" style="line-height:150%"> <span lang="EN-US" style="font-size:9.0pt;line-height:150%">2013 /7--</span><span style="font-size:9.0pt;line-height:150%">至今：中国平安保险（<span lang="EN-US">10000</span>人以上）<span lang="EN-US"> [ 4</span>个月<span lang="EN-US">] <u></u><u></u></span></span></p> </td> </tr> <tr> <td width="22%" style="width:22.0%;padding:0cm 0cm 0cm 0cm"><p class="MsoNormal" style="line-height:150%"> <span style="font-size:9.0pt;line-height:150%">所属行业：<span lang="EN-US"><u></u><u></u></span></span></p> </td> <td width="78%" style="width:78.0%;padding:0cm 0cm 0cm 0cm"><p class="MsoNormal" style="line-height:150%"> <span style="font-size:9.0pt;line-height:150%">保险<span lang="EN-US"><u></u><u></u></span></span></p></td> </tr> <tr> <td style="padding:0cm 0cm 0cm 0cm"><p class="MsoNormal" style="line-height:150%"><b><span style="font-size:9.0pt;line-height:150%">销售</span></b><span style="font-size:9.0pt;line-height:150%"> <span lang="EN-US"><u></u><u></u></span></span></p> </td> <td style="padding:0cm 0cm 0cm 0cm"><p class="MsoNormal" style="line-height:150%"><b><span style="font-size:9.0pt;line-height:150%">电话销售</span></b><span style="font-size:9.0pt;line-height:150%"> <span lang="EN-US"><u></u><u></u></span></span></p> </td> </tr> <tr> <td colspan="2" valign="top" style="padding:0cm 0cm 0cm 0cm"><p class="MsoNormal" style="line-height:150%"><span style="font-size:9.0pt;line-height:150%">从<span lang="EN-US">7</span>月中旬培训一个月左右，每天打电话跟客户交流，培养了我的信心，但是最后发现自己不太适合做销售，想换一份压力相对较小一点的工作。<span lang="EN-US"><u></u><u></u></span></span></p> </td> </tr> </tbody> </table>';
       var $ = cheerio.load(html);
       var table = $('table');
-      var data = helper.parseTable(table, $);
+      var data = helper.parseTable(table);
       expect(data[0][0]).to.equal('2013 /7--至今：中国平安保险（10000人以上） [ 4个月]');
       expect(data[1][0]).to.equal('所属行业：');
       expect(data[1][1]).to.equal('保险');
       expect(data[2][0]).to.equal('销售');
       expect(data[2][1]).to.equal('电话销售');
       expect(data[3][0]).to.equal('从7月中旬培训一个月左右，每天打电话跟客户交流，培养了我的信心，但是最后发现自己不太适合做销售，想换一份压力相对较小一点的工作。');
+    });
+  });
+
+  describe('#parseV1BTable', function () {
+  it('should parse correctly', function () {
+      var html = '<div id="resumeinfo" name="resumeinfo" class="rusume778bg1"> begin text<ul class="edit_text1"> <div align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <div align="center"><B><FONT style="FONT-FAMILY: 宋体; FONT-SIZE: 22px">巫章丽</FONT></B></div> <div align="center"><B><FONT size=4></FONT></B>&nbsp; <div align="left"><FONT style="FONT-FAMILY: Arial"><FONT color=#0000ff><FONT style="FONT-SIZE: 12px"><FONT style="FONT-SIZE: 16px"><FONT style="FONT-SIZE: 14px">E-mail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;:<B style="FONT-FAMILY: ; mso-bidi-font-weight: normal"><U style="FONT-FAMILY: "> lili720@126.com</U></B><B style="FONT-FAMILY: ; mso-bidi-font-weight: normal"><U style="FONT-FAMILY: "></U></B></FONT></FONT></FONT></FONT></FONT></div><div align="left"><FONT style="FONT-FAMILY: Arial"><FONT color=#0000ff><FONT style="FONT-SIZE: 12px"><FONT style="FONT-SIZE: 16px"><FONT style="FONT-SIZE: 14px">手机&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<U style="FONT-FAMILY: "> <B style="FONT-FAMILY: ; mso-bidi-font-weight: normal">1592-1504-990</B></U></FONT></FONT></FONT></FONT></FONT> </div></div></div></ul>end text</div>';
+      var $ = cheerio.load(html);
+      var table = $('#resumeinfo');
+      var data = helper.parseV1BTable(table);
+
+      expect(data[0]).to.equal('begin text');
+      expect(data[1]).to.equal('巫章丽');
+      expect(data[2]).to.equal('E-mail : lili720@126.com');
+      expect(data[3]).to.equal('手机 : 1592-1504-990');
+      expect(data[4]).to.equal('end text');
     });
   });
 
@@ -534,7 +549,7 @@ describe('helper', function () {
   describe('#splitBySemiolon', function () {
     it('should return correctly', function () {
       expect(helper.splitBySemiolon('产品经理/主管;信息技术经理/主管;项目经理/主管')).to.deep.equal([
-          '产品经理/主管','信息技术经理/主管','项目经理/主管'
+        '产品经理/主管', '信息技术经理/主管', '项目经理/主管'
       ]);
     });
   });
