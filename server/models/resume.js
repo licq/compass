@@ -262,7 +262,7 @@ resumeSchema.statics.query = function (params, callback) {
       }
     },
     sort: [
-      { "createdAt": {"order": "desc"}}
+      { "applyDate": {"order": "desc"}}
     ]
   };
 

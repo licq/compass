@@ -9,7 +9,7 @@ exports.list = function (req, res, next) {
   req.query.company = req.user.company;
   req.query.sort = [
     {
-      createdAt: {order: 'desc'}
+      applyDate: {order: 'desc'}
     }
   ];
   req.user.hasPositions(req.query.applyPosition, function (err, positions) {
@@ -49,6 +49,7 @@ exports.uploadResume = function (req, res, next) {
   resume.company = req.user.company;
   resume.channel = '导入简历';
   req.files.resumeFile.documentId = resume.id;
+  resume.applyDate = new Date();
   resume.attach('resumeFile', req.files.resumeFile, function (err) {
     if (err) return next(err);
     resume.saveAndIndex(function (err) {

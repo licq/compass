@@ -392,7 +392,6 @@ exports.parse = function (data) {
   resume.inSchoolPractices = parseInSchoolPractices(findTable('社会经验'), errors);
   resume.inSchoolStudy = parseInSchoolStudy(findTable('所获奖项'), errors);
   resume.applyPosition = $('td tr:nth-child(1) .blue1:nth-child(2)').text().trim();
-  resume.applyDate = helper.parseDate($('tr:nth-child(3) .blue1').text());
   resume.channel = '前程无忧';
   resume.mail = data.mailId;
   resume.company = data.company;

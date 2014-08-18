@@ -152,7 +152,6 @@ exports.parse = function (data) {
   resume.languageSkills = parseLanguageSkills(findTable('语言/技能'), errors);
   resume.itSkills = parseItSkills($('td.tdBar:contains(语言/技能)').parent().next().next().next().find('table:nth-child(1)'), errors);
   resume.applyPosition = $('td.bluecolor:contains(应聘岗位)').next().text();
-  resume.applyDate = helper.parseDate($('td.bluecolor:contains(应聘日期)').next().text());
   resume.channel = '最佳东方';
   resume.mail = data.mailId;
   resume.company = data.company;

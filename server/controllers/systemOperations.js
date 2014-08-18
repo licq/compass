@@ -40,7 +40,7 @@ exports.synchronizeToEs = function (req, res) {
 };
 
 exports.reparseMails = function (req, res) {
-  var stream = Mail.find().select('html subject company fromAddress createdAt attachments').stream();
+  var stream = Mail.find().select('html subject company fromAddress date attachments').stream();
   var index = 0;
   stream.on('data', function (mail) {
     index += 1;

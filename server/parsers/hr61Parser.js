@@ -305,7 +305,6 @@ exports.parse = function (data) {
   var pictureTable = findTable('证件/图片', 'Certificate/Image');
   if (!!pictureTable)
     resume.photoUrl = pictureTable.find('img').attr('src');
-  resume.applyDate = data.createdAt;
   resume.channel = '乐聘';
   resume.mail = data.mailId;
   resume.company = data.company;
