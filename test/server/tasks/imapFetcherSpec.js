@@ -19,7 +19,8 @@ describe.skip('imapFetcher', function () {
       tls: false,//true
       port: 143,//993
       protocol: 'imap',
-      keepMails: false};
+      keepMails: false
+    };
 //    lingpin = {'address': 'yuzhihang@lingpin.cc',
 //      'account': 'yuzhihang@lingpin.cc',
 //      'password': 'compass.123',
@@ -34,8 +35,6 @@ describe.skip('imapFetcher', function () {
     helper.clearCollections(Email, 'Company', 'User', 'Mail', 'Resume', function () {
       Factory.create('email', testmail, function (mb) {
         mailbox = mb;
-        mailbox.host = mailbox.server;
-        mailbox.user = mailbox.address;
         imapFetcher.fetch(mailbox, function (err) {
           expect(err).to.not.exist;
           async.eachSeries(_.range(3), function (i, callback) {
@@ -54,16 +53,14 @@ describe.skip('imapFetcher', function () {
     it('should retrieve and delete emails', function (done) {
       this.timeout(0);
       setTimeout(function () {
-        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+        imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
-          expect(totalMails).to.be.equal(3);
-          expect(retrievedMails).to.have.length(0);
+          expect(retrievedMails).to.have.length(3);
           mailbox.retrievedMails = retrievedMails;
-          imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+          imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
             expect(err).to.not.exist;
             expect(processedMails).to.be.equal(0);
-            expect(totalMails).to.be.equal(0);
             expect(retrievedMails).to.have.length(0);
             done();
           });
@@ -75,16 +72,14 @@ describe.skip('imapFetcher', function () {
       this.timeout(0);
       setTimeout(function () {
         mailbox.keepMails = true;
-        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+        imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
-          expect(totalMails).to.be.equal(3);
           expect(retrievedMails).to.have.length(3);
           mailbox.retrievedMails = retrievedMails;
-          imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+          imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
             expect(err).to.not.exist;
             expect(processedMails).to.be.equal(0);
-            expect(totalMails).to.be.equal(3);
             expect(retrievedMails).to.have.length(3);
             done();
           });
@@ -96,10 +91,9 @@ describe.skip('imapFetcher', function () {
       this.timeout(0);
       setTimeout(function () {
         mailbox.keepMails = true;
-        imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+        imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
           expect(err).to.not.exist;
           expect(processedMails).to.be.equal(3);
-          expect(totalMails).to.be.equal(3);
           expect(retrievedMails).to.have.length(3);
           async.eachSeries(_.range(3), function (i, callback) {
             mailer.sendSignupEmail('applicant' + i, testmail.address, i, function (error) {
@@ -108,16 +102,15 @@ describe.skip('imapFetcher', function () {
           }, function () {
             setTimeout(function () {
               mailbox.keepMails = false;
-              imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+              mailbox.retrievedMails = retrievedMails;
+              imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
                 expect(err).to.not.exist;
-                expect(processedMails).to.be.equal(6);
-                expect(totalMails).to.be.equal(6);
-                expect(retrievedMails).to.have.length(0);
+                expect(processedMails).to.be.equal(3);
+                expect(retrievedMails).to.have.length(6);
                 mailbox.retrievedMails = retrievedMails;
-                imapFetcher.fetch(mailbox, function (err, processedMails, totalMails, retrievedMails) {
+                imapFetcher.fetch(mailbox, function (err, processedMails, retrievedMails) {
                   expect(err).to.not.exist;
                   expect(processedMails).to.be.equal(0);
-                  expect(totalMails).to.be.equal(0);
                   expect(retrievedMails).to.have.length(0);
                   done();
                 });

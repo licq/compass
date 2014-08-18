@@ -40,13 +40,19 @@ exports.synchronizeToEs = function (req, res) {
 };
 
 exports.reparseMails = function (req, res) {
-  var stream = Mail.find().select('html subject company fromAddress date attachments').stream();
+  var query = req.body.query || {};
+  if (query.subject) {
+    query.subject = new RegExp(query.subject);
+  }
+  var stream = Mail.find(query).select('html subject company fromAddress date attachments').stream();
   var index = 0;
   stream.on('data', function (mail) {
     index += 1;
     jobs.addParseResumeJob(mail);
   }).on('close', function () {
     logger.info('add ', index, ' parse resume jobs');
-    res.send(200);
+  }).on('error', function () {
+    logger.info('reparseMails error');
   });
+  res.send(200);
 };

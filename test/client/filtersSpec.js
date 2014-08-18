@@ -366,4 +366,15 @@ describe('filters', function () {
       expect(isPastFilter(moment())).to.be.false;
     }));
   });
+
+  describe('isEmpty', function () {
+    it('should return correctly', inject(function (isEmptyFilter) {
+      expect(isEmptyFilter(undefined)).to.be.true;
+      expect(isEmptyFilter(null)).to.be.true;
+      expect(isEmptyFilter({})).to.be.true;
+      expect(isEmptyFilter({a: 1})).to.be.false;
+      expect(isEmptyFilter([])).to.be.true;
+      expect(isEmptyFilter([1])).to.be.false;
+    }));
+  });
 });
