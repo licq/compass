@@ -61,7 +61,7 @@ function handleParseResume(job, done) {
   try {
     logger.info('handleParseResume ', job.data.title);
     var data = parser.parse(job.data);
-    data.createdAt = job.data.date;
+    data.applyDate = job.data.date;
     var parseErrors = data.parseErrors;
     delete data.parseErrors;
 
