@@ -31,7 +31,7 @@ module.exports = function (grunt) {
       },
       testServer: {
         files: ['test/server/**/*.js'],
-        tasks: ['jshint:testServer'],
+        tasks: ['jshint:testServer']
       },
 
       livereload: {
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         src: ['server/**/*.js', 'server.js']
       },
       client: {
-        src: ['public/app/**/*.js'],
+        src: ['public/app/**/*.js']
       },
       testServer: {
         src: ['test/server/**/*.js']
@@ -85,7 +85,7 @@ module.exports = function (grunt) {
       debug: {
         script: 'server.js',
         options: {
-          nodeArgs: ['--debug-brk'],
+          nodeArgs: ['--debug-brk']
         }
       },
 
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
         script: 'server.js',
         options: {
           nodeArgs: ['--debug'],
-          ignore: ['public/**', 'test/**', 'compass*.log*', 'compass-test.log','dist/**','assets/**'],
+          ignore: ['public/**', 'test/**', 'compass*.log*', 'dist/**', 'assets/**'],
           callback: function (nodemon) {
             nodemon.on('restart', function () {
               setTimeout(function () {
@@ -107,7 +107,7 @@ module.exports = function (grunt) {
         script: 'dist/server.js',
         options: {
           env: {
-            NODE_ENV: 'production',
+           NODE_ENV: 'production'
           }
         }
       }
@@ -180,7 +180,7 @@ module.exports = function (grunt) {
     },
     useminPrepare: {
       html: [
-        'server/views/index.html',
+        'server/views/index.html'
       ],
       options: {
         dest: '<%= project.dist %>/public'
@@ -236,7 +236,8 @@ module.exports = function (grunt) {
             cwd: '<%= project.app %>/app',
             dest: '<%= project.dist %>/public/app',
             src: '**/*.html'
-          },{
+          },
+          {
             expand: true,
             dot: true,
             cwd: '<%= project.app %>/css',
