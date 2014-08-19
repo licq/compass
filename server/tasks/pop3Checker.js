@@ -23,13 +23,12 @@ exports.check = function (mailbox, callback) {
   });
 
   client.on('capa', function(status,data){
-    console.log('capa',status,data);
+    logger.info('capa',status,data);
     client.stls();
   });
 
   client.on('stls', function(status,rawdata){
-    console.log('stls',status,rawdata);
-
+    logger.info('stls',status,rawdata);
     client.login(mailbox.account,mailbox.password);
   });
 
