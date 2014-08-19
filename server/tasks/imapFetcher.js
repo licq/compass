@@ -48,7 +48,7 @@ exports.fetch = function fetch(mailbox, callback) {
                 retrievedCount += 1;
                 mailParser.parseAndSave(buffer, mailbox.address, function (err) {
                   if (err && err.code !== 11000 && err.code !== 11001) {
-                    logger.error('save resume to db failed because of', err);
+                    logger.error('save mail to db failed because of', err);
                   }
                 });
               });

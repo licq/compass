@@ -86,7 +86,7 @@ exports.fetch = function (mailbox, callback) {
     if (status === true) {
       mailParser.parseAndSave(data, mailbox.address, function (err) {
         if (err && err.code !== 11000 && err.code !== 11001) {
-          logger.error('save resume to db failed because of', err);
+          logger.error('save mail to db failed because of', err);
           client.quit();
         } else {
           retrievedMails.push(toBeRetrieved[0].uid);
