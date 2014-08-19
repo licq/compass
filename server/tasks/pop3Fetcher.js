@@ -10,12 +10,12 @@ var POPClient = require('poplib'),
 
 exports.fetch = function (mailbox, callback) {
   logger.info('fetch', mailbox.address);
-  var loginCorrect = false,
-    deleteIndex = 1,
+  var deleteIndex = 1,
     retrievedMails = mailbox.retrievedMails || [],
     toBeRetrieved = [],
     retrievedCount = 0,
-    uidsOnServer;
+    uidsOnServer,
+    errorOccurred;
 
   var client = new POPClient(mailbox.port, mailbox.server, {
     ignoretlserrs: true,
@@ -25,10 +25,9 @@ exports.fetch = function (mailbox, callback) {
 
   client.on('error', function (err) {
     logger.info('error', mailbox.address);
-    if (err.errno === 111) logger.info('Unable to connect to server, failed');
-    else logger.info('Server error occurred, failed');
-    logger.error('error info', err);
-    callback('connect failed', 0);
+    if (err && err.errno === 111) logger.error('Unable to connect to server, failed');
+    else logger.error('Server error occurred, failed:', err);
+    errorOccurred = 'connect failed';
   });
 
   client.on('connect', function () {
@@ -47,11 +46,10 @@ exports.fetch = function (mailbox, callback) {
   client.on('login', function (status, data) {
     logger.info('login', mailbox.address);
     if (status) {
-      loginCorrect = true;
       client.uidl();
     } else {
       logger.info('LOGIN/PASS failed');
-      callback('用户名/密码不正确', 0);
+      errorOccurred = '用户名/密码不正确';
     }
   });
 
@@ -129,11 +127,19 @@ exports.fetch = function (mailbox, callback) {
 
   client.on('quit', function (status, rawdata) {
     logger.info('quit', mailbox.address);
-    if (loginCorrect) {
-      callback(null, retrievedCount, retrievedMails);
+  });
+
+  client.on('close', function () {
+    logger.info('close', mailbox.address);
+    if (errorOccurred) {
+      callback(errorOccurred, 0);
     } else {
-      callback('login failed', 0);
+      callback(null, retrievedCount, retrievedMails);
     }
+  });
+
+  client.on('end', function () {
+    logger.info('end', mailbox.address);
   });
 };
 
