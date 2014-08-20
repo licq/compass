@@ -4,5 +4,11 @@ angular.module('compass')
       {update: {
         method: 'PUT',
         isArray: false
-      }});
+      },
+        enable: {
+          method: 'PUT',
+          url: '/api/users/:_id/enable',
+          isArray: false
+        }
+      });
   });

@@ -199,9 +199,12 @@ userSchema.statics.createUser = function (user, cb) {
 
 userSchema.statics.deleteUser = function (user, cb) {
   user.deleted = true;
+  var positions = user.positions;
+  user.positions = [];
+  user.markModified('positions');
   user.save(function (err, deletedUser) {
     if (err)  return cb(err);
-    updatePositions(deletedUser.positions, deletedUser, 'remove', function (err) {
+    updatePositions(positions, deletedUser, 'remove', function (err) {
       cb(err, deletedUser);
     });
   });

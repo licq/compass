@@ -60,6 +60,7 @@ describe('User', function () {
           User.findOne({_id: deletedUser._id}, function (err, u) {
             expect(err).to.not.exist;
             expect(u.deleted).to.be.true;
+            expect(u.positions).to.have.length(0);
             Position.findOne({_id: position._id}, function (err, p) {
               expect(err).to.not.exist;
               expect(p.owners).to.have.length(0);

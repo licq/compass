@@ -110,7 +110,7 @@ describe('users', function () {
     });
   });
 
-  describe('DELETE /api/users/:id', function () {
+  describe('DELETE and RECOVER /api/users/:id', function () {
     it('should return 200', function (done) {
       Factory.create('user', {company: existUser.company, positions: [existPosition._id]}, function (userToDelete) {
         existPosition.owners.push(userToDelete);
@@ -119,11 +119,22 @@ describe('users', function () {
             .expect(200)
             .end(function (err) {
               expect(err).to.not.exist;
-              User.findOne({_id: userToDelete._id}, function (err, u) {
-                expect(u.deleted).to.be.true;
+              User.findOne({_id: userToDelete._id}, function (err, deletedUser) {
+                expect(deletedUser.deleted).to.be.true;
+                expect(deletedUser.positions).to.have.length(0);
                 Position.findOne({_id: existPosition._id}, function (err, p) {
                   expect(p.owners).to.have.length(1);
-                  done(err);
+                  request.put('/api/users/' + deletedUser._id + '/enable')
+                    .expect(200)
+                    .end(function (err) {
+                      expect(err).to.not.exist;
+                      User.findOne({_id: deletedUser._id}, function (err, recoveredUser) {
+                        expect(recoveredUser.deleted).to.be.false;
+                        expect(recoveredUser.positions).to.have.length(0);
+                        done(err);
+                      });
+                    }
+                  );
                 });
               });
             });

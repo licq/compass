@@ -10,8 +10,7 @@ exports.list = function (req, res, next) {
     fields = [fields];
   }
   User.find({
-    company: req.user.company,
-    deleted: false
+    company: req.user.company
   }).populate('role', 'name')
     .populate('positions', 'name')
     .select(fields.join(' '))
@@ -39,6 +38,14 @@ exports.create = function (req, res) {
 
 exports.delete = function (req, res, next) {
   User.deleteUser(req.loadedUser, function (err) {
+    if (err) return next(err);
+    res.end();
+  });
+};
+
+exports.enable = function (req, res, next) {
+  req.loadedUser.deleted = false;
+  req.loadedUser.save(function (err) {
     if (err) return next(err);
     res.end();
   });
