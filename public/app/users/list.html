@@ -8,31 +8,43 @@
       </div>
     </div>
     <div class="panel-body">
+      <label class="ui-tree checkbox">
+        <input type="checkbox" ng-change="refreshDisplay()" ng-model="showDeleted">
+        显示已删除用户
+      </label>
+
       <div class="table-responsive">
         <table tr-ng-grid="" class="table table-bordered table-striped"
-               items="users" enable-filtering="false">
+               items="displayUsers" enable-filtering="false" order-by="'deleted'" order-by-reverse="false">
           <thead>
           <tr>
-            <th field-name="name" display-name="姓名" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="email" display-name="邮箱" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="title" display-name="职位" enable-filtering="false" enable-sorting="false"></th>
-            <th field-name="role.name" display-name="角色" enable-filtering="false" enable-sorting="false"></th>
-            <th enable-filtering="true" ng-show="settings.positionRightControlled">负责职位</th>
-            <th field-name="deleted" display-name="状态" enable-filtering="false"></th>
-            <th>操作</th>
+            <th field-name="name" display-name="姓名" enable-filtering="false" enable-sorting="false"
+                class="col-md-1"></th>
+            <th field-name="email" display-name="邮箱" enable-filtering="false" enable-sorting="false"
+                class="col-md-2"></th>
+            <th field-name="title" display-name="职位" enable-filtering="false" enable-sorting="false"
+                class="col-md-1"></th>
+            <th field-name="role.name" display-name="角色" enable-filtering="false" enable-sorting="false"
+                class="col-md-1"></th>
+            <th enable-filtering="true" ng-show="settings.positionRightControlled" class="col-md-4">负责职位</th>
+            <th field-name="deleted" display-name="状态" enable-filtering="false" enable-sorting="false"
+                class="col-md-1"></th>
+            <th class="col-md-1">操作</th>
           </tr>
           </thead>
           <tbody>
           <tr>
             <td ng-show="settings.positionRightControlled">
-              <span  ng-class="{'text-danger': !gridItem.positions.length}">{{gridItem.positions | displayNames:'user'}}</span>
+              <span
+                ng-class="{'text-danger': !gridItem.positions.length}">{{gridItem.positions | displayNames:'user'}}</span>
             </td>
             <td field-name="deleted">
               <status-span value="gridItem.deleted">{{gridItem.deleted | deletedState }}</status-span>
             </td>
             <td>
-              <edit-button action="edit(gridItem)"></edit-button>
-              <delete-button action="remove(gridItem)"></delete-button>
+              <edit-button ng-hide="gridItem.deleted" action="edit(gridItem)"></edit-button>
+              <delete-button ng-hide="gridItem.deleted" action="remove(gridItem)"></delete-button>
+              <button ng-show="gridItem.deleted" class="btn btn-primary btn-sm" ng-click="enable(gridItem)">恢复</button>
             </td>
           </tr>
           </tbody>

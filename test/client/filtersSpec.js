@@ -16,6 +16,13 @@ describe('filters', function () {
     }));
   });
 
+  describe('isDeletedUser', function () {
+    it('should return correctly', inject(function (isDeletedUserFilter) {
+      expect(isDeletedUserFilter({deleted: false})).to.equal(false);
+      expect(isDeletedUserFilter({deleted: true})).to.equal(true);
+    }));
+  });
+
   describe('yearAndMonth', function () {
     it('should return correctly', inject(function (yearAndMonthFilter) {
       expect(yearAndMonthFilter(new Date(2011, 9, 20))).to.equal('2011年10月');

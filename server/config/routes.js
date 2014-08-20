@@ -81,6 +81,10 @@ module.exports = function (app) {
     .put(users.update)
     .delete(users.delete);
 
+  apiRouter.route('/users/:id/enable')
+    .all(users.load)
+    .put(users.enable);
+
   apiRouter.route('/companies/:id')
     .all(companies.load)
     .get(companies.get);

@@ -23,6 +23,14 @@ angular.module('compass')
       return '正常';
     };
   })
+  .filter('isDeletedUser', function () {
+    return function (user) {
+      if (user.deleted) {
+        return true;
+      }
+      return false;
+    };
+  })
   .filter('yearAndMonth', function ($filter) {
     var dateFilter = $filter('date');
     return function (date) {
