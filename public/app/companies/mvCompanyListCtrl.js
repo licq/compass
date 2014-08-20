@@ -1,4 +1,5 @@
 angular.module('compass')
   .controller('mvCompanyListCtrl', function ($scope, mvCompany) {
-    $scope.companies = mvCompany.query();
+    $scope.companies = mvCompany.query(function(){
+    });
   });
