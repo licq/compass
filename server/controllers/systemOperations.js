@@ -49,6 +49,7 @@ exports.reparseMails = function (req, res) {
   stream.on('data', function (mail) {
     index += 1;
     jobs.addParseResumeJob(mail);
+    logger.info('add ', index, ' parse resume job');
   }).on('close', function () {
     logger.info('add ', index, ' parse resume jobs');
   }).on('error', function () {
