@@ -26,8 +26,6 @@ describe('mvUserListCtrl', function () {
   it('should get the user list', function () {
     expect($scope.settings.positionRightControlled).to.be.false;
     expect($scope.users).to.have.length(4);
-    expect($scope.normalUsers).to.have.length(2);
-    expect($scope.deletedUsers).to.have.length(2);
     expect($scope.displayUsers).to.have.length(2);
     expect($scope.showDeleted).to.be.false;
 
@@ -41,14 +39,10 @@ describe('mvUserListCtrl', function () {
       $scope.remove($scope.users[1]);
       $httpBackend.flush();
       expect($scope.users).to.have.length(4);
-      expect($scope.normalUsers).to.have.length(1);
-      expect($scope.deletedUsers).to.have.length(3);
       expect($scope.displayUsers).to.have.length(1);
       $scope.showDeleted = true;
       $scope.refreshDisplay();
       expect($scope.users).to.have.length(4);
-      expect($scope.normalUsers).to.have.length(1);
-      expect($scope.deletedUsers).to.have.length(3);
       expect($scope.displayUsers).to.have.length(4);
     }));
   });
@@ -59,14 +53,10 @@ describe('mvUserListCtrl', function () {
       $scope.enable($scope.users[2]);
       $httpBackend.flush();
       expect($scope.users).to.have.length(4);
-      expect($scope.normalUsers).to.have.length(3);
-      expect($scope.deletedUsers).to.have.length(1);
       expect($scope.displayUsers).to.have.length(3);
       $scope.showDeleted = true;
       $scope.refreshDisplay();
       expect($scope.users).to.have.length(4);
-      expect($scope.normalUsers).to.have.length(3);
-      expect($scope.deletedUsers).to.have.length(1);
       expect($scope.displayUsers).to.have.length(4);
     }));
   });

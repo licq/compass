@@ -110,7 +110,7 @@ describe('users', function () {
     });
   });
 
-  describe('DELETE and RECOVER /api/users/:id', function () {
+  describe('DELETE and ENABLE /api/users/:id', function () {
     it('should return 200', function (done) {
       Factory.create('user', {company: existUser.company, positions: [existPosition._id]}, function (userToDelete) {
         existPosition.owners.push(userToDelete);

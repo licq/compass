@@ -44,9 +44,7 @@
             <td>
               <edit-button ng-hide="gridItem.deleted" action="edit(gridItem)"></edit-button>
               <delete-button ng-hide="gridItem.deleted" action="remove(gridItem)"></delete-button>
-              <input ng-show="gridItem.deleted" type="submit" class="btn btn-primary btn-sm"
-                     ng-click="enable(gridItem)"
-                     value="恢复">
+              <button ng-show="gridItem.deleted" class="btn btn-primary btn-sm" ng-click="enable(gridItem)">恢复</button>
             </td>
           </tr>
           </tbody>
