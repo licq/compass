@@ -5,48 +5,42 @@ var mongoose = require('mongoose'),
   Email = mongoose.model('Email'),
   User = mongoose.model('User'),
   Resume = mongoose.model('Resume'),
+  Interview = mongoose.model('Interview'),
   _ = require('lodash'),
   async = require('async');
 
-var getEmailCount = function (company, cb) {
-  Email.count({company: company._id}, function (err, count) {
-    var c = company.toObject();
-    c.emailCount = count;
-    cb(err, c);
-  });
-};
-
-var getUserCount = function (company, cb) {
-  User.count({company: company._id}, function (err, count) {
-    company.userCount = count;
-    cb(err, company);
-  });
-};
-
-var getResumeCount = function (company, cb) {
-  Resume.count({company: company._id}, function (err, count) {
-    company.resumeCount = count;
-    cb(err, company);
-  });
-};
-
 exports.list = function (req, res, next) {
-  async.waterfall([
+  async.series([
     function (cb) {
-      Company.find({}).exec(cb);
+      Company.find({}).select('name createdAt').exec(function (err, companies) {
+        cb(err, _.map(companies, function (c) {
+          return c.toObject();
+        }));
+      });
     },
-    function (companies, cb) {
-      async.map(companies, getEmailCount, cb);
+    function (cb) {
+      Email.aggregate().group({_id: '$company', emailCount: {$sum: 1}}).exec(cb);
     },
-    function (companies, cb) {
-      async.map(companies, getUserCount, cb);
+    function (cb) {
+      User.aggregate().group({_id: '$company', userCount: {$sum: 1}}).exec(cb);
     },
-    function (companies, cb) {
-      async.map(companies, getResumeCount, cb);
+    function (cb) {
+      Resume.aggregate().group({_id: '$company', resumeCount: {$sum: 1}}).exec(cb);
+    },
+    function (cb) {
+      Interview.aggregate().group({_id: '$company', interviewCount: {$sum: 1}}).exec(cb);
     }
-  ], function (err, companies) {
+  ], function (err, results) {
     if (err) return next(err);
-    return res.json(companies);
+    if (results.length > 0) {
+      results = _.groupBy(_.flatten(results), '_id');
+      results = _.map(results, function (result) {
+        return _.reduce(result, function (s, r) {
+          return _.merge(s, r);
+        }, {});
+      });
+    }
+    return res.json(results);
   });
 };
 
@@ -56,7 +50,7 @@ exports.get = function (req, res) {
 
 exports.load = function (req, res, next) {
   Company.findOne({_id: req.params.id})
-    .select('name created')
+    .select('name createdAt')
     .exec(function (err, loadedCompany) {
       if (err) return next(err);
       if (!loadedCompany) return res.send(404, {message: 'not found'});

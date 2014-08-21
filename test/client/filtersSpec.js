@@ -272,6 +272,15 @@ describe('filters', function () {
     }));
   });
 
+
+  describe('nullToZeroFilter', function () {
+    it('should return correctly', inject(function (nullToZeroFilter) {
+      expect(nullToZeroFilter(3)).to.equal(3);
+      expect(nullToZeroFilter(null)).to.equal(0);
+      expect(nullToZeroFilter(undefined)).to.equal(0);
+    }));
+  });
+
   describe('eventTimeRangeFilter', function () {
     it('should return correctly', inject(function (eventTimeRangeFilter) {
       expect(eventTimeRangeFilter({startTime: '2014-06-06T12:05:00.000Z', duration: 90})).to.equal('20:05-21:35');

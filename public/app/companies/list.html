@@ -9,11 +9,14 @@
                items="companies" enable-filtering="true">
           <thead>
           <tr>
-            <th field-name="name" display-name="名称" enable-filtering="false"></th>
-            <th field-name="resumeCount" display-name="简历数量" enable-filtering="false"></th>
-            <th field-name="userCount" display-name="用户数量" enable-filtering="false"></th>
-            <th field-name="emailCount" display-name="Email数量" enable-filtering="false"></th>
-            <th field-name="_id" display-name="ID" enable-filtering="false"></th>
+            <th field-name="name" display-name="名称" enable-filtering="false" display-format="nullToZero"></th>
+            <th field-name="resumeCount" display-name="简历数量" enable-filtering="false" display-format="nullToZero"></th>
+            <th field-name="interviewCount" display-name="面试数量" enable-filtering="false"
+                display-format="nullToZero"></th>
+            <th field-name="userCount" display-name="用户数量" enable-filtering="false" display-format="nullToZero"></th>
+            <th field-name="emailCount" display-name="Email数量" enable-filtering="false"
+                display-format="nullToZero"></th>
+            <th field-name="_id" display-name="ID" enable-filtering="false" display-format="nullToZero"></th>
             <th field-name="createdAt" display-name="创建时间" enable-filtering="false"
                 display-format="longDate"></th>
           </tr>
