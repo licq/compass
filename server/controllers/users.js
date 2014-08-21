@@ -76,7 +76,7 @@ exports.update = function (req, res, next) {
 exports.load = function (req, res, next) {
   User.findOne({_id: req.params.id, company: req.user.company})
     .populate('role', 'name permissions')
-    .select('name email company title role positions')
+    .select('name email company title department role positions')
     .exec(function (err, loadedUser) {
       if (err) return next(err);
       if (!loadedUser) return res.send(404, {message: 'not found'});
