@@ -124,15 +124,22 @@ describe('users', function () {
                 expect(deletedUser.positions).to.have.length(0);
                 Position.findOne({_id: existPosition._id}, function (err, p) {
                   expect(p.owners).to.have.length(1);
-                  request.put('/api/users/' + deletedUser._id + '/enable')
-                    .expect(200)
-                    .end(function (err) {
+                  request.del('/api/users/' + existUser._id)
+                    .expect(400)
+                    .end(function (err, res) {
                       expect(err).to.not.exist;
-                      User.findOne({_id: deletedUser._id}, function (err, recoveredUser) {
-                        expect(recoveredUser.deleted).to.be.false;
-                        expect(recoveredUser.positions).to.have.length(0);
-                        done(err);
-                      });
+                      expect(res.body.message).to.be.equal('这是贵公司最后一个用户，不能删除');
+                      request.put('/api/users/' + deletedUser._id + '/enable')
+                        .expect(200)
+                        .end(function (err) {
+                          expect(err).to.not.exist;
+                          User.findOne({_id: deletedUser._id}, function (err, recoveredUser) {
+                            expect(recoveredUser.deleted).to.be.false;
+                            expect(recoveredUser.positions).to.have.length(0);
+                            done(err);
+                          });
+                        });
+
                     }
                   );
                 });

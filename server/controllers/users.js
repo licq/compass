@@ -37,9 +37,16 @@ exports.create = function (req, res) {
 };
 
 exports.delete = function (req, res, next) {
-  User.deleteUser(req.loadedUser, function (err) {
+  User.count({company: req.user.company, deleted: false}, function (err, count) {
     if (err) return next(err);
-    res.end();
+    if (count > 1) {
+      User.deleteUser(req.loadedUser, function (err) {
+        if (err) return next(err);
+        res.end();
+      });
+    } else {
+      return res.json(400, {message: '这是贵公司最后一个用户，不能删除'});
+    }
   });
 };
 
