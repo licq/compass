@@ -39,11 +39,6 @@ module.exports = function (app, config) {
   app.route('/app/*', function (req, res) {
     res.send(404);
   });
-  app.use(expressWinston.logger({
-    transports: winston.transports,
-    meta: false,
-    msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}} {{req.ips}}"
-  }));
   app.use(require('cookie-parser')());
   app.use(require('body-parser').urlencoded({extended: true}));
   app.use(require('body-parser').json());

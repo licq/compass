@@ -77,6 +77,7 @@ exports.fetch = function (mailbox, callback) {
       } else {
         logger.info('uidl8');
         client.quit();
+        logger.info('uidl9');
       }
     }
   });

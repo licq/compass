@@ -47,6 +47,14 @@ exports.addFetchEmailJob = function addFetchEmailJob(email, minutes, done) {
     title: 'fetch email from ' + email.address
   });
   if (minutes) job.delay(1000 * 60 * minutes);
+  job.on('complete', function (result) {
+    logger.info(job.data.title, 'complete with result:', result);
+  });
+
+  job.on('failed', function () {
+    logger.error(job.data.title, 'failed ');
+  });
+
   job.save(function (err) {
     if (err) logger.error('job create failed because of ', err);
     done && done(err);
@@ -117,19 +125,5 @@ exports.init = function (config) {
       port: config.redis.port,
       host: config.redis.host
     }
-  });
-
-  jobs.on('job complete', function (id) {
-    Job.get(id, function (err, job) {
-      if (err) return;
-      logger.info(job.data.title, 'complete');
-    });
-  });
-
-  jobs.on('job failed', function (id) {
-    Job.get(id, function (err, job) {
-      if (err) return;
-      logger.error(job.data.title, 'failed ');
-    });
   });
 };

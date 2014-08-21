@@ -12,7 +12,8 @@ var express = require('express'),
   resumes = require('../controllers/resumes'),
   evaluationCriterions = require('../controllers/evaluationCriterions'),
   applications = require('../controllers/applications'),
-  logger = require('./winston').logger(),
+  winston = require('./winston'),
+  logger = winston.logger(),
   companies = require('../controllers/companies'),
   events = require('../controllers/events'),
   interviews = require('../controllers/interviews'),
@@ -27,14 +28,21 @@ var express = require('express'),
   interviewReports = require('../controllers/interviewReports'),
   applierRejectReasons = require('../controllers/applierRejectReasons'),
   multipart = require('connect-multiparty'),
+  expressWinston = require('express-winston'),
   _ = require('lodash');
 
 module.exports = function (app) {
   var apiRouter = express.Router(),
     publicApiRouter = express.Router(),
     systemApiRouter = express.Router(),
-    tasksRouter = express.Router();
+    tasksRouter = express.Router(),
+    expressLogger = expressWinston.logger({
+      transports: winston.transports,
+      meta: false,
+      msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}} {{req.ips}}"
+    });
 
+  publicApiRouter.use(expressLogger);
   publicApiRouter.route('/sessions')
     .post(sessions.authenticate)
     .delete(sessions.logout);
@@ -49,6 +57,7 @@ module.exports = function (app) {
     .put(captchas.verify);
 
   apiRouter.use(sessions.requiresLogin);
+  apiRouter.use(expressLogger);
   apiRouter.route('/emails')
     .get(emails.list)
     .post(emails.create);
@@ -203,6 +212,7 @@ module.exports = function (app) {
 
   systemApiRouter.use(sessions.requiresLogin);
   systemApiRouter.use(users.isSystemAdmin);
+  systemApiRouter.use(expressLogger);
   systemApiRouter.route('/recreateAllJobs')
     .post(systemOperations.recreateAllJobs);
   systemApiRouter.route('/recreateFetchEmailJobs')
