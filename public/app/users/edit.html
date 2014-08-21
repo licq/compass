@@ -21,7 +21,14 @@
                    ng-show="userForm.name.$error.required && !userForm.name.$pristine">
                   请输入姓名帐号</p>
               </div>
-
+              <div class="form-group">
+                <label>部门</label>
+                <input type="text"
+                       class="form-control placeholder"
+                       ng-model="user.department" placeholder="部门"
+                       typeahead="department for department in departments | filter:$viewValue | limitTo:8"
+                       name="department"/>
+              </div>
               <div class="form-group">
                 <label>职位</label>
                 <input type="text"

@@ -17,16 +17,18 @@
         <table tr-ng-grid="" class="table table-bordered table-striped"
                items="displayUsers" enable-filtering="false" order-by="'deleted'" order-by-reverse="false">
           <thead>
-          <tr>
-            <th field-name="name" display-name="姓名" enable-filtering="false" enable-sorting="false"
+          <tr class="no-gutter">
+            <th field-name="name" display-name="姓名" enable-filtering="false" enable-sorting="true"
                 class="col-md-1"></th>
-            <th field-name="email" display-name="邮箱" enable-filtering="false" enable-sorting="false"
+            <th field-name="email" display-name="邮箱" enable-filtering="false" enable-sorting="true"
                 class="col-md-2"></th>
-            <th field-name="title" display-name="职位" enable-filtering="false" enable-sorting="false"
+            <th field-name="department" display-name="部门" enable-filtering="false" enable-sorting="true"
+                class="col-md-2"></th>
+            <th field-name="title" display-name="职位" enable-filtering="false" enable-sorting="true"
                 class="col-md-1"></th>
-            <th field-name="role.name" display-name="角色" enable-filtering="false" enable-sorting="false"
+            <th field-name="role.name" display-name="角色" enable-filtering="false" enable-sorting="true"
                 class="col-md-1"></th>
-            <th enable-filtering="true" ng-show="settings.positionRightControlled" class="col-md-4">负责职位</th>
+            <th enable-filtering="true" ng-show="settings.positionRightControlled" class="col-md-3">负责职位</th>
             <th field-name="deleted" display-name="状态" enable-filtering="false" enable-sorting="false"
                 class="col-md-1"></th>
             <th class="col-md-1">操作</th>

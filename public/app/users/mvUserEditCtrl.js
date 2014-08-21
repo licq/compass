@@ -8,17 +8,19 @@ angular.module('compass')
         $scope.positions = positions;
         mvUser.get({_id: $routeParams.id}, function (user) {
           $scope.user = user;
-          $scope.selectAll = $scope.user.positions.length === $scope.positions.length;
-          angular.forEach($scope.positions, function (position) {
-            position.checked = _.some($scope.user.positions, function (userPosition) {
-              return userPosition === position._id;
+          mvUser.query({fields: 'department', deleted: false}, function (departments) {
+            $scope.departments = _.uniq(_.compact(_.pluck(departments, 'department')));
+            $scope.selectAll = $scope.user.positions.length === $scope.positions.length;
+            angular.forEach($scope.positions, function (position) {
+              position.checked = _.some($scope.user.positions, function (userPosition) {
+                return userPosition === position._id;
+              });
+            });
+            mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
+              $scope.positionRightControlled = settings.positionRightControlled;
+              $scope.dataReady = true;
             });
           });
-          mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
-            $scope.positionRightControlled = settings.positionRightControlled;
-            $scope.dataReady = true;
-          });
-
         });
       });
     });

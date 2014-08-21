@@ -5,13 +5,16 @@ angular.module('compass')
       mvPosition.query({fields: 'name'}, function (positions) {
         $scope.positions = positions;
         $scope.user = new mvUser();
-        $scope.selectAll = false;
-        angular.forEach($scope.positions, function (position) {
-          position.checked = false;
-        });
-        mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
-          $scope.positionRightControlled = settings.positionRightControlled;
-          $scope.dataReady = true;
+        mvUser.query({fields: 'department', deleted: false}, function (departments) {
+          $scope.departments = _.uniq(_.compact(_.pluck(departments, 'department')));
+          $scope.selectAll = false;
+          angular.forEach($scope.positions, function (position) {
+            position.checked = false;
+          });
+          mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
+            $scope.positionRightControlled = settings.positionRightControlled;
+            $scope.dataReady = true;
+          });
         });
       });
     });

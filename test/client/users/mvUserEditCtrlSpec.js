@@ -27,6 +27,13 @@ describe('mvUserEditCtrl', function () {
       {'_id': '3344', 'name': 'sales'}
     ]);
     $httpBackend.expectGET('/api/users/7788').respond(userData);
+    $httpBackend.expectGET('/api/users?deleted=false&fields=department').respond(function () {
+      return [200, [
+        {email: 'compass@best.com', _id: '7788', deleted : false, department:'d1'},
+        {email: 'compass1@best.com', _id: '8899', deleted : false,department:'d2'},
+        {email: 'compass2@best.com', _id: '9900', deleted: false,department:'d2'},
+      ]];
+    });
     $httpBackend.expectGET('/api/applicationSettings?fields=positionRightControlled').respond({positionRightControlled: false});
     mvUserEditCtrl = $controller('mvUserEditCtrl', {
       $scope: $scope,
@@ -40,6 +47,7 @@ describe('mvUserEditCtrl', function () {
     expect($scope.positions).to.have.length(2);
     expect($scope.positionRightControlled).to.be.false;
     expect($scope.roles).to.have.length(2);
+    expect($scope.departments).to.have.length(2);
     expect($scope.user).to.exist;
   });
 

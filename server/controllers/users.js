@@ -5,13 +5,15 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
-  var fields = req.query.fields || ['name', 'email', 'company', 'title', 'deleted', 'createdAt', 'role', 'positions'];
+  var fields = req.query.fields || ['name', 'email', 'department', 'company', 'title', 'deleted', 'createdAt', 'role', 'positions'];
   if (!Array.isArray(fields)) {
     fields = [fields];
   }
-  User.find({
-    company: req.user.company
-  }).populate('role', 'name')
+  var query = {company: req.user.company};
+  if (req.query.deleted)
+    query.deleted = req.query.deleted;
+  User.find(query)
+    .populate('role', 'name')
     .populate('positions', 'name')
     .select(fields.join(' '))
     .exec(function (err, users) {
