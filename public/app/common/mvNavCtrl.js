@@ -17,8 +17,9 @@ angular.module('compass')
       });
     };
 
-    $scope.updateAppCounts = function(){
-      $scope.updateNavCounts({counts:['new','pursued','undetermined']});
+    $scope.updateAppCounts = function () {
+      $scope.updateNavCounts({counts: ['new', 'pursued', 'undetermined']});
+      $scope.$broadcast('clearQueryOptions');
     };
 
     $scope.retrieveEvents = function () {

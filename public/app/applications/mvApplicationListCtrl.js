@@ -65,6 +65,19 @@ angular.module('compass')
       }
     }
 
+    $scope.$on('clearQueryOptions', function () {
+      $scope.clearQueryOptions();
+    });
+
+    $scope.clearQueryOptions = function () {
+      $scope.queryOptions.q = '';
+      $scope.queryOptions.applyPosition = '';
+      $scope.queryOptions.age = '';
+      $scope.queryOptions.highestDegree = '';
+      $scope.queryOptions.page = 1;
+      $scope.query();
+    };
+
     $scope.setApplyPosition = function (applyPosition) {
       $scope.queryOptions.applyPosition = applyPosition;
       $scope.queryOptions.page = 1;

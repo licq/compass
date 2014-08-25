@@ -10,6 +10,7 @@
           </div>
           <div class="col-md-4">
             <button class="btn btn-primary" ng-click="query()">搜索</button>
+            <button class="btn btn-default" ng-click="clearQueryOptions()">清空</button>
           </div>
         </div>
         <div class="form-group small-gutter" ng-show="totalApplicationCount > 0">
@@ -58,7 +59,8 @@
     </div>
 
     <div class="panel-body">
-      <div class="row callout callout-info no-gutter" ng-repeat="application in applications" on-finish-render="scroll()">
+      <div class="row callout callout-info no-gutter" ng-repeat="application in applications"
+           on-finish-render="scroll()">
         <div class="col-md-1 resume-name">
           <h4>{{application.name}}</h4>
           <img ng-src="{{application.photoUrl}}" class="img img-responsive img-photo" ng-show="application.photoUrl">
