@@ -237,10 +237,19 @@ resumeSchema.statics.query = function (params, callback) {
         }
       }
     },
+    "aggregations": {
+      "applyPosition": {
+        "terms": {
+          "field": "applyPosition.original",
+          "size": 0
+        }
+      }
+    },
     facets: {
       applyPosition: {
         terms: {
-          field: 'applyPosition.original'
+          field: 'applyPosition.original',
+          size: 50
         }
       },
       highestDegree: {
