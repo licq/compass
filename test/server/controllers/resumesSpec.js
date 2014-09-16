@@ -1,5 +1,6 @@
 var
   Resume = require('mongoose').model('Resume'),
+  Interview = require('mongoose').model('Interview'),
   helper = require('../testHelper'),
   Factory = require('../factory'),
   expect = require('chai').expect;
@@ -8,12 +9,12 @@ describe('#resumes', function () {
   var request, resume, user;
 
   beforeEach(function (done) {
-    helper.clearCollections('User', 'Company', 'Role', 'Resume', 'Mail', function () {
+    helper.clearCollections('User', 'Company', 'Role', 'Resume', 'Mail', 'Interview', function () {
       Resume.recreateIndex(function () {
         helper.login(function (agent, newUser) {
           user = newUser;
           request = agent;
-          Factory.build('resume', {company: newUser.company, status: 'archived'}, function (newResume) {
+          Factory.build('resume', {company: user.company, status: 'archived'}, function (newResume) {
             resume = newResume;
             resume.saveAndIndexSync(done);
           });
@@ -106,4 +107,65 @@ describe('#resumes', function () {
         });
     });
   });
+
+  describe('put /api/resumes/:id', function () {
+
+    it('should reset resume to pursued status', function (done) {
+      request.put('/api/resumes/' + resume.id)
+        .expect(200)
+        .end(function (err) {
+          expect(err).to.not.exist;
+          Resume.findById(resume._id, function (err, resume) {
+            expect(err).to.not.exist;
+            expect(resume.status).to.equal('pursued');
+            Interview.findOne({application: resume._id}, function (err, interview) {
+              expect(err).to.not.exist;
+              expect(interview).to.not.exist;
+              done();
+            });
+          });
+        });
+    });
+
+    it('should reset resume to interview', function (done) {
+      var rejectedResume;
+      Factory.build('resume', {company: user.company, status: 'offer rejected'}, function (newResume) {
+        rejectedResume = newResume;
+        rejectedResume.saveAndIndexSync(function(){
+          Factory.create('interview', {
+            application: rejectedResume._id,
+            company: user.company,
+            applyPosition: '人力总监',
+            events: [
+              {
+                startTime: new Date(),
+                duration: 90,
+                interviewers: [user._id],
+                createdBy: user._id
+              }
+            ],
+            status: 'offer rejected'
+          }, function () {
+            request.put('/api/resumes/' + rejectedResume.id)
+              .expect(200)
+              .end(function (err) {
+                expect(err).to.not.exist;
+                Resume.findById(rejectedResume._id, function (err, resume) {
+                  expect(err).to.not.exist;
+                  expect(resume.status).to.equal('interview');
+                  Interview.findOne({application: rejectedResume._id}, function (err, interview) {
+                    expect(err).to.not.exist;
+                    expect(interview.status).to.equal('new');
+                    done();
+                  });
+                });
+              });
+          });
+
+        });
+      });
+
+    });
+  });
+
 });

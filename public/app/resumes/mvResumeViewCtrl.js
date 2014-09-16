@@ -7,7 +7,7 @@ angular.module('compass')
 
       if ($scope.resume.status === 'archived')
         $scope.newStatus = '通过';
-      else $scope.newStatus = '面试中';
+      else $scope.newStatus = '面试';
     });
 
     $scope.back = function () {
@@ -16,7 +16,8 @@ angular.module('compass')
 
     $scope.resetStatus = function(){
       mvResume.resetStatus({_id: $scope.resume._id}, function () {
-          mvNotifier.notify('已将简历恢复到' + $scope.newStatus + '状态');
+          mvNotifier.notify('已将简历恢复到' + $scope.newStatus + '列表中');
+          $location.path('/resumes');
         }
       );
     };
