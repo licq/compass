@@ -124,7 +124,8 @@ module.exports = function (app) {
     .get(resumes.list);
   apiRouter.route('/resumes/:id')
     .all(resumes.load)
-    .get(resumes.get);
+    .get(resumes.get)
+    .put(resumes.reset);
 
   apiRouter.route('/eventSettings')
     .get(eventSettings.get);

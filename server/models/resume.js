@@ -210,7 +210,7 @@ var resumeSchema = mongoose.Schema({
   status: {
     type: String,
     default: 'new',
-    enum: ['new', 'undetermined', 'pursued', 'archived', 'offer accepted', 'interview', 'offered',
+    enum: ['new', 'undetermined', 'pursued', 'archived', 'interview', 'offer accepted', 'offered',
       'rejected', 'offer rejected', 'recruited', 'not recruited', 'duplicate'],
     index: true
   },
@@ -720,7 +720,7 @@ resumeSchema.plugin(mongoosastic, {
           },
           level: {
             type: 'string',
-            index:'no'
+            index: 'no'
           },
           language: {
             type: 'string',

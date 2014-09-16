@@ -8,7 +8,7 @@ describe('mvPositionNewCtrl', function () {
     $httpBackend = _$httpBackend_;
     $scope = $rootScope.$new();
     $httpBackend.expectGET('/api/positions/toBeAdded').respond(['JAVA工程师', '市场总监']);
-    $httpBackend.expectGET('/api/users?fields=name').respond([
+    $httpBackend.expectGET('/api/users?deleted=false&fields=name').respond([
       {'_id': '4466', 'name': '张三'},
       {'_id': '5577', 'name': '李四'}
     ]);

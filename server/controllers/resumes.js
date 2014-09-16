@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume'),
+  Interview = mongoose.model('Interview'),
   jobs = require('../tasks/jobs');
 
 exports.list = function (req, res, next) {
@@ -51,5 +52,35 @@ exports.load = function (req, res, next) {
       if (!resume) return res.send(404, {message: 'not found'});
       req.resume = resume;
       next();
+    });
+};
+
+exports.reset = function (req, res, next) {
+  Resume.findOne({_id: req.params.id, company: req.user.company})
+    .exec(function (err, resume) {
+      if (err) return next(err);
+      if (!resume) return res.send(404, {message: 'not found'});
+
+      if (resume.status === 'archived')
+        resume.status = 'pursued';
+      else
+        resume.status = 'interview';
+
+      resume.saveAndIndexSync(function (err) {
+        if (err) return next(err);
+        if (resume.status === 'interview') {
+          Interview.findOne({application: resume._id, company: req.user.company})
+            .exec(function (err, interview) {
+              interview.status = 'new';
+              interview.save(function (err) {
+                if (err) return next(err);
+                res.end();
+              });
+            });
+        }
+        else {
+          res.end();
+        }
+      });
     });
 };

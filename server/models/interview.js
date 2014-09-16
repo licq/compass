@@ -247,7 +247,7 @@ interviewSchema.statics.eventsForInterviewer = function (interviewer, start, end
       startTime: '$events.startTime',
       duration: '$events.duration',
       interviewers: '$events.interviewers',
-      application: 1,
+      application: 1
     })
     .match({ interviewers: interviewer, startTime: { $gte: start, $lt: end } })
     .sort('startTime');

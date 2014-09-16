@@ -6,10 +6,15 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
-  Position.find({
-    company: req.user.company
-  }).populate('owners', 'name')
-    .select('name owners evaluationCriterions department createdAt')
+  var fields = req.query.fields || ['name owners evaluationCriterions department createdAt'];
+  if (!Array.isArray(fields)) {
+    fields = [fields];
+  }
+  var query = {company: req.user.company};
+
+  Position.find(query)
+    .populate('owners', 'name')
+    .select(fields.join(' '))
     .exec(function (err, positions) {
       if (err) return next(err);
       return res.json(positions);

@@ -6,7 +6,7 @@ angular.module('compass')
       $scope.positions = $scope.positions.concat(res);
     });
 
-    mvUser.query({fields: 'name'}, function (users) {
+    mvUser.query({fields: 'name', deleted: false}, function (users) {
       $scope.users = users;
       mvPosition.get({_id: $routeParams.id}, function (position) {
         $scope.position = position;

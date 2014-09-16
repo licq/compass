@@ -6,7 +6,7 @@ angular.module('compass')
       $scope.positions = res;
     });
 
-    mvUser.query({fields: 'name'}, function (users) {
+    mvUser.query({fields: 'name', deleted: false}, function (users) {
       $scope.users = users;
       $scope.selectAll = false;
       angular.forEach($scope.users, function (user) {

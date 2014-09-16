@@ -1,4 +1,9 @@
 angular.module('compass')
   .factory('mvResume', function ($resource) {
-    return $resource('/api/resumes/:_id', {_id: '@_id'});
+    return $resource('/api/resumes/:_id', {_id: '@_id'}, {
+      resetStatus: {
+        method: 'PUT',
+        isArray: false
+      }
+    });
   });

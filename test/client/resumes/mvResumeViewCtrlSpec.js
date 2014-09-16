@@ -8,7 +8,7 @@ describe('mvResumeViewCtrl', function () {
   beforeEach(inject(function (_$httpBackend_, $rootScope, $controller) {
     $httpBackend = _$httpBackend_;
     $httpBackend.expectGET('/api/resumes/7788').respond({address: 'compass@best.com', _id: '7788',
-      mail: '8899'});
+      mail: '8899', status: 'offered'});
 
     $scope = $rootScope.$new();
     mvResumeViewCtrl = $controller('mvResumeViewCtrl', {
@@ -33,4 +33,16 @@ describe('mvResumeViewCtrl', function () {
       expect(spy).to.have.been.calledWith('/resumes');
     }));
   });
+
+  it('should return successfully', inject(
+      function (mvNotifier, $location) {
+        $httpBackend.expectPUT('/api/resumes/7788').respond(200);
+        var spy = sinon.spy(mvNotifier, 'notify');
+        var spyLoc = sinon.spy($location, 'path');
+        $scope.resetStatus();
+        $httpBackend.flush();
+        expect(spy).to.have.been.calledWith('已将简历恢复到面试列表中');
+        expect(spyLoc).to.have.been.calledWith('/resumes');
+      })
+  );
 });
