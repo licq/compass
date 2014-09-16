@@ -1,11 +1,14 @@
 angular.module('compass')
-  .controller('mvPositionListCtrl', function ($scope, mvApplicationSetting, mvPosition, $location, mvNotifier, $http) {
+  .controller('mvPositionListCtrl', function ($scope, mvApplicationSetting, mvPosition, $location, mvNotifier, $filter, $http) {
     $http.get('/api/positions/toBeAdded').success(function (res) {
       $scope.toBeAddedPositions = res;
     });
 
     mvPosition.query(function (positions) {
       $scope.positions = positions;
+      angular.forEach($scope.positions, function (position) {
+        position.owners = $filter('orderBy')(position.owners, 'name');
+      });
       mvApplicationSetting.get({fields: 'positionRightControlled'}, function (settings) {
         $scope.settings = settings;
       });

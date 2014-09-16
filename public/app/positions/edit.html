@@ -39,7 +39,7 @@
                       全选
                     </label>
                   </li>
-                  <li ng-repeat="user in users">
+                  <li ng-repeat="user in users | orderBy:'name'">
                     <label class="checkbox">
                       <input type="checkbox" ng-model="user.checked" ng-change="onSelectUser(user)">
                       {{user.name}}
