@@ -1572,4 +1572,17 @@ describe('mvResumeListCtrl', function () {
       expect(spy.called).to.be.true;
     });
   });
+
+  describe('resetStatus', function(){
+    it('should return successfully', inject(
+        function (mvNotifier) {
+          $httpBackend.expectPUT('/api/resumes/7788').respond(200);
+          var spy = sinon.spy(mvNotifier, 'notify');
+          $scope.resetStatus('7788');
+          $httpBackend.flush();
+          expect(spy).to.have.been.called;
+        })
+    );
+  });
+
 });

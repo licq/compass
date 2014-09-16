@@ -1,13 +1,24 @@
 angular.module('compass')
-  .controller('mvResumeViewCtrl', function ($scope, mvResume, $routeParams, $location, $window) {
+  .controller('mvResumeViewCtrl', function ($scope, mvResume, mvNotifier, $routeParams, $location, $window) {
     mvResume.get({_id: $routeParams.id}, function (resume) {
       $scope.resume = resume;
       $scope.interview = $scope.resume.interview;
       $scope.mailHtml = '/api/mails/' + $scope.resume.mail + '/html';
+
+      if ($scope.resume.status === 'archived')
+        $scope.newStatus = '通过';
+      else $scope.newStatus = '面试中';
     });
 
     $scope.back = function () {
       $location.path('/resumes');
+    };
+
+    $scope.resetStatus = function(){
+      mvResume.resetStatus({_id: $scope.resume._id}, function () {
+          mvNotifier.notify('已将简历恢复到' + $scope.newStatus + '状态');
+        }
+      );
     };
 
     $scope.original = false;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compass')
-  .controller('mvResumeListCtrl', function ($scope, mvResume, $location, states, $http) {
+  .controller('mvResumeListCtrl', function ($scope, mvResume, mvNotifier, $location, states, $http) {
     states.defaults('mvResumeListCtrl', {
       queryOptions: {
         pageSize: 20,
@@ -58,4 +58,12 @@ angular.module('compass')
       $scope.queryOptions.page = 1;
       $scope.query();
     };
+
+    $scope.resetStatus = function (id) {
+      mvResume.resetStatus({_id: id}, function () {
+          mvNotifier.notify('已将简历恢复到' + $scope.newStatus + '状态');
+        }
+      );
+    };
+
   });

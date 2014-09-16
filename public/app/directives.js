@@ -42,6 +42,16 @@ angular.module('compass')
       template: '<button class="btn btn-xs btn-success" ng-click="action()"><i class="fa fa-archive"</button> '
     };
   })
+  .directive('resetButton', function () {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        action: '&'
+      },
+      template: '<button class="btn btn-xs btn-success" ng-click="action()"><i class="fa fa-undo"</button> '
+    };
+  })
   .directive('validNumber', function () {
     return {
       require: '?ngModel',
