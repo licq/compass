@@ -28,7 +28,7 @@
                 class="col-md-1"></th>
             <th field-name="role.name" display-name="角色" enable-filtering="false" enable-sorting="true"
                 class="col-md-1"></th>
-            <th enable-filtering="true" enable-sorting="true" ng-show="settings.positionRightControlled" class="col-md-3">负责职位</th>
+            <th enable-filtering="true" enable-sorting="false" ng-show="settings.positionRightControlled" class="col-md-3">负责职位</th>
             <th field-name="deleted" display-name="状态" enable-filtering="false" enable-sorting="true"
                 class="col-md-1"></th>
             <th class="col-md-1">操作</th>
@@ -38,7 +38,7 @@
           <tr>
             <td ng-show="settings.positionRightControlled">
               <span
-                ng-class="{'text-danger': !gridItem.positions.length}">{{gridItem.positions | displayNames:'user'}}</span>
+                ng-class="{'text-danger': !gridItem.positions.length}">{{gridItem.positions | orderBy:'name' | displayNames:'user'}}</span>
             </td>
             <td field-name="deleted">
               <status-span value="gridItem.deleted">{{gridItem.deleted | deletedState }}</status-span>

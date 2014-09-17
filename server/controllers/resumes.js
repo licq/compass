@@ -61,7 +61,7 @@ exports.reset = function (req, res, next) {
       if (err) return next(err);
       if (!resume) return res.send(404, {message: 'not found'});
 
-      if (resume.status === 'archived')
+      if (resume.status === 'archived' || resume.status === 'duplicate')
         resume.status = 'pursued';
       else
         resume.status = 'interview';
@@ -71,14 +71,18 @@ exports.reset = function (req, res, next) {
         if (resume.status === 'interview') {
           Interview.findOne({application: resume._id, company: req.user.company})
             .exec(function (err, interview) {
-              interview.status = 'new';
-              interview.save(function (err) {
-                if (err) return next(err);
+              if (err) return next(err);
+              if (interview) {
+                interview.status = 'new';
+                interview.save(function (err) {
+                  if (err) return next(err);
+                  res.end();
+                });
+              } else {
                 res.end();
-              });
+              }
             });
-        }
-        else {
+        } else {
           res.end();
         }
       });

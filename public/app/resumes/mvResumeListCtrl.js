@@ -59,27 +59,4 @@ angular.module('compass')
       $scope.query();
     };
 
-    $scope.resetStatus = function (id) {
-      mvResume.resetStatus({_id: id}, function () {
-          var newStatus;
-
-          var index = -1;
-          angular.forEach($scope.resumes, function (resume, i) {
-            if (resume._id === id) {
-              index = i;
-              if (resume.status === 'archived')
-                newStatus = '通过';
-              else
-                newStatus = '面试';
-            }
-          });
-
-          if (index > -1) {
-            $scope.resumes.splice(index, 1);
-            $scope.totalResumesCount -= 1;
-            mvNotifier.notify('已将简历恢复到' + newStatus + '列表中');
-          }
-        }
-      );
-    };
   });
