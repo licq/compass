@@ -369,6 +369,6 @@ exports.parse = function (data) {
 };
 
 exports.test = function (data) {
-  return data.fromAddress.indexOf('zhaopin') > -1;
+  return data.fromAddress.indexOf('@zhaopin') > -1;
 };
 
