@@ -73,7 +73,10 @@ exports.update = function (req, res, next) {
         interview.statusBy = req.user;
         interview.applierRejectReason = req.body.applierRejectReason;
         interview.onboardDate = req.body.onboardDate;
-        if (interview.status === 'recruited') interview.onboardDate = new Date();
+        if (interview.status === 'recruited')
+          interview.onboardDate = new Date();
+        if(interview.onboardDate)
+          interview.onboardDate.setHours(12, 0, 0, 0);
         interview.save(function (err) {
           if (err) return next(err);
           Resume.findById(interview.application, function (err, resume) {
