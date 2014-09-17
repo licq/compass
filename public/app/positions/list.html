@@ -23,7 +23,7 @@
           <tr>
             <th field-name="name" class="col-md-2" display-name="职位" enable-filtering="false"
                 enable-sorting="true"></th>
-            <th enable-filtering="false" enable-sorting="true">招聘负责人</th>
+            <th enable-filtering="false" enable-sorting="false" >招聘负责人</th>
             <th class="col-md-2" field-name="department" display-name="部门" enable-filtering="false"
                 enable-sorting="true"></th>
             <th class="col-md-1">操作</th>
@@ -32,7 +32,7 @@
           <tbody>
           <tr>
             <td>
-              <span ng-show="settings.positionRightControlled" ng-class="{'text-danger': !gridItem.owners.length}">{{gridItem.owners | displayNames:'position'}}</span>
+              <span ng-show="settings.positionRightControlled" ng-class="{'text-danger': !gridItem.owners.length}">{{gridItem.owners | orderBy:'name' | displayNames:'position' }}</span>
               <span ng-show="!settings.positionRightControlled">所有人</span>
             </td>
             <td>

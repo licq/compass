@@ -11,7 +11,6 @@ angular.module('compass')
 
     $scope.refreshDisplay = function () {
       $scope.displayUsers = $filter('filter')($scope.users, function (user) {
-        user.positions = $filter('orderBy')(user.positions, 'name');
         return !user.deleted || $scope.showDeleted;
       });
     };

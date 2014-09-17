@@ -21,6 +21,7 @@ describe('mvResumeViewCtrl', function () {
 
   it('should get the resume', function (done) {
     expect($scope.resume).to.exist;
+    expect($scope.newStatus).to.equal('面试');
     expect($scope.resume.address).to.equal('compass@best.com');
     expect($scope.mailHtml).to.equal('/api/mails/8899/html');
     done();

@@ -5,16 +5,17 @@ angular.module('compass')
       $scope.interview = $scope.resume.interview;
       $scope.mailHtml = '/api/mails/' + $scope.resume.mail + '/html';
 
-      if ($scope.resume.status === 'archived')
+      if ($scope.resume.status === 'archived' || $scope.resume.status === 'duplicate')
         $scope.newStatus = '通过';
-      else $scope.newStatus = '面试';
+      else
+        $scope.newStatus = '面试';
     });
 
     $scope.back = function () {
       $location.path('/resumes');
     };
 
-    $scope.resetStatus = function(){
+    $scope.resetStatus = function () {
       mvResume.resetStatus({_id: $scope.resume._id}, function () {
           mvNotifier.notify('已将简历恢复到' + $scope.newStatus + '列表中');
           $location.path('/resumes');

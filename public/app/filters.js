@@ -288,13 +288,11 @@ angular.module('compass')
       return input > 0 ? ('总共有' + input + '个') : '没有';
     };
   })
-
   .filter('nullToZero', function () {
     return function (input) {
       return input ? input : 0;
     };
   })
-
   .filter('eventTimeRange', function () {
     return function (event) {
       var start = moment(event.startTime).format('H:mm'),
