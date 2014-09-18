@@ -30,5 +30,7 @@ angular.module('compass')
     $scope.edit = function (position) {
       $location.path('/settings/positions/edit/' + position._id);
     };
+
+    $scope.identity = angular.identity;
   }
 );
