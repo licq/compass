@@ -10,7 +10,7 @@ describe('mvPositionEditCtrl', function () {
       $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
 
-      $httpBackend.expectGET('/api/positions/toBeAdded').respond(['市场总监','销售经理']);
+      $httpBackend.expectGET('/api/positions/toBeAdded').respond(['市场总监', '销售经理']);
       $httpBackend.expectGET('/api/users?deleted=false&fields=name').respond([
         {'_id': '4466', 'name': '张三'},
         {'_id': '5577', 'name': '李四'}
@@ -19,6 +19,7 @@ describe('mvPositionEditCtrl', function () {
         name: 'cio',
         department: 'sales',
         owners: ['5577'],
+        alias: ['cinfoo', 'chiefio'],
         evaluationCriterions: [
           {
             'name': '英语',
@@ -41,6 +42,7 @@ describe('mvPositionEditCtrl', function () {
           name: 'pm',
           department: 'marketing',
           owners: ['4466', '5577'],
+          alias: ['cinfoo', 'chiefio'],
           evaluationCriterions: [
             {
               'name': '英语',
@@ -57,6 +59,7 @@ describe('mvPositionEditCtrl', function () {
         expect($scope.users).to.have.length(2);
         expect($scope.position.evaluationCriterions).to.have.length(1);
         expect($scope.position.owners[0]).to.equal('5577');
+        expect($scope.position.alias).to.have.length(2);
       });
 
       it('should initialize positions', function () {
@@ -156,6 +159,18 @@ describe('mvPositionEditCtrl', function () {
           $scope.onSelectAll();
           expect(_.some($scope.users, 'checked')).to.be.false;
         });
+      });
+
+      describe('loadPositions', function () {
+        it('should simulate promise', inject(function () {
+          var promise = $scope.loadPositions('场总');
+          var resolvedValue;
+
+          promise.then(function (value) {
+            resolvedValue = value;
+            expect(resolvedValue).toEqual(['市场总监']);
+          });
+        }));
       });
 
       describe('onSelectUser', function () {

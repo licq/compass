@@ -30,10 +30,12 @@ describe('mvPositionNewCtrl', function () {
     beforeEach(function () {
       $scope.position.name = 'cio';
       $scope.position.department = 'sales';
+      $scope.position.alias = ['cinfoo', 'chiefio'];
       postData = {
         name: 'cio',
         department: 'sales',
         owners: ['4466', '5577'],
+        alias: ['cinfoo', 'chiefio'],
         evaluationCriterions: [
           {
             'name': '英语',
@@ -130,6 +132,18 @@ describe('mvPositionNewCtrl', function () {
       $scope.onSelectAll();
       expect(_.some($scope.users, 'checked')).to.be.false;
     });
+  });
+
+  describe('loadPositions', function () {
+    it('should simulate promise', inject(function () {
+      var promise = $scope.loadPositions('场总');
+      var resolvedValue;
+
+      promise.then(function (value) {
+        resolvedValue = value;
+        expect(resolvedValue).toEqual(['市场总监']);
+      });
+    }));
   });
 
   describe('onSelectUser', function () {

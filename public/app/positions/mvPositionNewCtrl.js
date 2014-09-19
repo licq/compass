@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier, $http, $routeParams) {
+  .controller('mvPositionNewCtrl', function ($scope, $location, mvPosition, mvApplicationSetting, mvEvaluationCriterion, mvUser, mvNotifier, $http, $routeParams, $q) {
     $scope.dataReady = false;
 
     $http.get('/api/positions/toBeAdded').success(function (res) {
@@ -43,6 +43,16 @@ angular.module('compass')
         $scope.err = err.data;
         mvNotifier.error('添加职位失败');
       });
+    };
+
+    $scope.loadPositions = function (query) {
+      var deferred = $q.defer();
+
+      deferred.resolve(_.filter($scope.positions, function (position) {
+        return position.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      }));
+
+      return deferred.promise;
     };
 
     $scope.remove = function (entity) {

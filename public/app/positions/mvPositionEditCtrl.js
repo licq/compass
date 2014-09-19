@@ -1,5 +1,5 @@
 angular.module('compass')
-  .controller('mvPositionEditCtrl', function ($scope, $location, mvApplicationSetting, $routeParams, mvPosition, mvUser, mvNotifier, $http) {
+  .controller('mvPositionEditCtrl', function ($scope, $location, mvApplicationSetting, $routeParams, mvPosition, mvUser, mvNotifier, $http, $q) {
 
     $scope.positions = [];
     $http.get('/api/positions/toBeAdded').success(function (res) {
@@ -47,6 +47,16 @@ angular.module('compass')
           $scope.position.evaluationCriterions.splice(index, 1);
         }
       });
+    };
+
+    $scope.loadPositions = function (query) {
+      var deferred = $q.defer();
+
+      deferred.resolve(_.filter($scope.positions, function (position) {
+        return position.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      }));
+
+      return deferred.promise;
     };
 
     $scope.onSelectAll = function () {

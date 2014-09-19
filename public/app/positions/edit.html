@@ -14,7 +14,8 @@
               <div class="form-group">
                 <label>名称</label>
                 <input type="text" ng-model="position.name" name="name"
-                       class="form-control" typeahead="position for position in positions | filter:$viewValue | limitTo:8"
+                       class="form-control"
+                       typeahead="position for position in positions | filter:$viewValue | limitTo:8"
                        placeholder="名称" required=""/>
 
                 <p class="text-danger"
@@ -22,6 +23,14 @@
                   请输入名称</p>
 
               </div>
+
+              <div class="form-group">
+                <label>别名</label>
+                <tags-input ng-model="position.alias" placeholder="请添加别名" min-length="1">
+                  <auto-complete source="loadPositions($query)" min-length="2"></auto-complete>
+                </tags-input>
+              </div>
+
               <div class="form-group">
                 <label>部门</label>
                 <input type="text"
@@ -84,8 +93,10 @@
                     <label>系数</label>
                     <input type="number" name="ecRate" class="form-control" ng-pattern="/\d+/"
                            ng-model="item.rate" required=""/>
-                    <button class="btn btn-primary btn-sm" ng-disabled="positionForm.ecRate.$invalid || positionForm.ecName.$invalid "
-                            ng-click="save()">添加</button>
+                    <button class="btn btn-primary btn-sm"
+                            ng-disabled="positionForm.ecRate.$invalid || positionForm.ecName.$invalid "
+                            ng-click="save()">添加
+                    </button>
                     <button class="btn btn-default btn-sm" ng-click="cancel()">取消</button>
                   </div>
                 </div>
