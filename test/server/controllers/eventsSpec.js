@@ -26,7 +26,7 @@ describe('events', function () {
           application: resume.id,
           startTime: moment().toISOString(),
           duration: '90',
-          interviewers: [user.id],
+          interviewers: [user.id]
         };
 
         request.post('/api/events')

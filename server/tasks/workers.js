@@ -4,6 +4,7 @@ var kue = require('kue'),
   mailer = require('./mailer'),
   mongoose = require('mongoose'),
   Email = mongoose.model('Email'),
+  Position = mongoose.model('Position'),
   _ = require('lodash'),
   pop3Fetcher = require('./pop3Fetcher'),
   imapFetcher = require('./imapFetcher'),
@@ -64,17 +65,21 @@ function handleParseResume(job, done) {
     data.applyDate = job.data.date;
     var parseErrors = data.parseErrors;
     delete data.parseErrors;
+    Position.findOne({alias: data.applyPosition}, function (err, position) {
+      if (err) return done(err);
+      if (position)
+        data.applyPosition = position.name;
+      Resume.createOrUpdateAndIndex(data, function (err) {
+        if (err) {
+          logger.error('save resume to db failed ', err.stack);
+        }
 
-    Resume.createOrUpdateAndIndex(data, function (err) {
-      if (err) {
-        logger.error('save resume to db failed ', err.stack);
-      }
-
-      Mail.findById(job.data.mailId).exec(function (err, mail) {
-        if (err) return done(err);
-        mail.parseErrors = parseErrors;
-        mail.markModified('parseErrors');
-        mail.save(done);
+        Mail.findById(job.data.mailId).exec(function (err, mail) {
+          if (err) return done(err);
+          mail.parseErrors = parseErrors;
+          mail.markModified('parseErrors');
+          mail.save(done);
+        });
       });
     });
   } catch (e) {

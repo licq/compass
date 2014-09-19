@@ -19,6 +19,7 @@ var positionSchema = mongoose.Schema({
   evaluationCriterions: [
     {name: String, rate: Number}
   ],
+  alias: [String],
   owners: {
     type: [
       {
