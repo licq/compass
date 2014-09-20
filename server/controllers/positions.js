@@ -70,7 +70,6 @@ exports.update = function (req, res, next) {
 
 exports.load = function (req, res, next) {
   Position.findOne({_id: req.params.id, company: req.user.company})
-    .select('name owners company evaluationCriterions department createdAt')
     .exec(function (err, position) {
       if (err) return next(err);
       if (!position) return res.send(404, {message: 'not found'});

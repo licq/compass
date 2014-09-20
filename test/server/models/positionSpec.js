@@ -30,9 +30,10 @@ describe('Position', function () {
     });
 
     it('should be able to save without problems', function (done) {
-      Factory.build('position', {company: company._id, owners: [user._id]}, function (position) {
+      Factory.build('position', {company: company._id, owners: [user._id], aliases: [{name:'p1'}, {name:'p2'}]}, function (position) {
         Position.createPosition(position, function (err) {
           expect(err).to.not.exist;
+          expect(position.aliases).to.have.length(2);
           User.find({_id: {$in: position.owners}}, function (err, users) {
             expect(err).to.not.exist;
             expect(users).to.have.length(1);
@@ -77,22 +78,22 @@ describe('Position', function () {
 
   describe('deletePosition', function () {
     it('should delete position and users', function (done) {
-        helper.createPosition({company: company._id, owners: [user]}, function (err, position) {
+      helper.createPosition({company: company._id, owners: [user]}, function (err, position) {
+        expect(err).to.not.exist;
+        Position.deletePosition(position, function (err) {
           expect(err).to.not.exist;
-          Position.deletePosition(position, function (err) {
+          User.find({_id: {$in: position.owners}}, function (err, users) {
             expect(err).to.not.exist;
-            User.find({_id: {$in: position.owners}}, function (err, users) {
+            expect(users).to.have.length(1);
+            expect(users[0].positions).to.have.length(0);
+            Position.findOne({_id: position._id}, function (err, p) {
               expect(err).to.not.exist;
-              expect(users).to.have.length(1);
-              expect(users[0].positions).to.have.length(0);
-              Position.findOne({_id: position._id}, function (err, p) {
-                expect(err).to.not.exist;
-                expect(p).to.not.exist;
-                done(err);
-              });
+              expect(p).to.not.exist;
+              done(err);
             });
           });
         });
+      });
     });
   });
 
@@ -101,12 +102,20 @@ describe('Position', function () {
       var user2;
       Factory.create('user', {company: company._id}, function (createdUser) {
         user2 = createdUser;
-        Factory.build('position', {company: company._id, owners: [user._id]}, function (p) {
+        Factory.build('position', {company: company._id, owners: [user._id], aliases: [
+          {name: 'p1'},
+          {name: 'p2'}
+        ]}, function (p) {
           Position.createPosition(p, function (err, position) {
             expect(err).to.not.exist;
+            expect(position.aliases).to.have.length(2);
             position.owners.push(user2._id);
+            position.aliases = [
+              {name: 'p3'}
+            ];
             Position.updatePosition(position, function (err, updatedPosition) {
               expect(err).to.not.exist;
+              expect(position.aliases).to.have.length(1);
               expect(updatedPosition.owners).to.have.length(2);
               User.find({_id: {$in: updatedPosition.owners}}, function (err, users) {
                 expect(err).to.not.exist;

@@ -26,7 +26,7 @@
 
               <div class="form-group">
                 <label>别名</label>
-                <tags-input ng-model="position.alias" placeholder="请添加别名" min-length="1">
+                <tags-input ng-model="position.aliases" placeholder="请添加别名" min-length="1" display-property="name">
                   <auto-complete source="loadPositions($query)" min-length="2"></auto-complete>
                 </tags-input>
               </div>
