@@ -65,7 +65,7 @@ function handleParseResume(job, done) {
     data.applyDate = job.data.date;
     var parseErrors = data.parseErrors;
     delete data.parseErrors;
-    Position.findOne({aliases: data.applyPosition}, function (err, position) {
+    Position.findOne({'aliases.name': data.applyPosition}, function (err, position) {
       if (err) return done(err);
       if (position)
         data.applyPosition = position.name;

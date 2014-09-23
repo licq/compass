@@ -34,6 +34,24 @@ var positionSchema = mongoose.Schema({
 
 positionSchema.index({company: 1, name: 1}, {unique: true});
 
+positionSchema.post('save', function (savedPosition) {
+  var Resume = mongoose.model('Resume');
+  var aliases = _.pluck(savedPosition.aliases, 'name');
+  Resume.find({applyPosition: {$in: aliases}})
+    .select('_id')
+    .exec(function (err, resumes) {
+      if (resumes && resumes.length > 0) {
+        resumes = _.pluck(resumes, '_id');
+        Resume.update({applyPosition: {$in: aliases}}, {applyPosition: savedPosition.name}, function () {
+          var Interview = mongoose.model('Interview');
+          Interview.update({applyPosition: {$in: aliases}}, {applyPosition: savedPosition.name}, function () {
+            Resume.synchronize({_id: {$in: resumes}});
+          });
+        });
+      }
+    });
+});
+
 function arrayToString(array) {
   return  _.map(array, function (element) {
     return element.toString();
