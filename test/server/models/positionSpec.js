@@ -5,6 +5,7 @@ var
   Resume = require('mongoose').model('Resume'),
   Interview = require('mongoose').model('Interview'),
   User = require('mongoose').model('User'),
+  Async = require('async'),
   expect = require('chai').expect,
   Factory = require('../factory'),
   helper = require('../testHelper'),
@@ -117,25 +118,30 @@ describe('Position', function () {
             expect(position.aliases).to.have.length(2);
             Resume.recreateIndex(function (err) {
               expect(err).to.not.exist;
-              Factory.build('resume', {company: user.company, status: 'offer rejected', applyPosition: position.name}, function (resume) {
-                resume.saveAndIndexSync(function () {
-                  Factory.create('interview', {
-                    application: resume._id,
-                    company: user.company,
-                    applyPosition: position.name,
-                    events: [
-                      {
-                        startTime: new Date(),
-                        duration: 90,
-                        interviewers: [user._id],
-                        createdBy: user._id
-                      }
-                    ],
-                    status: 'offered'
-                  }, function () {
-                    done();
+              Async.times(5, function (n, next) {
+                Factory.build('resume', {company: user.company, status: 'offer rejected', applyPosition: position.name}, function (resume) {
+                  resume.saveAndIndexSync(function () {
+                    Factory.create('interview', {
+                      application: resume._id,
+                      company: user.company,
+                      applyPosition: position.name,
+                      events: [
+                        {
+                          startTime: new Date(),
+                          duration: 90,
+                          interviewers: [user._id],
+                          createdBy: user._id
+                        }
+                      ],
+                      status: 'offered'
+                    }, function () {
+                      next();
+                    });
                   });
                 });
+              }, function (err) {
+                expect(err).to.not.exist;
+                done();
               });
             });
           });
@@ -156,16 +162,16 @@ describe('Position', function () {
               expect(users).to.have.length(1);
               Resume.find({applyPosition: anotherPosition.name}, function (err, resumes) {
                 expect(err).to.not.exist;
-                expect(resumes).to.have.length(1);
+                expect(resumes).to.have.length(5);
                 expect(resumes[0].applyPosition).to.equal('anotherPosition');
                 Interview.find({applyPosition: anotherPosition.name}, function (err, interviews) {
                   expect(err).to.not.exist;
-                  expect(interviews).to.have.length(1);
+                  expect(interviews).to.have.length(5);
                   expect(interviews[0].applyPosition).to.equal('anotherPosition');
                   setTimeout(function () {
                     Resume.query({applyPosition: anotherPosition.name}, function (err, results) {
                       expect(err).to.not.exist;
-                      expect(results.hits.total).to.equal(1);
+                      expect(results.hits.total).to.equal(5);
                       expect(results.hits.hits[0].applyPosition).to.equal('anotherPosition');
                       done(err);
                     });
@@ -194,16 +200,16 @@ describe('Position', function () {
             expect(users).to.have.length(2);
             Resume.find({applyPosition: position.name}, function (err, resumes) {
               expect(err).to.not.exist;
-              expect(resumes).to.have.length(1);
+              expect(resumes).to.have.length(5);
               expect(resumes[0].applyPosition).to.equal('newPosition');
               Interview.find({applyPosition: position.name}, function (err, interviews) {
                 expect(err).to.not.exist;
-                expect(interviews).to.have.length(1);
+                expect(interviews).to.have.length(5);
                 expect(interviews[0].applyPosition).to.equal('newPosition');
                 setTimeout(function () {
                   Resume.query({applyPosition: position.name}, function (err, results) {
                     expect(err).to.not.exist;
-                    expect(results.hits.total).to.equal(1);
+                    expect(results.hits.total).to.equal(5);
                     expect(results.hits.hits[0].applyPosition).to.equal('newPosition');
                     done(err);
                   });

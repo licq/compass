@@ -52,13 +52,9 @@
           </h5>
 
           <div class="row">
-            <ul>
-              <div class="col-md-3" ng-repeat="p in toBeAddedPositions | orderBy:identity">
-                <li>
-                  <a href="#/settings/positions/new?name={{p}}">{{p}}</a>
-                </li>
-              </div>
-            </ul>
+            <div class="col-md-3" ng-repeat="p in toBeAddedPositions | orderBy:identity">
+              <a href="#/settings/positions/new?name={{p}}">{{p}}</a>
+            </div>
           </div>
         </div>
       </div>

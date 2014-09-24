@@ -42,9 +42,9 @@ positionSchema.post('save', function (savedPosition) {
     .exec(function (err, resumes) {
       if (resumes && resumes.length > 0) {
         resumes = _.pluck(resumes, '_id');
-        Resume.update({applyPosition: {$in: aliases}}, {applyPosition: savedPosition.name}, function () {
+        Resume.update({applyPosition: {$in: aliases}}, {$set: {applyPosition: savedPosition.name}}, {multi: true}, function () {
           var Interview = mongoose.model('Interview');
-          Interview.update({applyPosition: {$in: aliases}}, {applyPosition: savedPosition.name}, function () {
+          Interview.update({applyPosition: {$in: aliases}}, {$set: {applyPosition: savedPosition.name}}, {multi: true}, function () {
             Resume.synchronize({_id: {$in: resumes}});
           });
         });
