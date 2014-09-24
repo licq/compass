@@ -19,7 +19,7 @@
           </div>
           <div class="col-md-11">
             <ul class="list-inline">
-              <li ng-repeat="term in facets.applyPosition.terms" ng-hide="queryOptions.applyPosition">
+              <li ng-repeat="term in facets.applyPosition.terms | orderBy:'term'" ng-hide="queryOptions.applyPosition">
                 <a ng-click="setApplyPosition(term.term)">{{term.term}}</a>
               </li>
               <li ng-show="queryOptions.applyPosition"><span class="text-danger">{{queryOptions.applyPosition}}<i
