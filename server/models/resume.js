@@ -413,7 +413,10 @@ resumeSchema.pre('save', function (next) {
 
 resumeSchema.pre('save', function (next) {
   var self = this;
-  self.applyPosition = self.applyPosition && self.applyPosition.trim();
+  if (self.applyPosition) {
+    self.applyPosition = self.applyPosition.replace(/\s+/g, '');
+  }
+
   if (self.isNew) {
     mongoose.model('ApplicationSetting').findOne({company: self.company}).select('filterSamePerson').exec(function (err, as) {
       if (err || !as) return next();

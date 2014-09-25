@@ -9,7 +9,7 @@ var
 
 describe('Resume', function () {
   beforeEach(function (done) {
-    helper.clearCollections(Resume, 'Company', 'ApplicationSetting', function () {
+    helper.clearCollections(Resume, 'Company', 'ApplicationSetting', 'Mail', function () {
       Resume.recreateIndex(function () {
         setTimeout(done, 500);
       });
@@ -32,7 +32,7 @@ describe('Resume', function () {
       var birthday = new Date();
       birthday.setFullYear(birthday.getFullYear() - 20);
       Factory.build('resume', {
-        applyPosition: '销售主管',
+        applyPosition: ' 销售 主管 ',
         educationHistory: [
           {
             degree: 'associate'
@@ -50,6 +50,11 @@ describe('Resume', function () {
           done();
         });
       });
+    });
+
+    it('should remove spaces from applyPosition', function (done) {
+      expect(resume.applyPosition).to.be.equal('销售主管');
+      done();
     });
 
     it('should update the resume parsed from the same mail', function (done) {
