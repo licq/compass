@@ -121,6 +121,19 @@ describe('mvInterviewViewCtrl', function () {
     }));
   });
 
+  describe('noshow', function () {
+    it('should put to /api/interviews/1234 with status noshow', inject(function ($location, mvNotifier) {
+      var spyLocation = sinon.spy($location, 'path');
+      var spyNotifier = sinon.spy(mvNotifier, 'notify');
+      $httpBackend.expectPUT('/api/interviews/7788', {status: 'noshow'}).respond(200);
+      $scope.noshow();
+      $httpBackend.flush();
+      expect($scope.interview.status).to.equal('noshow');
+      expect(spyLocation).to.have.been.calledWith('/interviews/list');
+      expect(spyNotifier).to.have.been.called;
+    }));
+  });
+
   describe('newEvent', function () {
     it('should add one event to events', function () {
       $scope.newEvent();

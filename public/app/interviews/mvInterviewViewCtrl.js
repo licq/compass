@@ -35,9 +35,18 @@ angular.module('compass')
         $location.path('/interviews/list');
       });
     };
+
     $scope.reject = function () {
       mvInterview.update({_id: $scope.interview._id}, {status: 'rejected'}, function () {
         $scope.interview.status = 'rejected';
+        mvNotifier.notify('已将' + $scope.interview.name + '放入人才库');
+        $location.path('/interviews/list');
+      });
+    };
+
+    $scope.noshow = function () {
+      mvInterview.update({_id: $scope.interview._id}, {status: 'noshow'}, function () {
+        $scope.interview.status = 'noshow';
         mvNotifier.notify('已将' + $scope.interview.name + '放入人才库');
         $location.path('/interviews/list');
       });
