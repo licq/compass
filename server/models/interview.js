@@ -111,7 +111,7 @@ var interviewSchema = mongoose.Schema({
   },
   status: {
     type: 'String',
-    enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted', 'recruited', 'not recruited'],
+    enum: ['new', 'offered', 'rejected', 'offer rejected', 'offer accepted', 'recruited', 'not recruited', 'noshow'],
     default: 'new',
     index: true
   },

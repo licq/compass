@@ -264,6 +264,7 @@ angular.module('compass')
       if (interview) {
         if (interview.status === 'offered') return '面试通过';
         if (interview.status === 'rejected') return '面试拒绝';
+        if (interview.status === 'noshow') return '面试爽约';
         if (interview.status === 'offer rejected') return '应聘者拒绝,拒绝原因:' + interview.applierRejectReason;
         if (interview.status === 'offer accepted') return '应聘者接受,入职日期:' + shortDateFilter(interview.onboardDate);
         if (interview.status === 'recruited') return '已入职,入职日期:' + shortDateFilter(interview.onboardDate);
@@ -280,6 +281,8 @@ angular.module('compass')
       if (status === 'offer rejected') return '应聘者拒绝';
       if (status === 'not recruited') return '应聘者未入职';
       if (status === 'duplicate') return '重复投递';
+      if (status === 'noshow') return '面试爽约';
+
       return 'unknown';
     };
   })

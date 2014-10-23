@@ -258,6 +258,7 @@ describe('filters', function () {
     it('should return correctly', inject(function (interviewStatusFilter) {
       expect(interviewStatusFilter({status: 'offered'})).to.equal('面试通过');
       expect(interviewStatusFilter({status: 'rejected'})).to.equal('面试拒绝');
+      expect(interviewStatusFilter({status: 'noshow'})).to.equal('面试爽约');
       expect(interviewStatusFilter({status: 'offer rejected', applierRejectReason: '工资太低'})).to.equal('应聘者拒绝,拒绝原因:工资太低');
       expect(interviewStatusFilter({status: 'offer accepted', onboardDate: new Date(2013, 1, 5)})).to.equal('应聘者接受,入职日期:2013年2月5日');
       expect(interviewStatusFilter({status: 'not recruited', applierRejectReason: '工资太低'})).to.equal('应聘者未入职,拒绝原因:工资太低');
@@ -300,6 +301,7 @@ describe('filters', function () {
       expect(resumeStatusFilter('offer rejected')).to.equal('应聘者拒绝');
       expect(resumeStatusFilter('not recruited')).to.equal('应聘者未入职');
       expect(resumeStatusFilter('duplicate')).to.equal('重复投递');
+      expect(resumeStatusFilter('noshow')).to.equal('面试爽约');
     }));
   });
 

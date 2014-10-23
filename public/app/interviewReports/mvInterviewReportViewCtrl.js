@@ -38,7 +38,8 @@ angular.module('compass')
           'offer accepted': '应聘者接受',
           'offer rejected': '应聘者拒绝',
           'recruited': '已入职',
-          'not recruited': '未入职'
+          'not recruited': '未入职',
+          'noshow': '面试爽约'
         };
         return {name: statusMap[s.name], count: s.count};
       });
