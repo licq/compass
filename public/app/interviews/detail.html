@@ -24,7 +24,7 @@
       <th>面试官</th>
       <th ng-repeat="head in reviewHeader">{{head}}</th>
       <th>总分</th>
-      <th>通过</th>
+      <th>合格</th>
       <th>时间</th>
     </tr>
     </thead>
@@ -50,7 +50,7 @@
     <div class="panel panel-default ui-ribbon-container ui-ribbon-success">
       <div class="ui-ribbon-wrapper">
         <div class="ui-ribbon">
-          通过
+          合格
         </div>
       </div>
       <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>{{review.interviewer.name}}</div>
@@ -63,7 +63,7 @@
     <div class="panel panel-default ui-ribbon-container ui-ribbon-danger">
       <div class="ui-ribbon-wrapper">
         <div class="ui-ribbon">
-          拒绝
+          不合格
         </div>
       </div>
       <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>{{review.interviewer.name}}</div>

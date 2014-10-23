@@ -252,9 +252,9 @@ angular.module('compass')
   .filter('qualified', function () {
     return function (qualified) {
       if (qualified) {
-        return '通过';
+        return '合格';
       } else if (qualified === false) {
-        return '拒绝';
+        return '不合格';
       }
       return '';
     };
