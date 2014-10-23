@@ -131,7 +131,7 @@ describe('#resumes', function () {
       var rejectedResume;
       Factory.build('resume', {company: user.company, status: 'offer rejected'}, function (newResume) {
         rejectedResume = newResume;
-        rejectedResume.saveAndIndexSync(function(){
+        rejectedResume.saveAndIndexSync(function () {
           Factory.create('interview', {
             application: rejectedResume._id,
             company: user.company,
@@ -164,8 +164,6 @@ describe('#resumes', function () {
 
         });
       });
-
     });
   });
-
 });
