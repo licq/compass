@@ -340,7 +340,10 @@ exports.parse = function (data) {
     resume = parseBasicInfo($('td tr:nth-child(1) table:nth-child(1)'), errors);
     resume.letter = helper.replaceEmpty($('html html p').text());
   } else {
-    resume = parseBasicInfo($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)'), errors);
+//    console.log($('table').eq(2).find('table tr:nth-child(1) table:nth-child(1)').text());
+//
+//    console.log($('table:nth-child(3) table tr:nth-child(1) table:nth-child(1)').text());
+    resume = parseBasicInfo($('table').eq(2).find('table:nth-child(1) tr:nth-child(1) table:nth-child(1)'), errors);
   }
 
 //  resume.careerObjective = parseCareerObjective(findTable('专业特长', '自我评价', '职业目标', '技能专长', '专业技能','个人技能'), errors);
