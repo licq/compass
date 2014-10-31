@@ -393,6 +393,7 @@ function constructQueryForReview(model, user, options) {
     query.where('applyPosition').regex(new RegExp(options.applyPosition));
   }
 
+  query.where('status').ne('noshow');
   return query;
 }
 

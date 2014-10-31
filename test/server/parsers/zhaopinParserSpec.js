@@ -4,7 +4,7 @@ var fs = require('fs'),
   resumeParser = require('../../../server/parsers/zhaopinParser'),
   expect = require('chai').expect;
 
-describe.only('ZhaopinParser', function () {
+describe('ZhaopinParser', function () {
 
   describe('#parse', function () {
     it('should parse the resume correctly', function (done) {
@@ -23,7 +23,7 @@ describe.only('ZhaopinParser', function () {
         var resume = resumeParser.parse({
           html: data
         });
-//                expect(resume.projectExperience).to.have.length(8);
+        expect(resume.workExperience).to.have.length(4);
         //console.log(resume);
         done(err);
       });

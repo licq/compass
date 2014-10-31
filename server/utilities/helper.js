@@ -24,11 +24,7 @@ exports.parseDate = function parseDate(input) {
   if (!input) return undefined;
   var match = input.match(/\d+/g);
   if (match) {
-    var result = new Date();
-    result.setYear(parseInt(match[0], 10));
-    result.setMonth(parseInt(match[1], 10) - 1);
-    result.setDate(parseInt(match[2], 10) || 1);
-    return result;
+    return new Date(parseInt(match[0], 10), parseInt(match[1], 10) - 1, parseInt(match[2], 10) || 1, 0, 0, 0, 0);
   } else if (input.indexOf('今') > -1 || input.indexOf('现在') > -1) {
     var date = new Date();
     date.setFullYear(9999);
@@ -190,7 +186,7 @@ exports.parseV1BTable = function parseV1BTable(table) {
         } else {
           depthfirst(child);
         }
-          child = child.next();
+        child = child.next();
       }
     }
   }
@@ -374,7 +370,8 @@ var politicalStatusMap = {
   '民主党派': 'democratic part',
   '无党派': 'no party',
   '群众': 'citizen',
-  '其他': 'others'};
+  '其他': 'others'
+};
 exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
   return politicalStatusMap[input.trim()];
 };

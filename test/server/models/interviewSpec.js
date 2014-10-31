@@ -259,6 +259,33 @@ describe('interview', function () {
       });
     });
 
+    it('should return no interviews', function (done) {
+      Factory.create('interview', {
+        status: 'noshow',
+        events: [
+          {
+            startTime: new Date(),
+            duration: 90,
+            interviewers: [user._id],
+            createdBy: user._id
+          }
+        ]}, function () {
+        var options = {
+          page: 1,
+          pageSize: 50
+        };
+        Interview.queryForReview(user, options, function (err, interviews) {
+          expect(err).to.not.exist;
+          expect(interviews).to.have.length(0);
+          Interview.countForReview(user, options, function (err, count) {
+            expect(err).to.not.exist;
+            expect(count).to.equal(0);
+            done();
+          });
+        });
+      });
+    });
+
     it('should return applyPositions', function (done) {
       Factory.create('interview', {
         applyPosition: '销售总监',
