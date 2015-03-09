@@ -80,14 +80,15 @@ function parseWorkExperience(tableData, errors) {
 
   if (!tableData) return;
   try {
-    var work = {};
 
+    var workExperience = [], work = {};
     _.forEach(tableData, function (line) {
       if (line.indexOf('工作经历') > -1) {
         work.jobDescription = line.substring(5);
       }
     });
-    return work;
+    workExperience.push(work);
+    return workExperience;
 
   } catch (e) {
     errors.push(e.message);
