@@ -8,7 +8,8 @@ var parsers = [
   require('./zhaopinParser'),
   require('./liepinParser'),
   require('./dongfangParser'),
-  require('./hr61Parser')
+  require('./hr61Parser'),
+  require('./ganjiParser')
 ];
 
 exports.parse = function (data) {
