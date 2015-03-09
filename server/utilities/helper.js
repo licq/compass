@@ -24,7 +24,7 @@ exports.parseDate = function parseDate(input) {
   if (!input) return undefined;
   var match = input.match(/\d+/g);
   if (match) {
-    return new Date(parseInt(match[0], 10), parseInt(match[1], 10) - 1, parseInt(match[2], 10) || 1, 0, 0, 0, 0);
+    return new Date(parseInt(match[0], 10), parseInt(match[1], 10) - 1 || 0, parseInt(match[2], 10) || 1, 0, 0, 0, 0);
   } else if (input.indexOf('今') > -1 || input.indexOf('现在') > -1) {
     var date = new Date();
     date.setFullYear(9999);
@@ -393,6 +393,7 @@ var degreeMap = {
   '中技': 'technical school',
   '高中': 'high school',
   '中专': 'polytechnic',
+  '中专/技校': 'polytechnic',
   '大专': 'associate',
   '本科': 'bachelor',
   'MBA': 'mba',
