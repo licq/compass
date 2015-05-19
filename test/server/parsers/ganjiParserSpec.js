@@ -18,7 +18,7 @@ describe('ganjiParser', function () {
         expect(resume.degree).to.equal('high school');
         expect(resume.applyPosition).to.equal('客运司机');
         expect(resume.educationHistory).have.length(1);
-        expect(resume.workExperience.jobDescription).to.exist;
+        expect(resume.workExperience).have.length(1);
         expect(resume.careerObjective.selfAssessment).to.exist;
         expect(resume.careerObjective.targetSalary).to.exist;
         done(err);
@@ -38,7 +38,7 @@ describe('ganjiParser', function () {
         expect(resume.degree).to.equal('polytechnic');
         expect(resume.applyPosition).to.equal('西餐厨师');
         expect(resume.educationHistory).have.length(1);
-        expect(resume.workExperience.jobDescription).to.exist;
+        expect(resume.workExperience).have.length(1);
         expect(resume.careerObjective.selfAssessment).to.exist;
         expect(resume.careerObjective.targetSalary).to.exist;
         done(err);
@@ -56,7 +56,7 @@ describe('ganjiParser', function () {
         expect(resume.mobile).to.equal('13801823925');
         expect(resume.degree).to.equal('high school');
         expect(resume.applyPosition).to.equal('班车司机');
-        expect(resume.workExperience.jobDescription).to.exist;
+        expect(resume.workExperience).have.length(1);
         expect(resume.careerObjective.selfAssessment).to.exist;
         expect(resume.careerObjective.targetSalary).to.exist;
         done(err);
