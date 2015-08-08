@@ -27,17 +27,20 @@ var configs = {
     },
     hostname: 'localhost',
     port: process.env.PORT || 3000,
-    logFileName: 'compass-dev.log',
+    logFileName: 'compass.log',
     db: 'mongodb://localhost/compass-dev',
     elastic: {
       host: 'localhost',
       port: 9200,
-      index: 'compass-dev'
+      index: 'compass'
     },
     redis: {
       host: 'localhost',
       port: 6379,
-      prefix: 'compass-dev'
+      prefix: 'compass'
+    },
+    resumeParser:{
+      host:'http://localhost:8080/index.json'
     }
   },
   test: {
@@ -63,6 +66,9 @@ var configs = {
       host: 'localhost',
       port: 6379,
       prefix: 'compass-test'
+    },
+    resumeParser:{
+      host:'http://localhost:8080/index.json'
     }
   },
   production: {
@@ -89,7 +95,7 @@ var configs = {
       },
       secureConnection: true,
       from: 'service@lingpin.cc'
-    }
+    },
   }
 };
 

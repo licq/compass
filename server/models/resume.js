@@ -470,16 +470,14 @@ resumeSchema.plugin(mongoosastic, {
         index: 'not_analyzed'
       },
       applyPosition: {
-        type: 'multi_field',
+        type: 'string',
+        include_in_all: true,
+        analyzer: 'ik',
         fields: {
-          applyPosition: {
-            type: 'string',
-            include_in_all: true,
-            analyzer: 'ik'
-          },
           original: {
             type: 'string',
-            index: 'not_analyzed'
+            index: 'not_analyzed',
+            include_in_all: false
           }
         }
       },

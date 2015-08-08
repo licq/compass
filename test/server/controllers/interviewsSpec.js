@@ -312,6 +312,7 @@ describe('interviews', function () {
         });
     });
   });
+
   describe('put /api/interview/:id with status offer accepted', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)
@@ -329,6 +330,7 @@ describe('interviews', function () {
         });
     });
   });
+
   describe('put /api/interview/:id with status recruited', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)
