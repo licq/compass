@@ -57,7 +57,7 @@ var resumeSchema = mongoose.Schema({
   },
   politicalStatus: {
     type: String,
-    enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others'],
+    enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others']
   },
 
   careerObjective: {
@@ -84,6 +84,8 @@ var resumeSchema = mongoose.Schema({
     {
       from: Date,
       to: Date,
+      boss:String,
+      achievement:String,
       company: String,
       industry: String,
       department: String,
@@ -144,15 +146,15 @@ var resumeSchema = mongoose.Schema({
       },
       level: {
         type: String,
-        enum: ['not sure', 'average', 'good', 'very good', 'excellent']
+        enum: ['not sure', 'basic', 'limited', 'advanced', 'expert']
       },
       readingAndWriting: {
         type: String,
-        enum: ['not sure', 'average', 'good', 'very good', 'excellent']
+        enum: ['not sure', 'basic', 'limited', 'advanced', 'expert']
       },
       listeningAndSpeaking: {
         type: String,
-        enum: ['not sure', 'average', 'good', 'very good', 'excellent']
+        enum: ['not sure', 'basic', 'limited', 'advanced', 'expert']
       }
     }
   ],

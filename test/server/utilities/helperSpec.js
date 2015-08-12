@@ -100,6 +100,14 @@ describe('helper', function () {
     });
   });
 
+  describe('#parseChannel', function () {
+    it('should parse correctly', function () {
+      expect(helper.parseChannel('51job')).to.equal('前程无忧');
+      expect(helper.parseChannel('@zhaopin')).to.equal('智联招聘');
+      expect(helper.parseChannel('testing')).to.not.exist;
+    });
+  });
+
   describe('#splitByCommas', function () {
     it('should split correctly', function () {
       expect(helper.splitByCommas('互联网/电子商务，计算机软件')).to.deep.equal([
@@ -361,6 +369,22 @@ describe('helper', function () {
   describe('#parseZhaopinApplyPosition', function () {
     it('should return correctly', function () {
       expect(helper.parseZhaopinApplyPosition('(Zhaopin.com) 应聘 预付储值卡销售-上海-张毅')).to.equal('预付储值卡销售-上海');
+    });
+  });
+
+  describe('#parse61hrApplyPosition', function () {
+    it('should return correctly', function () {
+      expect(helper.parse61hrApplyPosition('lwjqaz123lyyy 应聘贵公司 中西餐厨师 职位')).to.equal('中西餐厨师');
+    });
+  });
+
+  describe('#parseApplyPosition', function () {
+    it('should return correctly', function () {
+      expect(helper.parseApplyPosition('xiaomin@61hr.com', 'lwjqaz123lyyy 应聘贵公司 中西餐厨师 职位')).to.equal('中西餐厨师');
+    });
+
+    it('should return correctly', function () {
+      expect(helper.parseApplyPosition('xiaomin@zhaopin.com', '(Zhaopin.com) 应聘 预付储值卡销售-上海-张毅')).to.equal('预付储值卡销售-上海');
     });
   });
 
