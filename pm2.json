@@ -1,0 +1,19 @@
+{
+    "apps" : [
+        {
+            "name"        : "server",
+            "script"      : "server.js",
+            "exec_mode"   : "cluster",
+            "instances"   : 4,
+            "ignore_watch": ["node_modules", "logs"]
+        },
+        {
+            "name"        : "jobs",
+            "script"      : "mailJobs.js",
+            "exec_mode"   : "cluster",
+            "instances"   : 1,
+            "cron_restart": "*/15 * * * *",
+            "ignore_watch": ["node_modules", "logs"]
+        }
+    ]
+}
