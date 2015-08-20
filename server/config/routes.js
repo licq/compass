@@ -245,7 +245,6 @@ module.exports = function (app,config) {
   app.use('/publicApi', publicApiRouter);
   app.use('/tasks', tasksRouter);
   app.use('/parser', function (req, res) {
-    console.log(config.parser.url);
     proxy.web(req, res, {target: config.parser.url});
   });
 
