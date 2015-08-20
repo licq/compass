@@ -38,6 +38,9 @@ var configs = {
       host: 'localhost',
       port: 6379,
       prefix: 'compass-dev'
+    },
+    parser: {
+      url: "http://localhost:8080/"
     }
   },
   test: {
@@ -63,7 +66,11 @@ var configs = {
       host: 'localhost',
       port: 6379,
       prefix: 'compass-test'
+    },
+    parser: {
+      url: "http://localhost:8080/"
     }
+
   },
   production: {
     hostname: 'www.lingpin.cc',
@@ -89,6 +96,9 @@ var configs = {
       },
       secureConnection: true,
       from: 'service@lingpin.cc'
+    },
+    parser: {
+      url: "http://" + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ":" + (process.env.PARSER_PORT_8080_TCP_PORT || '8080')
     }
   }
 };

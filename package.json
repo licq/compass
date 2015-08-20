@@ -31,6 +31,7 @@
     "express": "~4.5.1",
     "express-session": "^1.6.4",
     "express-winston": "^0.2.6",
+    "http-proxy": "^1.11.1",
     "icalendar": "^0.6.5",
     "imap": "^0.8.12",
     "kue": "^0.8.2",

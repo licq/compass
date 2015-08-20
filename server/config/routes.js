@@ -29,9 +29,12 @@ var express = require('express'),
   applierRejectReasons = require('../controllers/applierRejectReasons'),
   multipart = require('connect-multiparty'),
   expressWinston = require('express-winston'),
+  http = require('http'),
+  httpProxy = require('http-proxy'),
+  proxy = httpProxy.createProxyServer(),
   _ = require('lodash');
 
-module.exports = function (app) {
+module.exports = function (app,config) {
   var apiRouter = express.Router(),
     publicApiRouter = express.Router(),
     systemApiRouter = express.Router(),
@@ -145,7 +148,7 @@ module.exports = function (app) {
     .get(evaluationCriterions.forReview);
 
   apiRouter.route('/applications/uploadResume')
-    .all(multipart({ uploadDir: '/tmp' }))
+    .all(multipart({uploadDir: '/tmp'}))
     .post(applications.uploadResume);
   apiRouter.route('/applications')
     .get(applications.list);
@@ -203,9 +206,12 @@ module.exports = function (app) {
   apiRouter.use(function (err, req, res, next) {
     if (!err) return next();
     logger.error(err.stack);
-    res.send(500, {message: 'Internal Server Error',
-      stack: err.stack});
+    res.send(500, {
+      message: 'Internal Server Error',
+      stack: err.stack
+    });
   });
+
 
   tasksRouter.use(sessions.requiresLogin);
   tasksRouter.use(users.isSystemAdmin);
@@ -238,11 +244,18 @@ module.exports = function (app) {
   app.use('/api', apiRouter);
   app.use('/publicApi', publicApiRouter);
   app.use('/tasks', tasksRouter);
+  app.use('/parser', function (req, res) {
+    console.log(config.parser.url);
+    proxy.web(req, res, {target: config.parser.url});
+  });
+
   app.use(function (err, req, res, next) {
     if (!err) return next();
     logger.error(err.stack);
-    res.send(500, {message: 'Internal Server Error',
-      stack: err.stack});
+    res.send(500, {
+      message: 'Internal Server Error',
+      stack: err.stack
+    });
   });
 
 
@@ -265,11 +278,11 @@ module.exports = function (app) {
 
     res.status(404);
     if (req.accepts('html')) {
-      return res.render('404', { url: req.url });
+      return res.render('404', {url: req.url});
     }
 
     if (req.accepts('json')) {
-      return res.send({ error: 'Not found' });
+      return res.send({error: 'Not found'});
     }
 
     res.type('txt').send('Not found');

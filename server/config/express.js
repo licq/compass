@@ -80,7 +80,7 @@ module.exports = function (app, config) {
     next();
   });
 
-  require('./routes')(app);
+  require('./routes')(app,config);
 
   app.use(expressWinston.errorLogger({
     transports: winston.transports
