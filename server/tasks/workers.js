@@ -61,8 +61,13 @@ function handleSendEmail(job, done) {
 function handleParseResume(job, done) {
     try {
         logger.info('handleParseResume ', job.data.title);
-        parser.parse(job.data, function (data) {
-            if(!data || !data.name) return;
+        var startTime = Date.now(), endTime;
+        parser.parse(job.data, function (err, data) {
+            endTime = Date.now();
+            if (!data || !data.name) {
+                return done(err);
+            }
+            logger.info('parse return ' + job.data.subject + ' name' + data.name);
             data.applyDate = job.data.date;
             var parseErrors = data.parseErrors;
             delete data.parseErrors;
@@ -72,14 +77,20 @@ function handleParseResume(job, done) {
                     data.applyPosition = position.name;
                 Resume.createOrUpdateAndIndex(data, function (err) {
                     if (err) {
-                        logger.error('save resume to db failed ', err.stack);
+                        logger.error('save resume to db failed ', err.stack + ' ' + job.data.subject);
                     }
-
+                    endTime = Date.now();
+                    logger.info('resume return ' + job.data.subject );
                     Mail.findById(job.data.mailId).exec(function (err, mail) {
-                        if (err) return done(err);
+                        if (err || !mail) return done(err);
                         mail.parseErrors = parseErrors;
                         mail.markModified('parseErrors');
-                        mail.save(done);
+                        //mail.save(done);
+                        mail.save(function () {
+                            endTime = Date.now();
+                            logger.info('mai return ' + job.data.subject);
+                            done();
+                        });
                     });
                 });
             });
@@ -90,12 +101,14 @@ function handleParseResume(job, done) {
     }
 }
 
+exports.handleParseResume = handleParseResume;
 exports.start = function (config) {
     jobs = kue.createQueue({
         prefix: config.redis.prefix,
         redis: {
             port: config.redis.port,
-            host: config.redis.host
+            host: config.redis.host,
+            options:config.redis.options
         }
     });
 

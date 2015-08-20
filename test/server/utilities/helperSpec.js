@@ -87,6 +87,14 @@ describe('helper', function () {
     });
   });
 
+  describe('#parseSkillExperience', function(){
+    it('should return correctly', function(){
+      expect(helper.parseSkillExperience('18个月')).to.equal(18);
+      expect(helper.parseSkillExperience('3年')).to.equal(36);
+      expect(helper.parseSkillExperience('2年5个月')).to.equal(29);
+    });
+  });
+
   describe('#parseEntryTime', function () {
     it('should parse correctly', function () {
       expect(helper.parseEntryTime('待定')).to.equal('to be determined');
@@ -355,7 +363,6 @@ describe('helper', function () {
   describe('#isYearsOfExperience', function () {
     it('should return correctly', function () {
       expect(helper.isYearsOfExperience('2年工作经验')).to.be.true;
-      expect(helper.isHukou('上海')).to.be.false;
     });
   });
 

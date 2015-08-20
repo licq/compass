@@ -123,7 +123,8 @@ exports.init = function (config) {
     prefix: config.redis.prefix,
     redis: {
       port: config.redis.port,
-      host: config.redis.host
+      host: config.redis.host,
+      options: config.redis.options
     }
   });
 };

@@ -3,30 +3,31 @@
 var request = require('request'),
     config = require('../config/config'),
     helper = require('../utilities/helper'),
+    logger = require('../config/winston').logger(),
     async = require('async'),
     _ = require('lodash');
 
 function postData(data, callback) {
+    logger.info('posting...' + data.subject);
+    if (!data.buffer)
+        return callback('no data to parse ', null, null);
+
     var req = request.post({
         uri: config.resumeParser.host
     }, function (err, res, body) {
-        var resume = JSON.parse(body);
-        callback(err, resume);
+        callback(err, res, body);
     });
 
     var form = req.form();
-    form.append('resumeFile', data, {filename: 'resumefile'});
+    form.append('resumeFile', data.buffer, {filename: data.fileName});
 }
 
-function removeNullnLowerCase(obj) {
+function removeNull(obj) {
     if (obj) {
-        if (_.isString(obj))
-            return obj.toLowerCase();
-
         if (_.isArray(obj)) {
             if (obj.length === 0) return;
             return _.map(obj, function (value) {
-                return removeNullnLowerCase(value);
+                return removeNull(value);
             });
         }
 
@@ -34,14 +35,15 @@ function removeNullnLowerCase(obj) {
             return _.mapValues(_.pick(obj, function (field) {
                 return !_.isNull(field) || !_.isUndefined(field);
             }), function (value) {
-                return removeNullnLowerCase(value);
+                return removeNull(value);
             });
         }
+        return obj;
     }
 }
 
-function extractDaterange(data) {
-    return _.map(data, function (item) {
+function extractDaterange(input) {
+    return _.map(input, function (item) {
         if (item.dateRange) {
             item.from = item.dateRange.from;
             item.to = item.dateRange.to;
@@ -50,31 +52,52 @@ function extractDaterange(data) {
     });
 }
 
-function reconstruct(data) {
-    var resume = {};
+function mapItSkills(skills) {
+    return _.map(skills, function (skill) {
+        skill.skill = skill.name;
+        skill.experience = helper.parseSkillExperience(skill.experience);
+        skill.level = helper.parseItSkillLevel(skill.level);
+        return skill;
+    });
+}
 
-    data = removeNullnLowerCase(data);
-
-    resume = _.extend(resume, data);
+function reconstruct(input) {
+    var resume = removeNull(input);
 
     if (resume.languageSkills) {
-        resume.languageSkills = _.compact(_.map(resume.languageSkills, function (item) {
-            if (item.language) item.language = helper.parseLanguage(item.language);
-            if (item.level) item.level = item.level.toLowerCase();
-            if (item.readingAndWritingLevel) item.readingAndWritingLevel = item.readingAndWritingLevel.toLowerCase();
-            if (item.listeningAndSpeakingLevel) item.listeningAndSpeakingLevel = item.listeningAndSpeakingLevel.toLowerCase();
-        }));
+        resume.languageSkills = _.map(_.compact(resume.languageSkills), function (item) {
+            item.language = helper.parseLanguage(item.language);
+            item.level = helper.parseLanguageLevel(item.level);
+            item.readingAndWritingLevel = helper.parseLanguageLevel(item.readingAndWritingLevel);
+            item.listeningAndSpeakingLevel = helper.parseLanguageLevel(item.listeningAndSpeakingLevel);
+            return item;
+        });
     }
-    resume.civilState = helper.parseCivilState(data.civilState);
-    resume.politicalStatus = helper.parseCivilState(data.politicalStatus);
-    resume.careerObjective.entryTime = helper.parseEntryTime(data.careerObjective.entryTime);
+    resume.civilState = helper.parseCivilState(input.civilState);
+    resume.politicalStatus = helper.parsePoliticalStatus(input.politicalStatus);
+    resume.gender = helper.parseGender(input.gender);
+
+    resume.careerObjective.entryTime = helper.parseEntryTime(input.careerObjective.entryTime);
+    resume.careerObjective.typeOfEmployment = helper.parseTypeOfEmployment(input.careerObjective.typeOfEmployment);
     resume.careerObjective.selfAssessment = resume.selfAssessment;
+    resume.careerObjective.industry = resume.careerObjective.industries;
+    resume.careerObjective.jobCategory = resume.careerObjective.jobCategories;
+    resume.careerObjective.jobCategory = resume.careerObjective.jobCategories;
 
     resume.workExperience = extractDaterange(resume.works);
     resume.projectExperience = extractDaterange(resume.projects);
     resume.educationHistory = extractDaterange(resume.educations);
     resume.trainingHistory = extractDaterange(resume.trainings);
     resume.inSchoolPractice = extractDaterange(resume.inSchoolPractices);
+
+    resume.itSkills = mapItSkills(resume.skills);
+
+    resume.languageCertificates = {
+        english: helper.parseEnglishCertificate(resume.languageCertificationEnglish),
+        japanese: helper.parseEnglishCertificate(resume.languageCertificationJapanese)
+    };
+    //if (resume.birthday)
+    //  resume.birthday = new Date(resume.birthday);
     delete resume.works;
     delete resume.projects;
     delete resume.educations;
@@ -85,47 +108,56 @@ function reconstruct(data) {
 }
 
 exports.parse = function (mail, callback) {
-    try{
-        var resume, parseErrors;
-        var attachments = _.map(_.filter(mail.attachments, function (attachment) {
-            if (attachment.fileName && attachment.fileName.search(/(\.mht|\.doc.|\.pdf｜\.txt)$/)) {
-                return true;
-            }
-        }), function (item) {
-            return item.content;
-        });
-
-        var data = attachments;
-        if (mail.html) {
-            data = [new Buffer(mail.html)].concat(attachments);
+    var resume, parseErrors;
+    var data = _.compact(_.map(_.filter(mail.attachments, function (attachment) {
+        if (attachment.fileName && attachment.fileName.search(/(\.mht|\.doc.?|\.pdf|\.txt|\.htm.?|\.rtf)$/) !== -1) {
+            return true;
         }
-        async.detectSeries(data, function (item, cb) {
+    }), function (item) {
+        if (item.content) {
+            if (_.isArray(item.content))
+                item.content = new Buffer(item.content);
+            return {buffer: item.content, fileName: item.fileName};
+        }
+    }));
+    //console.log(mail.html instanceof Buffer);
 
-                postData(item, function (err, res) {
-                    if (res.name && res.mobile) {
-                        resume = reconstruct(res);
-                        if (err) parseErrors = err;
+    if (mail.html) {
+        data.unshift({buffer: new Buffer(mail.html), fileName: mail.subject + '.html'});
+    }
+    async.detectSeries(data, function (item, cb) {
+            //todo no series
+            //console.log('subj ', mail.subject);
+            item.subject = mail.subject;
+            postData(item, function (err, res, body) {
+                try {
+                    if (body)
+                        resume = JSON.parse(body);
+                    console.log(err, res);
+                    parseErrors = err;
+                    if (resume && resume.name && (resume.mobile || resume.phone)) {
+                        resume = reconstruct(resume);
+                        console.log('get name ', resume.name);
                         cb(true);
                     } else {
                         cb(false);
                     }
-                });
-            },
-            function (result) {
-                if (result) {
-                    resume.company = mail.company;
-                    resume.mail = mail.mailId;
-                    resume.channel = helper.parseChannel(mail.fromAddress);
-                    resume.parseErrors = parseErrors;
-                    if (!resume.applyPosition) {
-                        resume.applyPosition = helper.parseApplyPosition(mail.fromAddress, mail.subject);
-                    }
+                } catch (e) {
+                    logger.error('reconstruct resume error: ' + e.message + ' subject: ' + mail.subject);
+                    cb(false);
                 }
-                callback(resume);
             });
-    }
-    catch (e) {
-        errors.push(e.message);
-        logger.error(e.stack);
-    }
+        },
+        function (result) {
+            if (result) {
+                resume.company = mail.company;
+                resume.mail = mail.mailId;
+                resume.channel = helper.parseChannel(mail.fromAddress);
+                resume.parseErrors = parseErrors;
+                if (!resume.applyPosition) {
+                    resume.applyPosition = helper.parseApplyPosition(mail.fromAddress, mail.subject);
+                }
+            }
+            callback(parseErrors, resume);
+        });
 };
