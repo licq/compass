@@ -11,12 +11,9 @@ function postData(data, callback) {
     logger.info('posting...' + data.subject);
     if (!data.buffer)
         return callback('no data to parse ', null, null);
-
     var req = request.post({
         uri: config.resumeParser.host
-    }, function (err, res, body) {
-        callback(err, res, body);
-    });
+    }, callback);
 
     var form = req.form();
     form.append('resumeFile', data.buffer, {filename: data.fileName});
@@ -96,8 +93,8 @@ function reconstruct(input) {
         english: helper.parseEnglishCertificate(resume.languageCertificationEnglish),
         japanese: helper.parseEnglishCertificate(resume.languageCertificationJapanese)
     };
-    //if (resume.birthday)
-    //  resume.birthday = new Date(resume.birthday);
+    if (resume.birthday)
+        resume.birthday = new Date(resume.birthday);
     delete resume.works;
     delete resume.projects;
     delete resume.educations;
@@ -120,31 +117,29 @@ exports.parse = function (mail, callback) {
             return {buffer: item.content, fileName: item.fileName};
         }
     }));
-    //console.log(mail.html instanceof Buffer);
 
     if (mail.html) {
         data.unshift({buffer: new Buffer(mail.html), fileName: mail.subject + '.html'});
     }
     async.detectSeries(data, function (item, cb) {
             //todo no series
-            //console.log('subj ', mail.subject);
             item.subject = mail.subject;
             postData(item, function (err, res, body) {
                 try {
-                    if (body)
-                        resume = JSON.parse(body);
-                    console.log(err, res);
+
+                    if (err) logger.error(err);
                     parseErrors = err;
-                    if (resume && resume.name && (resume.mobile || resume.phone)) {
-                        resume = reconstruct(resume);
-                        console.log('get name ', resume.name);
+
+                    if (body) body = JSON.parse(body);
+                    if (body && body.name && (body.mobile || body.phone)) {
+                        resume = reconstruct(body);
                         cb(true);
                     } else {
                         cb(false);
                     }
                 } catch (e) {
-                    logger.error('reconstruct resume error: ' + e.message + ' subject: ' + mail.subject);
-                    cb(false);
+                    logger.error('reconstruct resume ' + mail.subject + 'error: ' + e.message);
+                    return cb(false);
                 }
             });
         },

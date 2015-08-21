@@ -10,6 +10,7 @@ var kue = require('kue'),
     imapFetcher = require('./imapFetcher'),
     delayedJobs = require('./jobs'),
     logger = require('../config/winston').logger(),
+    async = require('async'),
     parser = require('../parsers/remoteResumeParser'),
     Mail = mongoose.model('Mail'),
     Resume = mongoose.model('Resume');
@@ -58,46 +59,66 @@ function handleSendEmail(job, done) {
     mailer.sendEmail(job.data, done);
 }
 
-function handleParseResume(job, done) {
+function handleParseResume(job, done, cb) {
     try {
-        logger.info('handleParseResume ', job.data.title);
-        var startTime = Date.now(), endTime;
-        parser.parse(job.data, function (err, data) {
-            endTime = Date.now();
-            if (!data || !data.name) {
-                return done(err);
-            }
-            logger.info('parse return ' + job.data.subject + ' name' + data.name);
-            data.applyDate = job.data.date;
-            var parseErrors = data.parseErrors;
-            delete data.parseErrors;
-            Position.findOne({'aliases.name': data.applyPosition}, function (err, position) {
-                if (err) return done(err);
-                if (position)
-                    data.applyPosition = position.name;
-                Resume.createOrUpdateAndIndex(data, function (err) {
-                    if (err) {
-                        logger.error('save resume to db failed ', err.stack + ' ' + job.data.subject);
-                    }
-                    endTime = Date.now();
-                    logger.info('resume return ' + job.data.subject );
+        logger.info('handleParseResume starts.job id: ' + job.id + ' ' + job.data.subject);
+        parser.parse(job.data, function (err, resume) {
+            var parseErrors = err;
+            async.parallel({
+                saveMail: function (callback) {
                     Mail.findById(job.data.mailId).exec(function (err, mail) {
-                        if (err || !mail) return done(err);
+                        if (err || !mail) {
+                            logger.error('no mail found for ' + job.data.subject + '.job id: ' + job.id + ' ' + err);
+                            return callback(null);
+                        }
                         mail.parseErrors = parseErrors;
                         mail.markModified('parseErrors');
                         //mail.save(done);
-                        mail.save(function () {
-                            endTime = Date.now();
-                            logger.info('mai return ' + job.data.subject);
-                            done();
+                        mail.save(function (err) {
+                            if (err)
+                                logger.error('save mail ' + job.data.subject + 'to db failed.job id: ' + job.id + ' ' + err);
+                            callback(null);
                         });
                     });
-                });
+                },
+                saveResume: function (callback) {
+                    if (!(resume && resume.name && (resume.mobile || resume.phone))) {
+                        logger.info('handleParseResume ends without result.job id: ' + job.id + ' subject:' + job.data.title);
+                        return callback(null, null);
+                    }
+                    logger.info('parsed resume: ' + job.data.subject + '.job id: ' + job.id + '.resume name: ' + resume.name);
+                    logger.info();
+                    resume.parseErrors = parseErrors;
+                    delete resume.parseErrors;
+                    resume.applyDate = job.data.date;
+
+                    Position.findOne({'aliases.name': resume.applyPosition}, function (err, position) {
+                        if (err) {
+                            logger.error('find position for ' + job.data.title + ' failed.job id: ' + job.id + ' ' + err.stack);
+                            return callback(err, null);
+                        }
+                        if (position)
+                            resume.applyPosition = position.name;
+                        Resume.createOrUpdateAndIndex(resume, function (err) {
+                            if (err) {
+                                logger.error('save resume ' + job.data.subject + 'to db failed.job id: ' + job.id + ' ' + err.stack);
+                            }
+                            return callback(err, resume);
+                        });
+                    });
+                }
+            }, function (err, results) {
+                if (!err && results.saveResume) {
+                    logger.info('handleParseResume ends successfully.job id: ' + job.id + ' subject:' + job.data.title);
+                }
+                done(err);
+                cb(results.saveResume);
             });
+
         });
     } catch (e) {
         done(e.message);
-        logger.error('handleParseResume failed: ' + job.data.title + ':' + e.message);
+        logger.error('handleParseResume failed. ' + 'job id:' + job.id + job.data.title + ':' + e.message);
     }
 }
 
@@ -108,7 +129,7 @@ exports.start = function (config) {
         redis: {
             port: config.redis.port,
             host: config.redis.host,
-            options:config.redis.options
+            options: config.redis.options
         }
     });
 
