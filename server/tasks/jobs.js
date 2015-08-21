@@ -1,11 +1,11 @@
 "use strict";
 
 var kue = require('kue'),
-    mongoose = require('mongoose'),
-    _ = require('lodash'),
-    async = require('async'),
-    Job = kue.Job,
-    logger = require('../config/winston').logger();
+  mongoose = require('mongoose'),
+  _ = require('lodash'),
+  async = require('async'),
+  Job = kue.Job,
+  logger = require('../config/winston').logger();
 
 var jobs;
 

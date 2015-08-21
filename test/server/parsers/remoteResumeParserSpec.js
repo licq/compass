@@ -1,14 +1,14 @@
 'use strict';
 
 var fs = require('fs'),
-    resumeParser = require('../../../server/parsers/remoteResumeParser'),
-    async = require('async'),
-    mongoose = require('mongoose'),
-    Resume = mongoose.model('Resume'),
-    helper = require('../testHelper'),
-    expect = require('chai').expect,
-    logger = require('../../../server/config/winston').logger(),
-    handleParseResume = require('../../../server/tasks/workers').handleParseResume;
+  resumeParser = require('../../../server/parsers/remoteResumeParser'),
+  async = require('async'),
+  mongoose = require('mongoose'),
+  Resume = mongoose.model('Resume'),
+  helper = require('../testHelper'),
+  expect = require('chai').expect,
+  logger = require('../../../server/config/winston').logger(),
+  handleParseResume = require('../../../server/tasks/workers').handleParseResume;
 
 describe.skip('remoteResumeParser', function () {
   var emailSchema;

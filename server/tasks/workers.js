@@ -1,19 +1,19 @@
 "use strict";
 
 var kue = require('kue'),
-    mailer = require('./mailer'),
-    mongoose = require('mongoose'),
-    Email = mongoose.model('Email'),
-    Position = mongoose.model('Position'),
-    _ = require('lodash'),
-    pop3Fetcher = require('./pop3Fetcher'),
-    imapFetcher = require('./imapFetcher'),
-    delayedJobs = require('./jobs'),
-    logger = require('../config/winston').logger(),
-    async = require('async'),
-    parser = require('../parsers/remoteResumeParser'),
-    Mail = mongoose.model('Mail'),
-    Resume = mongoose.model('Resume');
+  mailer = require('./mailer'),
+  mongoose = require('mongoose'),
+  Email = mongoose.model('Email'),
+  Position = mongoose.model('Position'),
+  _ = require('lodash'),
+  pop3Fetcher = require('./pop3Fetcher'),
+  imapFetcher = require('./imapFetcher'),
+  delayedJobs = require('./jobs'),
+  logger = require('../config/winston').logger(),
+  async = require('async'),
+  parser = require('../parsers/remoteResumeParser'),
+  Mail = mongoose.model('Mail'),
+  Resume = mongoose.model('Resume');
 
 var jobs;
 

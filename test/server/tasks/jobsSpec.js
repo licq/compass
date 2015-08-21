@@ -1,13 +1,13 @@
 'use strict';
 
 var jobs = require('../../../server/tasks/jobs'),
-    kue = require('kue'),
-    config = require('../../../server/config/config'),
-    Factory = require('../factory'),
-    mongoose = require('mongoose'),
-    Company = mongoose.model('Company'),
-    Email = mongoose.model('Email'),
-    expect = require('chai').expect;
+  kue = require('kue'),
+  config = require('../../../server/config/config'),
+  Factory = require('../factory'),
+  mongoose = require('mongoose'),
+  Company = mongoose.model('Company'),
+  Email = mongoose.model('Email'),
+  expect = require('chai').expect;
 
 describe.skip('jobs', function () {
   beforeEach(function (done) {

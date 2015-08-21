@@ -1,12 +1,12 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Resume = mongoose.model('Resume'),
-    Position = mongoose.model('Position'),
-    fs = require('fs'),
-    path = require('path'),
-    parser = require('../parsers/remoteResumeParser'),
-    _ = require('lodash');
+  Resume = mongoose.model('Resume'),
+  Position = mongoose.model('Position'),
+  fs = require('fs'),
+  path = require('path'),
+  parser = require('../parsers/remoteResumeParser'),
+  _ = require('lodash');
 
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
@@ -39,12 +39,12 @@ exports.update = function (req, res, next) {
 
 exports.load = function (req, res, next) {
   Resume.findOne({_id: req.params.id, company: req.user.company})
-      .exec(function (err, resume) {
-        if (err) return next(err);
-        if (!resume) return res.send(404, {message: 'not found'});
-        req.resume = resume;
-        next();
-      });
+    .exec(function (err, resume) {
+      if (err) return next(err);
+      if (!resume) return res.send(404, {message: 'not found'});
+      req.resume = resume;
+      next();
+    });
 };
 exports.uploadResume = function (req, res, next) {
   var resume = new Resume(req.body);

@@ -1,60 +1,59 @@
 <div class="page">
-    <section class="panel panel-default">
-        <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>上传简历</strong></div>
-        <div class="panel-body">
-            <form name="uploadResumeForm" novalidate="" class="form-horizontal">
-                <div class="row">
-                    <div class="well text-danger col-md-8 col-md-offset-2" ng-show="err">
-                        {{err.message}}
-                    </div>
-                </div>
-                <fieldset class="row">
-                    <div class="form-group">
-
-                        <label class="col-md-2 control-label">应聘职位</label>
-
-                        <div class="col-md-3">
-                            <input type="text" ng-model="applyPosition" name="applyPosition" class="form-control"
-                                   typeahead="position for position in positions | filter:$viewValue | limitTo:8"
-                                   required=""/>
-
-                            <p class="text-danger"
-                               ng-show="uploadResumeForm.applyPosition.$error.required && !uploadResumeForm.applyPosition.$pristine">
-                                请输入应聘职位</p>
-                        </div>
-                        <div class="col-md-2 control-label">
-                            状态
-                        </div>
-                        <div class="col-md-3">
-                            <select class="form-control" name="status" ng-model="status">
-                                <option value="new">新应聘</option>
-                                <option value="pursued">通过</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-1 col-md-offset-1 control-label">简历</label>
-
-                        <div class="col-md-3">
-                            <input type="file" ng-file-select="onFileSelect($files)" onclick="this.value=null"
-                                   required=""
-                                   name="resumeFile"/>
-
-                            <p class="text-danger"> (支持html,htm,doc,docx,txt和pdf格式)</p>
-
-                            <p class="text-danger" ng-show="resumeFileRequired"> 请选择简历文件</p>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-2 col-md-offset-4">
-                        <button class="btn btn-primary" ng-click="submit()"
-                                ng-disabled="uploadResumeForm.$invalid || resumeFileRequired">提交
-                        </button>
-                    </div>
-                </fieldset>
-            </form>
+  <section class="panel panel-default">
+    <div class="panel-heading"><strong><span class="glyphicon glyphicon-user"></span>上传简历</strong></div>
+    <div class="panel-body">
+      <form name="uploadResumeForm" novalidate="" class="form-horizontal">
+        <div class="row">
+          <div class="well text-danger col-md-8 col-md-offset-2" ng-show="err">
+            {{err.message}}
+          </div>
         </div>
-    </section>
+        <fieldset class="row">
+          <div class="form-group">
+
+            <label class="col-md-2 control-label">应聘职位</label>
+
+            <div class="col-md-3">
+              <input type="text" ng-model="applyPosition" name="applyPosition" class="form-control"
+                     typeahead="position for position in positions | filter:$viewValue | limitTo:8" required=""/>
+
+              <p class="text-danger"
+                 ng-show="uploadResumeForm.applyPosition.$error.required && !uploadResumeForm.applyPosition.$pristine">
+                请输入应聘职位</p>
+            </div>
+            <div class="col-md-2 control-label">
+              状态
+            </div>
+            <div class="col-md-3">
+              <select class="form-control" name="status" ng-model="status">
+                <option value="new">新应聘</option>
+                <option value="pursued">通过</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-1 col-md-offset-1 control-label">简历</label>
+
+            <div class="col-md-3">
+              <input type="file" ng-file-select="onFileSelect($files)" onclick="this.value=null"
+                     required=""
+                     name="resumeFile"/>
+
+              <p class="text-danger"> (支持html,htm,doc,docx,txt和pdf格式)</p>
+
+              <p class="text-danger" ng-show="resumeFileRequired"> 请选择简历文件</p>
+            </div>
+
+          </div>
+
+          <div class="col-md-2 col-md-offset-4">
+            <button class="btn btn-primary" ng-click="submit()"
+                    ng-disabled="uploadResumeForm.$invalid || resumeFileRequired">提交
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </section>
 </div>

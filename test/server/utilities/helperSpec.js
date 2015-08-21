@@ -1,9 +1,9 @@
 'use strict';
 
 var expect = require('chai').expect,
-    helper = require('../../../server/utilities/helper'),
-    cheerio = require('cheerio'),
-    moment = require('moment');
+  helper = require('../../../server/utilities/helper'),
+  cheerio = require('cheerio'),
+  moment = require('moment');
 
 describe('helper', function () {
   describe('#onlyNumber', function () {
@@ -400,22 +400,22 @@ describe('helper', function () {
       expect(helper.chunkByEmptyArray([
         [1, 2, 3]
       ])).to.deep.equal([
-            [
-              [1, 2, 3]
-            ]
-          ]);
+          [
+            [1, 2, 3]
+          ]
+        ]);
       expect(helper.chunkByEmptyArray([
         [1, 2, 3],
         [''],
         [4, 5]
       ])).to.deep.equal([
-            [
-              [1, 2, 3]
-            ],
-            [
-              [4, 5]
-            ]
-          ]);
+          [
+            [1, 2, 3]
+          ],
+          [
+            [4, 5]
+          ]
+        ]);
 
       expect(helper.chunkByEmptyArray([
         [1, 2, 3],
@@ -425,17 +425,17 @@ describe('helper', function () {
         [''],
         [6]
       ])).to.deep.equal([
-            [
-              [1, 2, 3],
-              [2, 7, 8]
-            ],
-            [
-              [4, 5]
-            ],
-            [
-              [6]
-            ]
-          ]);
+          [
+            [1, 2, 3],
+            [2, 7, 8]
+          ],
+          [
+            [4, 5]
+          ],
+          [
+            [6]
+          ]
+        ]);
     });
   });
 
@@ -564,7 +564,7 @@ describe('helper', function () {
         startTime: moment([2014, 5, 5, 8, 0, 0, 0]),
         endTime: moment([2014, 5, 5, 9, 0, 0, 0])
       }))
-          .to.equal('hello,beijing,销售经理--2014年6月5日8:00:2014年6月5日9:00');
+        .to.equal('hello,beijing,销售经理--2014年6月5日8:00:2014年6月5日9:00');
     });
   });
 

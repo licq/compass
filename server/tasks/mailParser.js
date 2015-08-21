@@ -1,8 +1,8 @@
 'use strict';
 
 var MailParser = require('mailparser').MailParser,
-    logger = require('../config/winston').logger(),
-    Mail = require('mongoose').model('Mail');
+  logger = require('../config/winston').logger(),
+  Mail = require('mongoose').model('Mail');
 
 function saveToDB(mail, address, callback) {
   logger.info('saveToDB', address);

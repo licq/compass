@@ -1,11 +1,11 @@
 'use strict';
 
 var request = require('request'),
-    config = require('../config/config'),
-    helper = require('../utilities/helper'),
-    logger = require('../config/winston').logger(),
-    async = require('async'),
-    _ = require('lodash');
+  config = require('../config/config'),
+  helper = require('../utilities/helper'),
+  logger = require('../config/winston').logger(),
+  async = require('async'),
+  _ = require('lodash');
 
 function postData(data, callback) {
   logger.info('posting...' + data.subject);
@@ -122,37 +122,37 @@ exports.parse = function (mail, callback) {
     data.unshift({buffer: new Buffer(mail.html), fileName: mail.subject + '.html'});
   }
   async.detectSeries(data, function (item, cb) {
-        //todo no series
-        item.subject = mail.subject;
-        postData(item, function (err, res, body) {
-          try {
+      //todo no series
+      item.subject = mail.subject;
+      postData(item, function (err, res, body) {
+        try {
 
-            if (err) logger.error(err);
-            parseErrors = err;
+          if (err) logger.error(err);
+          parseErrors = err;
 
-            if (body) body = JSON.parse(body);
-            if (body && body.name && (body.mobile || body.phone)) {
-              resume = reconstruct(body);
-              cb(true);
-            } else {
-              cb(false);
-            }
-          } catch (e) {
-            logger.error('reconstruct resume ' + mail.subject + 'error: ' + e.message);
-            return cb(false);
+          if (body) body = JSON.parse(body);
+          if (body && body.name && (body.mobile || body.phone)) {
+            resume = reconstruct(body);
+            cb(true);
+          } else {
+            cb(false);
           }
-        });
-      },
-      function (result) {
-        if (result) {
-          resume.company = mail.company;
-          resume.mail = mail.mailId;
-          resume.channel = helper.parseChannel(mail.fromAddress);
-          resume.parseErrors = parseErrors;
-          if (!resume.applyPosition) {
-            resume.applyPosition = helper.parseApplyPosition(mail.fromAddress, mail.subject);
-          }
+        } catch (e) {
+          logger.error('reconstruct resume ' + mail.subject + 'error: ' + e.message);
+          return cb(false);
         }
-        callback(parseErrors, resume);
       });
+    },
+    function (result) {
+      if (result) {
+        resume.company = mail.company;
+        resume.mail = mail.mailId;
+        resume.channel = helper.parseChannel(mail.fromAddress);
+        resume.parseErrors = parseErrors;
+        if (!resume.applyPosition) {
+          resume.applyPosition = helper.parseApplyPosition(mail.fromAddress, mail.subject);
+        }
+      }
+      callback(parseErrors, resume);
+    });
 };

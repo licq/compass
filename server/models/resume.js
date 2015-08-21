@@ -1,15 +1,15 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    logger = require('../config/winston').logger(),
-    mongoosastic = require('mongoosastic'),
-    config = require('../config/config'),
-    _ = require('lodash'),
-    crate = require('mongoose-crate'),
-    LocalFS = require('mongoose-crate-localfs'),
-    moment = require('moment'),
-    path = require('path'),
-    timestamps = require('mongoose-timestamp');
+  logger = require('../config/winston').logger(),
+  mongoosastic = require('mongoosastic'),
+  config = require('../config/config'),
+  _ = require('lodash'),
+  crate = require('mongoose-crate'),
+  LocalFS = require('mongoose-crate-localfs'),
+  moment = require('moment'),
+  path = require('path'),
+  timestamps = require('mongoose-timestamp');
 
 var baseDir;
 
@@ -437,11 +437,11 @@ resumeSchema.pre('save', function (next) {
         email: self.email,
         createdAt: {$gt: moment().subtract(as.filterSamePerson, 'M').toDate()}
       })
-          .exec(function (err, resumeCount) {
-            if (err || resumeCount === 0) return next();
-            self.status = 'duplicate';
-            next();
-          });
+        .exec(function (err, resumeCount) {
+          if (err || resumeCount === 0) return next();
+          self.status = 'duplicate';
+          next();
+        });
     });
   } else {
     next();

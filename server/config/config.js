@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require('path'),
-    _ = require('lodash');
+  _ = require('lodash');
 
 var rootPath = path.normalize(__dirname + '/../../');
 

@@ -1,10 +1,10 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Resume = mongoose.model('Resume'),
-    Mail = mongoose.model('Mail'),
-    jobs = require('../tasks/jobs'),
-    logger = require('../config/winston').logger();
+  Resume = mongoose.model('Resume'),
+  Mail = mongoose.model('Mail'),
+  jobs = require('../tasks/jobs'),
+  logger = require('../config/winston').logger();
 
 exports.recreateAllJobs = function (req, res, next) {
   jobs.recreateAllJobs(function (err) {
