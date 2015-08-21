@@ -1,9 +1,9 @@
 'use strict';
 
 var expect = require('chai').expect,
-  helper = require('../../../server/utilities/helper'),
-  cheerio = require('cheerio'),
-  moment = require('moment');
+    helper = require('../../../server/utilities/helper'),
+    cheerio = require('cheerio'),
+    moment = require('moment');
 
 describe('helper', function () {
   describe('#onlyNumber', function () {
@@ -87,8 +87,8 @@ describe('helper', function () {
     });
   });
 
-  describe('#parseSkillExperience', function(){
-    it('should return correctly', function(){
+  describe('#parseSkillExperience', function () {
+    it('should return correctly', function () {
       expect(helper.parseSkillExperience('18个月')).to.equal(18);
       expect(helper.parseSkillExperience('3年')).to.equal(36);
       expect(helper.parseSkillExperience('2年5个月')).to.equal(29);
@@ -158,7 +158,7 @@ describe('helper', function () {
   });
 
   describe('#parseV1BTable', function () {
-  it('should parse correctly', function () {
+    it('should parse correctly', function () {
       var html = '<div id="resumeinfo" name="resumeinfo" class="rusume778bg1"> begin text<ul class="edit_text1"> <div align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <div align="center"><B><FONT style="FONT-FAMILY: 宋体; FONT-SIZE: 22px">巫章丽</FONT></B></div> <div align="center"><B><FONT size=4></FONT></B>&nbsp; <div align="left"><FONT style="FONT-FAMILY: Arial"><FONT color=#0000ff><FONT style="FONT-SIZE: 12px"><FONT style="FONT-SIZE: 16px"><FONT style="FONT-SIZE: 14px">E-mail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;:<B style="FONT-FAMILY: ; mso-bidi-font-weight: normal"><U style="FONT-FAMILY: "> lili720@126.com</U></B><B style="FONT-FAMILY: ; mso-bidi-font-weight: normal"><U style="FONT-FAMILY: "></U></B></FONT></FONT></FONT></FONT></FONT></div><div align="left"><FONT style="FONT-FAMILY: Arial"><FONT color=#0000ff><FONT style="FONT-SIZE: 12px"><FONT style="FONT-SIZE: 16px"><FONT style="FONT-SIZE: 14px">手机&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<U style="FONT-FAMILY: "> <B style="FONT-FAMILY: ; mso-bidi-font-weight: normal">1592-1504-990</B></U></FONT></FONT></FONT></FONT></FONT> </div></div></div></ul>end text</div>';
       var $ = cheerio.load(html);
       var table = $('#resumeinfo');
@@ -400,22 +400,22 @@ describe('helper', function () {
       expect(helper.chunkByEmptyArray([
         [1, 2, 3]
       ])).to.deep.equal([
-          [
-            [1, 2, 3]
-          ]
-        ]);
+            [
+              [1, 2, 3]
+            ]
+          ]);
       expect(helper.chunkByEmptyArray([
         [1, 2, 3],
         [''],
         [4, 5]
       ])).to.deep.equal([
-          [
-            [1, 2, 3]
-          ],
-          [
-            [4, 5]
-          ]
-        ]);
+            [
+              [1, 2, 3]
+            ],
+            [
+              [4, 5]
+            ]
+          ]);
 
       expect(helper.chunkByEmptyArray([
         [1, 2, 3],
@@ -425,17 +425,17 @@ describe('helper', function () {
         [''],
         [6]
       ])).to.deep.equal([
-          [
-            [1, 2, 3],
-            [2, 7, 8]
-          ],
-          [
-            [4, 5]
-          ],
-          [
-            [6]
-          ]
-        ]);
+            [
+              [1, 2, 3],
+              [2, 7, 8]
+            ],
+            [
+              [4, 5]
+            ],
+            [
+              [6]
+            ]
+          ]);
     });
   });
 
@@ -562,8 +562,9 @@ describe('helper', function () {
         name: 'beijing',
         applyPosition: '销售经理',
         startTime: moment([2014, 5, 5, 8, 0, 0, 0]),
-        endTime: moment([2014, 5, 5, 9, 0, 0, 0])}))
-        .to.equal('hello,beijing,销售经理--2014年6月5日8:00:2014年6月5日9:00');
+        endTime: moment([2014, 5, 5, 9, 0, 0, 0])
+      }))
+          .to.equal('hello,beijing,销售经理--2014年6月5日8:00:2014年6月5日9:00');
     });
   });
 
@@ -587,13 +588,13 @@ describe('helper', function () {
 
   describe('#isNewWork', function () {
     it('should return correctly', function () {
-      expect(helper.isNewWork([ '2008.05 - 至今', '华数集团-华数传媒网络有限公司' ])).to.be.true;
+      expect(helper.isNewWork(['2008.05 - 至今', '华数集团-华数传媒网络有限公司'])).to.be.true;
       expect(helper.isNewWork('2012.08.-至今 通联支付'.split(' '))).to.be.true;
       expect(helper.isNewWork('2012.04.-2102.6至今 上海盛锐软件技术有限公司'.split(' '))).to.be.true;
       expect(helper.isNewWork('2012 /8--至今：垂直电商企业(家健商城)（150-500人） [ 2年]')).to.be.true;
       expect(helper.isNewWork('2004/05—2009/01 上海华腾软件系统公司'.split(' '))).to.be.true;
-      expect(helper.isNewWork([ '', '产品部门经理 2008.05 - 至今' ])).to.be.false;
-      expect(helper.isNewWork([ '- 所在地区：杭州 - 汇报对象：总监 - 下属人数：18人 - 工作职责： 1、部门管理：团队组建人员招聘、公司管理规章制度落实、工作流程规范的制定、人才梯队的培养建设、员工季度及年度绩效考核等； 2、产品开发：产品业务需求分析和产品规划、系统平台设计及实施、项目开发管理、产品版本管控、日常推广运营等。 工作业绩： 手机视频产品华数与移动、联通、电信三大运营商合作的产品线；该产品线自11年本人加入后经历了从无到有、从免费到收费的逐步成长历程。目前华数TV（手机视频）在全国范围内完成商用，与电信三大运营商展开多种合作模式，如系统平台供应商、SP、CP角色等（如：垂直频道、专区模式），产品线类目包括：客户端（IOS版/安卓版）、WAP门户（炫彩版/触屏版/文字版）、公网等多个产品，用户已超过百万级别。' ])).to.be.false;
+      expect(helper.isNewWork(['', '产品部门经理 2008.05 - 至今'])).to.be.false;
+      expect(helper.isNewWork(['- 所在地区：杭州 - 汇报对象：总监 - 下属人数：18人 - 工作职责： 1、部门管理：团队组建人员招聘、公司管理规章制度落实、工作流程规范的制定、人才梯队的培养建设、员工季度及年度绩效考核等； 2、产品开发：产品业务需求分析和产品规划、系统平台设计及实施、项目开发管理、产品版本管控、日常推广运营等。 工作业绩： 手机视频产品华数与移动、联通、电信三大运营商合作的产品线；该产品线自11年本人加入后经历了从无到有、从免费到收费的逐步成长历程。目前华数TV（手机视频）在全国范围内完成商用，与电信三大运营商展开多种合作模式，如系统平台供应商、SP、CP角色等（如：垂直频道、专区模式），产品线类目包括：客户端（IOS版/安卓版）、WAP门户（炫彩版/触屏版/文字版）、公网等多个产品，用户已超过百万级别。'])).to.be.false;
     });
   });
 });

@@ -1,10 +1,10 @@
 var async = require('async'),
-  mongoose = require('mongoose'),
-  request = require('supertest'),
-  Position = mongoose.model('Position'),
-  app = require('../../server'),
-  Factory = require('./factory'),
-  _ = require('lodash');
+    mongoose = require('mongoose'),
+    request = require('supertest'),
+    Position = mongoose.model('Position'),
+    app = require('../../server'),
+    Factory = require('./factory'),
+    _ = require('lodash');
 
 exports.clearCollections = function () {
   var models = Array.prototype.slice.call(arguments, 0);
@@ -21,10 +21,10 @@ exports.clearCollections = function () {
 function authenticateAgent(user, cb) {
   var agent = request.agent(app);
   agent.post('/publicApi/sessions')
-    .send({email: user.email, password: user.password})
-    .expect(200, function () {
-      cb(agent, user);
-    });
+      .send({email: user.email, password: user.password})
+      .expect(200, function () {
+        cb(agent, user);
+      });
 }
 
 exports.login = function (user, cb) {
