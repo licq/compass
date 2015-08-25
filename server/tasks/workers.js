@@ -59,7 +59,7 @@ function handleSendEmail(job, done) {
   mailer.sendEmail(job.data, done);
 }
 
-function handleParseResume(job, done, cb) {
+function handleParseResume(job, done) {
   try {
     logger.info('handleParseResume starts.job id: ' + job.id + ' ' + job.data.subject);
     parser.parse(job.data, function (err, resume) {
@@ -112,7 +112,6 @@ function handleParseResume(job, done, cb) {
           logger.info('handleParseResume ends successfully.job id: ' + job.id + ' subject:' + job.data.title);
         }
         done(err);
-        cb(results.saveResume);
       });
 
     });
