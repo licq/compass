@@ -298,8 +298,10 @@ describe('interviews', function () {
   describe('put /api/interview/:id with status offer rejected', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)
-        .send({status: 'offer rejected',
-          applierRejectedReason: 'money'})
+        .send({
+          status: 'offer rejected',
+          applierRejectedReason: 'money'
+        })
         .expect(200, function () {
           Interview.findById(interview._id, function (err, newInterview) {
             expect(newInterview.status).to.equal('offer rejected');
@@ -312,11 +314,14 @@ describe('interviews', function () {
         });
     });
   });
+
   describe('put /api/interview/:id with status offer accepted', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)
-        .send({status: 'offer accepted',
-          onboardDate: new Date()})
+        .send({
+          status: 'offer accepted',
+          onboardDate: new Date()
+        })
         .expect(200, function () {
           Interview.findById(interview._id, function (err, newInterview) {
             expect(newInterview.status).to.equal('offer accepted');
@@ -329,6 +334,7 @@ describe('interviews', function () {
         });
     });
   });
+
   describe('put /api/interview/:id with status recruited', function () {
     it('should change the status of the interview and the status of the resume', function (done) {
       request.put('/api/interviews/' + interview._id)

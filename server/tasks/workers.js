@@ -10,7 +10,8 @@ var kue = require('kue'),
   imapFetcher = require('./imapFetcher'),
   delayedJobs = require('./jobs'),
   logger = require('../config/winston').logger(),
-  parser = require('../parsers/resumeParser'),
+  async = require('async'),
+  parser = require('../parsers/remoteResumeParser'),
   Mail = mongoose.model('Mail'),
   Resume = mongoose.model('Resume');
 
@@ -61,40 +62,74 @@ function handleSendEmail(job, done) {
 
 function handleParseResume(job, done) {
   try {
-    logger.info('handleParseResume ', job.data.title);
-    var data = parser.parse(job.data);
-    data.applyDate = job.data.date;
-    var parseErrors = data.parseErrors;
-    delete data.parseErrors;
-    Position.findOne({'aliases.name': data.applyPosition}, function (err, position) {
-      if (err) return done(err);
-      if (position)
-        data.applyPosition = position.name;
-      Resume.createOrUpdateAndIndex(data, function (err) {
-        if (err) {
-          logger.error('save resume to db failed ', err.stack);
-        }
+    logger.info('handleParseResume starts.job id: ' + job.id + ' ' + job.data.subject);
+    parser.parse(job.data, function (err, resume) {
+      var parseErrors = err;
+      async.parallel({
+        saveMail: function (callback) {
+          Mail.findById(job.data.mailId).exec(function (err, mail) {
+            if (err || !mail) {
+              logger.error('no mail found for ' + job.data.subject + '.job id: ' + job.id + ' ' + err);
+              return callback(null);
+            }
+            mail.parseErrors = parseErrors;
+            mail.markModified('parseErrors');
+            //mail.save(done);
+            mail.save(function (err) {
+              if (err)
+                logger.error('save mail ' + job.data.subject + 'to db failed.job id: ' + job.id + ' ' + err);
+              callback(null);
+            });
+          });
+        },
+        saveResume: function (callback) {
+          if (!(resume && resume.name && (resume.mobile || resume.phone))) {
+            logger.info('handleParseResume ends without result.job id: ' + job.id + ' subject:' + job.data.title);
+            return callback(null, null);
+          }
+          logger.info('parsed resume: ' + job.data.subject + '.job id: ' + job.id + '.resume name: ' + resume.name);
+          logger.info();
+          resume.parseErrors = parseErrors;
+          delete resume.parseErrors;
+          resume.applyDate = job.data.date;
 
-        Mail.findById(job.data.mailId).exec(function (err, mail) {
-          if (err) return done(err);
-          mail.parseErrors = parseErrors;
-          mail.markModified('parseErrors');
-          mail.save(done);
-        });
+          Position.findOne({'aliases.name': resume.applyPosition}, function (err, position) {
+            if (err) {
+              logger.error('find position for ' + job.data.title + ' failed.job id: ' + job.id + ' ' + err.stack);
+              return callback(err, null);
+            }
+            if (position)
+              resume.applyPosition = position.name;
+            Resume.createOrUpdateAndIndex(resume, function (err) {
+              if (err) {
+                logger.error('save resume ' + job.data.subject + 'to db failed.job id: ' + job.id + ' ' + err.stack);
+              }
+              return callback(err, resume);
+            });
+          });
+        }
+      }, function (err, results) {
+        if (!err && results.saveResume) {
+          logger.info('handleParseResume ends successfully.job id: ' + job.id + ' subject:' + job.data.title);
+        }
+        done(err);
       });
+
     });
   } catch (e) {
     done(e.message);
-    logger.error('handleParseResume failed: ' + job.data.title + ':' + e.message);
+    logger.error('handleParseResume failed. ' + 'job id:' + job.id + job.data.title + ':' + e.message);
   }
 }
 
+exports.handleParseResume = handleParseResume;
 exports.start = function (config) {
   jobs = kue.createQueue({
     prefix: config.redis.prefix,
     redis: {
       port: config.redis.port,
-      host: config.redis.host
+      host: config.redis.host,
+      options: config.redis.options
     }
   });
 
@@ -116,5 +151,3 @@ exports.start = function (config) {
 
   return jobs;
 };
-
-

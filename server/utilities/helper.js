@@ -87,6 +87,18 @@ exports.parseYearsOfExperience = function parseYearsOfExperience(input) {
   if (match) return englishToNumberMap[match[1]];
 };
 
+exports.parseSkillExperience = function parseSkillExperience(input) {
+  if (input) {
+    if (_.isNumber(input)) return input;
+    var match = input.match(/^(\d+)个?月$/);
+    if (match) return Number(match[1]);
+    match = input.match(/^(\d+)年$/);
+    if (match) return Number(match[1] * 12);
+    match = input.match(/^(\d+)年(\d+)个?月$/);
+    if (match) return Number(match[1]) * 12 + Number(match[2]);
+  }
+};
+
 var entryTimeMap = {
   '待定': 'to be determined',
   '即时': 'immediately',
@@ -101,6 +113,7 @@ var entryTimeMap = {
 
 exports.parseEntryTime = function parseEntryTime(input) {
   var result;
+  if (!input) return;
   _.forEach(entryTimeMap, function (value, key) {
     if (input.indexOf(key) > -1) {
       result = value;
@@ -115,12 +128,16 @@ var typeOfEmploymentMap = {
   '兼职': 'parttime',
   '实习': 'intern',
   'Full-time': 'fulltime',
+  'Fulltime': 'fulltime',
   'Part-time': 'parttime',
+  'Parttime': 'parttime',
   'Internship': 'intern',
+  'Intern': 'intern',
   'Full / part-time': 'fulltime'
 };
 exports.parseTypeOfEmployment = function parseTypeOfEmployment(input) {
-  return typeOfEmploymentMap[input.trim()];
+  if (input)
+    return typeOfEmploymentMap[input.trim()];
 };
 
 exports.splitByCommas = function splitByCommas(input) {
@@ -207,25 +224,35 @@ exports.isAddress = function isAddress(input) {
 
 var englishCertificateMap = {
   '英语四级': 'cet4',
+  'CET4': 'cet4',
   '未参加': 'not participate',
   '未通过': 'not passed',
   '英语六级': 'cet6',
+  'CET6': 'cet6',
   '专业四级': 'tem4',
+  'TEM4': 'tem4',
   '专业八级': 'tem8',
+  'TEM8': 'tem8',
   '四级': 'level4',
   '三级': 'level3',
   '二级': 'level2',
   '一级': 'level1',
+  'Level4': 'level4',
+  'Level3': 'level3',
+  'Level2': 'level2',
+  'Level1': 'level1',
   '无': 'none'
 };
 
 exports.parseEnglishCertificate = function parseEnglishCertificate(input) {
-  var result = englishCertificateMap[input.trim()];
-  if (!result) {
-    result = parseInt(input);
-    result = isNaN(result) ? 0 : result;
+  if (input) {
+    var result = englishCertificateMap[input.trim()];
+    if (!result) {
+      result = parseInt(input);
+      result = isNaN(result) ? 0 : result;
+    }
+    return result;
   }
-  return result;
 };
 
 var languageSkillMap = {
@@ -237,7 +264,11 @@ var languageSkillMap = {
   'Good': 'good',
   'General': 'average',
   'Skilled': 'very good',
-  'Proficient': 'excellent'
+  'Proficient': 'excellent',
+  'Basic': 'average',
+  'Advanced': 'very good',
+  'Limited': 'good',
+  'Expert': 'excellent'
 };
 
 var languageMap = {
@@ -271,17 +302,20 @@ exports.parseLanguageTest = function parseLanguageTest(input) {
 };
 
 exports.parseLanguage = function parseLanguage(input) {
-  return languageMap[input.trim()];
+  if (input)
+    return languageMap[input.trim()];
 };
 
 exports.parseLanguageLevel = function parseLanguageLevel(input) {
   var result;
-  _.forEach(languageSkillMap, function (value, key) {
-    if (input.indexOf(key) > -1) {
-      result = value;
-      return false;
-    }
-  });
+  if (input) {
+    _.forEach(languageSkillMap, function (value, key) {
+      if (input.indexOf(key) > -1) {
+        result = value;
+        return false;
+      }
+    });
+  }
   return result;
 };
 
@@ -307,12 +341,16 @@ var itSkillLevelMap = {
   '了解': 'limited',
   '熟练': 'advanced',
   '精通': 'expert',
-  '良好': 'limited'
+  '良好': 'limited',
+  'Basic': 'basic',
+  'Limited': 'limited',
+  'Expert': 'expert',
+  'Advanced': 'advanced'
 };
 
-
 exports.parseItSkillLevel = function parseItSkillLevel(input) {
-  return itSkillLevelMap[input.trim()];
+  if (input)
+    return itSkillLevelMap[input.trim()];
 };
 
 exports.isProjectHeader = function isProjectHeader(input) {
@@ -370,10 +408,16 @@ var politicalStatusMap = {
   '民主党派': 'democratic part',
   '无党派': 'no party',
   '群众': 'citizen',
-  '其他': 'others'
+  '其他': 'others',
+  'PartyMember': 'party member',
+  'LeagueMember': 'league member',
+  'DemocraticPart': 'democratic part',
+  'NoParty': 'no party',
+  'Citizen': 'citizen'
 };
 exports.parsePoliticalStatus = function parsePoliticalStatus(input) {
-  return politicalStatusMap[input.trim()];
+  if (input)
+    return politicalStatusMap[input.trim()];
 };
 
 exports.parseDateRange = function parseDateRange(input) {
@@ -414,6 +458,27 @@ exports.parseDegree = function parseDegree(input) {
   if (input) {
     return degreeMap[input.trim()];
   }
+};
+
+var channelMap = {
+  'veryeast': '最佳东方',
+  'ganji': '赶集网',
+  '61hr': '乐聘',
+  '51job': '前程无忧',
+  'lietou': '猎聘网',
+  '@zhaopin': '智联招聘'
+};
+
+exports.parseChannel = function parseChannel(input) {
+  if (!input) return;
+  var channel;
+  _.forEach(channelMap, function (value, key) {
+    if (input.indexOf(key) > -1) {
+      channel = value;
+      return false;
+    }
+  });
+  return channel;
 };
 
 exports.isGender = function isGender(input) {
@@ -465,6 +530,24 @@ exports.parseZhaopinApplyPosition = function parseZhaopinApplyPosition(input) {
     var start = input.indexOf('应聘');
     var end = input.lastIndexOf('-');
     return input.substring(start + 3, end);
+  }
+};
+
+exports.parse61hrApplyPosition = function parse61hrApplyPosition(input) {
+  var startIndex = input.indexOf('应聘贵公司');
+  var endIndex = input.indexOf('职位');
+  if (startIndex > -1 && endIndex > -1)
+    return input.substr(startIndex + 6, endIndex - startIndex - 7);
+};
+
+exports.parseApplyPosition = function parseApplyPosition(fromAddress, subject) {
+  if (!fromAddress) return;
+  if (fromAddress.indexOf('61hr') > -1) {
+    return this.parse61hrApplyPosition(subject);
+  }
+
+  if (fromAddress.indexOf('@zhaopin') > -1) {
+    return this.parseZhaopinApplyPosition(subject);
   }
 };
 

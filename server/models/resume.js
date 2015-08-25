@@ -21,7 +21,7 @@ function makeTermFilter(queryValue, termKey) {
     if (Array.isArray(queryValue)) {
       return {terms: term};
     } else {
-      return {term: term };
+      return {term: term};
     }
   }
 }
@@ -43,10 +43,9 @@ var resumeSchema = mongoose.Schema({
     default: Date.now()
   },
   photoUrl: String,
+  additionalInformation: String,
   yearsOfExperience: Number,
-
   birthday: Date,
-
   hukou: String, //户口
   residency: String,
   address: String,
@@ -57,7 +56,7 @@ var resumeSchema = mongoose.Schema({
   },
   politicalStatus: {
     type: String,
-    enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others'],
+    enum: ['party member', 'league member', 'democratic part', 'no party', 'citizen', 'others']
   },
 
   careerObjective: {
@@ -84,11 +83,17 @@ var resumeSchema = mongoose.Schema({
     {
       from: Date,
       to: Date,
+      boss: String,
+      achievement: String,
       company: String,
       industry: String,
       department: String,
+      employeeNumber: Number,
       jobTitle: String,
-      jobDescription: String
+      jobDescription: String,
+      companyLocation: String,
+      companyIntroduction: String,
+      leaveReason: String
     }
   ],
   projectExperience: [
@@ -132,6 +137,7 @@ var resumeSchema = mongoose.Schema({
     {
       date: Date,
       subject: String,
+      content: String,
       score: String
     }
   ],
@@ -164,8 +170,7 @@ var resumeSchema = mongoose.Schema({
       content: String
     }
   ],
-
-  inSchoolStudy: [String ],
+  inSchoolStudy: [String],
   addtionalInformation: String,
 
   languageCertificates: {
@@ -220,7 +225,7 @@ var resumeSchema = mongoose.Schema({
   toJSON: {virtuals: true}
 });
 
-resumeSchema.index({company: 1, name: 1, mobile: 1, email: 1, createdAt: 1 });
+resumeSchema.index({company: 1, name: 1, mobile: 1, email: 1, createdAt: 1});
 
 resumeSchema.virtual('highestDegree').get(function () {
   if (this.educationHistory && this.educationHistory.length > 0) {
@@ -271,7 +276,7 @@ resumeSchema.statics.query = function (params, callback) {
       }
     },
     sort: [
-      { "applyDate": {"order": "desc"}}
+      {"applyDate": {"order": "desc"}}
     ]
   };
 
@@ -327,9 +332,11 @@ resumeSchema.statics.query = function (params, callback) {
 
   var filters = queryConditions.query.filtered.filter.and;
   if (params.company) {
-    filters.push({term: {
-      company: params.company
-    }});
+    filters.push({
+      term: {
+        company: params.company
+      }
+    });
   }
 
   var highestDegreeFilter = makeTermFilter(params.highestDegree, 'highestDegree');
@@ -351,19 +358,21 @@ resumeSchema.statics.query = function (params, callback) {
     if (!Array.isArray(params.age)) {
       params.age = [params.age];
     }
-    filters.push({or: _.map(params.age, function (age) {
-      age = _.parseInt(age);
-      return {
-        script: {
-          script: 'DateTime.now().year -doc[\'birthday\'].date.year >= lowerAge ' +
+    filters.push({
+      or: _.map(params.age, function (age) {
+        age = _.parseInt(age);
+        return {
+          script: {
+            script: 'DateTime.now().year -doc[\'birthday\'].date.year >= lowerAge ' +
             '&& DateTime.now().year -doc[\'birthday\'].date.year <= higherAge',
-          params: {
-            lowerAge: age,
-            higherAge: age + 4
+            params: {
+              lowerAge: age,
+              higherAge: age + 4
+            }
           }
-        }
-      };
-    })});
+        };
+      })
+    });
   }
 
   if (filters.length === 0) {
@@ -421,7 +430,13 @@ resumeSchema.pre('save', function (next) {
     mongoose.model('ApplicationSetting').findOne({company: self.company}).select('filterSamePerson').exec(function (err, as) {
       if (err || !as) return next();
       if (as.filterSamePerson === 0) return next();
-      self.constructor.count({company: self.company, name: self.name, mobile: self.mobile, email: self.email, createdAt: {$gt: moment().subtract(as.filterSamePerson, 'M').toDate()}})
+      self.constructor.count({
+        company: self.company,
+        name: self.name,
+        mobile: self.mobile,
+        email: self.email,
+        createdAt: {$gt: moment().subtract(as.filterSamePerson, 'M').toDate()}
+      })
         .exec(function (err, resumeCount) {
           if (err || resumeCount === 0) return next();
           self.status = 'duplicate';

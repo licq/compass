@@ -113,9 +113,15 @@ exports.addParseResumeJob = function (mail, cb) {
       attachments: mail.attachments,
       date: mail.date
     };
-    jobs.create('parse resume', data).attempts(3).save();
+    var job = jobs.create('parse resume', data).attempts(3).save(function (err) {
+      if (!err) logger.info('handleParseResume job added.' + 'job id:' + job.id + ' ' + job.data.title);
+    });
   }
   cb && cb();
+};
+
+exports.inactiveCount = function inactiveCount(cb) {
+  jobs.inactiveCount(cb);
 };
 
 exports.init = function (config) {
@@ -123,7 +129,8 @@ exports.init = function (config) {
     prefix: config.redis.prefix,
     redis: {
       port: config.redis.port,
-      host: config.redis.host
+      host: config.redis.host,
+      options: config.redis.options
     }
   });
 };

@@ -44,7 +44,7 @@
 </div>
 
 
-<div class="panel panel-default" ng-if="resume.careerObjective && resume.isFromMail">
+<div class="panel panel-default" ng-if="resume.careerObjective | isNotEmpty">
   <div class="panel-heading">
     <strong>职业目标</strong>
   </div>
@@ -52,6 +52,7 @@
     <div class="table-responsive">
       <table class="table table-bordered">
         <tr>
+        <tr ng-if="resume.careerObjective.selfAssessment">
           <td class="col-md-1">自我评价</td>
           <td>{{resume.careerObjective.selfAssessment}}</td>
         </tr>
@@ -83,7 +84,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.workExperience">
+<div class="panel panel-default" ng-if="resume.workExperience | isNotEmpty">
   <div class="panel-heading">
     <strong>工作经历</strong>
   </div>
@@ -104,7 +105,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.projectExperience">
+<div class="panel panel-default" ng-if="resume.projectExperience | isNotEmpty">
   <div class="panel-heading">
     <strong>项目经验</strong>
   </div>
@@ -135,7 +136,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.educationHistory">
+<div class="panel panel-default" ng-if="resume.educationHistory | isNotEmpty">
   <div class="panel-heading">
     <strong>教育经历</strong>
   </div>
@@ -156,7 +157,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.trainingHistory">
+<div class="panel panel-default" ng-if="resume.trainingHistory | isNotEmpty">
   <div class="panel-heading">
     <strong>培训</strong>
   </div>
@@ -188,7 +189,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.certifications">
+<div class="panel panel-default" ng-if="resume.certifications | isNotEmpty">
   <div class="panel-heading">
     <strong>证书</strong>
   </div>
@@ -204,7 +205,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.languageSkills">
+<div class="panel panel-default" ng-if="resume.languageSkills | isNotEmpty">
   <div class="panel-heading">
     <strong>语言能力</strong>
   </div>
@@ -221,7 +222,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.inSchoolPractices">
+<div class="panel panel-default" ng-if="resume.inSchoolPractices | isNotEmpty">
   <div class="panel-heading">
     <strong>在校实习情况</strong>
   </div>
@@ -236,7 +237,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-if="resume.inSchoolStudy">
+<div class="panel panel-default" ng-if="resume.inSchoolStudy | isNotEmpty">
   <div class="panel-heading">
     <strong>在校学习情况</strong>
   </div>
@@ -250,7 +251,7 @@
     </div>
   </div>
 </div>
-<div class="panel panel-default" ng-hide="resume.languageCertificates | isEmpty">
+<div class="panel panel-default" ng-if="resume.languageCertificates | isNotEmpty">
   <div class="panel-heading">
     <strong>语言成绩</strong>
   </div>
@@ -281,7 +282,7 @@
   </div>
 </div>
 
-<div class="panel panel-default" ng-if="resume.itSkills">
+<div class="panel panel-default" ng-if="resume.itSkills | isNotEmpty">
   <div class="panel-heading">
     <strong>IT能力</strong>
   </div>

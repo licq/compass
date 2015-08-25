@@ -345,6 +345,11 @@ angular.module('compass')
       return moment(time).isBefore(moment());
     };
   })
+  .filter('isNotEmpty', function () {
+    return function (input) {
+      return !_.isEmpty(input);
+    };
+  })
   .filter('isEmpty', function () {
     return function (input) {
       return _.isEmpty(input);

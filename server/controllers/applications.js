@@ -2,7 +2,10 @@
 
 var mongoose = require('mongoose'),
   Resume = mongoose.model('Resume'),
+  Position = mongoose.model('Position'),
+  fs = require('fs'),
   path = require('path'),
+  parser = require('../parsers/remoteResumeParser'),
   _ = require('lodash');
 
 exports.list = function (req, res, next) {
@@ -43,18 +46,42 @@ exports.load = function (req, res, next) {
       next();
     });
 };
-
 exports.uploadResume = function (req, res, next) {
   var resume = new Resume(req.body);
-  resume.company = req.user.company;
-  resume.channel = '导入简历';
+  var applyPosition = resume.applyPosition;
   req.files.resumeFile.documentId = resume.id;
   resume.applyDate = new Date();
   resume.attach('resumeFile', req.files.resumeFile, function (err) {
     if (err) return next(err);
-    resume.saveAndIndex(function (err) {
+    fs.readFile(resume.resumeFile.url, function (err, data) {
       if (err) return next(err);
-      res.json({_id: resume._id});
+      parser.parse({
+        attachments: [{
+          content: new Buffer(data),
+          fileName: req.files.resumeFile.originalFilename
+        }]
+      }, function (err, result) {
+        if (err) return next(err);
+        if (result && result.name && result.mobile) {
+          resume = _.extend(resume, result);
+          if (applyPosition)
+            resume.applyPosition = applyPosition;
+          Position.findOne({'aliases.name': resume.applyPosition}, function (err, position) {
+            if (err) return next(err);
+            if (position)
+              resume.applyPosition = position.name;
+            resume.company = req.user.company;
+            resume.channel = '导入简历';
+            resume.saveAndIndex(function (err) {
+              if (err) return next(err);
+              res.json({_id: resume._id});
+            });
+          });
+        } else {
+          res.json(400, {message: '抱歉，无法解析此简历'});
+        }
+
+      });
     });
   });
 };

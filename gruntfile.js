@@ -107,7 +107,7 @@ module.exports = function (grunt) {
         script: 'dist/server.js',
         options: {
           env: {
-           NODE_ENV: 'production'
+            NODE_ENV: 'production'
           }
         }
       }
@@ -187,7 +187,7 @@ module.exports = function (grunt) {
       }
     },
     usemin: {
-      html: [ '<%= project.dist %>/server/views/{,*/}*.html' ],
+      html: ['<%= project.dist %>/server/views/{,*/}*.html'],
 //      css: ['<%= project.dist %>/public/styles/{,*/}*.css'],
       options: {
         assetsDirs: ['<%= project.dist %>/public']
@@ -320,7 +320,7 @@ module.exports = function (grunt) {
     } else if (target === 'prod') {
       return grunt.task.run(['build', 'nodemon:prod']);
     }
-    grunt.task.run([ 'concurrent:dev' ]);
+    grunt.task.run(['concurrent:dev']);
   });
 
   grunt.registerTask('test', function (target) {

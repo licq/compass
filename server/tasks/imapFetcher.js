@@ -33,7 +33,7 @@ exports.fetch = function fetch(mailbox, callback) {
         toBeRetrieved = _.difference(allMails, retrievedMails);
 
         if (toBeRetrieved.length > 0) {
-          var fetcher = imap.fetch(toBeRetrieved, { bodies: '' });
+          var fetcher = imap.fetch(toBeRetrieved, {bodies: ''});
 
           fetcher.on('message', function (msg, seqno) {
 

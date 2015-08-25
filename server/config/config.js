@@ -41,6 +41,9 @@ var configs = {
     },
     parser: {
       url: "http://localhost:8080/"
+    },
+    resumeParser: {
+      host: 'http://localhost:8080/index.json'
     }
   },
   test: {
@@ -69,8 +72,10 @@ var configs = {
     },
     parser: {
       url: "http://localhost:8080/"
+    },
+    resumeParser: {
+      host: 'http://localhost:8080/index.json'
     }
-
   },
   production: {
     hostname: 'www.lingpin.cc',
@@ -99,6 +104,9 @@ var configs = {
     },
     parser: {
       url: "http://" + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ":" + (process.env.PARSER_PORT_8080_TCP_PORT || '8080')
+    },
+    resumeParser: {
+      host: 'http://' + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ':' + (process.env.PARSER_PORT_8080_TCP_PORT || 8080) + 'index.json'
     }
   }
 };

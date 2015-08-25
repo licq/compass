@@ -39,6 +39,18 @@ exports.synchronizeToEs = function (req, res) {
   res.send(200);
 };
 
+function streamResumeTimeout(stream) {
+  jobs.inactiveCount(function (err, total) {
+    if (total > 50) {
+      setTimeout(function () {
+        streamResumeTimeout(stream);
+      }, 30000);
+    } else {
+      stream.resume();
+    }
+  });
+}
+
 exports.reparseMails = function (req, res) {
   var query = req.body.query || {};
   if (query.subject) {
@@ -46,12 +58,20 @@ exports.reparseMails = function (req, res) {
   }
   var stream = Mail.find(query).select('html subject company fromAddress date attachments').stream();
   var index = 0;
+
   stream.on('data', function (mail) {
     index += 1;
-    jobs.addParseResumeJob(mail);
-    logger.info('add ', index, ' parse resume job');
+    if ((index % 50) === 0) {
+      stream.pause();
+      setTimeout(function () {
+        streamResumeTimeout(stream);
+      }, 30000);
+    }
+    jobs.addParseResumeJob(mail, function () {
+      logger.info('add ', index + 'th parse resume job');
+    });
   }).on('close', function () {
-    logger.info('add ', index, ' parse resume jobs');
+    logger.info('closed and totally added ', index, ' parse resume jobs');
   }).on('error', function () {
     logger.info('reparseMails error');
   });
