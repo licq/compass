@@ -106,7 +106,7 @@ var configs = {
       url: "http://" + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ":" + (process.env.PARSER_PORT_8080_TCP_PORT || '8080')
     },
     resumeParser: {
-      host: 'http://' + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ':' + (process.env.PARSER_PORT_8080_TCP_PORT || 8080) + 'index.json'
+      host: 'http://' + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ':' + (process.env.PARSER_PORT_8080_TCP_PORT || '8080') + '/index.json'
     }
   }
 };

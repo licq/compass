@@ -8,7 +8,6 @@ var request = require('request'),
   _ = require('lodash');
 
 function postData(data, callback) {
-  logger.info('posting...' + data.subject);
   if (!data.buffer)
     return callback('no data to parse ', null, null);
   var req = request.post({

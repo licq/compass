@@ -9,7 +9,7 @@ var fs = require('fs'),
   expect = require('chai').expect,
   handleParseResume = require('../../../server/tasks/workers').handleParseResume;
 
-describe.skip('remoteResumeParser', function () {
+describe('remoteResumeParser', function () {
   var emailSchema;
   beforeEach(function (done) {
     helper.clearCollections('Resume', 'Mail', done);
@@ -35,14 +35,14 @@ describe.skip('remoteResumeParser', function () {
   });
 
   describe('#parse', function () {
-    it('should parse resume correctly', function (done) {
+    it.only('should parse resume correctly', function (done) {
       this.timeout(0);
       fs.readFile(__dirname + '/51job63.html', function (err, data) {
         //console.log(data.toString());
         resumeParser.parse({
           attachments: [{
             content: new Buffer(data),
-            fileName: '51job.html'
+            fileName: '51job63.html'
           }]
         }, function (err, resume) {
           if (resume) {

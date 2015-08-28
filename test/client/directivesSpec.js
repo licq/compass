@@ -73,8 +73,6 @@ describe('directives', function () {
       expect(element).to.have.class('btn');
       expect(element).to.have.class('btn-xs');
       expect(element).to.have.class('btn-success');
-
-      expect(element).to.have('i.fa.fa-archive');
     });
 
     it('should invoke the action', function () {
