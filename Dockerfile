@@ -10,4 +10,4 @@ VOLUME ["/compass/assets"]
 EXPOSE 80
 ADD dist/ /compass
 RUN npm install --production
-CMD ["pm2","start","pm2.json"]
+CMD ["pm2","start","pm2.json","--no-daemon"]
