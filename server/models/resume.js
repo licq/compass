@@ -903,7 +903,7 @@ exports.setupUploadDir = function (dir) {
     storage: new LocalFS({
       directory: dir,
       path: function (attachment) {
-        return '/' + attachment.documentId + attachment.originalFilename;
+        return '/' + attachment.documentId + attachment.originalname;
       }
     }),
     fields: {

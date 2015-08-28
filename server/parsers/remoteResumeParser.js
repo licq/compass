@@ -11,7 +11,7 @@ function postData(data, callback) {
   if (!data.buffer)
     return callback('no data to parse ', null, null);
   var req = request.post({
-    uri: config.resumeParser.host
+    uri: config.resumeParser.url
   }, callback);
 
   var form = req.form();

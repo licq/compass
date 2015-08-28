@@ -43,7 +43,7 @@ var configs = {
       url: "http://localhost:8080/"
     },
     resumeParser: {
-      host: 'http://localhost:8080/index.json'
+      url: 'http://localhost:8080/index.json'
     }
   },
   test: {
@@ -74,7 +74,7 @@ var configs = {
       url: "http://localhost:8080/"
     },
     resumeParser: {
-      host: 'http://localhost:8080/index.json'
+      url: 'http://localhost:8080/index.json'
     }
   },
   production: {
@@ -106,7 +106,7 @@ var configs = {
       url: "http://" + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ":" + (process.env.PARSER_PORT_8080_TCP_PORT || '8080')
     },
     resumeParser: {
-      host: 'http://' + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ':' + (process.env.PARSER_PORT_8080_TCP_PORT || '8080') + '/index.json'
+      url: 'http://' + (process.env.PARSER_PORT_8080_TCP_ADDR || 'localhost') + ':' + (process.env.PARSER_PORT_8080_TCP_PORT || '8080') + '/index.json'
     }
   }
 };

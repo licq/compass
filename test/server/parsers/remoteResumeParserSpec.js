@@ -9,7 +9,7 @@ var fs = require('fs'),
   expect = require('chai').expect,
   handleParseResume = require('../../../server/tasks/workers').handleParseResume;
 
-describe('remoteResumeParser', function () {
+describe.skip('remoteResumeParser', function () {
   var emailSchema;
   beforeEach(function (done) {
     helper.clearCollections('Resume', 'Mail', done);
@@ -35,7 +35,7 @@ describe('remoteResumeParser', function () {
   });
 
   describe('#parse', function () {
-    it.only('should parse resume correctly', function (done) {
+    it('should parse resume correctly', function (done) {
       this.timeout(0);
       fs.readFile(__dirname + '/51job63.html', function (err, data) {
         //console.log(data.toString());
@@ -79,5 +79,6 @@ describe('remoteResumeParser', function () {
           done(err);
         });
       });
-    });  });
+    });
+  });
 });

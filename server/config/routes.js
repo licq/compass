@@ -27,7 +27,7 @@ var express = require('express'),
   resumeReports = require('../controllers/resumeReports'),
   interviewReports = require('../controllers/interviewReports'),
   applierRejectReasons = require('../controllers/applierRejectReasons'),
-  multipart = require('connect-multiparty'),
+  multer = require('multer'),
   expressWinston = require('express-winston'),
   http = require('http'),
   httpProxy = require('http-proxy'),
@@ -148,7 +148,7 @@ module.exports = function (app,config) {
     .get(evaluationCriterions.forReview);
 
   apiRouter.route('/applications/uploadResume')
-    .all(multipart({uploadDir: '/tmp'}))
+    .all(multer({dest: '/tmp'}).single('resumeFile'))
     .post(applications.uploadResume);
   apiRouter.route('/applications')
     .get(applications.list);

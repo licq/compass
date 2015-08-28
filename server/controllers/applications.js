@@ -49,16 +49,17 @@ exports.load = function (req, res, next) {
 exports.uploadResume = function (req, res, next) {
   var resume = new Resume(req.body);
   var applyPosition = resume.applyPosition;
-  req.files.resumeFile.documentId = resume.id;
+  req.file.documentId = resume.id;
+  req.file.name = req.file.originalname;
   resume.applyDate = new Date();
-  resume.attach('resumeFile', req.files.resumeFile, function (err) {
+  resume.attach('resumeFile', req.file, function (err) {
     if (err) return next(err);
     fs.readFile(resume.resumeFile.url, function (err, data) {
       if (err) return next(err);
       parser.parse({
         attachments: [{
           content: new Buffer(data),
-          fileName: req.files.resumeFile.originalFilename
+          fileName: req.file.originalname
         }]
       }, function (err, result) {
         if (err) return next(err);
@@ -80,7 +81,6 @@ exports.uploadResume = function (req, res, next) {
         } else {
           res.json(400, {message: '抱歉，无法解析此简历'});
         }
-
       });
     });
   });
