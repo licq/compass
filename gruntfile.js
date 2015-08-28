@@ -254,6 +254,8 @@ module.exports = function (grunt) {
             expand: true,
             dest: '<%= project.dist %>',
             src: [
+              'pm2.json',
+              'mailJobs.js',
               'package.json',
               'server.js',
               'server/**/*'
