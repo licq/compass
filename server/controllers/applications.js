@@ -8,6 +8,22 @@ var mongoose = require('mongoose'),
   parser = require('../parsers/remoteResumeParser'),
   _ = require('lodash');
 
+
+function BinaryToString(binary) {
+  var error;
+
+  try {
+    return decodeURIComponent(binary);
+  } catch (_error) {
+    error = _error;
+    if (error instanceof URIError) {
+      return binary;
+    } else {
+      throw error;
+    }
+  }
+}
+
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
   req.query.sort = [
@@ -46,15 +62,21 @@ exports.load = function (req, res, next) {
       next();
     });
 };
+
 exports.uploadResume = function (req, res, next) {
+  console.log(req.body, req.headers);
   var resume = new Resume(req.body);
   var applyPosition = resume.applyPosition;
   req.file.documentId = resume.id;
   req.file.name = req.file.originalname;
+  console.log('req.file ---------', req.file);
   resume.applyDate = new Date();
   resume.attach('resumeFile', req.file, function (err) {
     if (err) return next(err);
+    console.log('resume ', resume);
     fs.readFile(resume.resumeFile.url, function (err, data) {
+      if (resume.resumeFile.name.search(/\.htm.?$/) !== -1)
+        data = BinaryToString(data);
       if (err) return next(err);
       parser.parse({
         attachments: [{
@@ -84,6 +106,18 @@ exports.uploadResume = function (req, res, next) {
       });
     });
   });
+};
+
+exports.removeContentLength = function (req, res, next) {
+  //delete req.headers['content-length'];
+  //console.log('-----------------------');
+  //console.log(req);
+  console.log('-----------------------');
+  console.log('headers------- ', req.headers);
+  console.log('-----------------------');
+  console.log('requme file ------', req.resumeFile);
+  console.log('-----------------------');
+  next();
 };
 
 exports.download = function (req, res, next) {
