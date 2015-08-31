@@ -34,6 +34,7 @@
     "angular-placeholder-shim": "~0.3.0",
     "jquery-html5-placeholder-shim": "*",
     "angular-wizard": "~0.4.0",
-    "ng-file-upload": "~1.6.4"
+    "ng-file-upload": "~1.6.4",
+    "jszip": "Stuk/jszip#~2.5.0"
   }
 }

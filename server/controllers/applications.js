@@ -6,23 +6,24 @@ var mongoose = require('mongoose'),
   fs = require('fs'),
   path = require('path'),
   parser = require('../parsers/remoteResumeParser'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  JSZip = require('jszip');
 
 
-function BinaryToString(binary) {
-  var error;
-
-  try {
-    return decodeURIComponent(binary);
-  } catch (_error) {
-    error = _error;
-    if (error instanceof URIError) {
-      return binary;
-    } else {
-      throw error;
-    }
-  }
-}
+//function BinaryToString(binary) {
+//  var error;
+//
+//  try {
+//    return decodeURIComponent(binary);
+//  } catch (_error) {
+//    error = _error;
+//    if (error instanceof URIError) {
+//      return binary;
+//    } else {
+//      throw error;
+//    }
+//  }
+//}
 
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
@@ -64,7 +65,6 @@ exports.load = function (req, res, next) {
 };
 
 exports.uploadResume = function (req, res, next) {
-  console.log(req.body, req.headers);
   var resume = new Resume(req.body);
   var applyPosition = resume.applyPosition;
   req.file.documentId = resume.id;
@@ -73,15 +73,17 @@ exports.uploadResume = function (req, res, next) {
   resume.applyDate = new Date();
   resume.attach('resumeFile', req.file, function (err) {
     if (err) return next(err);
-    console.log('resume ', resume);
     fs.readFile(resume.resumeFile.url, function (err, data) {
-      if (resume.resumeFile.name.search(/\.htm.?$/) !== -1)
-        data = BinaryToString(data);
+      //if (resume.resumeFile.name.search(/\.htm.?$/) !== -1)
+      //  data = BinaryToString(data);t
+      var filename = resume.resumeFile.name.slice(0, -4);
+      var zip = new JSZip();
+      data = zip.load(data).file(filename).asNodeBuffer();
       if (err) return next(err);
       parser.parse({
         attachments: [{
-          content: new Buffer(data),
-          fileName: req.file.originalname
+          content: data,
+          fileName: filename
         }]
       }, function (err, result) {
         if (err) return next(err);
@@ -109,13 +111,8 @@ exports.uploadResume = function (req, res, next) {
 };
 
 exports.removeContentLength = function (req, res, next) {
-  //delete req.headers['content-length'];
-  //console.log('-----------------------');
-  //console.log(req);
   console.log('-----------------------');
   console.log('headers------- ', req.headers);
-  console.log('-----------------------');
-  console.log('requme file ------', req.resumeFile);
   console.log('-----------------------');
   next();
 };

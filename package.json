@@ -32,6 +32,7 @@
     "http-proxy": "^1.11.1",
     "icalendar": "^0.6.5",
     "imap": "^0.8.12",
+    "jszip": "^2.5.0",
     "kue": "^0.8.2",
     "lodash": "~2.4.1",
     "mailparser": "^0.4.4",
