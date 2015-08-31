@@ -41,10 +41,10 @@ exports.synchronizeToEs = function (req, res) {
 
 function streamResumeTimeout(stream) {
   jobs.inactiveCount(function (err, total) {
-    if (total > 50) {
-      setTimeout(function () {
+    if (total > 100) {
+      process.nextTick(function () {
         streamResumeTimeout(stream);
-      }, 30000);
+      });
     } else {
       stream.resume();
     }
@@ -61,11 +61,11 @@ exports.reparseMails = function (req, res) {
 
   stream.on('data', function (mail) {
     index += 1;
-    if ((index % 50) === 0) {
+    if ((index % 100) === 0) {
       stream.pause();
-      setTimeout(function () {
+      process.nextTick(function () {
         streamResumeTimeout(stream);
-      }, 30000);
+      });
     }
     jobs.addParseResumeJob(mail, function () {
       logger.info('add ', index + 'th parse resume job');

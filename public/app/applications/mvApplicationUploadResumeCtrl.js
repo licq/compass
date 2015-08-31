@@ -15,20 +15,11 @@ angular.module('compass')
         $scope.resumeFileRequired = true;
         return;
       }
-      var birthday;
-      //if ($scope.birthdayYear && $scope.birthdayMonth) {
-      //    birthday = moment().year($scope.birthdayYear).month($scope.birthdayMonth - 1).date(1).toISOString();
-      //}
       $upload.upload({
         url: '/api/applications/uploadResume',
         method: 'POST',
         data: {
-          //name: $scope.name,
           applyPosition: $scope.applyPosition,
-          //mobile: $scope.mobile,
-          //email: $scope.email,
-          //birthday: birthday,
-          //gender: $scope.gender,
           status: $scope.status
         },
         file: $scope.file,
