@@ -22,11 +22,12 @@
            class="toggle-min"><i class="fa fa-bars"></i></a>
       </li>
 
-      <li class="dropdown text-normal nav-profile">
-        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="hidden-xs">
-                        <span>{{identity.currentUser.name}}</span>
-                    </span> <span class="caret"></span></a>
+      <li class="text-normal nav-profile" dropdown>
+        <a href="javascript:;" dropdown-toggle>
+          <span class="hidden-xs">
+            <span>{{identity.currentUser.name}}</span>
+          </span>
+          <span class="caret"></span></a>
         <ul class="dropdown-menu dropdown-dark with-arrow">
           <li>
             <a href="#/settings/users/edit/{{identity.currentUser._id}}">
@@ -43,9 +44,8 @@
     </ul>
 
     <ul class="nav-right pull-right list-unstyled">
-      <li class="dropdown">
-        <a href="" class="dropdown-toggle bg-orange" data-toggle="dropdown"
-           ng-click="retrieveEvents()">
+      <li dropdown>
+        <a href="" class="bg-orange" ng-click="retrieveEvents()" dropdown-toggle>
           <i class="fa fa-user"></i>
           <span class="badge badge-info">{{counts.eventsOfToday}}</span>
         </a>
@@ -57,9 +57,9 @@
           <ul class="list-group">
             <li ng-cloak class="list-group-item" ng-repeat="event in eventsForHeader">
               <a href="#/resumes/{{event.application}}" class="media">
-                                <span class="pull-left media-icon">
-                                    <span class="square-icon sm bg-orange"><i class="fa fa-user"></i></span>
-                                </span>
+                <span class="pull-left media-icon">
+                  <span class="square-icon sm bg-orange"><i class="fa fa-user"></i></span>
+                </span>
 
                 <div class="media-body">
                   <span class="text-muted block">{{event | eventTimeRange}}</span>
@@ -73,9 +73,8 @@
           </div>
         </div>
       </li>
-      <li class="dropdown">
-        <a href="" class="dropdown-toggle bg-warning" data-toggle="dropdown"
-           ng-click="retrieveReviews()">
+      <li dropdown>
+        <a href="" class="bg-warning" ng-click="retrieveReviews()" dropdown-toggle>
           <i class="fa fa-pencil"></i>
           <span class="badge badge-info">{{counts.unreviewed}}</span>
         </a>
@@ -104,8 +103,8 @@
           </div>
         </div>
       </li>
-      <li class="dropdown">
-        <a href="" class="dropdown-toggle bg-success" data-toggle="dropdown">
+      <li dropdown>
+        <a href="" class="bg-success" dropdown-toggle >
           <i class="fa fa-child fa-lg"></i>
           <span class="badge badge-info">{{counts.onboards}}</span>
         </a>

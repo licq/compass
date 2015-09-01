@@ -13,7 +13,7 @@
     "angular-ui-calendar": "0.8.1",
     "trNgGrid": "git://github.com/licq/trNgGrid.git#v2.1_zh_cn",
     "toastr": "~2.1",
-    "angular-bootstrap": "0.12.1",
+    "angular-bootstrap": "0.13.3",
     "moment": "~2.10",
     "eonasdan-bootstrap-datetimepicker": "~3.1",
     "angular-ui-select2": "0.0.5",
