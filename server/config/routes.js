@@ -148,8 +148,8 @@ module.exports = function (app,config) {
     .get(evaluationCriterions.forReview);
 
   apiRouter.route('/applications/uploadResume')
-    .all(applications.removeContentLength)
     .all(multer({dest: '/tmp'}).single('resumeFile'))
+    .all(applications.unzipFile)
     .post(applications.uploadResume);
   apiRouter.route('/applications')
     .get(applications.list);

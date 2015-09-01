@@ -9,7 +9,7 @@ describe('mvApplicationUploadResumeCtrl', function () {
     $scope = $rootScope.$new();
     $httpBackend = _$httpBackend_;
     $controller('mvApplicationUploadResumeCtrl', {
-      $scope: $scope,
+      $scope: $scope
     });
 
     $httpBackend.expectGET('/api/resumeReports/applyPositions').respond([
@@ -23,15 +23,6 @@ describe('mvApplicationUploadResumeCtrl', function () {
 
   it('should initialize the positions', function () {
     expect($scope.positions).to.have.length(2);
-  });
-
-  it('should initialize years', function () {
-    expect($scope.years).to.have.length(46);
-  });
-  it('should initialize months', function () {
-    expect($scope.months).to.have.length(12);
-    expect($scope.months[0]).to.equal(1);
-    expect($scope.months[11]).to.equal(12);
   });
 
   it('should initialize status to new', function () {

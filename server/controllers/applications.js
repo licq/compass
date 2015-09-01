@@ -9,22 +9,6 @@ var mongoose = require('mongoose'),
   _ = require('lodash'),
   JSZip = require('jszip');
 
-
-//function BinaryToString(binary) {
-//  var error;
-//
-//  try {
-//    return decodeURIComponent(binary);
-//  } catch (_error) {
-//    error = _error;
-//    if (error instanceof URIError) {
-//      return binary;
-//    } else {
-//      throw error;
-//    }
-//  }
-//}
-
 exports.list = function (req, res, next) {
   req.query.company = req.user.company;
   req.query.sort = [
@@ -69,21 +53,15 @@ exports.uploadResume = function (req, res, next) {
   var applyPosition = resume.applyPosition;
   req.file.documentId = resume.id;
   req.file.name = req.file.originalname;
-  console.log('req.file ---------', req.file);
   resume.applyDate = new Date();
   resume.attach('resumeFile', req.file, function (err) {
     if (err) return next(err);
     fs.readFile(resume.resumeFile.url, function (err, data) {
-      //if (resume.resumeFile.name.search(/\.htm.?$/) !== -1)
-      //  data = BinaryToString(data);t
-      var filename = resume.resumeFile.name.slice(0, -4);
-      var zip = new JSZip();
-      data = zip.load(data).file(filename).asNodeBuffer();
       if (err) return next(err);
       parser.parse({
         attachments: [{
           content: data,
-          fileName: filename
+          fileName: resume.resumeFile.name
         }]
       }, function (err, result) {
         if (err) return next(err);
@@ -110,11 +88,16 @@ exports.uploadResume = function (req, res, next) {
   });
 };
 
-exports.removeContentLength = function (req, res, next) {
-  console.log('-----------------------');
-  console.log('headers------- ', req.headers);
-  console.log('-----------------------');
-  next();
+exports.unzipFile = function (req, res, next) {
+  fs.readFile(req.file.path, function (err, data) {
+    if (err) return next(err);
+    var zip = new JSZip();
+    var buffer = zip.load(data).file('tmp').asNodeBuffer();
+    fs.writeFile(req.file.path, buffer, function (err) {
+      if (err) return next(err);
+      next();
+    });
+  });
 };
 
 exports.download = function (req, res, next) {
