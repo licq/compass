@@ -57,6 +57,20 @@ function mapItSkills(skills) {
   });
 }
 
+function parseEducationHistory(educationHistory) {
+  return _.map(educationHistory, function (item) {
+    if (item.degree) {
+      item.degree = helper.parseDegree(item.degree);
+    }
+
+    if (item.dateRange) {
+      item.from = item.dateRange.from;
+      item.to = item.dateRange.to;
+    }
+    return item;
+  });
+}
+
 function reconstruct(input) {
   var resume = removeNull(input);
 
@@ -80,9 +94,10 @@ function reconstruct(input) {
   resume.careerObjective.jobCategory = resume.careerObjective.jobCategories;
   resume.careerObjective.jobCategory = resume.careerObjective.jobCategories;
 
+  resume.educationHistory = parseEducationHistory(resume.educations);
+
   resume.workExperience = extractDaterange(resume.works);
   resume.projectExperience = extractDaterange(resume.projects);
-  resume.educationHistory = extractDaterange(resume.educations);
   resume.trainingHistory = extractDaterange(resume.trainings);
   resume.inSchoolPractice = extractDaterange(resume.inSchoolPractices);
 

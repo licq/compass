@@ -445,12 +445,18 @@ var degreeMap = {
   '博士': 'doctorate',
   '其他': 'others',
   'Junior High School': 'junior high',
+  'JuniorHigh': 'junior high',
+  'TechnicalSchool': 'technical school',
   'High School': 'high school',
+  'HighSchool': 'high school',
   'CNTIC': 'technical school',
   'Vocational': 'polytechnic',
+  'Associate': 'associate',
   'College': 'associate',
   'Undergraduate': 'bachelor',
+  'Bachelor':'bachelor',
   'Master': 'master',
+  'Doctorate':'doctorate',
   'Dr.': 'doctorate',
   'Other': 'others'
 };
