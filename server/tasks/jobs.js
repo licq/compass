@@ -120,8 +120,8 @@ exports.addParseResumeJob = function (mail, cb) {
   cb && cb();
 };
 
-exports.inactiveCount = function inactiveCount(cb) {
-  jobs.inactiveCount(cb);
+exports.activeCount = function activeCount(cb) {
+  jobs.activeCount(cb);
 };
 
 exports.init = function (config) {

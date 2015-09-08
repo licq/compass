@@ -12,7 +12,7 @@ angular.module('compass')
     $scope.parse = function () {
       mvMail.parse({_id: $scope.mail._id},
         function () {
-          mvNotifier.notify('邮件解析成功');
+          mvNotifier.notify('邮件解析完毕');
         },
         function () {
           mvNotifier.notify('邮件解析失败');
